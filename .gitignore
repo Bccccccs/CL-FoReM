@@ -1,0 +1,25 @@
+# catkin 构建产物
+/build/
+/devel/
+/logs/
+/install/
+/.catkin_tools/
+
+# ---- 自带 .git 的包，在各自仓库里管理，根仓库不跟踪 ----
+# 算法主包：分支 husky，父提交是上游 N2M2 的 3c6706d
+/src/modulation_rl/
+# 第三方包：有本地改动的已在各自仓库的 husky-ws 分支上提交
+/src/bio_ik/
+/src/gripper_breakdown_solution/
+/src/husky/
+/src/realsense2_description/
+/src/realsense_ros_gazebo/
+/src/roboticsgroup_upatras_gazebo_plugins/
+/src/tf_lookup/
+/src/tmc_control_msgs/
+
+# 早期整包快照，728M 且自带 .git；保留在磁盘上，不入库
+/modulation_rl(复件)/
+
+__pycache__/
+*.pyc
