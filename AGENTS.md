@@ -240,6 +240,8 @@
 8. **仓库体积**：`scripts/runs/` 5.4 G、各 checkpoints 约 1.3 G、`modulation_rl(复件)` 728 M。建 git 前必须先 ignore，否则仓库会炸。
 9. **显存**：2080 Ti 11 G，且 Turing 不支持 FlashAttention。世界模型设计要按这个上限来，别照搬论文的 NeRF/tiny-cuda-nn 规模。
 10. **实时性**：P4 的测试时梯度更新在 Gazebo 的控制循环里很容易超时。必须从一开始就记录每步耗时，并准备"每 k 步自适应一次"的降级方案。
+11. **Python 输出是块缓冲的**：重定向到文件时 `stdbuf -oL` 对 Python **无效**（Python 不走 stdio 缓冲策略），日志会滞后几千字节，看起来像"卡住不动"。跑后台任务一律用 `python3 -u`。判断训练是否真的在跑，用 TensorBoard 事件文件而不是日志。
+12. **读 TensorBoard 标量要解 tensor proto**：`torch.utils.tensorboard` 写出的事件里 `value.simple_value` 恒为 0，真实数值在 `value.tensor` 里。只看 `simple_value` 会误判成"损失全是 0"。
 
 ---
 
@@ -371,3 +373,69 @@ python3 eval.py --env husky_ur5 --task simpleobstacle --world_type sim --seed 42
 3. **没有 remote**，全是本地仓库。需要异地备份要自己加 remote 或定期打包。
 4. `modulation_rl(复件)/` 未入库（728 M，自带 .git）。它是早期快照，内容已由
    `1ccedd0` 覆盖，可以归档后删除。
+
+### 10.7 训练流程实测（2026-09-21）
+
+`main.py` 在此之前从未运行过。本次首跑验证结果：
+
+```bash
+python3 main.py --env husky_ur5 --task simpleobstacle --world_type sim --seed 42
+```
+
+流程健康，`update_parameters_modified`（带冻结先验 KL 的更新路径，此前一次都没执行过）
+正常工作，所有标量有限、无 NaN/Inf：
+
+| 标量 | step 31568 的值 |
+|---|---|
+| `loss/critic_1` / `critic_2` | 0.0545 / 0.0574 |
+| `loss/policy` | 6.5273 |
+| `loss/entropy_loss` | −0.1402 |
+| `entropy_temprature/alpha` | 0.3391 |
+
+50 回合滑动的训练指标（step 128）：goal_reached 0.68、perfect_success 0.38、
+碰撞 0.56、IK 失败 7.38、reward −30.4。
+
+**实测吞吐（133 s 区间，2168 次更新 / 11 回合）**：
+
+| | |
+|---|---|
+| 速度 | **16.3 步/秒**，5.0 回合/分钟 |
+| 跑满代码写死的 500 万步 | **85 小时（3.5 天）** |
+| 到第 1000 回合（首次存 checkpoint） | 2.9 小时 |
+| 到第 4000 回合（历史权重规模） | 13 小时 |
+
+对比纯 rollout 的 70 步/秒：每步一次 batch 256 的 SAC 更新，且待训练 agent 与
+冻结先验两套网络都要前向，吞吐掉到约 1/4。
+
+`main.py` 没有任何提前停止机制（`num_steps = 5000001`、`itertools.count(1)`），
+**要停只能手动 kill**。checkpoint 只在 `i_episode % 1000 == 0` 存，评估插在
+`% 500 == 0`。
+
+### 10.8 Gazebo 路径的资产缺口（未解决）
+
+`n2m2_husky_empty_world.launch` 默认加载 `gazebo_world/worlds/modulation_tasks.world`，
+它引用的模型缺 10 个：
+
+```
+aruco_board  bench  closet  dining_chair  floor_lamp
+ground_plane  pal_poster  sideboard  sofa  wall_with_reem_photo
+```
+
+其中 9 个属于 PAL Robotics 的 `pal_gazebo_worlds`（TIAGo 的资产，**不在本工作区**）。
+上游 Dockerfile:159 把它加进 `GAZEBO_MODEL_PATH`，说明原作者机器上有这个包。
+本地 `gazebo_models/` 只有 8 个模型，容器里 `~/.gazebo/models` 缓存为空，
+`GAZEBO_MODEL_PATH` / `GAZEBO_RESOURCE_PATH` 都没设置。
+
+其他 world：`dynamic_world.world` 缺项目自己的 `dynamic_obstacle` 模型；
+`test4.world` 缺的是 Gazebo 官方模型库里的标准模型（理论上可联网下载）。
+
+两条路：
+- **快**：用 `gazebo_ros` 自带 `empty.world` 只验证链路（gzserver 起得来、Husky 能 spawn、
+  控制器加载、`--world_type gazebo` 能驱动机器人），场景是空的。
+- **全**：补 `pal_gazebo_worlds`，才能跑原来的 picknplace / door / drawer 场景。
+
+Gazebo 需要先导出：
+```bash
+export GAZEBO_MODEL_PATH=/root/mm_husky_ws/src/modulation_rl/gazebo_models:$GAZEBO_MODEL_PATH
+export GAZEBO_RESOURCE_PATH=/root/mm_husky_ws/src/modulation_rl/gazebo_world/worlds:$GAZEBO_RESOURCE_PATH
+```
