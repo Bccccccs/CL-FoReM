@@ -257,7 +257,7 @@ class Map:
         center_pixel_cropped_2x = crop_multiple * local_map_sz / 2.
         # take into account pixel rounding in crop_fn
         translation = loc_pixel % 1
-        tf = cv2.getRotationMatrix2D(center=center_pixel_cropped_2x + translation, angle=np.rad2deg(-yaw), scale=1)
+        tf = cv2.getRotationMatrix2D(center=tuple(center_pixel_cropped_2x + translation), angle=np.rad2deg(-yaw), scale=1)
         tf[:, 2] -= translation
         local_map = cv2.warpAffine(img_cropped_2x, tf, img_cropped_2x.shape)
 
@@ -834,8 +834,8 @@ class SimpleObstacleMap(SceneMap):
                                                   requires_spawn=requires_spawn,
                                                   fixed_scene_objects=fixed_scene_objects)
         # space between obstacle centers in meters
-        self._obstacle_spacing = obstacle_spacing
-        self.offset_std = offset_std
+        self._obstacle_spacing = 3.0  #obstacle_spacing
+        self.offset_std = 0.8  #offset_std
 
     def _draw_initial_base_pose(self):
         """Draw the base pose together with the goal in the task setup, as much easier to ensure that there is a feasible path that way"""
@@ -863,6 +863,9 @@ class SimpleObstacleMap(SceneMap):
                 xx = self.np_random.uniform(0.025, 1.5)
                 yy = self.np_random.uniform(0.025, 1.0)
                 zz = self.np_random.uniform(0.2, 0.8) if self.np_random.random() > 0.33 else self.max_map_height
+                # xx = self.np_random.uniform(0.025, 1.0)
+                # yy = self.np_random.uniform(0.025, 0.5)
+                # zz = self.np_random.uniform(0.2, 0.8) if self.np_random.random() > 0.33 else self.max_map_height
 
                 # NOTE: gazebo does not have an ellipse model, so can only use with "sim" env atm
                 if (self.np_random.random() < 0.5) or (self._world_type == "gazebo") or self.fake_gazebo:
@@ -874,4 +877,7 @@ class SimpleObstacleMap(SceneMap):
                 obj = GazeboObject("rectangle", x=xx, y=yy, z=zz, geometry=geometry, getter_fn=getter_fn)
                 objects.append(SpawnObject(f"obstacle{i}", obj, obstacle_pose))
                 i += 1
+
+                
+        # objects = []
         return objects

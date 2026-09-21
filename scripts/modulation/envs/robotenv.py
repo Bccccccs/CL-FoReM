@@ -8,7 +8,7 @@ from gym.utils import seeding
 import yaml
 from dataclasses import dataclass, field
 from pybindings import RobotObs, RobotConfig, multiply_tfs  # , gripper_to_tip_goal, tip_to_gripper_goal
-from pybindings_robots import RobotPR2, RobotTiago, RobotHSR
+from pybindings_robots import RobotPR2, RobotTiago, RobotHSR, RobotHusky
 
 from modulation.envs.eeplanner import TIME_STEP_TRAIN
 from modulation.envs.env_utils import PROJECT_ROOT, IDENTITY_TF, calc_euclidean_tf_dist, calc_rot_dist, \
@@ -140,6 +140,10 @@ class RobotEnv(Env):
             self.robot_config['ik_joint_model_group_name'] = 'right_arm' if learn_torso else self.robot_config['joint_model_group_name']
             robot_fn = RobotPR2
             self.drive = "omni"
+        elif env == 'husky_ur5':
+            self.robot_config['ik_joint_model_group_name'] = 'manipulator' if learn_torso else self.robot_config['joint_model_group_name']
+            robot_fn = RobotHusky
+            self.drive = "diff"
         elif env == 'tiago':
             self.robot_config['ik_joint_model_group_name'] = 'arm' if learn_torso else self.robot_config['joint_model_group_name']
             robot_fn = RobotTiago
@@ -220,7 +224,7 @@ class RobotEnv(Env):
 
         if initial_joint_values is None:
             initial_joint_values = self.draw_joint_values("rnd")
-
+            
         # TODO: maybe always pass around dicts for joint values?
         jn = self.get_joint_names()
         assert len(jn) == len(initial_joint_values)

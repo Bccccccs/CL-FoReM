@@ -260,8 +260,10 @@ class PickNPlaceChainedTask(BaseChainedTask):
 
         self._pick_obj_name = "pick_obj"
         self.set_gazebo_object_to_ignore([{f"{self._pick_obj_name}::link::collision"}])
+        self.set_gazebo_object_to_ignore([{"ground_plane::link::collision"}])
 
-    def get_goal_objects(self, start_table_pos=Point(x=3.3, y=0, z=0), end_table_rng=(-1.5, 2, -3, -1.5)):
+    def get_goal_objects(self, start_table_pos=Point(x=4.3, y=0, z=0), end_table_rng=(-1.5, 2, -3, -1.5)):
+    # def get_goal_objects(self, start_table_pos=Point(x=3.3, y=0, z=0), end_table_rng=(-1.5, 2, -3, -1.5)):
         objects = []
         # pick table
         start_table_pose = Pose(start_table_pos, Quaternion(0, 0, 1, 0))
@@ -361,6 +363,7 @@ class DoorChainedTask(BaseChainedTask):
 
         self._top_shelf_name = "target_shelf"
         self.set_gazebo_object_to_ignore(self.get_kallaxdoor_gazebo_objects_to_ignore(self._top_shelf_name, self.env.robot_config["gripper_collision_names"]))
+        self.set_gazebo_object_to_ignore([{"ground_plane::link::collision"}])
 
     @staticmethod
     def get_kallaxdoor_gazebo_objects_to_ignore(top_shelf_name: str, gripper_collision_names: list) -> list:
@@ -442,7 +445,7 @@ class DrawerChainedTask(BaseChainedTask):
         self._top_drawer_name = "target_drawer"
         self.set_gazebo_object_to_ignore([{self._top_drawer_name + "::Drawer1::D1handle"}] +
                                          [{self._top_drawer_name + "::Drawer1::Drawer1Front", gripper} for gripper in self.env.robot_config["gripper_collision_names"]])
-
+        self.set_gazebo_object_to_ignore([{"ground_plane::link::collision"}])
     def get_goal_objects(self, drawer_pos=Point(x=-3.3, y=0.0, z=0.24)) -> List[SpawnObject]:
         objects = []
         objects.append(SpawnObject("Kallax_bottom", self._drawer, Pose(drawer_pos, Quaternion(0, 0, 1, 1))))
@@ -504,6 +507,7 @@ class RoomDoorChainedTask(BaseChainedTask):
 
         self._door_name = "target_door"
         self.set_gazebo_object_to_ignore(self.get_roomdoor_gazebo_objects_to_ignore(self._door_name, self.env.robot_config["gripper_collision_names"]))
+        self.set_gazebo_object_to_ignore([{"ground_plane::link::collision"}])
 
     @staticmethod
     def get_roomdoor_gazebo_objects_to_ignore(door_name: str, gripper_collision_names: list) -> list:
@@ -608,6 +612,7 @@ class BookstorePickNPlaceChainedTask(BaseChainedTask):
 
         self._pick_obj_name = "pick_obj"
         self.set_gazebo_object_to_ignore([{f"{self._pick_obj_name}::link::collision"}])
+        self.set_gazebo_object_to_ignore([{"RetailShopFloor_01_001::aws_robomaker_retail_RetailShopFloor_01::link::collision"}])
 
     def get_goal_objects(self):
         self.pick_obj_pose, self.place_obj_pose = self.np_random.choice(self.muesli_poses, size=2, replace=False)

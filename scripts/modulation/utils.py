@@ -43,7 +43,7 @@ def get_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument('--load_best_defaults', type=str2bool, nargs='?', const=True, default=True, help="Replace default values with those from configs/best_defaults.yaml.")
     parser.add_argument('--seed', type=int, default=-1, help="Set to a value >= to use deterministic seed")
-    parser.add_argument('--total_steps', type=int, default=1_000_000, help='Total number of action/observation steps to take over all episodes')
+    parser.add_argument('--total_steps', type=int, default=10_000_000, help='Total number of action/observation steps to take over all episodes')
     parser.add_argument('--batch_size', type=int, default=256)
     parser.add_argument('--buffer_size', type=int, default=100_000)
     #################################################
@@ -93,7 +93,7 @@ def get_parser():
     #################################################
     # Env
     #################################################
-    parser.add_argument('--env', type=str.lower, default='pr2', choices=['pr2', 'tiago', 'hsr'], help='')
+    parser.add_argument('--env', type=str.lower, default='pr2', choices=['pr2', 'tiago', 'hsr', 'husky_ur5'], help='')
     parser.add_argument('--use_map_obs', type=str2bool, nargs='?', const=True, default=True, help='Observe a local obstacle map')
     parser.add_argument('--global_map_resolution', type=float, default=0.025, help='Resolution to use for global map')
     parser.add_argument('--local_map_resolution', type=float, default=0.025, help='Resolution to use for local map')
@@ -306,7 +306,7 @@ def launch_ros(main_path: Path, config, task: str, no_gui: bool = False, always_
     my_env["PATH"] = my_env["PATH"].replace(str(conda_path.parent.parent / "envs" / "modulation_rl" / "bin") + ":", "")
     my_env["PATH"] = my_env["PATH"].replace(str(conda_path.parent) + ":", "")
 
-    out = subprocess.run(["python2", script] + args, env=my_env)
+    out = subprocess.run(["python", script] + args, env=my_env)
     assert out.returncode == 0, out
 
 

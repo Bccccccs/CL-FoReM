@@ -127,7 +127,7 @@ def get_sac_conf(wandb_config, model_config: dict) -> dict:
         # If not None, clip gradients during optimization at this value.
         "grad_clip": 10,
         # How many steps of the model to sample before learning starts.
-        "learning_starts": wandb_config.rnd_steps,
+        "learning_starts": 0, #wandb_config.rnd_steps,
         # Update the replay buffer with this many samples at once. Note that this
         # setting applies per-worker if num_workers > 1.
         # "rollout_fragment_length": 1,

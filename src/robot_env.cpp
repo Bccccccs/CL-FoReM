@@ -11,6 +11,7 @@
 #include <std_srvs/Empty.h>
 #include <boost/bind.hpp>
 #include <utility>
+#include"ros/duration.h"
 namespace py = pybind11;
 
 using namespace std;
@@ -329,7 +330,11 @@ bool RobotEnv::checkArmValues(){
     vector<string> joint_names = joint_model_group_->getVariableNames();
     for (int i = 0; i < joint_values_desired.size(); i++) {
         double phase_diff = abs(myutils::trueModulo(joint_values_desired[i], 2.0 * M_PI) - myutils::trueModulo(joint_values_world[i], 2.0 * M_PI));
-        if (phase_diff >= 0.03){
+        if(phase_diff>M_PI)
+        {
+            phase_diff=abs(2*M_PI-phase_diff);
+        }
+        if (phase_diff >= 0.1){
              py::print(joint_names[i], "phase diff:", phase_diff, "jv-desired:", joint_values_desired[i], "jv-world:", joint_values_world[i], "fmod1:", myutils::trueModulo(joint_values_desired[i], 2.0 * M_PI), "fmod2:", myutils::trueModulo(joint_values_world[i], 2.0 * M_PI));
             return false;
         }
@@ -340,6 +345,7 @@ bool RobotEnv::checkArmValues(){
 
 void RobotEnv::setJointValuesFromDict(const map<string, double> &joint_values, bool set_in_world) {
     kinematic_state_->setVariablePositions(joint_values);
+
     if (!set_in_world){
         return;
     }
@@ -347,12 +353,12 @@ void RobotEnv::setJointValuesFromDict(const map<string, double> &joint_values, b
     // This might sometimes fail. So continue sampling a few random poses
     if (!world_->isAnalytical()) {
         // Arm: if not the analytical env, we actually execute it to reset.
-        bool success = false;
+        bool success = false, success_1 = false;
         int trials = 0, max_trials = 10;
         while ((!success) && (trials < max_trials)) {
             // arm: use controllers
             sendArmCommandCurrent(4.0);
-            getArmSuccess();
+            success_1 = getArmSuccess();
             success = checkArmValues();
             // success = resetArm(10);
             if (!success) {
@@ -366,6 +372,9 @@ void RobotEnv::setJointValuesFromDict(const map<string, double> &joint_values, b
 
         // Base
         tf::Transform base_tf = getGlobalLinkTransform(base_link_name_);
+        tf::Vector3 origin = base_tf.getOrigin();
+        origin.setZ(0.05);                       // 把 z 改为 0.1
+        base_tf.setOrigin(origin);
         if (world_->getName() == "world") {
             tf::Transform base_tf_world = world_->getBaseTransformWorld();
             if (!myutils::tfAlmostEqual(base_tf, base_tf_world)) {
@@ -510,11 +519,14 @@ vector<double> RobotEnv::drawJointValues(const double z_min, const double z_max)
         bool invalid = true;
         int i = 0;
         while (invalid) {
-            kinematic_state_->setToRandomPositions(joint_model_group_, *rng_);
+            // kinematic_state_->setToRandomPositions(joint_model_group_, *rng_);
+            std::vector<double> joint_positions = {-0.0007863513851198434, -1.5705042627235626, -0.01111974792726489, -1.5713908974689739
+            , -0.0005968816301642477, -0.006540936480208259};
+            kinematic_state_->setJointGroupPositions(joint_model_group_, joint_positions);
 
             invalid = checkSelfCollision();
             ROS_INFO_COND(invalid, "set_start_pose: drawn pose in self-collision, trying again");
-
+/*
             if (!invalid && ((z_min != 0.0) || (z_max != 0.0))) {
                 if (z_min >= z_max){
                     throw runtime_error("z_min must be smaller than z_max");
@@ -523,11 +535,12 @@ vector<double> RobotEnv::drawJointValues(const double z_min, const double z_max)
                 invalid |= (temp_tf.getOrigin().z() < z_min);
                 invalid |= (temp_tf.getOrigin().z() > z_max);
                 ROS_INFO_COND(invalid, "EE outside of restricted ws, sampling again.");
-            }
+            }*/
             if (i > 1000) {
                 throw runtime_error("drawJointValues failed to draw values");
-            }
+            }  
             i ++;
+
     }
     vector<double> joint_values;
     kinematic_state_->copyJointGroupPositions(joint_model_group_, joint_values);

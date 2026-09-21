@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 2.8.12)
 project(modulation_rl)
 
+set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
+
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
 
@@ -168,7 +171,8 @@ add_library(robots
         src/robot_env.cpp
         src/robot_pr2.cpp
         src/robot_tiago.cpp
-        src/robot_hsr.cpp)
+        src/robot_hsr.cpp
+        src/robot_husky.cpp)
 target_link_libraries(robots myutils ${catkin_LIBRARIES})
 
 # pybind

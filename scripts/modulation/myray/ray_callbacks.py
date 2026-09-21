@@ -1,5 +1,6 @@
 from typing import Optional, Dict
-
+import torch
+import torch.nn as nn
 import numpy as np
 from ray.rllib import BaseEnv, RolloutWorker, Policy
 from ray.rllib.agents.callbacks import DefaultCallbacks
@@ -10,6 +11,7 @@ from ray.rllib.utils.typing import AgentID, PolicyID
 from modulation.envs.env_utils import calc_disc_return
 from modulation.utils import episode_is_success
 from modulation.envs.eeplanner import PointToPointPlanner
+import os
 
 def get_player_policy_names(values):
     if len(values) == 1 and 'default_policy' in values:
@@ -26,7 +28,80 @@ def set_early_termination_dones_false(*, postprocessed_batch: SampleBatch) -> No
     postprocessed_batch[SampleBatch.DONES] = np.logical_and(postprocessed_batch[SampleBatch.DONES], goal_reached).astype(postprocessed_batch[SampleBatch.DONES].dtype)
 
 
+# === CLUB Estimator ===
+class CLUB(nn.Module):
+    def __init__(self, x_dim, y_dim, hidden_size=64):
+        super().__init__()
+        self.p_mu = nn.Sequential(nn.Linear(x_dim, hidden_size), nn.ReLU(), nn.Linear(hidden_size, y_dim))
+        self.p_logvar = nn.Sequential(nn.Linear(x_dim, hidden_size), nn.ReLU(), nn.Linear(hidden_size, y_dim))
+
+    def forward(self, x, y):
+        mu, logvar = self.p_mu(x), self.p_logvar(x)
+        positive = -((mu - y) ** 2 / logvar.exp()).sum(dim=1)
+        random_index = torch.randperm(x.size(0))
+        y_shuffle = y[random_index]
+        negative = -((mu - y_shuffle) ** 2 / logvar.exp()).sum(dim=1)
+        return (positive - negative).mean()
+    
+# === Causal Mask Estimation ===
+def compute_sa_reward_mask(self, club, states, actions, rewards, threshold=0.1):
+    sa = torch.cat([states, actions], dim=-1)
+    mi_full = club(sa, rewards)
+    mask = []
+    for i in range(sa.shape[1]):
+        sa_ = sa.clone()
+        sa_[:, i] = 0.0
+        mi_i = club(sa_, rewards)
+        delta = (mi_full - mi_i).item()
+        mask.append(1.0 if delta > threshold else 0.0)
+    return torch.tensor(mask, dtype=torch.float32)
+    
 class TrainCallback(DefaultCallbacks):
+    def __init__(self, legacy_callbacks_dict=None):
+        super().__init__(legacy_callbacks_dict)
+        self.club = None
+        self.save_dir = "./club_checkpoints"
+        os.makedirs(self.save_dir, exist_ok=True)
+
+    def on_train_result(self, *, trainer, result, **kwargs):
+        policy = trainer.get_policy()
+        buffer = getattr(policy, "replay_buffer", None)
+        model = policy.model
+
+        if buffer is None or len(buffer) < 1000:
+            return
+
+        # Sample batch from replay buffer
+        batch = buffer.sample(256)
+        states = torch.tensor(batch[SampleBatch.OBS], dtype=torch.float32).cuda()
+        actions = torch.tensor(batch[SampleBatch.ACTIONS], dtype=torch.float32).cuda()
+        rewards = torch.tensor(batch[SampleBatch.REWARDS], dtype=torch.float32).unsqueeze(-1).cuda()
+
+        # CLUB init
+        if self.club is None:
+            sa_dim = states.shape[1] + actions.shape[1]
+            self.club = CLUB(sa_dim, 1).cuda()
+
+        # Train CLUB (you can add optimizer if needed)
+        self.club.train()
+        loss = self.club(states, rewards)
+        loss.backward()
+        for param in self.club.parameters():
+            param.data -= 1e-3 * param.grad  # simple SGD
+            param.grad = None
+
+        # Update causal mask
+        mask = self.compute_sa_reward_mask(self.club, states, actions, rewards)
+        action_mask = mask[-actions.shape[1]:]
+        model.set_mask(action_mask)
+
+        # Save CLUB model every 50 iters
+        iter_id = result["training_iteration"]
+        if iter_id % 10000 == 0:
+            save_path = os.path.join(self.save_dir, f"club_iter_{iter_id}.pt")
+            torch.save(self.club.state_dict(), save_path)
+            print(f"[CLUB Saved] {save_path}")
+
     def on_episode_start(self,
                          *,
                          worker: "RolloutWorker",
@@ -49,7 +124,6 @@ class TrainCallback(DefaultCallbacks):
             env = base_env.vector_env.envs[0].unwrapped
         else:
             env = base_env.get_unwrapped()[0]
-
         policy_names = get_player_policy_names(sorted(episode._policies.keys()))
         if (len(policy_names) == 1) or not episode.last_done_for(policy_names[0]):
             info = episode.last_info_for(policy_names[0])
@@ -111,7 +185,6 @@ class TrainCallback(DefaultCallbacks):
 
                 disc_return = calc_disc_return(rewards=rs, gamma=policies[pol].config['gamma'])
                 episode.custom_metrics[f"{pname}episode_disc_return"] = disc_return
-
 
     def on_postprocess_trajectory(
             self, *, worker: "RolloutWorker", episode: MultiAgentEpisode,

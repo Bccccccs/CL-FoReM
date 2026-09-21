@@ -13,9 +13,9 @@ from ocs2_msgs.msg import mpc_target_trajectories, mpc_state, mpc_input, mpc_obs
 plt.style.use('seaborn')
 from modulation.utils import setup_config_wandb, env_creator, launch_ros, create_env
 from modulation.envs.tasks import GripperActions, publish_move_obstacles_enabled
-from modulation.planning.rrt import PlanningEpisode
+from modulation.baselines.rrt import PlanningEpisode
 from modulation.envs.env_utils import quaternion_to_yaw, calc_euclidean_tf_dist, calc_rot_dist
-from modulation.articulated.articulated_utils import BaseCollisionMarker, get_ocs2_msg, set_joints_to_articulated_values, \
+from modulation.baselines.articulated_utils import BaseCollisionMarker, get_ocs2_msg, set_joints_to_articulated_values, \
     ArticulatedEpisode, publish_sdf, start_mpc_mrt_node, get_grippertf_world, \
     load_velocity_controllers, switch_to_position_controllers
 from modulation.envs.eeplanner import NextEEPlan, TIME_STEP_TRAIN
@@ -44,7 +44,7 @@ def get_ee_plan(env, continuing_episode: bool, max_plan_len=None, start_gripper_
     while True:
         if eeobs:
             initial_robot_obs.gripper_tf = eeobs.next_gripper_tf
-        _, _, _ = ee_planner.step(initial_robot_obs, learned_vel_norm=PLANNER_VELOCITY)
+        _, _ = ee_planner.step(initial_robot_obs, learned_vel_norm=PLANNER_VELOCITY)
         eeobs, _ = ee_planner.generate_obs_step(initial_robot_obs, plan_horizon_meter=0.5)
         ee_plan.append(eeobs.next_gripper_tf)
         if ee_planner._is_done(eeobs.next_gripper_tf):
@@ -220,8 +220,8 @@ def main(raw_args=None):
             fwd_orientations = [False, True] if (task in ['picknplace', 'bookstorepnp']) else [False]
             for o in fwd_orientations:
                 wandb_config.update({'use_fwd_orientation': o}, allow_val_change=True)
-                _ = subprocess.run(["rosnode", "kill", "/mobile_manipulator_mpc_node"])
-                launch_ros(main_path=main_path, config=wandb_config, task=task, no_gui=True, always_relaunch=world_type == "sim")
+                # _ = subprocess.run(["rosnode", "kill", "/mobile_manipulator_mpc_node"])
+                # launch_ros(main_path=main_path, config=wandb_config, task=task, no_gui=True, always_relaunch=world_type == "sim")
                 rospy.init_node('kinematic_feasibility_py', anonymous=False)
 
                 rospy.set_param("/ocs2_world_type", world_type)
@@ -254,6 +254,7 @@ def main(raw_args=None):
 
                     if (world_type == "gazebo") and (env.env_name == "pr2"):
                         switch_to_position_controllers()
+
                     obs = env.reset()
                     publish_move_obstacles_enabled(False)
 

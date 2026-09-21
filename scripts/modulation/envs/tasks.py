@@ -252,6 +252,7 @@ class RndStartRndGoalsTask(BaseTask):
         assert len(goal_dist_rng) == len(goal_height_rng) == 2
         self._goal_dist_rng = goal_dist_rng
         self._goal_height_rng = goal_height_rng
+        self.set_gazebo_object_to_ignore([{"ground_plane::link::collision"}])
 
     def draw_goal(self):
         def goal_fn(base_tf: list):
@@ -282,7 +283,7 @@ class RestrictedWsTask(RndStartRndGoalsTask):
                                                                 env.robot_config["restricted_ws_z_max"]),
                                                use_fwd_orientation=use_fwd_orientation,
                                                eval=eval)
-
+        self.set_gazebo_object_to_ignore([{"ground_plane::link::collision"}])
 
 class SplineTask(RndStartRndGoalsTask):
     @staticmethod
@@ -300,7 +301,7 @@ class SplineTask(RndStartRndGoalsTask):
                                          goal_dist_rng=(1, 3),
                                          use_fwd_orientation=use_fwd_orientation,
                                          eval=eval)
-
+        self.set_gazebo_object_to_ignore([{"ground_plane::link::collision"}])
     def draw_goal(self):
         def goal_fn(base_tf: list):
             # assert base_tf == IDENTITY_TF, "Atm always assuming we start from the origin"
@@ -351,6 +352,7 @@ class SimpleObstacleTask(BaseTask):
         assert len(goal_dist_rng) == len(goal_height_rng) == 2
         self._goal_dist_rng = goal_dist_rng
         self._goal_height_rng = goal_height_rng
+        self.set_gazebo_object_to_ignore([{"ground_plane::link::collision"}])
 
     def draw_goal(self):
         def goal_fn(base_tf: list):
@@ -423,6 +425,7 @@ class DynamicObstacleTask(BaseTask):
         assert len(goal_dist_rng) == len(goal_height_rng) == 2
         self._goal_dist_rng = goal_dist_rng
         self._goal_height_rng = goal_height_rng
+        self.set_gazebo_object_to_ignore([{"ground_plane::link::collision"}])
 
     def draw_goal(self):
         def goal_fn(base_tf: list):

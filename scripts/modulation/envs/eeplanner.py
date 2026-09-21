@@ -542,7 +542,7 @@ class PointToPointPlanner(EEPlannerFullPython):
 
         ee_weights = (self.map_to_weights(self._map,
                                           ignore_below_height=self._robot_config['z_max'] - self.HEIGHT_INFLATION,
-                                          height_preference=self.eval)
+                                          height_preference= True)  #self.eval)
                       + inversed_map)
         return ee_weights
 
@@ -676,7 +676,7 @@ class PointToPointPlanner(EEPlannerFullPython):
             # NOTE: to make this less expensive for dyn obstacles: do not inflate at all?
             self._weights = self.map_to_weights(self._map,
                                                 ignore_below_height=self._robot_config['z_max'] - self.HEIGHT_INFLATION,
-                                                height_preference=False,
+                                                height_preference=True,
                                                 inflation_radius_meter=None)
         # else:
         #     self._weights = self.generate_base_feasible_eeweights(base_tf=robot_obs.base_tf, gripper_goal_wrist=self.gripper_goal_wrist)

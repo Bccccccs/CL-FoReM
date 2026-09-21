@@ -1,6 +1,7 @@
 #include <modulation_rl/robot_hsr.h>
 #include <modulation_rl/robot_pr2.h>
 #include <modulation_rl/robot_tiago.h>
+#include <modulation_rl/robot_husky.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
@@ -46,6 +47,9 @@ PYBIND11_MODULE(pybindings_robots, m) {
     py::class_<RobotTiago>(m, "RobotTiago", robotenv)
         .def(py::init<uint32_t, std::string, bool, std::string, RoboConf, double, double, double, std::string>());
 
+    py::class_<RobotHusky>(m, "RobotHusky", robotenv)
+        .def(py::init<uint32_t, std::string, bool, std::string, RoboConf, double, double, double, std::string>());
+        
     py::class_<RobotHSR>(m, "RobotHSR", robotenv)
         .def(py::init<uint32_t, std::string, bool, std::string, RoboConf, double, double, double, std::string>());
 

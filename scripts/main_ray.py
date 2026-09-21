@@ -29,14 +29,14 @@ def main():
     wandb_config = DotDict(args)
     assert not wandb_config.restore_model and not wandb_config.resume_id, "Not implemented yet"
 
-    launch_ros(main_path=main_path, config=wandb_config, task=wandb_config.task, pure_analytical=None)
+    # launch_ros(main_path=main_path, config=wandb_config, task=wandb_config.task, pure_analytical="yes")
 
     if wandb_config.vis_env and wandb_config.num_workers > 0:
         print("WON'T BE ABLE TO SEE THE VISUALISATIONS FROM REMOTE WORKERS. SET num_workers == 0")
 
     # need a node to listen to some stuff for the task envs
     rospy.init_node('kinematic_feasibility_py', anonymous=False)
-    ray.init(logging_level='DEBUG' if wandb_config.debug else 'INFO', local_mode=wandb_config.debug)
+    ray.init(logging_level='ERROR' if wandb_config.debug else 'INFO', local_mode=wandb_config.debug)
     register_envs_models()
 
     ray_config = {
@@ -276,7 +276,7 @@ def main():
                            checkpoint_freq=100,
                            checkpoint_at_end=True,
                            # restore is probably the one I want: takes a path (could first restore from wandb) and allows to continue training
-                           # restore=,
+                           # restore="/home/cbl/mm_ws/src/modulation_rl/scripts/logs/ray/husky_ur5_acceleration_penalty:0.05_learn_vel_norm:0.1_training_intensity:0.1_transition_noise_base:0.04_mindispl1.0,0.0,1.0/SACTrainerCustom_modulation_rl_env_b3cd2_00000_0_2025-03-27_23-18-14/checkpoint_000991/checkpoint-991",
                            # bool & does not ally to continue training -> probably not what I want
                            # resume=,
                            local_dir=get_local_ray_dir(wandb_config),

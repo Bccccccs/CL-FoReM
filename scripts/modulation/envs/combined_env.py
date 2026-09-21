@@ -275,7 +275,7 @@ class CombinedEnv(Env):
             except Exception as e:
                 print(f"Reset {i} failed, trying until {max_i - 1}, exception: {e}")
                 assert i < (max_i - 1), f"Reached {i} reset attempts, exception: {e}"
-
+                
         self.nr_base_collisions = 0
         self.nr_kin_failures = 0
         self._marker_counter = 0

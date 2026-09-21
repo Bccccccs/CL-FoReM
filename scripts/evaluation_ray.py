@@ -62,7 +62,7 @@ def ray_eval(trainer, wandb_config, ray_config):
 def main(raw_args=None):
     main_path = Path(__file__).parent.absolute()
     run, wandb_config = setup_config_wandb(main_path, sync_tensorboard=False, allow_init=False, no_ckpt_endig=True, framework='ray', raw_args=raw_args)
-    launch_ros(main_path=main_path, config=wandb_config, task=wandb_config.eval_tasks[0])
+    # launch_ros(main_path=main_path, config=wandb_config, task=wandb_config.eval_tasks[0])
 
     # need a node to listen to some stuff for the task envs
     rospy.init_node('kinematic_feasibility_py', anonymous=False)
