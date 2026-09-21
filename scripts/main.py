@@ -152,7 +152,7 @@ eval_nr_kin_failures = []
 # Prior Agent
 prior_agent = SAC(rob_env.observation_space, rob_env.action_space, target_update_interval, ray_config, num_steps)
 
-prior_agent.load_and_freeze_checkpoint("/home/cbl/mm_husky_ws/src/modulation_rl/scripts/checkpoints_pnp_plus/sac_checkpoint_husky_ur5_4000")
+prior_agent.load_and_freeze_checkpoint(str(main_path / "checkpoints_pnp_plus" / "sac_checkpoint_husky_ur5_4000"))
 
 # Agent
 agent = SAC(rob_env.observation_space, rob_env.action_space, target_update_interval, ray_config, num_steps)
@@ -165,7 +165,7 @@ memory = ReplayMemory(buffer_size, ray_config["seed"])
 
 # evaluate the loaded checkpoint
 if resume is True:
-    agent.load_checkpoint("/home/cbl/mm_husky_ws/src/modulation_rl/scripts/checkpoints_pnp_plus/sac_checkpoint_husky_ur5_4000")
+    agent.load_checkpoint(str(main_path / "checkpoints_pnp_plus" / "sac_checkpoint_husky_ur5_4000"))
     episodes = 20
     for _  in range(episodes):
         state = rob_env.reset()

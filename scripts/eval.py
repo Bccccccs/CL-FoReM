@@ -136,7 +136,7 @@ eval_nr_kin_failures = []
 # Agent
 agent = SAC(rob_env.observation_space, rob_env.action_space, target_update_interval, ray_config, num_steps)
 
-agent.load_checkpoint("/home/cbl/mm_husky_ws/src/modulation_rl/scripts/checkpoints/sac_checkpoint_husky_ur5_4000", evaluate=True)
+agent.load_checkpoint(str(main_path / "checkpoints" / "sac_checkpoint_husky_ur5_4000"), evaluate=True)
 
 #Tesnorboard
 writer = SummaryWriter('runs/{}_SAC_{}_{}_{}'.format(datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S"), ray_config["env"],
