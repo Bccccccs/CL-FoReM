@@ -127,10 +127,10 @@
 - [x] **P0.2** 缺失 ROS 包：**不用补**——`ur_description`、`velodyne_description`、`lms1xx` 在镜像里已由 apt 装好（`/opt/ros/noetic/share/`）。`husky_description`、`robotiq_85_description` 从 src 源码编译。
 - [x] **P0.3 / P0.4 / P0.5** 工作区已构建完成：`devel/lib/python3/dist-packages/pybindings{,_robots}.cpython-38-x86_64-linux-gnu.so` 已生成并可 import，`RobotHusky` 可见。注意是 **python3.8**（noetic 原生 py3），不是原来的 3.7。
 - [x] **P0.6** 死路径已改：[eval.py:139](src/modulation_rl/scripts/eval.py) 与 [main.py:155,168](src/modulation_rl/scripts/main.py) 改成 `main_path / "checkpoints…"`；备份在 scratchpad。
-- [ ] **P0.7** 跑通 analytical 评估：加载 `checkpoints_simpleobstacle/sac_checkpoint_husky_ur5_4000`，`--task simpleobstacle --world_type sim`，跑 ≥20 episode，记录 SR / perfect-success / 碰撞 / IK 失败。
+- [x] **P0.7** analytical 评估已跑通：`eval.py` 加载 `checkpoints/sac_checkpoint_husky_ur5_4000`，`--task simpleobstacle --world_type sim --seed 42`，100 episode。**基线结果见 10.6**。
 - [ ] **P0.8** 跑通 Gazebo：`n2m2_husky_empty_world.launch` + `n2m2_moveit_planning_execution.launch`，确认 BioIK 插件参数与 `iksolver=bioik` 一致（`robotenv.py:135` 有断言）。
 - [ ] **P0.9** 决定是否把 `mm_husky_runtime` 的修复合并回本工作区（`setup/runtime_changes.patch`）。**建议合并**，理由见「关键坑 1」。
-- [ ] **P0.10** 建 git 基线：为本工作区建独立仓库或分支，`.gitignore` 掉 `runs/`、`checkpoints*/`、`build/`、`devel/`，把当前 Husky 改动作为第一个 commit。**在此之前不要开始 P1**，否则后面的改动无法回滚、无法做消融。
+- [x] **P0.10** git 基线已建，见第 11 节。
 
 **阶段 0 验收标准**：同一条命令、同一组种子跑两次，SR 与初始观测哈希一致；Gazebo 里能看到 Husky 实际移动且 rviz 有局部代价图。
 
@@ -316,3 +316,58 @@ python3 eval.py --env husky_ur5 --task simpleobstacle --world_type sim --seed 42
 5. 改掉 3 处 `/home/cbl/...` 硬编码 checkpoint 路径。
 
 以上 1–4 属于环境修复，不改算法语义；5 只改路径。
+
+### 10.6 基线结果（2026-09-21，100 episode）
+
+命令：`python3 eval.py --env husky_ur5 --task simpleobstacle --world_type sim --seed 42`
+权重：`scripts/checkpoints/sac_checkpoint_husky_ur5_4000`
+
+| 指标 | 值 |
+|---|---|
+| goal-reached rate | **0.60** |
+| perfect-success rate（无碰撞无 IK 失败） | **0.46** |
+| 平均基座碰撞数 | 1.23 |
+| 平均 IK 失败数 | 7.88 |
+| 平均回报 | −19.62 |
+
+这是后续所有消融的对照起点。注意三件事：
+
+1. 用的是 `checkpoints/`，不是 `checkpoints_simpleobstacle/`；换权重要重新测。
+2. 日志里出现 `REACHED MAX_CLOSE_STEPS`（在目标附近耗尽步数）与
+   `EE-PLANNER HAVING MORE COLLISIONS THAN POTENTIALLY DESIRED`。前者按当前实现
+   算作失败，`mm_husky_runtime` 的修复把它改成了"人工截断、保留 bootstrap"。
+   **合并那份修复后这个数字会变**，届时必须重测基线。
+3. IK 失败均值 7.88，接近阈值 20 的一半，说明失败主要来自运动学而非碰撞。
+   世界模型的前瞻如果能提前规避不可解的位姿，这一项是最有希望改善的。
+
+---
+
+## 11. git 基线（2026-09-21 建立）
+
+工作区里有 **10 个独立 git 仓库**（8 个第三方包 + 算法主包 + 新建的根仓库）。
+不是一个大仓库，因为第三方包各自带 `.git`，强行合并会产生 gitlink 空壳。
+
+| 仓库 | 分支 | 说明 |
+|---|---|---|
+| `mm_husky_ws`（根） | `main` | 新建。跟踪 `src/husky_ur5` 等无独立 git 的包 + `AGENTS.md`。23 M |
+| `src/modulation_rl` | `husky` | **算法主包，日常改这里**。父提交是上游 N2M2 的 `3c6706d` |
+| `src/husky` | `husky-ws` | 6 个 launch/xacro 的本地适配 |
+| `src/realsense2_description` | `husky-ws` | `_d435.gazebo.xacro` |
+| `src/gripper_breakdown_solution` | `husky-ws` | 记录 `gazebo_plugins/` 子树已被删除 |
+| 其余 4 个第三方包 | `master` | 无本地改动 |
+
+`src/modulation_rl` 上的两个提交是有意分开的：
+
+- `1ccedd0` baseline —— 收到时的原样快照，**回滚到这里就是"什么都没改"的状态**
+- `68b8d0b` fix —— 只改了 3 处 `/home/cbl` 硬编码路径
+
+### 注意
+
+1. **所有仓库都设了 `core.fileMode=false`**。整棵树有 644→755 的权限位漂移（跨文件系统
+   拷贝造成），`src/husky` 里 153 个"改动"中有 147 个是纯权限位。不关掉的话每次
+   `git status` 都是噪声。
+2. **权重和日志不在 git 里**：`scripts/runs/`（5.4 G）、`scripts/checkpoints*/`（1.3 G）、
+   根目录两个 40 M checkpoint 全部 ignore。它们只在磁盘上，**git 不为它们做备份**。
+3. **没有 remote**，全是本地仓库。需要异地备份要自己加 remote 或定期打包。
+4. `modulation_rl(复件)/` 未入库（728 M，自带 .git）。它是早期快照，内容已由
+   `1ccedd0` 覆盖，可以归档后删除。
