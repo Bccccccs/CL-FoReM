@@ -309,11 +309,12 @@
       </link>
       <pose>-0.025898 -4.80869 1 1e-06 -6e-06 -1.60377</pose>
     </model>
+    -->
     <!-- Add a floor lamp -->
     <include>
       <name>floor_lamp_0</name>
       <uri>model://floor_lamp</uri>
-      <pose>4.0 -4.0 0.000000 0.000000 0.000000</pose>
+      <pose>4.0 -4.0 0.000000 0.000000 0.000000 0.000000</pose>
     </include>
     <!-- Add a floor lamp -->
     <include>

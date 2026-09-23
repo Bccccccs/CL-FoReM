@@ -20,3 +20,6 @@ obstacles:
   raytrace_range: 3.0
 
 
+
+# Reset may replace a subscriber while diagnostic subscribers remain connected.
+always_send_full_costmap: true

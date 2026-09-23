@@ -5,7 +5,7 @@ import pickle
 
 class ReplayMemory:
     def __init__(self, capacity, seed):
-        random.seed(seed)
+        self.rng = random.Random(seed)
         self.capacity = capacity
         self.buffer = []
         self.position = 0
@@ -17,7 +17,7 @@ class ReplayMemory:
         self.position = (self.position + 1) % self.capacity
 
     def sample(self, batch_size):
-        batch = random.sample(self.buffer, batch_size)
+        batch = self.rng.sample(self.buffer, batch_size)
         map_state, rob_state, action, reward, next_map_state, next_rob_state, done = map(np.stack, zip(*batch))
         return map_state, rob_state, action, reward, next_map_state, next_rob_state, done
 

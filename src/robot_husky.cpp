@@ -142,8 +142,7 @@ void RobotHusky::openGripper(double position, bool wait_for_result) {
     control_msgs::FollowJointTrajectoryGoal goal;
 
     // The joint names, which apply to all waypoints
-    goal.trajectory.joint_names.push_back("gripper_finger1_finger_joint");
-    goal.trajectory.joint_names.push_back("gripper_finger2_finger_joint");
+    goal.trajectory.joint_names.push_back("gripper_finger1_joint");
     int n = goal.trajectory.joint_names.size();
 
     // Two waypoints in this goal trajectory
@@ -153,8 +152,8 @@ void RobotHusky::openGripper(double position, bool wait_for_result) {
     // Positions
     int index = 0;
     goal.trajectory.points[index].positions.resize(n);
-    goal.trajectory.points[index].positions[0] = position / 2;
-    goal.trajectory.points[index].positions[1] = position / 2;
+    // Same width[m] -> joint[rad] convention as robotiq_85_driver.py.
+    goal.trajectory.points[index].positions[0] = std::max(0.0, std::min(0.8, 0.8 - (0.8 / 0.085) * position));
     // Velocities
     goal.trajectory.points[index].velocities.resize(n);
     for (int j = 0; j < n; ++j) {

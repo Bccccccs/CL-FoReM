@@ -253,6 +253,11 @@ RobotObs RobotEnv::step(const vector<double>& base_translation_relative_list,
             throw runtime_error("Unknown execute_style");
         }
 
+        // Gazebo must execute the issued command before returning its observation.
+        if (world_->getName() == "gazebo") {
+            ros::Duration(dt_exec).sleep();
+        }
+
         // update state to what we actually achieve. Without execution we'll always be at the next base transform
         if (perception_style == "base") {
             // v0: update base, which will also change the end-effector tf that we return in robot_obs, but do so with the desired joint values
@@ -454,7 +459,8 @@ bool RobotEnv::findIk(const tf::Transform &desired_gripper_tf_world, const doubl
     robot_state::GroupStateValidityCallbackFn callback_fn = boost::bind(&validity_fun::validityCallbackFnSelfCollision, planning_scene_, &in_selfcollision, kinematic_state_, _2, _3);
 
     bool success;
-    if (ik_solver_name_ == "bio_ik/BioIKKinematicsPlugin"){
+    if (ik_solver_name_ == "bio_ik/BioIKKinematicsPlugin" ||
+        ik_solver_name_ == "modulation_rl/P0BioIKKinematicsPlugin"){
         success = findIkBioIk(desired_gripper_tf_world, dt, callback_fn);
     } else {
         success = findIkDefault(desired_gripper_tf_world, callback_fn);

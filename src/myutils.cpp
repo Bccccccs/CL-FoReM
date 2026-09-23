@@ -429,20 +429,13 @@ namespace myutils {
       if (dt < epsilon){
         throw runtime_error("dt cannot be zero");
       }
-      throw runtime_error("Not implemented for diff-drive yet");
-
-      tf::Transform base_no_trans(current_base_tf.getRotation(), tf::Vector3(0., 0., 0.));
-      tf::Vector3 delta = base_no_trans.inverse() * (desired_base_tf.getOrigin() - current_base_tf.getOrigin());
-
-      base_translation_per_second[0] = delta.length() / dt;
-      if (delta.x() < 0.0){
-        base_translation_per_second[0] *= -1.0;
-      }
-
-      base_rotation_per_second = std::atan2(delta.y(), delta.x());
-      if (base_rotation_per_second > M_PI) {
-        base_rotation_per_second -= 2 * M_PI;
-      }
+      // Invert calcDesiredBaseTfDiffDrive: translation is along the updated
+      // heading; yaw change is independent of translation (including pure turns).
+      const double yaw = qToRpy(desired_base_tf.getRotation()).z();
+      const tf::Vector3 delta = desired_base_tf.getOrigin() - current_base_tf.getOrigin();
+      const double forward = delta.x() * std::cos(yaw) + delta.y() * std::sin(yaw);
+      base_translation_per_second = tf::Vector3(forward / dt, 0.0, 0.0);
+      base_rotation_per_second = rpyAngleDiff(yaw, qToRpy(current_base_tf.getRotation()).z()) / dt;
     }
 
     double trueModulo(double a, double b){

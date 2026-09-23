@@ -272,3 +272,23 @@ install(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+# Optional, separate P0 diagnostic plugin. Original bio_ik source/library stays intact.
+option(MODULATION_BUILD_P0_BIOIK "Build local BioIK diagnostic plugin" ON)
+if(MODULATION_BUILD_P0_BIOIK)
+  set(P0_BIOIK_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/../bio_ik/src")
+  find_package(PythonInterp 3 REQUIRED)
+  execute_process(COMMAND ${PYTHON_EXECUTABLE}
+    ${CMAKE_CURRENT_SOURCE_DIR}/p0_bioik/generate.py
+    ${P0_BIOIK_SOURCE} ${CMAKE_CURRENT_BINARY_DIR}/p0_bioik
+    RESULT_VARIABLE P0_GENERATE_RESULT)
+  if(NOT P0_GENERATE_RESULT EQUAL 0)
+    message(FATAL_ERROR "P0 BioIK source adaptation failed")
+  endif()
+  add_library(modulation_p0_bioik SHARED ${CMAKE_CURRENT_BINARY_DIR}/p0_bioik/p0_kinematics_plugin.cpp)
+  target_include_directories(modulation_p0_bioik PRIVATE ${P0_BIOIK_SOURCE} ${catkin_INCLUDE_DIRS})
+  target_compile_options(modulation_p0_bioik PRIVATE -O3 -std=c++14)
+  target_link_libraries(modulation_p0_bioik ${catkin_LIBRARIES})
+  install(TARGETS modulation_p0_bioik LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION})
+  install(FILES p0_bioik/plugin.xml DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/p0_bioik)
+endif()

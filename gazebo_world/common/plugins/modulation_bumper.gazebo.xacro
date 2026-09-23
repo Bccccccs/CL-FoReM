@@ -4,7 +4,8 @@
 
     <xacro:macro name="modulation_bumper" params="reference sensor_name collision_name">
         <gazebo reference="${reference}">
-            <turnGravityOff>true</turnGravityOff>
+            <!-- Contact sensing must not disable robot physics. -->
+            <turnGravityOff>false</turnGravityOff>
             <selfCollide>false</selfCollide>
             <sensor type="contact" name="${sensor_name}_contact_sensor">
                 <update_rate>50.0</update_rate>

@@ -134,7 +134,7 @@ class RobotEnv(Env):
 
         if not fake_gazebo and (env != 'hsr'):
             solver_param = "/robot_description_kinematics/" + self.robot_config["joint_model_group_name"] + "/kinematics_solver"
-            assert (rospy.get_param(solver_param) == "bio_ik/BioIKKinematicsPlugin") == (iksolver == "bioik"), (iksolver, rospy.get_param(solver_param))
+            assert (rospy.get_param(solver_param) in {"bio_ik/BioIKKinematicsPlugin", "modulation_rl/P0BioIKKinematicsPlugin"}) == (iksolver == "bioik"), (iksolver, rospy.get_param(solver_param))
 
         if env == 'pr2':
             self.robot_config['ik_joint_model_group_name'] = 'right_arm' if learn_torso else self.robot_config['joint_model_group_name']

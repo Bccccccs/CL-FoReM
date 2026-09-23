@@ -156,20 +156,9 @@ class GaussianPolicy(nn.Module):
 
     def sample(self, map_obs, robot_state_space):
         mean_actions, log_std, kwargs = self.forward(map_obs, robot_state_space)
-        return self.action_dist.log_prob_from_params(mean_actions, log_std, **kwargs)
-
-        # std = log_std.exp()
-        # normal = Normal(mean, std)
-        # x_t = normal.rsample()  # for reparameterization trick (mean + std * N(0,1))
-        # y_t = torch.tanh(x_t)
-        # action = y_t * self.action_scale + self.action_bias
-        # log_prob = normal.log_prob(x_t)
-        # log_prob = torch.clamp(log_prob, -100, 100)
-        # # Enforcing Action Bound
-        # log_prob -= torch.log((1 - y_t.pow(2)) + epsilon)
-        # log_prob = log_prob.sum(1, keepdim=True)
-        # mean = torch.tanh(mean) * self.action_scale + self.action_bias
-        # return action, log_prob, mean
+        actions, log_prob = self.action_dist.log_prob_from_params(mean_actions, log_std, **kwargs)
+        return (actions * self.action_scale + self.action_bias,
+                (log_prob - torch.log(self.action_scale).sum()).reshape(-1, 1))
 
     def predict(self, map_obs, robot_state_space, eval = False):
         mean_actions, log_std, kwargs = self.forward(map_obs, robot_state_space)
@@ -177,11 +166,13 @@ class GaussianPolicy(nn.Module):
         # print("log_std device:", log_std.device)
         # print("kwargs device:", kwargs["latent_sde"].device)
         action = self.action_dist.actions_from_params(mean_actions, log_std, deterministic=eval, **kwargs)
-        return   torch.tanh(action) * self.action_scale + self.action_bias
+        return action * self.action_scale + self.action_bias
     
     def sample_with_action(self, map_obs, robot_state_space, actions):
         mean_actions, log_std, kwargs = self.forward(map_obs, robot_state_space)
-        return self.action_dist.log_prob_from_params_given_action(mean_actions, log_std, actions, **kwargs)
+        normalized = (actions - self.action_bias) / self.action_scale
+        self.action_dist.proba_distribution(mean_actions, log_std, **kwargs)
+        return (self.action_dist.log_prob(normalized) - torch.log(self.action_scale).sum()).reshape(-1, 1)
 
     def to(self, device):
         self.action_scale = self.action_scale.to(device)

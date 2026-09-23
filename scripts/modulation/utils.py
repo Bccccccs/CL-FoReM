@@ -179,7 +179,7 @@ def create_run_name(args) -> str:
     if not n:
         n = []
         for k, v in sorted(args.items()):
-            if (k in parser.parse_known_args()[0]) and (v != parser.get_default(k)) \
+            if (k in parser.parse_known_args([])[0]) and (v != parser.get_default(k)) \
                 and (not k.startswith('bioik')) \
                 and not (args['algo'] != 'moveit' and 'moveit' in k) \
                 and not (args['algo'] != 'articulated' and 'articulated' in k) \

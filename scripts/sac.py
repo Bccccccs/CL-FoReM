@@ -4,6 +4,7 @@ import torch.nn.functional as F
 from torch.optim import Adam
 from utils import soft_update, hard_update
 from model import GaussianPolicy, QNetwork, DeterministicPolicy
+from checkpointing import load_trusted
 import gym
 import torch.nn as nn
 from torch.optim.lr_scheduler import LambdaLR
@@ -31,7 +32,9 @@ class SAC(object):
         self.target_update_interval = target_update_interval
         self.automatic_entropy_tuning = True
 
-        self.device = torch.device("cuda")
+        self.device = torch.device(args.get("device", "cuda"))
+        self.prior_beta = args.get("prior_beta", None)
+        self.config = dict(args)
 
         self.critic = QNetwork(map_space, robot_state_space,  action_space, args["model"]["custom_model_config"]["post_fcnet_hiddens"]).to(device=self.device)
         self.critic_optim = Adam(self.critic.parameters(), lr=self.lr_start)
@@ -85,7 +88,7 @@ class SAC(object):
         with torch.no_grad():
             next_state_action, next_state_log_pi = self.policy.sample(next_map_state_batch, next_rob_state_batch)
             qf1_next_target, qf2_next_target = self.critic_target(next_map_state_batch, next_rob_state_batch, next_state_action)
-            min_qf_next_target = torch.min(qf1_next_target, qf2_next_target) - self.alpha * next_state_log_pi.unsqueeze(1)
+            min_qf_next_target = torch.min(qf1_next_target, qf2_next_target) - self.alpha * next_state_log_pi.reshape(-1, 1)
             next_q_value = reward_batch + mask_batch * self.gamma * (min_qf_next_target)
         qf1, qf2 = self.critic(map_state_batch, rob_state_batch, action_batch)  # Two Q-functions to mitigate positive bias in the policy improvement step
         qf1_loss = F.mse_loss(qf1, next_q_value)  # JQ = 𝔼(st,at)~D[0.5(Q1(st,at) - r(st,at) - γ(𝔼st+1~p[V(st+1)]))^2]
@@ -110,7 +113,7 @@ class SAC(object):
         qf1_pi, qf2_pi = self.critic(map_state_batch, rob_state_batch, pi)
         min_qf_pi = torch.min(qf1_pi, qf2_pi)
 
-        policy_loss = ((self.alpha * log_pi) - min_qf_pi).mean() # Jπ = 𝔼st∼D,εt∼N[α * logπ(f(εt;st)|st) − Q(st,f(εt;st))]
+        policy_loss = ((self.alpha * log_pi.reshape(-1, 1)) - min_qf_pi).mean() # Jπ = 𝔼st∼D,εt∼N[α * logπ(f(εt;st)|st) − Q(st,f(εt;st))]
 
         self.policy_optim.zero_grad()
         policy_loss.backward()
@@ -143,12 +146,12 @@ class SAC(object):
 
             # self.alpha = self.log_alpha.exp()
             # 限制最大alpha为0.35
-            self.alpha = self.log_alpha.exp() * self.max_alpha
+            self.alpha = (self.log_alpha.exp() * self.max_alpha).detach()
             alpha_tlogs = self.alpha.clone() # For TensorboardX logs
 
             # alpha降低至0.05时，不再降低了
             if self.alpha <= self.min_alpha:
-                self.alpha = torch.tensor(self.min_alpha)
+                self.alpha = torch.tensor(self.min_alpha, device=self.device)
                 self.automatic_entropy_tuning = False
                 alpha_tlogs = self.alpha
             # alpha_tlogs = self.alpha
@@ -178,12 +181,8 @@ class SAC(object):
             if self.use_sde:
                 self.policy.reset_noise(batch_size)
 
+            beta = self.alpha if self.prior_beta is None else self.prior_beta
             with torch.no_grad():
-
-                state_action, state_log_pi = self.policy.sample(map_state_batch, rob_state_batch)
-
-                prior_log_prob = prior_agent.policy.sample_with_action(map_state_batch, rob_state_batch, state_action)
-                prior_log_prob = prior_log_prob.reshape(-1, 1)
 
                 next_state_action, next_state_log_pi = self.policy.sample(next_map_state_batch, next_rob_state_batch)
                 next_state_log_pi = next_state_log_pi.reshape(-1, 1)
@@ -192,7 +191,7 @@ class SAC(object):
                 next_prior_log_prob = next_prior_log_prob.reshape(-1, 1)
 
                 qf1_next_target, qf2_next_target = self.critic_target(next_map_state_batch, next_rob_state_batch, next_state_action)
-                min_qf_next_target = torch.min(qf1_next_target, qf2_next_target) + self.alpha * next_prior_log_prob - self.alpha * next_state_log_pi
+                min_qf_next_target = torch.min(qf1_next_target, qf2_next_target) + beta * next_prior_log_prob - self.alpha * next_state_log_pi
 
                 next_q_value = reward_batch + mask_batch * self.gamma * (min_qf_next_target)
             qf1, qf2 = self.critic(map_state_batch, rob_state_batch, action_batch)  # Two Q-functions to mitigate positive bias in the policy improvement step
@@ -213,10 +212,16 @@ class SAC(object):
             self.critic_optim.step()
             self.scheduler_critic_optim.step()
 
+            # Freeze prior weights but retain d log prior(a|s) / da.
+            for parameter in prior_agent.policy.parameters():
+                parameter.requires_grad_(False)
+            state_action, state_log_pi = self.policy.sample(map_state_batch, rob_state_batch)
+            state_log_pi = state_log_pi.reshape(-1, 1)
+            prior_log_prob = prior_agent.policy.sample_with_action(map_state_batch, rob_state_batch, state_action).reshape(-1, 1)
             qf1_pi, qf2_pi = self.critic(map_state_batch, rob_state_batch, state_action)
             min_qf_pi = torch.min(qf1_pi, qf2_pi)
 
-            policy_loss = (self.alpha * state_log_pi - min_qf_pi - self.alpha * prior_log_prob).mean()
+            policy_loss = (self.alpha * state_log_pi - min_qf_pi - beta * prior_log_prob).mean()
 
             self.policy_optim.zero_grad()
             policy_loss.backward()
@@ -249,12 +254,12 @@ class SAC(object):
 
                 # self.alpha = self.log_alpha.exp()
                 # 限制最大alpha为0.35
-                self.alpha = self.log_alpha.exp() * self.max_alpha
+                self.alpha = (self.log_alpha.exp() * self.max_alpha).detach()
                 alpha_tlogs = self.alpha.clone() # For TensorboardX logs
 
                 # alpha降低至0.05时，不再降低了
                 if self.alpha <= self.min_alpha:
-                    self.alpha = torch.tensor(self.min_alpha)
+                    self.alpha = torch.tensor(self.min_alpha, device=self.device)
                     self.automatic_entropy_tuning = False
                     alpha_tlogs = self.alpha
                 # alpha_tlogs = self.alpha
@@ -285,7 +290,7 @@ class SAC(object):
     def load_checkpoint(self, ckpt_path, evaluate=False):
         print('Loading models from {}'.format(ckpt_path))
         if ckpt_path is not None:
-            checkpoint = torch.load(ckpt_path)
+            checkpoint = load_trusted(ckpt_path)
             self.policy.load_state_dict(checkpoint['policy_state_dict'])
             self.critic.load_state_dict(checkpoint['critic_state_dict'])
             self.critic_target.load_state_dict(checkpoint['critic_target_state_dict'])
@@ -306,7 +311,7 @@ class SAC(object):
     def load_and_freeze_checkpoint(self, ckpt_path):
         print('Loading models from {}'.format(ckpt_path))
         if ckpt_path is not None:
-            checkpoint = torch.load(ckpt_path)
+            checkpoint = load_trusted(ckpt_path)
             self.policy.load_state_dict(checkpoint['policy_state_dict'])
             self.critic.load_state_dict(checkpoint['critic_state_dict'])
             self.critic_target.load_state_dict(checkpoint['critic_target_state_dict'])
