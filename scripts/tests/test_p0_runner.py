@@ -67,3 +67,34 @@ def test_fixed_ik_worker_keeps_budget(tmp_path):
     command=episode_command(args,tmp_path,10008)
     assert command[command.index('--ik-mode')+1]=='fixed'
     assert command[command.index('--ik-iterations')+1]=='12'
+
+
+def test_collection_seeds_only_training_range(tmp_path):
+    from p0_runner import read_seeds
+    p=tmp_path/'seeds.json'
+    p.write_text('[0,9999]')
+    assert read_seeds(p,2,allow_training=True)==[0,9999]
+    for text in ['[10000,1]','[5,5]','[20000,1]']:
+        p.write_text(text)
+        with pytest.raises(ValueError): read_seeds(p,2,allow_training=True)
+    p.write_text('[0,1]')
+    with pytest.raises(ValueError): read_seeds(p,2)
+
+
+def test_worker_propagates_collection_options(tmp_path):
+    from argparse import Namespace
+    from p0_runner import episode_command
+    args=Namespace(checkpoint='/tmp/w.pt',task='simpleobstacle',world_type='sim',device='cpu',seed=11,max_episode_steps=80,
+                   ik_mode='fixed',ik_iterations=100,policy_mode='stochastic',save_observations=True)
+    command=episode_command(args,tmp_path,5)
+    assert command[command.index('--policy-mode')+1]=='stochastic' and '--save-observations' in command
+    args.save_observations=False;args.policy_mode='deterministic'
+    assert '--save-observations' not in episode_command(args,tmp_path,6)
+
+
+def test_stochastic_policy_requires_data_collection(tmp_path):
+    import subprocess,sys
+    result=subprocess.run([sys.executable,str(Path(__file__).resolve().parents[1]/'p0_runner.py'),'eval',
+        '--checkpoint','x','--seeds','y','--policy-mode','stochastic','--output',str(tmp_path/'o')],
+        capture_output=True,text=True,timeout=30)
+    assert result.returncode!=0 and 'only for data collection' in result.stderr

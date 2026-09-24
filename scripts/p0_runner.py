@@ -37,8 +37,16 @@ def sha(path):
     return h.hexdigest()
 
 
-def read_seeds(path, episodes):
+def read_seeds(path, episodes, allow_training=False):
+    """Evaluation uses validation/test seeds only. World-model data collection (allow_training)
+    uses the training range 0-9999 only, so evaluation sets are never consumed as data."""
     seeds=json.loads(Path(path).read_text())
+    if allow_training:
+        if not isinstance(seeds,list) or len(seeds)<episodes or len(set(seeds))!=len(seeds):
+            raise ValueError('Need enough unique episode seeds')
+        if any(type(s) is not int or not 0<=s<=9999 for s in seeds):
+            raise ValueError('Data collection seeds must be in the training range 0-9999')
+        return seeds[:episodes]
     if not isinstance(seeds,list) or len(seeds)<episodes or len(set(seeds))!=len(seeds):
         raise ValueError('Need enough unique episode seeds')
     if any(type(s) is not int or not 10000<=s<=20299 for s in seeds):
@@ -91,7 +99,7 @@ def load_weights(agent,path):
 
 
 def evaluate(args,agent,env,output,config):
-    seeds=read_seeds(args.seeds,args.episodes)
+    seeds=read_seeds(args.seeds,args.episodes,args.save_observations)
     agent.policy.eval()
     records=[];latencies=[]
     sensor_stamps={};subscriptions=[]
@@ -108,6 +116,7 @@ def evaluate(args,agent,env,output,config):
         row=dict(seed=seed,task=args.task,world=args.world_type,exception=None,success=False,
                  perfect_success=False,checkpoint_sha256=sha(args.checkpoint))
         total_reward=0.; info={}; step=0
+        obs_rob=[]; obs_map=[]; rewards=[]; step_dt=[]; subgoal=[]; step_done=[]
         sim_start=rospy.get_time() if args.world_type=='gazebo' else None
         ages=[]
         try:
@@ -117,10 +126,13 @@ def evaluate(args,agent,env,output,config):
             row['initial_goal']=list(env.unwrapped._ee_planner.gripper_goal_wrist)
             row['layout_sha256']=hashlib.sha256(np.asarray(env.map._floorplan_img,dtype='<f4').tobytes()).hexdigest()
             poses.append(env.get_robot_obs().base_tf[:2])
+            if args.save_observations:
+                obs_rob.append(np.asarray(state[0],dtype=np.float32));obs_map.append(np.asarray(state[1],dtype=np.float32))
+                subgoal.append(int(getattr(env,'current_goal',0)))
             trajectory_hash=hashlib.sha256()
             for step in range(1,args.max_episode_steps+1):
-                tick=time.monotonic()
-                with torch.no_grad(): action=agent.select_action(state,eval=True)
+                tick=time.monotonic(); sim_tick=rospy.get_time() if args.world_type=='gazebo' else None
+                with torch.no_grad(): action=agent.select_action(state,eval=args.policy_mode=='deterministic')
                 next_state,reward,done,info=step_with_limit(env,action,step,args.max_episode_steps)
                 duration=time.monotonic()-tick
                 episode_latency.append(duration);latencies.append(duration)
@@ -132,6 +144,10 @@ def evaluate(args,agent,env,output,config):
                 trajectory_hash.update(observation_fingerprint(next_state).encode())
                 trajectory_hash.update(np.asarray(action,dtype='<f4').tobytes())
                 total_reward+=reward;state=next_state
+                if args.save_observations:
+                    obs_rob.append(np.asarray(next_state[0],dtype=np.float32));obs_map.append(np.asarray(next_state[1],dtype=np.float32))
+                    rewards.append(float(reward));step_done.append(bool(done));subgoal.append(int(getattr(env,'current_goal',0)))
+                    step_dt.append(.1 if args.world_type=='sim' else rospy.get_time()-sim_tick)
                 if done: break
             end=termination(done,info,config['ik_fail_thresh'])
             success=end['primary_reason']=='success'
@@ -147,6 +163,18 @@ def evaluate(args,agent,env,output,config):
                    sensor_age_seconds=ages)
         dump(output/('episode-%05d-tail.json'%seed),list(tail))
         np.savez_compressed(output/('episode-%05d-trajectory.npz'%seed),base_xy=poses,states=states,actions=actions,control_seconds=episode_latency)
+        if args.save_observations:
+            # observations[0:T+1] with actions[0:T]; the normalized action is what env.step received.
+            complete=row['exception'] is None and len(obs_rob)==len(actions)+1
+            np.savez_compressed(output/('episode-%05d-observations.npz'%seed),
+                robot_state=np.asarray(obs_rob,dtype=np.float32).reshape(-1,*(env.observation_space.spaces[0].shape)),
+                local_map=np.asarray(obs_map,dtype=np.float32).reshape(-1,*(env.observation_space.spaces[1].shape)),
+                action=np.asarray(actions,dtype=np.float32).reshape(-1,env.action_space.shape[0]),
+                reward=np.asarray(rewards,dtype=np.float32),dt=np.asarray(step_dt,dtype=np.float32),
+                done=np.asarray(step_done,dtype=bool),subgoal_index=np.asarray(subgoal,dtype=np.int16),
+                terminated=bool(row.get('terminated',False)),truncated=bool(row.get('truncated',False)),
+                complete=complete,seed=seed,policy_mode=args.policy_mode,
+                checkpoint_sha256=row['checkpoint_sha256'],semantics=SEMANTICS)
         with (output/'episodes.jsonl').open('a') as f:f.write(json.dumps(row,default=jsonable)+'\n')
         records.append(row)
         print('EVAL',index+1,len(seeds),seed,row['primary_reason'],step,flush=True)
@@ -178,13 +206,15 @@ def episode_command(args,output,seed):
             '--world-type',args.world_type,'--device',args.device,'--seed',str(args.seed),
             '--max-episode-steps',str(args.max_episode_steps),
             '--ik-mode',getattr(args,'ik_mode','legacy'),
-            '--ik-iterations',str(getattr(args,'ik_iterations',0))]
+            '--ik-iterations',str(getattr(args,'ik_iterations',0)),
+            '--policy-mode',getattr(args,'policy_mode','deterministic')]+(
+            ['--save-observations'] if getattr(args,'save_observations',False) else [])
 
 
 def evaluate_isolated(args,output,config):
     """A new solver process per episode prevents BioIK RNG leakage across resets."""
     records=[];latencies=[]
-    seeds=read_seeds(args.seeds,args.episodes)
+    seeds=read_seeds(args.seeds,args.episodes,args.save_observations)
     for seed in seeds:
         command=episode_command(args,output,seed)
         worker=output/('worker-%05d'%seed)
@@ -291,11 +321,17 @@ def main():
     p.add_argument('--device',default='cuda',choices=['cpu','cuda'])
     p.add_argument('--ik-mode',choices=['legacy','diagnostic','fixed'],default='legacy')
     p.add_argument('--ik-iterations',type=int,default=0)
+    p.add_argument('--policy-mode',choices=['deterministic','stochastic'],default='deterministic',
+                   help='eval action selection; stochastic only for world-model data collection')
+    p.add_argument('--save-observations',action='store_true',
+                   help='world-model data collection: save observations[0:T+1] incl. maps; training seeds only')
     args=p.parse_args()
     if args.ik_mode=='fixed' and args.ik_iterations<1:p.error('fixed IK requires positive --ik-iterations')
     if args.mode=='train' and args.world_type=='gazebo' and args.eval_interval:
         p.error('Gazebo training requires --eval-interval 0; evaluation must use an isolated simulator')
     if args.mode=='eval' and (not args.checkpoint or not args.seeds):p.error('eval requires checkpoint and seeds')
+    if args.policy_mode=='stochastic' and not args.save_observations:
+        p.error('stochastic policy is only for data collection (--save-observations)')
     if args.mode=='train' and args.algorithm!='sac' and not args.prior_checkpoint:p.error('prior algorithm requires prior checkpoint')
     output=Path(args.output);output.mkdir(parents=True,exist_ok=False)
     from modulation.utils import parse_args,env_creator,set_seed
