@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 root=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
-container=${MM_CONTAINER:-mmhusky-p0-ready}
-image=${MM_IMAGE:-mm_husky:p0-ready}
+container=${MM_CONTAINER:-mmhusky-node01}
+image=${MM_IMAGE:-mm_husky:node01}
 command=${1:-help}
 if (($#)); then shift; fi
 run() { local runtime_image
@@ -11,6 +11,13 @@ run() { local runtime_image
   GAZEBO_MODEL_PATH=/root/mm_husky_ws/src/modulation_rl/gazebo_models:/root/mm_husky_ws/assets/gazebo/pal_gazebo_worlds/models:/root/mm_husky_ws/assets/gazebo/aws-bookstore/models:/usr/share/gazebo-11/models "$@"; }
 case "$command" in
   build)
+    dockerfile=${MM_DOCKERFILE:-Dockerfile.node01}
+    if [[ $dockerfile != Dockerfile ]]; then
+      # node01: public Noetic base; direct connection (no proxy build-args), see ENV.md.
+      docker build --network host -f "$root/docker/$dockerfile" -t "$image" "$root/docker"
+      exit
+    fi
+    # Legacy source-machine path: incremental build on the audited local mm_husky:deps.
     base=${MM_BASE_IMAGE:-mm_husky:deps}
     expected=sha256:7e08e15e9865c49c7ee903f6e5b9172ac4d1438574c9351c600181a41e75024d
     actual=$(docker image inspect "$base" --format '{{.Id}}')

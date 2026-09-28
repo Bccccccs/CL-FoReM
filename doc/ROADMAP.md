@@ -114,6 +114,6 @@ Stage0 前置验证 ──G0──▶ F1 设计冻结 ──▶ Stage1 闭环筛
 - **P0–P5**：技术模块编号，只用于找模块文档，不代表执行顺序：P0 基线环境、P1 世界模型、P2 前瞻修正、P3 记忆校准（后置）、P4 在线更新（简化版进 Stage1）、P5 视觉语言（主线外）。
 - **R0-x**：Stage0 的实验；**S0–S4**：Stage1/2 的对比组（同时训练，不是先后阶段）；**G0–G2**：通过/停止检查点；**F1**：设计冻结；**Dxx**：DECISIONS 条目。
 
-## 11. 当前位置（2026-09-28 约16:00）
+## 11. 当前位置（2026-09-28 约16:40）
 
-P0 analytical 已验收；P1 单种子 val 有初步正结果（D36）；Stage0 执行 Agent 被用户停止，残留已清理，**Stage0 待用户启动新执行 Agent 从头执行**（提示词 agent_logs/20260928-stage0-prompt-v2.md）；工作区已改名为 /home/ybc/projects/CL-FoReM；Stage1 代码尚未编写。
+P0 analytical 已验收；P1 单种子 val 有初步正结果（D36）；Stage0 前一次执行被用户停止、残留已清理，**Stage0 待用户启动新执行 Agent 从头执行**（提示词 [agent_logs/20260928-stage0-prompt-v3.md](agent_logs/20260928-stage0-prompt-v3.md)）。工作区为 `/home/ybc/projects/CL-FoReM`（D41），单仓库、GitHub 私有远端（D42）；常驻容器已按新路径重建；文档已全量审查（DOCREV-028）。Stage1 代码尚未编写。

@@ -1,15 +1,14 @@
-# AGENTS.md - SC²-WM 闭环世界模型移植
+# AGENTS.md - CL-FoReM：Husky 世界模型闭环
 
-更新日期：2026-09-28。本文是所有在本工作区工作的 Agent 的执行约束。
+更新日期：2026-09-28（DOCREV-028 全量审查）。本文是所有在本工作区工作的 Agent 的执行约束。旧版全文见 [审查前快照](doc/archive/20260928-docrev/AGENTS-pre-docrev.md)，仅作溯源。
 
-## 0. 最新研究约束（2026-09-28，优先于下方历史环境快照）
+## 0. 最新研究约束
 
-- 用户明确：只把世界模型闭环引入现有 Husky 系统，不考虑 TopAY/NMoMA；现有可沿用的继续沿用。投稿目标暂定 IJCAI 2027（CCF-B，截稿约2027年1月中旬，待官方CFP确认；D35/D37，原IROS目标已取代），先完成研究与验证，当前不撰写论文正文。
-- 继续使用 N²M²/SAC、EE planner、BioIK、控制器、已有采数/训练/评测入口和 P0–P5 文档；不机械移植候选轨迹评分、优化器调参等不存在的接口。最终动作仍由 SAC 输出。
+- 用户明确：只把世界模型闭环引入现有 Husky 系统，不考虑 TopAY/NMoMA；现有可沿用的继续沿用。投稿目标暂定 IJCAI 2027（CCF-B，截稿约2027年1月中旬，待官方CFP确认；D37），先完成研究与验证，当前不撰写论文正文。
+- 继续使用 N²M²/SAC、EE planner、BioIK、控制器、已有采数/训练/评测入口；不机械移植候选轨迹评分、优化器调参等不存在的接口。最终动作仍由 SAC 输出。
 - 所有重大修改先关联研究问题、假设、对照和验收。WM预测、一次选择、每步反馈决策、在线模型适应分别命名；现有SAC本身已有观测反馈，不能把它描述成整体open-loop。
-- 目标与文档入口：[研究目标](doc/RESEARCH_GOAL.md)、[系统流程](doc/SYSTEM_PIPELINE.md)、[机制与claims](doc/WM_RESEARCH_DESIGN.md)、[实验框架](doc/RESEARCH_EXPERIMENTS.md)、[内存方案](doc/P1_MEMORY_PLAN.md)。全部阶段结果以最新证据为准，文档完成不等于研究验收。
-- 当前权威路径是 `/home/ybc/projects/CL-FoReM/src/modulation_rl`（2026-09-28 由 `/home/ybc/projects/mm_husky_ws` 改名，D41；容器内仍挂载为 `/root/mm_husky_ws`）；旧 `/home/ybc/projects/mm_husky_ws`、`/home/yanbochao/...` 均不存在。node01 环境按 ENV.md 和 D23–D25 使用；本轮只读快照见 [记录](doc/RESEARCH_RECORDS.md)。下方2080Ti、Python3.8及旧容器是来源机器历史，不适用于本机。
-- 用户要求在现有内存内解决扩量问题。先做端到端有界数据/编码/训练/评测设计及验证，不用增加内存、swap或仅缩小batch掩盖全量加载问题。
+- **唯一执行计划是 [doc/ROADMAP.md](doc/ROADMAP.md)**（D40）：Stage0 前置验证 → G0 → F1 设计冻结 → Stage1 闭环筛查 → G1 → Stage2 正式验证 → G2 → Stage3 写作。P0–P5 只是技术模块编号，不代表执行顺序；最小闭环 = P2 前瞻修正 + 简化 P4 在线更新（D38），失配来源见 D39。
+- 用户要求在现有内存内解决扩量问题：数据/编码/训练/评测走有界链路（D31/D34），不用增加内存、swap或仅缩小batch掩盖全量加载问题。
 
 ## 1. 研究目标与职责边界
 
@@ -34,81 +33,43 @@
 7. **并发写入规则**：每个任务使用独立日志文件，优先只更新自己负责的进度行；写共享文档前重读，保留其他 Agent 的内容。多人协作由协调 Agent 维护总表，子 Agent 用自己的日志反馈。发现重叠修改先记录并协调，不覆盖他人工作。
 8. **完成标准**：完成交付、执行规定验证、处理审查发现、更新进度和交接记录后，才能标为 `done`。未经验证使用 `review`，有明确依赖使用 `blocked`，不得虚报完成。
 
-任务记录模板：[doc/agent_logs/TEMPLATE.md](doc/agent_logs/TEMPLATE.md)。所有本项目子目录及独立 Git 仓库中的 Agent 均适用上述要求；给子 Agent 的任务说明必须附本规则和日志路径。此规则不要求主动创建子 Agent。
+任务记录模板：[doc/agent_logs/TEMPLATE.md](doc/agent_logs/TEMPLATE.md)。所有本项目子目录及第三方嵌套仓库中的 Agent 均适用上述要求；给子 Agent 的任务说明必须附本规则和日志路径。此规则不要求主动创建子 Agent。
 
-## 3. 权威代码与文档
+## 3. 权威代码、仓库与文档
 
-- 唯一开发代码：`/home/ybc/projects/CL-FoReM/src/modulation_rl`（容器内 `/root/mm_husky_ws/src/modulation_rl`），算法入口在 `scripts/`；旧绝对路径仅为历史来源。
-- `mm_husky_runtime/ws`、`scripts/modulation（修改后）/`、`scripts/modulation/envs/改过的地图场景/`、根目录 `modulation_rl(复件)/` 仅作为参考，禁止在其中实现正式研究功能。
-- runtime 中的修复须逐项审查并移植到主目录，不能整体覆盖。修正现有算法/环境语义属于 P0，必须单独记录和重测；P1-P5 不得偷偷改变奖励、终止或动作语义。
-- 当前阶段安排以 [doc/README.md](doc/README.md) 及其链接的 P0-P5 文档为准，状态以 [doc/PROGRESS.md](doc/PROGRESS.md) 为准。
-- 设计变更写入 [doc/DECISIONS.md](doc/DECISIONS.md)，实验协议见 [doc/EVALUATION.md](doc/EVALUATION.md)，合理性审查见 [doc/REVIEW.md](doc/REVIEW.md)。用户最新明确指令优先，变更必须同步文档。
-- 当前环境入口以 [ENV.md](ENV.md) 与 [docker/run.sh](docker/run.sh) 为准。2026-09-22 的独立环境任务已更新指南；这是基于本地依赖镜像的增量构建，完整可移植重建仍需额外资产。
-- 旧版安排和实验数字完整保存在 [历史快照](doc/archive/AGENTS-20260921.md)，仅作溯源，不具备当前指令效力。
+- 工作区：宿主 `/home/ybc/projects/CL-FoReM`，容器内挂载为 `/root/mm_husky_ws`（D41）。唯一开发代码：`src/modulation_rl`，算法入口在 `scripts/`。
+- Git：单仓库，远端 `git@github.com:Bccccccs/CL-FoReM.git`（私有，D42）。`src/modulation_rl` 已并入根仓库，研究代码与文档一起提交；第三方 ROS 包（bio_ik、husky 等）仍是独立仓库、被根仓库忽略，改它们时检查各自的 diff/status。不得丢弃他人改动，不自动改 remote，不把第三方嵌套仓库当作已被根仓库备份。
+- `scripts/modulation（修改后）/`、`scripts/modulation/envs/改过的地图场景/`、根目录 `modulation_rl(复件)/` 仅作参考，禁止在其中实现正式研究功能。
+- 修正现有算法/环境语义必须单独记录（DECISIONS）和重测；新增模块不得偷偷改变奖励、终止或动作语义。
+- 文档入口见 [doc/README.md](doc/README.md)：执行计划看 ROADMAP，状态看 [PROGRESS](doc/PROGRESS.md)，设计变更写入 [DECISIONS](doc/DECISIONS.md)（只追加），通用评测协议见 [EVALUATION](doc/EVALUATION.md)。用户最新明确指令优先，变更必须同步文档。
+- 环境入口以 [ENV.md](ENV.md) 与 [docker/run.sh](docker/run.sh) 为准。
+- `doc/archive/` 只作溯源，不具备当前指令效力，日常工作无需阅读。
 
-## 4. 阶段与进入条件
+## 4. 当前阶段（详见 ROADMAP 与 PROGRESS 看板）
 
-| 阶段 | 内容 | 进入条件/出口 |
-|---|---|---|
-| [P0](doc/P0/PLAN.md) | 环境、训练正确性、评测基线、失败分析；独立推进 Gazebo | analytical 验收通过后可进入 P1，完整 Gazebo 场景不阻塞离线训练 |
-| [P1](doc/P1_WORLD_MODEL.md) | P1a 最小动作条件预测；P1b 概率时序模型 | 预测优于复制/无动作对照，明确数据和状态接口 |
-| [P2](doc/P2_CORRECTION.md) | 可关闭的特征残差修正、匹配结构消融 | 先 P1a 接最小闭环；GRU 版本必须完成 P1b 与序列训练接口 |
-| [P3](doc/P3_MEMORY.md) | 记忆校准、受控感知扰动与动态障碍 | P2 有可重复收益，时序训练已实现 |
-| [P4](doc/P4_ADAPTATION.md) | 条件式测试时模型更新 | P2 稳定、固定 P3 开关、时序和实时预算已核验 |
-| [P5](doc/P5_LANGUAGE.md) | 可选 RGB-D 与语言条件化 | P2 收益验证后，用户决定启动；不属于近期主线 |
+| 项 | 状态 |
+|---|---|
+| P0 基线环境 | analytical 已验收（node01，fixed-IK 复现差值0，D24）；Gazebo 实时/任务出口未通过，对齐工作并入 Stage0 R0-5 |
+| P1 世界模型 | 索引修复与有界链路已验收（D33/D34）；1000回合单seed val 初步正结果（D36）；跨seed与独立test由 Stage0 R0-1/R0-2 完成 |
+| 当前阶段 | **Stage0 前置验证**（M、R0-1～R0-5），通过 G0 后经用户确认 F1 才进入 Stage1 |
+| P2/P4 | Stage1 一起实现（D38），尚未编写 |
+| P3/P5 | 后置扩展/主线外，未启动 |
 
-P1-P5 的文档是阶段研究安排，不代表功能已实现或超参数已验证。未通过阶段入口检查，不得将后续研究结果用于正式对比。
+各模块文档（doc/P0、P1_WORLD_MODEL … P5_LANGUAGE）描述接口与实现细节，不代表功能已实现或超参数已验证。未通过检查点，不得将后续结果用于正式对比。
 
-## 5. 当前已核实状态与限制
+## 5. 必须记住的已核实事实
 
-2026-09-22 的检查结果（会话证据整理见 [记录](doc/agent_logs/20260922-doc-plan.md)）：
-
-- 根仓库与 `src/modulation_rl` 检查时干净；算法主包 HEAD 为 `68b8d0b`，之前的原样 Husky 基线为 `1ccedd0`。
-- 前序检查的旧容器 `mmhusky-dev` 新进程 CUDA/NVML 失败，宿主 GPU 正常；后续独立环境任务已创建 `mmhusky-p0` / `mm_husky:p0-noetic`，CUDA 运算通过。新工作采用 ENV.md 的新入口，旧训练保持原状；故障具体触发原因仍未确认。
-- `update_parameters_modified()` 的独立 CPU 单步检查：loss 有限，但 actor 梯度张量数 0、参数变化 0。普通更新路径有 20 个梯度张量、最大参数变化约 9.55e-5。必须先修复并回归，旧“训练健康”判断撤回。
-- 实际使用仓库内修改过的 `scripts/stable_baselines3/`，pip 同名版本不能替代；应同时记录模块导入路径。
-- 旧 SR=0.60、perfect-success=0.46 是旧语义 checkpoint 的 100 回合历史结果，不是修复后基线。
+- 正式 analytical 评测一律带 `--ik-mode fixed --ik-iterations 100`（`p0-ik-budget-v1`）；源码默认 `legacy` 为墙钟预算、不可复现。
+- 动作/终止语义为 `p0-action-terminal-v2`；旧语义 checkpoint 与旧 SR=0.60/perfect=0.46 只作历史，不与修复后结果混比。
+- 实际使用仓库内修改过的 `scripts/stable_baselines3/`，pip 同名版本不能替代；manifest 记录模块导入路径。
+- 测试集曝光：旧 test 9000–9199、旧 val 8000–8099 不得再当未见测试（D32）；种子登记以 ROADMAP §9 为准，20000–20299 在 Stage2 前不得使用。
 
 ## 6. 环境与工程约束
 
-- 宿主 Ubuntu 24.04/ROS2 Jazzy；ROS1 编译运行在容器内，禁止在宿主安装 Noetic。使用现有 Noetic/Python 3.8 路线，不恢复旧 Python 3.7 产物。
-- 2080 Ti 显存 11 GB；模型规模和 batch 必须实测峰值，不依据历史吞吐承诺总工期。
-- 环境前缀需 source `/opt/ros/noetic/setup.bash`、`/root/mm_husky_ws/devel/setup.bash`，工作目录及 `PYTHONPATH` 包含主包 `scripts/`。
-- ROS、Gazebo 端口及 host 网络可能与其他容器共享，启动前核查。`nmoma` 项目不在本任务范围内。
-- 观测历史实测为 `(41,)` 状态和 `(120,120,1)` 地图，动作 3 维；以当前运行配置重新核验，不能随意改变 CNN 120/150 像素约束。
-- 算法主包 `src/modulation_rl` 已于 2026-09-28 以 subtree 方式并入根仓库（保留历史，D42），研究代码与文档统一由根仓库管理和提交；其余第三方 ROS 包（bio_ik、husky 等）仍是独立 Git 仓库且被根仓库忽略，修改它们时检查各自的 diff/status。不得丢弃用户改动，不自动改 remote，不把仍嵌套的第三方仓库当作已被根仓库备份。
-- checkpoint、轨迹、TensorBoard、大型模型和生成构建产物不入 Git；文档只跟踪摘要、配置、哈希和产物位置。
+- 本机 node01：Ubuntu 22.04.5，4 × RTX PRO 6000 Blackwell（每卡约 96 GiB），RAM 约 251 GiB。ROS1 Noetic 只在容器内运行，镜像 `mm_husky:node01`（Python 3.10.18 / Torch 2.7.1+cu128），禁止在宿主安装 Noetic。模型规模、batch 与内存必须实测峰值，不依据历史吞吐承诺工期。
+- 常驻容器 `mmhusky-node01`（analytical）与 `mmhusky-node01-gz`（Gazebo），用法见 ENV.md。实验任务另建带任务前缀的独立容器，不停止或重建他人正在使用的容器；启动前核查 GPU 与 ROS/Gazebo 端口占用。
+- docker 需用 `sg docker -c '<命令>'`；容器内写出的 results 文件属 root。后台 Python 使用 `python3 -u`。
+- 容器内环境前缀：source `/opt/ros/noetic/setup.bash`、`/root/mm_husky_ws/devel/setup.bash`，`PYTHONPATH` 含主包 `scripts/`（`run.sh` 入口自动完成）。
+- 观测为 `(41,)` 状态和 `(120,120,1)` 地图，动作 3 维；以当前运行配置重新核验，不能随意改变 CNN 120/150 像素约束。
+- checkpoint、轨迹、TensorBoard、大型模型和 `results/` 不入 Git；文档只跟踪摘要、配置、哈希和产物位置。
 - 所有声称的回归通过、复现成功或性能增益必须有实际验证记录。仅文档修改不能把算法阶段任务打勾。
-
-
-## 7. Docker 环境增补（2026-09-22）
-
-当前环境入口见 [ENV.md](ENV.md)，配置见 [docker/run.sh](docker/run.sh)。
-本次仅新增根仓库 Docker 配置和验证脚本，未修改算法主包与机器人配置。
-
-- 新镜像 `mm_husky:p0-noetic`，新容器 `mmhusky-p0`，基于本机
-  `mm_husky:deps` 增量构建；不是从公开镜像全量重建。保留旧训练容器。
-- Python 3.8.10 / Torch 1.8.1+cu111 / Noetic，复用当前工作区 devel；
-  `mm_husky_runtime` 未合并，权威副本仍为本工作区。
-- 修复 pip/OpenSSL、补 PettingZoo、Xvfb/xauth 和 `python` 命令。
-  新容器通过 NVIDIA runtime 的 CDI 模式使用 GPU，独立 bridge 网络隔离 ROS。
-- GPU 运算、C++ 绑定、SAC/环境导入、analytical 20 步测试通过。
-- 相同种子的初始观测哈希仍不同，因此**未完成可复现评测协议**。
-- Gazebo 空场景可 spawn Husky，控制器/BioIK/120×120 局部代价图可用；
-  但移动检查仅约 1.2 cm，未达到阈值，**P0.8 仍未完成**。
-  PAL 场景资产未补，SAC Gazebo rollout 与 RViz 视觉验收未完成。
-- `pip check` 仍有 7 项继承的声明冲突，保存于 `docker/pip-check.txt`；
-  不要将核心路径可运行误写成所有依赖均已兼容。
-- 检查输出见 `docker/validation/`。旧 `mmhusky-dev` 新进程 NVML 失效，
-  已有训练进程仍存在；不要未经任务需要重启它或宿主 Docker。
-
-
-## 8. 当前环境入口验收（2026-09-22，后续结果优先）
-
-用户明确环境配置的标准是“可以进入 P0”，不是完成 P0。
-默认容器改为 `mmhusky-p0-ready`、镜像 `mm_husky:p0-ready`，使用 ENV.md 和 docker/run.sh。
-原 7 项依赖冲突已解决，pip check、CUDA、绑定、普通 SAC 短更新、analytical 20 步与
-Gazebo 启动检查全部通过；环境入口已验收。旧容器和旧训练保持不动。
-第 7 节为早期实测历史；其中 pip 冲突不再适用于新默认镜像。
-prior-SAC 梯度、严格复现、Gazebo 物理移动和完整场景是 P0 内部待办，本轮没有修算法。
-证据与审查：[P0-FIX-022](doc/P0/logs/20260922-p0-fixes.md)。

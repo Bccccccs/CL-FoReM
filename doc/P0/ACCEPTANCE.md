@@ -42,7 +42,7 @@
 
 **结论：P0-ALG 通过，运行环境通过，Gazebo 基础物理及 picknplace 有限 rollout 链路通过；P0-EVAL 的严格数值复现未通过，P0 整体尚未完成，P1 入口保持关闭。**
 
-执行：P0完成人 `/root`。详细过程、失败结果、命令、PID与交接见 [执行日志](logs/20260922-p0-execution.md)。独立审查见 [审查记录](logs/20260922-p0-code-review.md)。权威代码仅修改 `src/modulation_rl`，根目录修改 Docker/文档；未开始 P1-P5。
+执行：P0完成人 `/root`。详细过程、失败结果、命令、PID与交接见 执行日志（`20260922-p0-execution.md`，正文缺失）。独立审查见 审查记录（`20260922-p0-code-review.md`，正文缺失）。权威代码仅修改 `src/modulation_rl`，根目录修改 Docker/文档；未开始 P1-P5。
 
 ## 本次做了什么
 

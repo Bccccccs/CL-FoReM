@@ -2,7 +2,7 @@
 
 > **DOCS-028**：本文保留通用协议（manifest、指标定义、配对统计）；各阶段的种子数、步数、回合数与种子范围以 [ROADMAP](ROADMAP.md) §4–§9 为准。
 
-> 2026-09-28最新审计：P1训练/评测窗口漏加时间偏移（D33），旧预测报告仅作受影响历史，不能据此判定P1出口；跨版本测试曝光见D32。修复与内存方案见 [P1_MEMORY_PLAN](P1_MEMORY_PLAN.md)，实验增补见 [RESEARCH_EXPERIMENTS](RESEARCH_EXPERIMENTS.md)。原阶段任务与历史记录保留。
+> P1 状态：D33 窗口缺陷已修复（D34），D26–D28 旧预测数字仅作历史；跨版本测试曝光见 D32，种子登记以 ROADMAP §9 为准。
 
 版本：v1（2026-09-22，规划版，尚未生成对应 manifest）。所有 Agent 在使用测试集前固定配置；改变协议需新增版本和 DECISIONS 记录。
 
@@ -16,7 +16,7 @@
 
 ## 2. 每次运行的 manifest
 
-必须包含：run_id、时间、Agent/任务 ID、根与所有被修改子仓库 HEAD、dirty diff 哈希、容器/镜像 ID、依赖及实际模块导入路径、完整配置、checkpoint SHA-256、数据/seed manifest 哈希、观测/动作/终止语义版本、训练步数和更新次数。
+必须包含：run_id、时间、Agent/任务 ID、根仓库 HEAD（单仓库，D42；若改了第三方嵌套 ROS 包，另记其 HEAD）、dirty diff 哈希、容器/镜像 ID、依赖及实际模块导入路径、完整配置、checkpoint SHA-256、数据/seed manifest 哈希、观测/动作/终止语义版本、训练步数和更新次数。
 
 推荐拟建产物布局为 `results/<run_id>/manifest.json`、`episodes.jsonl`、`summary.json`、`timing.jsonl`、`logs/` 和必要轨迹分片；建立目录时同步 Git ignore。doc 仅存表格摘要和这些产物的路径/哈希。
 
@@ -77,6 +77,8 @@ perfect-success 必须是任务成功且按既定计数无碰撞/IK 失败。不
 表格必须附训练/评估语义版本、统计方法和异常数量。文档中不填造预测收益数字，失败结果同样归档。
 
 ## P0 数值复测补充 v1.1（2026-09-22，正式复测前冻结）
+
+> 历史：node01 在 `p0-ik-budget-v1`（fixed100）下该门槛以逐元素差 0 通过（D24，P0 验收）；下文的来源机器失败记录保留作溯源。
 
 首轮双次验证 eval-a/b 初始哈希与所有离散结果完全相同，轨迹字节哈希不同；
 最大最终状态差约 3.5e-7，回报差约 6.2e-5，轨迹长度差约 2.2e-8m。

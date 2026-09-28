@@ -1,6 +1,6 @@
 # 文档索引
 
-更新：2026-09-28（DOCS-028 文档架构调整）。项目：在 Husky+UR5 / N²M² / SAC 上加入 SC²-WM 式世界模型闭环，暂定投稿 IJCAI 2027（D37）。
+更新：2026-09-28（DOCS-028 文档架构调整；DOCREV-028 全量审查）。项目：在 Husky+UR5 / N²M² / SAC 上加入 SC²-WM 式世界模型闭环，暂定投稿 IJCAI 2027（D37）。
 
 ## 先看这三份
 
@@ -37,7 +37,7 @@
 
 **C. 历史（不再维护，仅溯源）**
 
-全部移入 [archive/](archive/)：`20260928-docs028/` 内为 DOCS-028 归档的 REVIEW（09-22 审查）、WORKFLOW_GUIDE（已并入 ROADMAP）、P0_ACCEPTANCE/P0_BASELINE（迁移占位）、NODE01_DOCKER_ADMIN（管理员配置）、P0-REMEDIATION_PLAN；另有 09-21 旧 AGENTS 与用户原始研究要求。09-22 的 4 份 P0 日志正文在迁移中缺失，详见 RESEARCH_RECORDS。
+全部移入 [archive/](archive/)：`20260928-docs028/` 内为 DOCS-028 归档的 REVIEW（09-22 审查）、WORKFLOW_GUIDE（已并入 ROADMAP）、P0_ACCEPTANCE/P0_BASELINE（迁移占位）、NODE01_DOCKER_ADMIN（管理员配置）、P0-REMEDIATION_PLAN；另有 09-21 旧 AGENTS 与用户原始研究要求。`20260928-docrev/` 为 DOCREV-028 全量审查前的 AGENTS/ENV/PROGRESS 原文（含来源机器环境与历史小节）。09-22 的 6 份 P0 日志正文在迁移中缺失、无副本，详见 RESEARCH_RECORDS。**日常工作无需阅读 archive。**
 
 ## 编号速查
 

@@ -2,25 +2,21 @@
 
 > **模块参考（DOCS-028）**：接口与实现细节；执行顺序与出口判据以 [ROADMAP](ROADMAP.md) 为准。
 
-> 2026-09-28最新审计：P1训练/评测窗口漏加时间偏移（D33），旧预测报告仅作受影响历史，不能据此判定P1出口；跨版本测试曝光见D32。修复与内存方案见 [P1_MEMORY_PLAN](P1_MEMORY_PLAN.md)，实验增补见 [RESEARCH_EXPERIMENTS](RESEARCH_EXPERIMENTS.md)。原阶段任务与历史记录保留。
+> **当前状态（2026-09-28）**：D33 窗口索引缺陷已由 P1-FIX-028 修复，并完成有界链路与资源验收（D34，[交接](agent_logs/20260928-p1-fix.md)）；D26–D28 的旧预测数字仅作受影响历史，跨版本测试曝光见 D32。1000train/300val、seed11 正式重训：动作模型一步/五步均优于复制/无动作，配对 CI 均 <0（D36，[报告](agent_logs/20260928-p1-retrain-report.md)）。跨 seed（R0-1）与独立 test（R0-2）由 ROADMAP Stage0 完成，P1 出口判据以 ROADMAP §4 为准。
 
-> 2026-09-28工程更新：P1-FIX-028已修复正确窗口并完成有界链路、65测试与三级有限资源验收（D34）。仅每模型8batch及全val工程验证；旧结果仍受D33影响，正式重训/新测试/P1出口尚未验收。见[交接](agent_logs/20260928-p1-fix.md)。
-
-> 2026-09-28正式诊断：P1-RETRAIN-028已完成1000train/300val、seed11完整重训；动作模型一步/五步均优于复制/无动作，配对CI均低于0。仅P1a初步预测证据，独立test与跨seed未验收，不放行P2。见[报告](agent_logs/20260928-p1-retrain-report.md)与D36。
-
-> 执行 Agent：遵守 AGENTS.md 文档交流规则，使用 executing-plans 技能逐任务落实；先登记 P1-A 或 P1-B。阶段产物与收益分别验收。
+> 执行 Agent：遵守 AGENTS.md 文档交流规则，先在 PROGRESS 登记任务。阶段产物与收益分别验收。
 
 **目标**：证明机器人状态与局部图包含可学习的动作条件动态，并提供 P2 可消费的稳定预测接口。
 
 **架构**：P1a 固定编码器、确定性一步预测；P1b 再引入 GRU 后验和概率先验。数据来自完整 episode，SAC 原有单步 replay 暂不改成时序 replay。
 
-**技术栈**：现有 PyTorch、LocalDoubleMapCNN、NumPy、分片轨迹数据；node01初始GPU预算8GiB，实际资源证据见P1-FIX-028；旧11GB为来源机器历史。
+**技术栈**：现有 PyTorch、LocalDoubleMapCNN、NumPy、分片轨迹数据；node01 资源预算与实测证据见 P1-FIX-028/D34。
 
 **依据**：[总体约束](../AGENTS.md)、[决策](DECISIONS.md)、[评测](EVALUATION.md)、[P0](P0/PLAN.md)。
 
 ## 文件与接口
 
-拟创建 `src/modulation_rl/scripts/wm/`：`data.py`、`encoder.py`、`dynamics.py`、`losses.py`、`train_offline.py`、`evaluate_prediction.py`，以及 `scripts/collect_rollouts.py`。对应测试放 `scripts/tests/test_wm_data.py`、`test_wm_prediction.py`。
+已实现 `src/modulation_rl/scripts/wm/`：`data.py`、`encoder.py`、`dynamics.py`、`losses.py`、`cache.py`（有界特征缓存，D34）、`train_offline.py`、`evaluate_prediction.py`、`val_probe.py`，以及 `scripts/collect_rollouts.py`、`scripts/wm_resource_check.py`。测试在 `scripts/tests/test_wm_*.py`。
 
 数据协议：每 episode 包含 `observations[0:T+1]`、`actions[0:T]`、reward、terminated、truncated、dt、info、初始种子及 manifest；动作必须是送入 step 的归一化动作，另存物理控制量及变换版本。末帧不可用时标记 invalid_target，不能用下一回合首帧补齐。
 

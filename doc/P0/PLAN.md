@@ -2,26 +2,26 @@
 
 > **模块参考（DOCS-028）**：P0 analytical 已验收；Gazebo 对齐并入 Stage0 R0-5，见 [ROADMAP](../ROADMAP.md)。
 
-> 执行 Agent：遵守 AGENTS.md 文档交流规则，逐任务登记和交接；使用 executing-plans 技能落实任务。执行验收结果见 [P0_ACCEPTANCE](ACCEPTANCE.md)，未通过项不得据历史通过结果打勾。
+> 执行 Agent：遵守 AGENTS.md 文档交流规则，逐任务登记和交接。执行验收结果见 [P0_ACCEPTANCE](ACCEPTANCE.md)，未通过项不得据历史通过结果打勾。本文为 09-22 制定的计划，环境描述（Python 3.8、`mm_husky_runtime`）属来源机器历史；现行环境见 [ENV](../../ENV.md)。
 
 **目标**：恢复可重复创建的环境，证明策略真实学习，形成固定评测入口与失败分析；独立验证 Gazebo。
 
 **架构**：保持主目录与 SAC 接口。先修正确性，再重测；从 runtime 副本逐项借鉴修复，禁止整体覆盖。
 
-**技术栈**：Docker、ROS Noetic、Python 3.8、现有 PyTorch/SAC、pytest、Gazebo Classic。
+**技术栈**：Docker、ROS Noetic、Python 3.10（node01；计划制定时为 3.8）、现有 PyTorch/SAC、pytest、Gazebo Classic。
 
 **依据**：[总体约束](../../AGENTS.md)、[决策](../DECISIONS.md)、[评测协议](../EVALUATION.md)。
 
 ## 范围与文件
 
 - 现有：`ENV.md`、`.catkin_tools/profiles/default/config.yaml`、`src/modulation_rl/scripts/{main.py,eval.py,sac.py,model.py,replay_memory.py}`、主 `modulation/envs/` 和 `scripts/stable_baselines3/`。
-- 参考：邻接 `mm_husky_runtime` 的 checkpointing、rollouts、experiment 和 tests，先比较主副本差异。
+- 参考（历史）：来源机器邻接的 `mm_husky_runtime` 副本，本机不存在；相关修复已在 P0 中逐项移植。
 - 已由独立环境任务新增：根 `docker/run.sh`、Dockerfile、环境检查脚本，继续扩展这些入口，不再另建 setup 启动体系。拟新增主包 `scripts/tests/test_sac_updates.py`、`test_action_semantics.py`、`test_rollout_termination.py`、`test_checkpoint_resume.py`；实验模块按实际差异审查后拆分。
 - 产物：环境清单、回归结果、基线 manifest、逐回合指标、失败分类、Gazebo 链路证据，写入 Git 忽略的实验目录。
 
 ## P0-ENV：诊断与环境固化
 
-2026-09-22 同期环境任务已完成新容器、增量镜像和 CUDA/绑定/analytical 烟测，证据见 [任务记录](logs/20260922-docker-env.md)。以下为整个 P0 的验收清单，尚未统一勾选；执行时先复用现有证据，再处理缺口，不能重建重复体系。后续命令使用 ENV.md 的新容器入口。基础镜像迁移、继承依赖冲突与训练后持久性仍需明确。
+2026-09-22 同期环境任务已完成新容器、增量镜像和 CUDA/绑定/analytical 烟测，证据日志 `20260922-docker-env.md` 正文缺失（见 P0/README）。以下为整个 P0 的验收清单，尚未统一勾选；执行时先复用现有证据，再处理缺口，不能重建重复体系。后续命令使用 ENV.md 的新容器入口。基础镜像迁移、继承依赖冲突与训练后持久性仍需明确。
 
 - [x] 开工先记录 `docker ps`、`docker inspect mmhusky-dev`、进程清单及当前镜像 ID，确认用户训练与 ROS master；不先重启或删除容器。
 - [x] 同时检查宿主/容器 nvidia-smi、容器 CUDA 初始化与小张量运算、工作区挂载和 Python 模块导入路径；将完整输出保存到任务产物目录。
@@ -77,14 +77,14 @@
 
 ## 环境入口验收增补
 
-2026-09-22 按用户明确边界，P0 的环境入口已经通过：使用 `mmhusky-p0-ready`，
-证据见 [P0-FIX-022](logs/20260922-p0-fixes.md)。上述算法/确定性/物理任务
+2026-09-22 按用户明确边界，P0 的环境入口已经通过：来源机器使用 `mmhusky-p0-ready`（本机不存在，node01 等价入口见 ENV），
+证据日志 `20260922-p0-fixes.md` 正文缺失。上述算法/确定性/物理任务
 继续作为进入 P0 后的待办，不因为环境入口通过而自动打勾。
 
 ## 2026-09-23 node01 结论
 
 analytical 出口通过（P0-NODE01-023，D24）；Gazebo 出口未通过。P0-GZ 各复选框保持未勾：共享 master 已用独立容器隔离、空场景与任务场景有限 rollout 在来源机器/node01 有证据，但实时预算与动态障碍仍缺，整体按 review 处理。
 
-## 2026-09-22 执行结论
+## 2026-09-22 执行结论（来源机器历史，已被上方 node01 结论取代）
 
 算法与环境正确性通过；最终数值复现失败，P0整体未完成。Gazebo空场景/有限picknplace执行已验证，bookstore整任务未测，实时预算未达标。详见[P0验收记录](ACCEPTANCE.md)。环境勾选表示诊断/剩余限制已记录，不表示旧NVML根因或公开全量重建已解决。
