@@ -17,6 +17,7 @@
 
 | ID | 阶段/任务 | Agent | 状态 | 范围与依赖 | 记录 |
 |---|---|---|---|---|---|
+| LIT-MISMATCH-028 | 执行失配与IK前瞻文献调研 | Codex /root | done（文献交付） | 2026-09-28T21:37+08:00起；2026-09-28T21:55:39+08:00完成；Q1–Q5、现实/压力分档、创新近邻与30项书目交付，缺证如实标注；不改代码、不跑实验、不动容器、不操作Git状态 | [日志](agent_logs/20260928-lit-mismatch-ik.md) |
 | VENUE-REASSESS-028 | 会议/期刊适配复核 | Codex /root（本会话） | done（咨询核查） | 2026-09-28T16:37:00+08:00起；2026-09-28T16:38:26+08:00完成；结合Husky范围与现有证据，核对官方投稿信息；仅咨询与文档，不改D37/ROADMAP | [日志](agent_logs/20260928-venue-reassessment.md) |
 | TIME-EST-028 | 现有流程分阶段耗时估算 | Codex /root（本会话） | done（估算） | 2026-09-28T16:44:53+08:00起；2026-09-28T16:46:05+08:00完成；计算约7–14天/含工程约2–4周条件估算，并发与闭环吞吐未实测；未启动实验 | [日志](agent_logs/20260928-time-estimate.md) |
 | ONBOARD-028 | 项目了解及 P/G/F 关系说明 | Codex /root（本会话） | done（了解与讲解） | 2026-09-28T16:22:10+08:00起；2026-09-28T16:22:41+08:00完成研究/控制链/入口与历史证据核对；2026-09-28T16:29:27+08:00补充P/G/F关系；仅文档，不启动实验或修改算法 | [日志](agent_logs/20260928-project-onboarding.md) |
@@ -24,6 +25,7 @@
 | PATHSYNC-028 | 改名后路径同步、容器重挂载、新建Git远端 | Claude Opus 5.5 /ybc | done | 2026-09-28T15:58+08:00起；路径同步与两容器重建并验证（D41）；modulation_rl subtree并入根仓库（D42）；已推送 GitHub 私有仓库 Bccccccs/CL-FoReM | [日志](agent_logs/20260928-path-sync.md) |
 | DOCS-028 | 文档架构调整：唯一执行计划ROADMAP、README分层、PROGRESS看板、清理 | Claude Opus 5.5 /ybc | done | 2026-09-28T15:44+08:00起；ROADMAP/README/横幅/PROGRESS分表/归档6份文档/清11个退出容器完成（D40）；AGENTS.md 已由 DOCREV-028 同步 | [日志](agent_logs/20260928-docs-restructure.md) |
 | EXP-OVERVIEW-028 | 已执行实验梳理 | Codex /root | active | 2026-09-28T15:09:20.062008+08:00；核对P0/P1/Gazebo既有证据，仅文档讲解 | [日志](agent_logs/20260928-experiment-overview.md) |
+| FOLLOWUP-028 | G0后续双线检验（A线结构化适应 / B线IK失败前瞻），无人值守流水线 | 设计：Claude Opus 5.5 /ybc；实现：待执行Agent | planned | 2026-09-28T21:55+08:00起；设计说明+D50/D51预登记完成，待执行Agent按提示词实现、验证并启动（分支followup-028） | [日志](agent_logs/20260928-followup-pipeline.md) |
 | STAGE0-028 | Stage0 前置验证（ROADMAP §4：M、R0-1～R0-5） | Claude Sonnet 5 /ybc | review | 2026-09-28T16:45–21:00+08:00；M/R0-1/R0-2通过；R0-3(原范围)不通过（D45）但R0-3c(更强范围，D48)通过，证明失配可测、原范围偏保守；R0-4形式通过效果量极小，R0-4b(D49，3种适应机制)全部不达标——文献核实（Nagabandi 2018等）指出根因是WM未meta训练+修正无物理结构；R0-5暂缓；G0不通过，不进F1/Stage1；已写更新后备选方案A/B/B1/B2/C/D并向用户汇报；分支`stage0-028`，不push不合main | [日志](agent_logs/20260928-stage0.md) |
 | P0-NODE01-023 | node01 上接手 P0 剩余工作 | Claude P0执行人 /ybc | done（analytical）/ review（Gazebo） | 2026-09-23 10:57–13:40 +08；analytical 出口通过（复现差值0，D24）；Gazebo 实时未达、需决策；接手 P0-CLOSE-022 范围：node01 重验回归、BioIK 固定预算复现、受影响基线重测、Gazebo 耗时/bookstore | [日志](P0/logs/20260923-p0-node01.md) |
 | P0-CLOSE-022 | P0 剩余问题与文档集中 | P0完成人 /root | review | 2026-09-22 14:30 +08；BioIK诊断/固定预算、GPU评测资源、Gazebo性能/场景；日志正文迁移中丢失，2026-09-23 由 P0-NODE01-023 接手 | `20260922-p0-closure.md`（正文缺失） |
