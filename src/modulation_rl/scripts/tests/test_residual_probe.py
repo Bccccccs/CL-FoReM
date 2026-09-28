@@ -32,6 +32,29 @@ def zero_init_model(dim=DIM, use_action=True):
     return MLPDynamics(dim, action_dim=3, hidden=(8,), use_action=use_action)
 
 
+class ArrayIndexOnlyFeats:
+    """Mimics wm/cache.py:FeatureCache.__getitem__, which only accepts an explicit index
+    array/list (np.asarray(indices, dtype=np.int64)) and raises TypeError on a plain Python
+    slice. Catches the real bug this test is named for: episode_errors originally did
+    feats[o0:o0+n+1] (a slice), which works against a plain ndarray in these other tests but
+    breaks against the real FeatureCache used in production."""
+    def __init__(self, array):
+        self._array = array
+
+    def __getitem__(self, indices):
+        if isinstance(indices, slice):
+            raise TypeError("int() argument must be a string, a bytes-like object or a real number, not 'slice'")
+        indices = np.asarray(indices, dtype=np.int64)
+        return self._array[indices]
+
+
+def test_episode_errors_indexes_feats_as_featurecache_not_ndarray():
+    ds = fake_ds(n_valid=3)
+    feats = ArrayIndexOnlyFeats(np.random.default_rng(9).normal(size=(4, DIM)).astype(np.float32))
+    rows = episode_errors(None, feats, ds, 0, IdentityNorm(), 'cpu', lr=1e-3, k=1)
+    assert len(rows) == 3
+
+
 def test_zero_init_model_is_identity_at_construction():
     model = zero_init_model()
     z = torch.randn(2, DIM)
@@ -119,27 +142,37 @@ def test_predict_before_update_never_scores_a_transition_the_update_already_used
         assert abs(updated_rows[t]['total'] - frozen_rows[t]['total']) < 1e-6
 
 
-def test_episode_mean_respects_post_warmup_filter():
-    rows = [dict(total=1.0, post_warmup=False), dict(total=3.0, post_warmup=True), dict(total=5.0, post_warmup=True)]
-    assert episode_mean(rows, 'total', post_warmup_only=False) == 3.0
-    assert episode_mean(rows, 'total', post_warmup_only=True) == 4.0
+def test_episode_mean_respects_min_step_filter():
+    rows = [dict(total=1.0, step=0, post_warmup=False), dict(total=3.0, step=1, post_warmup=True),
+            dict(total=5.0, step=2, post_warmup=True)]
+    assert episode_mean(rows, 'total', min_step=None) == 3.0
+    assert episode_mean(rows, 'total', min_step=1) == 4.0
 
 
-def test_paired_summary_matches_manual_diff_and_filters_post_warmup():
-    a_by_ep = {0: [dict(total=2.0, post_warmup=True), dict(total=4.0, post_warmup=True)],
-               1: [dict(total=10.0, post_warmup=True)]}
-    b_by_ep = {0: [dict(total=1.0, post_warmup=True), dict(total=1.0, post_warmup=True)],
-               1: [dict(total=9.0, post_warmup=True)]}
-    out = paired_summary(a_by_ep, b_by_ep, [0, 1], np.array([1, 2]), 'total', post_warmup_only=True)
-    # ep0: mean(a)=3, mean(b)=1 -> diff=2; ep1: mean(a)=10, mean(b)=9 -> diff=1
+def test_episode_mean_filters_by_step_not_by_the_post_warmup_flag():
+    """The regression this pins: frozen/copy rows always carry post_warmup=False (only the
+    updated treatment ever sets it), so filtering on that flag instead of on 'step' silently
+    empties every frozen/copy episode and NaNs every paired comparison against them."""
+    frozen_like_rows = [dict(total=2.0, step=0, post_warmup=False), dict(total=4.0, step=1, post_warmup=False),
+                        dict(total=6.0, step=2, post_warmup=False)]
+    assert episode_mean(frozen_like_rows, 'total', min_step=1) == 5.0  # steps 1,2 -> mean(4,6)
+
+
+def test_paired_summary_matches_manual_diff_and_filters_by_min_step():
+    a_by_ep = {0: [dict(total=2.0, step=0), dict(total=4.0, step=1)],
+               1: [dict(total=10.0, step=1)]}
+    b_by_ep = {0: [dict(total=1.0, step=0), dict(total=1.0, step=1)],
+               1: [dict(total=9.0, step=1)]}
+    out = paired_summary(a_by_ep, b_by_ep, [0, 1], np.array([1, 2]), 'total', min_step=1)
+    # ep0: mean(a)=4 (step>=1 only), mean(b)=1 -> diff=3; ep1: mean(a)=10, mean(b)=9 -> diff=1
     assert out['episodes'] == 2
-    assert abs(out['mean'] - 1.5) < 1e-9
+    assert abs(out['mean'] - 2.0) < 1e-9
     assert out['a_better_fraction'] == 0.0  # both diffs positive, a is never "better" (lower)
 
 
 def test_paired_summary_drops_episodes_with_no_matching_steps():
-    a_by_ep = {0: [dict(total=2.0, post_warmup=False)]}  # no post_warmup step at all
-    b_by_ep = {0: [dict(total=1.0, post_warmup=False)]}
-    out = paired_summary(a_by_ep, b_by_ep, [0], np.array([1]), 'total', post_warmup_only=True)
+    a_by_ep = {0: [dict(total=2.0, step=0)]}  # only step 0, below min_step=1
+    b_by_ep = {0: [dict(total=1.0, step=0)]}
+    out = paired_summary(a_by_ep, b_by_ep, [0], np.array([1]), 'total', min_step=1)
     assert out['episodes'] == 0
     assert np.isnan(out['mean'])

@@ -76,7 +76,10 @@ def episode_errors(base_model, feats, ds, i, norm, device, lr=None, k=None):
     if n < 1:
         return []
     o0, a0 = int(ds.obs_offset[i]), int(ds.act_offset[i])
-    z = norm(torch.as_tensor(feats[o0:o0 + n + 1], dtype=torch.float32, device=device))
+    # feats is a FeatureCache; its __getitem__ takes an explicit index array (see WindowSource.take
+    # in wm/train_offline.py), not a Python slice - a plain feats[o0:o0+n+1] raises inside
+    # np.asarray(slice, dtype=int64).
+    z = norm(torch.as_tensor(feats[np.arange(o0, o0 + n + 1)], dtype=torch.float32, device=device))
     actions = torch.as_tensor(ds.action[a0:a0 + n], dtype=torch.float32, device=device)
     dts = torch.as_tensor(ds.dt[a0:a0 + n], dtype=torch.float32, device=device)
     if base_model is None:
@@ -103,8 +106,12 @@ def episode_errors(base_model, feats, ds, i, norm, device, lr=None, k=None):
     return rows
 
 
-def episode_mean(rows, key='total', post_warmup_only=False):
-    values = [r[key] for r in rows if (r['post_warmup'] or not post_warmup_only)]
+def episode_mean(rows, key='total', min_step=None):
+    """min_step=k restricts to steps t>=k (comparable across treatments by step index). Do not
+    filter by a row's own 'post_warmup' flag here: that flag is only ever True for the updated
+    treatment (opt is not None); frozen/copy rows always carry post_warmup=False by construction,
+    so filtering on it would silently empty out every frozen/copy episode."""
+    values = [r[key] for r in rows if (min_step is None or r['step'] >= min_step)]
     return float(np.mean(values)) if values else float('nan')
 
 
@@ -122,13 +129,13 @@ def run_condition(model, norm, ds, feats, device, lrs, ks, seed):
     return frozen, copy_rows, updated
 
 
-def paired_summary(a_by_ep, b_by_ep, episodes, seeds, key='total', post_warmup_only=False):
+def paired_summary(a_by_ep, b_by_ep, episodes, seeds, key='total', min_step=None):
     """Per-episode mean(a) - mean(b), paired by episode index (already seed-aligned by caller),
     then an episode-level bootstrap CI matching evaluate_prediction.py's bootstrap_ci."""
-    diffs, blocks = [], {'robot': [], 'map': []}
+    diffs = []
     for i in episodes:
-        am = episode_mean(a_by_ep[i], key, post_warmup_only)
-        bm = episode_mean(b_by_ep[i], key, post_warmup_only)
+        am = episode_mean(a_by_ep[i], key, min_step)
+        bm = episode_mean(b_by_ep[i], key, min_step)
         if np.isfinite(am) and np.isfinite(bm):
             diffs.append(am - bm)
     diffs = np.asarray(diffs)
@@ -151,12 +158,12 @@ def condition_report(model, norm, ds, feats, device, lrs, ks, seed):
         key = '%.0e_k%d' % (lr, k)
         report['updated'][key] = dict(
             lr=lr, k=k,
-            mean_post_warmup=dict(total=float(np.mean([episode_mean(by_ep[i], 'total', True) for i in episodes])),
-                                  robot=float(np.mean([episode_mean(by_ep[i], 'robot', True) for i in episodes])),
-                                  maps=float(np.mean([episode_mean(by_ep[i], 'maps', True) for i in episodes]))),
-            updated_minus_frozen_post_warmup=paired_summary(by_ep, frozen, episodes, ds.seeds, 'total', True),
-            updated_minus_frozen_post_warmup_robot=paired_summary(by_ep, frozen, episodes, ds.seeds, 'robot', True),
-            updated_minus_frozen_post_warmup_map=paired_summary(by_ep, frozen, episodes, ds.seeds, 'maps', True))
+            mean_post_warmup=dict(total=float(np.mean([episode_mean(by_ep[i], 'total', k) for i in episodes])),
+                                  robot=float(np.mean([episode_mean(by_ep[i], 'robot', k) for i in episodes])),
+                                  maps=float(np.mean([episode_mean(by_ep[i], 'maps', k) for i in episodes]))),
+            updated_minus_frozen_post_warmup=paired_summary(by_ep, frozen, episodes, ds.seeds, 'total', k),
+            updated_minus_frozen_post_warmup_robot=paired_summary(by_ep, frozen, episodes, ds.seeds, 'robot', k),
+            updated_minus_frozen_post_warmup_map=paired_summary(by_ep, frozen, episodes, ds.seeds, 'maps', k))
     return report, frozen
 
 
