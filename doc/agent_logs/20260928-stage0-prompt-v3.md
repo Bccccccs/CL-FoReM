@@ -15,7 +15,7 @@
    - `doc/README.md`
    - **`doc/ROADMAP.md`**：唯一执行计划，本任务规格见 §4 与 §9
    - `doc/PROGRESS.md` 顶部看板
-   - `doc/DECISIONS.md`：重点 D24、D32–D42
+   - `doc/DECISIONS.md`：重点 D24、D32–D44
    - `ENV.md`：node01 环境与 run.sh 用法
    - `doc/agent_logs/20260928-stage0.md`：全部历史，包括上一次执行被停止和清理的经过
    - `doc/agent_logs/20260928-logic-review.md`：L1/L2 已并入 R0-3/R0-4 判据
@@ -25,7 +25,7 @@
 3. 遵守 AGENTS.md 第 2 节：
    - 每个子任务开始、完成、失败，以及启动长任务时都更新日志；持续工作每 30 分钟至少写一次。
    - 日志写明命令、容器名/PID、退出码、产物路径。
-   - 追加 DECISIONS 前先查最大编号（当前为 D43）。
+   - 追加 DECISIONS 前先查最大编号（当前为 D44）。
 4. Git：
    - 从 `main` 新建分支 `stage0-028`，所有改动在该分支上进行。
    - 每完成一个**已验证**的子任务就提交一次，提交信息带任务编号（如 `STAGE0-028 M: ...`）。先提交再跑正式实验，这样 manifest 记录的是干净的根仓库 HEAD。
