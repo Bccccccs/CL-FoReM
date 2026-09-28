@@ -108,7 +108,7 @@ def main():
     metadata = dict(source_dataset_sha256=file_sha256(dataset), subset_dataset_sha256=file_sha256(subset),
                     encoder_sha256=file_sha256(a.encoder_checkpoint), code=code_identity(),
                     image=os.environ.get('P0_IMAGE_ID'), python=sys.version,
-                    git_head=subprocess.check_output(['git', '--git-dir='+str(Path(__file__).resolve().parents[1]/'.git'), '--work-tree='+str(Path(__file__).resolve().parents[1]), 'rev-parse', 'HEAD'], text=True).strip(),
+                    git_head=subprocess.check_output(['git', '--git-dir='+str(Path(__file__).resolve().parents[3]/'.git'), '--work-tree='+str(Path(__file__).resolve().parents[3]), 'rev-parse', 'HEAD'], text=True).strip(),
                     harness_sha256=file_sha256(__file__), host_memory_before=before,
                     train_episodes=len(train), validation_episodes=len(val), scope='finite engineering; train/val only; D33 corrected')
     (out/'manifest.json').write_text(json.dumps(metadata, indent=2))

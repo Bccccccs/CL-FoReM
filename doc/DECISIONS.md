@@ -164,3 +164,8 @@ Agent：Claude Opus 5.5 /ybc。用户：“现有的流程组织架构太乱…�
 ## D41 — 工作区改名为 CL-FoReM，常驻容器按新路径重建（2026-09-28，PATHSYNC-028）
 
 Agent：Claude Opus 5.5 /ybc。工作区于约 15:53 由 `/home/ybc/projects/mm_husky_ws` 改名为 `/home/ybc/projects/CL-FoReM`（内容不变）。用户要求“同步一下路径，容器也重新挂载”。(1) 宿主路径以 `/home/ybc/projects/CL-FoReM` 为准；**容器内挂载点仍为 `/root/mm_husky_ws`**，devel、runner、launch 脚本和 docker/ 下的容器内路径不改。D31 等历史条目及已完成任务日志/证据 JSON 中的旧宿主路径是当时实测记录，不改写，按新路径理解。AGENTS §0/§3、ENV 已同步。(2) `mmhusky-node01`、`mmhusky-node01-gz` 用同一镜像 `mm_husky:node01`（`sha256:e674db49…c430`）与原参数（bridge、nvidia runtime、shm 8g、无内存限制）经 `docker/run.sh up` 重建，仅挂载源改为新路径；重建前两容器仅有遗留 analytical launch 与 Xvfb、可写层只有 NVIDIA 注入和缓存。重建后 CUDA、train-smoke、analytical 20 步、Gazebo 启动检查均通过，证据见 [PATHSYNC-028 日志](agent_logs/20260928-path-sync.md)。本条不改变任何算法、评测协议或实验语义。
+
+
+## D42 — src/modulation_rl 并入根仓库形成单仓库 CL-FoReM（2026-09-28，PATHSYNC-028）
+
+Agent：Claude Opus 5.5 /ybc。用户选择“合并为单仓库”、GitHub 私有仓库。(1) 先在原子仓库 `p0-node01` 分支把 P1-FIX-028 此前未提交的改动原样提交为 `06c0ee1`（wm/data、encoder、evaluate_prediction、train_offline、val_probe、cache、streaming 测试、wm_resource_check）；根仓库待提交的 doc/docker/AGENTS/ENV 提交为 `9293083`。(2) 原 `.git` 移至 `/home/ybc/projects/CL-FoReM-backups/modulation_rl-dotgit-20260928`，另有全引用镜像 `modulation_rl-20260928.git`；根 `.gitignore` 去掉 `/src/modulation_rl/`，以 `merge -s ours --allow-unrelated-histories` + `read-tree --prefix=src/modulation_rl/` 合并为 `ac8d686`，工作区文件未变动。文档引用的 `1ccedd0/68b8d0b/b23aa39/2a1348a` 仍可在本仓库解析；注意 `git log -- src/modulation_rl/...` 不会跨越 subtree 前缀追溯旧提交，查旧历史直接按哈希。(3) 溯源影响：`p0_runner.provenance` 对原子仓库路径将记录 `git unavailable`（有异常兜底），根仓库条目已覆盖全部代码；`wm_resource_check.py` 的 `git_head` 改为读根仓库（原写法会因 .git 不存在直接崩溃），仍用显式 `--git-dir` 以避开容器内 safe.directory。不改变任何算法、评测或实验语义。其他第三方 ROS 包仍为独立仓库。
