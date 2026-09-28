@@ -1,0 +1,36 @@
+noetic-ros-base-focal: Pulling from library/ros
+0da4792f7f41: Pulling fs layer
+ff0451913b17: Pulling fs layer
+d20358ca2eb5: Pulling fs layer
+60ca0507171d: Pulling fs layer
+6932d16c2645: Pulling fs layer
+342ecf093a91: Pulling fs layer
+5dce350d6ea4: Pulling fs layer
+6c240714a1b7: Pulling fs layer
+59cc10980325: Pulling fs layer
+13b7e930469f: Pulling fs layer
+e5145030147e: Download complete
+60ca0507171d: Download complete
+5dce350d6ea4: Download complete
+6932d16c2645: Download complete
+6c240714a1b7: Download complete
+ff0451913b17: Download complete
+0da4792f7f41: Download complete
+d20358ca2eb5: Download complete
+13b7e930469f: Download complete
+13b7e930469f: Pull complete
+0da4792f7f41: Pull complete
+60ca0507171d: Pull complete
+5dce350d6ea4: Pull complete
+d20358ca2eb5: Pull complete
+f743f4f945c8: Download complete
+342ecf093a91: Download complete
+59cc10980325: Download complete
+6932d16c2645: Pull complete
+59cc10980325: Pull complete
+6c240714a1b7: Pull complete
+342ecf093a91: Pull complete
+ff0451913b17: Pull complete
+Digest: sha256:72b8bc59035dc0a5b8e07aae28c16caa84192971d72d207c72ed734fb1d5e97d
+Status: Downloaded newer image for registry-1.docker.io/library/ros:noetic-ros-base-focal
+registry-1.docker.io/library/ros:noetic-ros-base-focal

@@ -1,0 +1,24 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_______________ test_cache_identity_separates_numerical_backend ________________
+
+tmp_path = PosixPath('/tmp/pytest-of-ybc/pytest-7/test_cache_identity_separates_0')
+
+    def test_cache_identity_separates_numerical_backend(tmp_path):
+        from wm.cache import build_cache
+        ds, cached, _ = cache_dataset(tmp_path)
+        original = cached.root
+        cached.close()
+        encoder = SmallEncoder()
+        encoder.numerical_identity = dict(encoder.numerical_identity, device_type='cuda')
+        changed = build_cache(ds, encoder, tmp_path/'cache', chunk_bytes=43*4*3, max_open=1)
+>       assert changed.root != original
+E       AssertionError: assert PosixPath('/tmp/pytest-of-ybc/pytest-7/test_cache_identity_separates_0/cache/7859809a158778503f45617b1c25945f22e409a889597cd7bc11e1078f53a21c') != PosixPath('/tmp/pytest-of-ybc/pytest-7/test_cache_identity_separates_0/cache/7859809a158778503f45617b1c25945f22e409a889597cd7bc11e1078f53a21c')
+E        +  where PosixPath('/tmp/pytest-of-ybc/pytest-7/test_cache_identity_separates_0/cache/7859809a158778503f45617b1c25945f22e409a889597cd7bc11e1078f53a21c') = <wm.cache.FeatureCache object at 0x719153ff4c70>.root
+
+src/modulation_rl/scripts/tests/test_wm_streaming.py:277: AssertionError
+----------------------------- Captured stdout call -----------------------------
+CACHE {"split": "train", "episodes": 3, "observations": 21, "seconds": 0.011388096958398819}
+=========================== short test summary info ============================
+FAILED src/modulation_rl/scripts/tests/test_wm_streaming.py::test_cache_identity_separates_numerical_backend
+1 failed, 17 deselected in 1.23s

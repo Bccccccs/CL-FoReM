@@ -1,0 +1,44 @@
+Log path: /root/mm_husky_ws/src/modulation_rl/scripts/logs
+Creating husky_ur5
+[33m[WARN] [1790039669.344075002]: Link 'ground_plane' is not known to URDF. Cannot disable/enable collisons.[0m
+[33m[WARN] [1790039669.344815063]: Link 'ground_plane' is not known to URDF. Cannot disable/enable collisons.[0m
+[33m[WARN] [1790039669.344841453]: Link 'ground_plane' is not known to URDF. Cannot disable/enable collisons.[0m
+[33m[WARN] [1790039669.344862739]: Link 'ground_plane' is not known to URDF. Cannot disable/enable collisons.[0m
+[0m[INFO] [1790039669.344934362]: Loading robot model 'husky_ur5'...[0m
+[33m[WARN] [1790039669.345000200]: Link front_bumper_link has visual geometry but no collision geometry. Collision geometry will be left empty. Fix your URDF file by explicitly specifying collision geometry.[0m
+[33m[WARN] [1790039669.463135702]: Link rear_bumper_link has visual geometry but no collision geometry. Collision geometry will be left empty. Fix your URDF file by explicitly specifying collision geometry.[0m
+[33m[WARN] [1790039669.463186101]: Link top_chassis_link has visual geometry but no collision geometry. Collision geometry will be left empty. Fix your URDF file by explicitly specifying collision geometry.[0m
+[33m[WARN] [1790039669.463508104]: Link user_rail_link has visual geometry but no collision geometry. Collision geometry will be left empty. Fix your URDF file by explicitly specifying collision geometry.[0m
+ur5_shoulder_pan_joint: 3.14159
+ur5_shoulder_lift_joint: 3.14159
+ur5_elbow_joint: 3.14159
+ur5_wrist_1_joint: 3.14159
+ur5_wrist_2_joint: 3.14159
+ur5_wrist_3_joint: 3.14159
+[0m[INFO] [1790039670.226134936]: Planning frame: odom[0m
+[33m[WARN] [1790039670.230967049]: SEVERE WARNING!!!
+Attempting to unload /root/mm_husky_ws/devel/lib/libbio_ik.so
+while objects created by this library still exist in the heap!
+You should delete your objects before destroying the ClassLoader. The library will NOT be unloaded.[0m
+Actions to learn: ['vel_norm', 'tiago_base_vel', 'tiago_base_angle']
+/usr/local/lib/python3.8/dist-packages/gym/logger.py:30: UserWarning: [33mWARN: Box bound precision lowered by casting to float32[0m
+  warnings.warn(colorize('%s: %s'%('WARN', msg % args), 'yellow'))
+{
+  "initial_observation_sha256": "b3c5875601760290694ec8a6c6de1e1271c971d5de89299930e45441241451a3",
+  "observation_shapes": [
+    [
+      41
+    ],
+    [
+      120,
+      120,
+      1
+    ]
+  ],
+  "action_shape": [
+    3
+  ],
+  "steps": 20,
+  "seconds": 0.2886613570153713,
+  "result": "PASS"
+}

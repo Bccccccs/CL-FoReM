@@ -1,0 +1,15 @@
+# Compatibility overrides for the audited mm_husky:deps image (Python 3.8).
+# Keep torch 1.8.1+cu111, torchvision 0.9.1, gym 0.18 and scipy 1.7.3.
+vit-pytorch==0.20.8
+scikit-image==0.18.3
+imageio==2.9.0
+Pillow==7.2.0
+attrs==23.2.0
+six==1.16.0
+psutil==5.9.8
+# CPU/GPU regression test runner for the P0 development stage.
+pytest==7.4.4
+exceptiongroup==1.2.2
+iniconfig==2.0.0
+pluggy==1.5.0
+tomli==2.0.1

@@ -1,0 +1,14 @@
+{
+  "100": {
+    "all_fp32_feature_blocks_identical_between_r1_and_r2": true,
+    "train_curve_identical": true
+  },
+  "1000": {
+    "all_fp32_feature_blocks_identical_between_r1_and_r2": true,
+    "train_curve_identical": true
+  },
+  "9600": {
+    "all_fp32_feature_blocks_identical_between_r1_and_r2": true,
+    "train_curve_identical": true
+  }
+}

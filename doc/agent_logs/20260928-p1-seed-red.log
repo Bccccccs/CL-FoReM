@@ -1,0 +1,19 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___________________ test_manifest_seed_mismatch_is_rejected ____________________
+
+tmp_path = PosixPath('/tmp/pytest-of-ybc/pytest-6/test_manifest_seed_mismatch_is0')
+
+    def test_manifest_seed_mismatch_is_rejected(tmp_path):
+        import json
+        m = make_manifest(tmp_path, [('train', 5, True)])
+        meta = json.loads(m.read_text())
+        meta['episodes'][0]['seed'] = 100
+        m.write_text(json.dumps(meta))
+>       with pytest.raises(DataError, match='seed'):
+E       Failed: DID NOT RAISE DataError
+
+src/modulation_rl/scripts/tests/test_wm_streaming.py:208: Failed
+=========================== short test summary info ============================
+FAILED src/modulation_rl/scripts/tests/test_wm_streaming.py::test_manifest_seed_mismatch_is_rejected
+1 failed, 11 deselected in 1.09s

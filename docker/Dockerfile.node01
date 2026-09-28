@@ -1,0 +1,146 @@
+# node01 migration: public Noetic base, separate Python 3.10 runtime.
+# Build with --network host and proxy build arguments; no proxy is persisted.
+ARG BASE_IMAGE=registry-1.docker.io/library/ros:noetic-ros-base-focal
+FROM ${BASE_IMAGE}
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+ENV DEBIAN_FRONTEND=noninteractive
+# node01's outbound proxy (2026-09-22 observed, both the daemon-level 17893
+# and shell-level 7892 chains) returns transient 502s on roughly 1 in 5-10
+# requests even at rest. apt's own Acquire::Retries did not reliably absorb
+# this (a build still failed on 502 with Retries=10). So every apt-get
+# install / pip install / git clone below is wrapped in an outer shell retry
+# loop that reruns the whole command up to 8 times; already-fetched .deb
+# files stay in apt's cache dir between attempts, so a retry only refetches
+# the packages that actually failed.
+RUN echo 'Acquire::Retries "10";' > /etc/apt/apt.conf.d/80retries \
+    && echo 'Acquire::http::Timeout "60";' >> /etc/apt/apt.conf.d/80retries \
+    && echo 'Acquire::https::Timeout "60";' >> /etc/apt/apt.conf.d/80retries
+# Split into several smaller apt layers on purpose: a failure partway through
+# one giant install invalidates the whole layer's Docker build cache.
+RUN ok=0; for i in $(seq 1 8); do \
+    apt-get update && apt-get install -y --no-install-recommends \
+    build-essential curl ca-certificates git cmake pkg-config \
+    libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev \
+    libffi-dev liblzma-dev libgdbm-dev libncursesw5-dev uuid-dev \
+    python3-dev python3-catkin-tools python3-rosdep python3-numpy \
+    xvfb xauth libgl1 libglib2.0-0 \
+    && ok=1 && break; echo "apt attempt $i failed, retrying..."; sleep 15; done; \
+    [ "$ok" = 1 ] && rm -rf /var/lib/apt/lists/*
+RUN ok=0; for i in $(seq 1 8); do \
+    apt-get update && apt-get install -y --no-install-recommends \
+    ros-noetic-moveit ros-noetic-navigation ros-noetic-gazebo-ros-pkgs \
+    ros-noetic-gazebo-ros-control ros-noetic-ros-controllers \
+    ros-noetic-pybind11-catkin ros-noetic-cmake-modules \
+    ros-noetic-ur5-moveit-config \
+    && ok=1 && break; echo "apt attempt $i failed, retrying..."; sleep 15; done; \
+    [ "$ok" = 1 ] && rm -rf /var/lib/apt/lists/*
+# ros-noetic-range-sensor-layer intentionally omitted: package.xml lists it as
+# exec_depend but Noetic apt never published a binary (rosdep has no rule for
+# it), and no .launch/.yaml in this repo references the plugin.
+RUN ok=0; for i in $(seq 1 8); do \
+    apt-get update && apt-get install -y --no-install-recommends \
+    ros-noetic-ur-description ros-noetic-velodyne-description ros-noetic-lms1xx \
+    ros-noetic-pr2-controllers-msgs ros-noetic-robot-localization \
+    ros-noetic-interactive-marker-twist-server ros-noetic-twist-mux \
+    ros-noetic-joy ros-noetic-teleop-twist-joy ros-noetic-joint-state-publisher \
+    ros-noetic-hector-gazebo-plugins \
+    && ok=1 && break; echo "apt attempt $i failed, retrying..."; sleep 15; done; \
+    [ "$ok" = 1 ] && rm -rf /var/lib/apt/lists/*
+# Remaining packages below were discovered via `rosdep install --from-paths
+# src --ignore-src` run live in a container against the actual workspace
+# (2026-09-22) plus two headers (pr2_mechanism_msgs, pr2_msgs) that
+# modulation_rl/src/robot_pr2.cpp includes without declaring in package.xml,
+# and ur5_moveit_config which husky_ur5's launch files need but also don't
+# declare. rosdep skip-keys used during that discovery pass (all verified
+# unused by the current P0 Husky/Gazebo path, see agent_logs/20260922-env-audit.md):
+# range_sensor_layer multimaster_launch hsrb_moveit_config microstrain_mips
+# hsrb_description python-scipy (legacy Python 2 scipy, obsoleted on Focal).
+RUN ok=0; for i in $(seq 1 8); do \
+    apt-get update && apt-get install -y --no-install-recommends \
+    ros-noetic-diagnostic-aggregator ros-noetic-gmapping \
+    ros-noetic-imu-filter-madgwick ros-noetic-imu-transformer \
+    ros-noetic-microstrain-3dmgx2-imu ros-noetic-nmea-comms \
+    ros-noetic-nmea-navsat-driver ros-noetic-pcl-conversions ros-noetic-pcl-ros \
+    ros-noetic-pointcloud-to-laserscan ros-noetic-pr2-mechanism-msgs \
+    ros-noetic-pr2-msgs ros-noetic-realsense2-camera ros-noetic-robot-upstart \
+    ros-noetic-roslint ros-noetic-rqt-console ros-noetic-rqt-gui \
+    ros-noetic-rqt-robot-monitor ros-noetic-rviz-imu-plugin \
+    ros-noetic-tf-conversions ros-noetic-um6 ros-noetic-um7 \
+    ros-noetic-urg-node ros-noetic-velodyne-gazebo-plugins \
+    ros-noetic-velodyne-pointcloud \
+    && ok=1 && break; echo "apt attempt $i failed, retrying..."; sleep 15; done; \
+    [ "$ok" = 1 ] && rm -rf /var/lib/apt/lists/*
+ARG PYTHON_VERSION=3.10.18
+# --connect-timeout/--speed-limit/--speed-time: a stalled (not merely slow)
+# transfer can otherwise hang far longer than --retry-delay before curl
+# notices and retries (observed 2026-09-22: one stalled attempt took ~7500s
+# to finally error out, with --retry 8 never getting a chance to kick in).
+RUN curl -fsSL --retry 8 --retry-delay 15 \
+    --connect-timeout 20 --speed-limit 5000 --speed-time 30 \
+    https://www.python.org/ftp/python/${PYTHON_VERSION}/Python-${PYTHON_VERSION}.tgz -o /tmp/python.tgz \
+    && mkdir /tmp/python-src && tar xzf /tmp/python.tgz -C /tmp/python-src --strip-components=1 \
+    && cd /tmp/python-src && ./configure --prefix=/opt/python310 --enable-shared --with-ensurepip=install \
+    && make -j4 && make install \
+    && echo /opt/python310/lib > /etc/ld.so.conf.d/python310.conf && ldconfig \
+    && rm -rf /tmp/python-src /tmp/python.tgz
+ENV PATH=/opt/python310/bin:$PATH
+RUN ln -s /opt/python310/bin/python3.10 /opt/python310/bin/python \
+    && python3 -m pip install --no-cache-dir --retries 10 pip==23.3.2 setuptools==65.5.0 wheel==0.38.4
+RUN ok=0; for i in $(seq 1 8); do \
+    python3 -m pip install --no-cache-dir --retries 10 torch==2.7.1 torchvision==0.22.1 \
+    --index-url https://download.pytorch.org/whl/cu128 \
+    && ok=1 && break; echo "pip torch attempt $i failed, retrying..."; sleep 15; done; [ "$ok" = 1 ]
+COPY requirements-node01.txt /opt/mm-husky/requirements-node01.txt
+RUN ok=0; for i in $(seq 1 8); do \
+    python3 -m pip install --no-cache-dir --retries 10 -r /opt/mm-husky/requirements-node01.txt \
+    && ok=1 && break; echo "pip requirements attempt $i failed, retrying..."; sleep 15; done; [ "$ok" = 1 ]
+# git has no built-in retry and, without a low-speed abort configured, a
+# stalled TLS connection can hang far longer than our own retry loop expects
+# (observed 2026-09-22: one attempt hung ~1017s on a GnuTLS handshake before
+# finally erroring). GIT_HTTP_LOW_SPEED_LIMIT/_TIME make git itself abort a
+# stalled clone quickly so the retry loop actually gets to cycle.
+RUN ok=0; for i in $(seq 1 8); do \
+    GIT_HTTP_LOW_SPEED_LIMIT=5000 GIT_HTTP_LOW_SPEED_TIME=30 \
+    python3 -m pip install --no-cache-dir --retries 10 \
+    'git+https://github.com/dhonerkamp/pyastar.git@4303b3d200f91016bbccbfdfc43cdc3b67fc6264' \
+    && ok=1 && break; echo "pip pyastar attempt $i failed, retrying..."; sleep 15; done; [ "$ok" = 1 ]
+# defusedxml: xacro (used by every roslaunch that loads husky_ur5.xacro)
+# imports it but it's not in ROS Noetic's own apt dependency chain or in
+# requirements-node01.txt; without it every roslaunch fails at URDF load.
+RUN ok=0; for i in $(seq 1 8); do \
+    python3 -m pip install --no-cache-dir --retries 10 defusedxml \
+    && ok=1 && break; echo "pip defusedxml attempt $i failed, retrying..."; sleep 15; done; [ "$ok" = 1 ]
+# Compatibility shim: ray 1.13.0 (pinned for its cp310 wheel; the algorithm's
+# historical pin was ray 1.6.0, see ENV.md) renamed ray.rllib.utils.torch_ops
+# to torch_utils with identical function names. modulation_rl's
+# myray/custom_sac.py and models/ray_mapencoder.py still import the old path.
+# This restores the old import path without touching src/modulation_rl.
+# NOTE: this only fixes the import; ray.rllib's Trainer.with_updates() API
+# was also removed in newer ray, and custom_sac.py's SACTrainerCustom still
+# breaks on that. That ray/rllib SAC path is NOT used by main.py/eval.py/
+# train_smoke.py (which use this repo's own sac.py/model.py instead) — see
+# agent_logs/20260922-env-audit.md for the verification that confirmed this.
+RUN cat > "$(python3 -c 'import ray.rllib.utils as u, os; print(os.path.dirname(u.__file__))')/torch_ops.py" <<'PYEOF'
+"""Compatibility shim for ray>=1.7, which renamed torch_ops to torch_utils.
+
+modulation_rl's scripts (custom_sac.py, ray_mapencoder.py) still import from
+the old ray.rllib.utils.torch_ops path; this repo's ray pin (1.13.0, chosen
+for its cp310 wheel) only ships torch_utils.py with the same functions under
+the same names. This restores the old import path without touching any
+algorithm code.
+"""
+from ray.rllib.utils.torch_utils import (  # noqa: F401
+    concat_multi_gpu_td_errors,
+    huber_loss,
+    convert_to_torch_tensor,
+)
+PYEOF
+COPY entrypoint.sh /usr/local/bin/mm-entrypoint
+RUN chmod +x /usr/local/bin/mm-entrypoint
+ENV PYTHONUNBUFFERED=1 OMP_NUM_THREADS=2 OPENBLAS_NUM_THREADS=2 \
+    WANDB_MODE=offline QT_X11_NO_MITSHM=1 \
+    ROS_MASTER_URI=http://127.0.0.1:11311 ROS_IP=127.0.0.1 \
+    GAZEBO_MASTER_URI=http://127.0.0.1:11345
+WORKDIR /root/mm_husky_ws/src/modulation_rl/scripts
+ENTRYPOINT ["/usr/local/bin/mm-entrypoint"]
+CMD ["sleep", "infinity"]

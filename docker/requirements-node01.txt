@@ -1,0 +1,44 @@
+# node01 dependency set; verified against the full P0 environment-entry
+# checklist on 2026-09-22 (see agent_logs/20260922-env-audit.md): pip check,
+# CUDA fwd/bwd, catkin build (all 34 packages), pybind11 bindings importing
+# under Python 3.10, train_smoke.py, analytical 20-step, Gazebo startup.
+numpy==1.23.5
+scipy==1.10.1
+gym==0.18.0
+# ray[rllib]==1.13.0 pinned for its cp310 wheel (the algorithm's historical
+# pin was 1.6.0, see ENV.md); newer rllib renamed torch_ops to torch_utils
+# (worked around by a build-time shim, see Dockerfile.node01) and dropped
+# Trainer.with_updates(), which breaks modulation/myray/custom_sac.py. That
+# ray/rllib SAC path is legacy/unused — main.py, eval.py and train_smoke.py
+# all use this repo's own sac.py/model.py instead, confirmed by grep.
+ray[rllib]==1.13.0
+protobuf==3.20.3
+# wandb 0.10.11 (the original pin) does `from collections import Mapping`,
+# removed in Python 3.10; 0.15.12 is the first version verified here to
+# import cleanly under 3.10 while keeping the wandb.init/log/config API this
+# repo's scripts actually call.
+wandb==0.15.12
+SuperSuit==3.8.1
+pettingzoo==1.23.1
+Pillow==7.2.0
+matplotlib==3.5.3
+pandas==1.5.3
+opencv-python==4.9.0.80
+PyYAML==6.0.1
+rospkg==1.6.0
+catkin-pkg==1.0.0
+catkin-tools==0.9.4
+empy==3.3.4
+pybind11==2.13.6
+pyOpenSSL==24.3.0
+cryptography==44.0.3
+vit-pytorch==0.20.8
+scikit-image==0.19.3
+imageio==2.9.0
+seaborn==0.12.2
+tensorboard==2.11.2
+tensorboardX==2.6.2.2
+gpustat==1.1.1
+pytest==7.4.4
+pycryptodomex==3.23.0
+gnupg==2.3.1

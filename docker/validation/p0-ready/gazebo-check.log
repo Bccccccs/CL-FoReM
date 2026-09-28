@@ -1,0 +1,17 @@
+{
+  "result": "PASS",
+  "scope": "Gazebo startup only; motion not tested",
+  "model": "husky_ur5",
+  "running_controllers": [
+    "husky_joint_publisher",
+    "husky_velocity_controller",
+    "joint_state_controller",
+    "eff_joint_traj_controller",
+    "gripper_controller"
+  ],
+  "costmap_shape": [
+    120,
+    120
+  ],
+  "simulation_time": 33.815
+}

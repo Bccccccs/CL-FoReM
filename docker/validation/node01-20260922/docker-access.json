@@ -1,0 +1,56 @@
+{
+  "group": {
+    "command": [
+      "getent",
+      "group",
+      "docker"
+    ],
+    "exit_code": 0,
+    "stdout": "docker:x:999:ybc\n",
+    "stderr": ""
+  },
+  "containers": {
+    "command": [
+      "sg",
+      "docker",
+      "-c",
+      "docker ps -a --format \"{{.Names}} {{.Status}} {{.Image}}\""
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "images": {
+    "command": [
+      "sg",
+      "docker",
+      "-c",
+      "docker image ls --format \"{{.Repository}}:{{.Tag}} {{.ID}}\""
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "runtimes": {
+    "command": [
+      "sg",
+      "docker",
+      "-c",
+      "docker info --format \"{{range $key, $value := .Runtimes}}{{$key}} {{end}}\""
+    ],
+    "exit_code": 64,
+    "stdout": "",
+    "stderr": "template parsing error: template: :1: unexpected \",\" in range\n"
+  },
+  "toolkit": {
+    "command": [
+      "dpkg-query",
+      "-W",
+      "nvidia-container-toolkit",
+      "libnvidia-container1"
+    ],
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": "dpkg-query: no packages found matching nvidia-container-toolkit\ndpkg-query: no packages found matching libnvidia-container1\n"
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "time": "2026-09-28T09:16:56.575276+08:00",
+  "calculation": {
+    "transitions": 2373775,
+    "complete_episodes": 9600,
+    "episodes": 9600,
+    "observation_frames_assuming_Tplus1": 2383375,
+    "maps_fp32_bytes": 137282400000,
+    "maps_fp32_two_copies_GiB": 255.70839643478394,
+    "features_fp32_GiB": 9.242793079465628,
+    "window1_feature_GiB": 18.411128036677837,
+    "window5_feature_upper_GiB": 55.23338411003351,
+    "max_episode_steps": 975,
+    "max_episode_maps_MiB": 53.61328125,
+    "training_batch512_pair_features_MiB": 4.06640625,
+    "encoder_batch128_maps_MiB": 7.03125,
+    "sample_file": "results/p1a-20260923/dataset-v2-10k/train-00/episode-00000-observations.npz",
+    "sample_zip_metadata": {
+      "robot_state.npy": {
+        "uncompressed_bytes": 17184,
+        "compressed_bytes": 15508
+      },
+      "local_map.npy": {
+        "uncompressed_bytes": 5990528,
+        "compressed_bytes": 31691
+      },
+      "action.npy": {
+        "uncompressed_bytes": 1364,
+        "compressed_bytes": 1260
+      },
+      "reward.npy": {
+        "uncompressed_bytes": 540,
+        "compressed_bytes": 493
+      },
+      "dt.npy": {
+        "uncompressed_bytes": 540,
+        "compressed_bytes": 78
+      },
+      "done.npy": {
+        "uncompressed_bytes": 231,
+        "compressed_bytes": 74
+      },
+      "subgoal_index.npy": {
+        "uncompressed_bytes": 336,
+        "compressed_bytes": 73
+      },
+      "terminated.npy": {
+        "uncompressed_bytes": 129,
+        "compressed_bytes": 67
+      },
+      "truncated.npy": {
+        "uncompressed_bytes": 129,
+        "compressed_bytes": 67
+      },
+      "complete.npy": {
+        "uncompressed_bytes": 129,
+        "compressed_bytes": 67
+      },
+      "seed.npy": {
+        "uncompressed_bytes": 136,
+        "compressed_bytes": 69
+      },
+      "policy_mode.npy": {
+        "uncompressed_bytes": 168,
+        "compressed_bytes": 88
+      },
+      "checkpoint_sha256.npy": {
+        "uncompressed_bytes": 384,
+        "compressed_bytes": 163
+      },
+      "semantics.npy": {
+        "uncompressed_bytes": 212,
+        "compressed_bytes": 112
+      }
+    },
+    "limits": "Derived from manifest and ZIP central-directory only; no whole-array load, no training; values exclude runtime overhead."
+  }
+}

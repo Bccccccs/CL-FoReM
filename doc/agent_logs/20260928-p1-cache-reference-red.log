@@ -1,0 +1,29 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+____________ test_small_window_reference_api_accepts_feature_cache _____________
+
+tmp_path = PosixPath('/tmp/pytest-of-ybc/pytest-10/test_small_window_reference_ap0')
+
+    def test_small_window_reference_api_accepts_feature_cache(tmp_path):
+        ds, cache, eps = cache_dataset(tmp_path)
+>       w = window_tensors(ds, cache, 1, 'cpu')
+
+src/modulation_rl/scripts/tests/test_wm_streaming.py:325: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+ds = <wm.data.EpisodeDataset object at 0x7633f59ea500>
+features = <wm.cache.FeatureCache object at 0x7633f59ee740>, k = 1
+device = 'cpu', exclude_goal_switch = False
+
+    def window_tensors(ds, features, k, device, exclude_goal_switch=False):
+        """Small correctness-reference API. All production consumers use WindowSource batches."""
+        source = WindowSource(ds, features, k, exclude_goal_switch)
+>       if len(source) * (k+1) * features.shape[-1] * 4 > 128 << 20:
+E       AttributeError: 'FeatureCache' object has no attribute 'shape'
+
+src/modulation_rl/scripts/wm/train_offline.py:64: AttributeError
+----------------------------- Captured stdout call -----------------------------
+CACHE {"split": "train", "episodes": 3, "observations": 21, "seconds": 0.011231222189962864}
+=========================== short test summary info ============================
+FAILED src/modulation_rl/scripts/tests/test_wm_streaming.py::test_small_window_reference_api_accepts_feature_cache
+1 failed, 21 deselected in 1.18s

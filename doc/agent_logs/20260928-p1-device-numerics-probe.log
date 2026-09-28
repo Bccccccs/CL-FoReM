@@ -1,0 +1,1 @@
+{"cudnn_allow_tf32_original": true, "torch_version": "2.7.1+cu128", "cuda_default_vs_cpu_max_abs": 2.384185791015625e-07, "cuda_tf32_disabled_vs_cpu_max_abs": 2.384185791015625e-07, "cuda_default_vs_disabled_max_abs": 0.0, "scope": "read-only numerical diagnosis; no training precision change", "dtype": "float32"}

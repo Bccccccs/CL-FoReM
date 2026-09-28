@@ -1,0 +1,224 @@
+[1mexecuting command [apt-get install -y ros-noetic-realsense2-camera][0m
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  ros-noetic-ddynamic-reconfigure ros-noetic-librealsense2
+The following NEW packages will be installed:
+  ros-noetic-ddynamic-reconfigure ros-noetic-librealsense2
+  ros-noetic-realsense2-camera
+0 upgraded, 3 newly installed, 0 to remove and 16 not upgraded.
+Need to get 13.3 MB of archives.
+After this operation, 39.1 MB of additional disk space will be used.
+Get:1 http://snapshots.ros.org/noetic/final/ubuntu focal/main amd64 ros-noetic-ddynamic-reconfigure amd64 0.4.2-1focal.20250521.004243 [74.8 kB]
+Get:2 http://snapshots.ros.org/noetic/final/ubuntu focal/main amd64 ros-noetic-librealsense2 amd64 2.50.0-1focal.20250426.005706 [12.8 MB]
+Get:3 http://snapshots.ros.org/noetic/final/ubuntu focal/main amd64 ros-noetic-realsense2-camera amd64 2.3.2-1focal.20250521.010944 [332 kB]
+debconf: delaying package configuration, since apt-utils is not installed
+Fetched 13.3 MB in 24s (557 kB/s)
+Selecting previously unselected package ros-noetic-ddynamic-reconfigure.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 126887 files and directories currently installed.)
+Preparing to unpack .../ros-noetic-ddynamic-reconfigure_0.4.2-1focal.20250521.004243_amd64.deb ...
+Unpacking ros-noetic-ddynamic-reconfigure (0.4.2-1focal.20250521.004243) ...
+Selecting previously unselected package ros-noetic-librealsense2.
+Preparing to unpack .../ros-noetic-librealsense2_2.50.0-1focal.20250426.005706_amd64.deb ...
+Unpacking ros-noetic-librealsense2 (2.50.0-1focal.20250426.005706) ...
+Selecting previously unselected package ros-noetic-realsense2-camera.
+Preparing to unpack .../ros-noetic-realsense2-camera_2.3.2-1focal.20250521.010944_amd64.deb ...
+Unpacking ros-noetic-realsense2-camera (2.3.2-1focal.20250521.010944) ...
+Setting up ros-noetic-ddynamic-reconfigure (0.4.2-1focal.20250521.004243) ...
+Setting up ros-noetic-librealsense2 (2.50.0-1focal.20250426.005706) ...
+Setting up ros-noetic-realsense2-camera (2.3.2-1focal.20250521.010944) ...
+Processing triggers for libc-bin (2.31-0ubuntu9.17) ...
+[1mexecuting command [apt-get install -y ros-noetic-robot-upstart][0m
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  daemontools net-tools
+Suggested packages:
+  daemontools-run | runit
+The following NEW packages will be installed:
+  daemontools net-tools ros-noetic-robot-upstart
+0 upgraded, 3 newly installed, 0 to remove and 16 not upgraded.
+Need to get 273 kB of archives.
+After this operation, 1366 kB of additional disk space will be used.
+Get:1 http://snapshots.ros.org/noetic/final/ubuntu focal/main amd64 ros-noetic-robot-upstart amd64 0.4.2-1focal.20250519.234300 [22.1 kB]
+Get:2 http://archive.ubuntu.com/ubuntu focal/universe amd64 daemontools amd64 1:0.76-7 [58.1 kB]
+Get:3 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 net-tools amd64 1.60+git20180626.aebd88e-1ubuntu1.3 [192 kB]
+debconf: delaying package configuration, since apt-utils is not installed
+Fetched 273 kB in 23s (11.9 kB/s)
+Selecting previously unselected package daemontools.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 127046 files and directories currently installed.)
+Preparing to unpack .../daemontools_1%3a0.76-7_amd64.deb ...
+Unpacking daemontools (1:0.76-7) ...
+Selecting previously unselected package net-tools.
+Preparing to unpack .../net-tools_1.60+git20180626.aebd88e-1ubuntu1.3_amd64.deb ...
+Unpacking net-tools (1.60+git20180626.aebd88e-1ubuntu1.3) ...
+Selecting previously unselected package ros-noetic-robot-upstart.
+Preparing to unpack .../ros-noetic-robot-upstart_0.4.2-1focal.20250519.234300_amd64.deb ...
+Unpacking ros-noetic-robot-upstart (0.4.2-1focal.20250519.234300) ...
+Setting up net-tools (1.60+git20180626.aebd88e-1ubuntu1.3) ...
+Setting up daemontools (1:0.76-7) ...
+Setting up ros-noetic-robot-upstart (0.4.2-1focal.20250519.234300) ...
+Processing triggers for man-db (2.9.1-1) ...
+[1mexecuting command [apt-get install -y ros-noetic-um6][0m
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  ros-noetic-serial
+The following NEW packages will be installed:
+  ros-noetic-serial ros-noetic-um6
+0 upgraded, 2 newly installed, 0 to remove and 16 not upgraded.
+Need to get 96.3 kB of archives.
+After this operation, 421 kB of additional disk space will be used.
+Get:1 http://snapshots.ros.org/noetic/final/ubuntu focal/main amd64 ros-noetic-serial amd64 1.2.1-1focal.20250426.010535 [39.6 kB]
+Get:2 http://snapshots.ros.org/noetic/final/ubuntu focal/main amd64 ros-noetic-um6 amd64 1.1.3-4focal.20250519.235528 [56.7 kB]
+debconf: delaying package configuration, since apt-utils is not installed
+Fetched 96.3 kB in 21s (4537 B/s)
+Selecting previously unselected package ros-noetic-serial.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 127167 files and directories currently installed.)
+Preparing to unpack .../ros-noetic-serial_1.2.1-1focal.20250426.010535_amd64.deb ...
+Unpacking ros-noetic-serial (1.2.1-1focal.20250426.010535) ...
+Selecting previously unselected package ros-noetic-um6.
+Preparing to unpack .../ros-noetic-um6_1.1.3-4focal.20250519.235528_amd64.deb ...
+Unpacking ros-noetic-um6 (1.1.3-4focal.20250519.235528) ...
+Setting up ros-noetic-serial (1.2.1-1focal.20250426.010535) ...
+Setting up ros-noetic-um6 (1.1.3-4focal.20250519.235528) ...
+[1mexecuting command [apt-get install -y ros-noetic-um7][0m
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following NEW packages will be installed:
+  ros-noetic-um7
+0 upgraded, 1 newly installed, 0 to remove and 16 not upgraded.
+Need to get 54.8 kB of archives.
+After this operation, 258 kB of additional disk space will be used.
+Get:1 http://snapshots.ros.org/noetic/final/ubuntu focal/main amd64 ros-noetic-um7 amd64 0.0.7-1focal.20250519.235533 [54.8 kB]
+debconf: delaying package configuration, since apt-utils is not installed
+Fetched 54.8 kB in 21s (2595 B/s)
+Selecting previously unselected package ros-noetic-um7.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 127222 files and directories currently installed.)
+Preparing to unpack .../ros-noetic-um7_0.0.7-1focal.20250519.235533_amd64.deb ...
+Unpacking ros-noetic-um7 (0.0.7-1focal.20250519.235533) ...
+Setting up ros-noetic-um7 (0.0.7-1focal.20250519.235533) ...
+[1mexecuting command [apt-get install -y ros-noetic-urg-node][0m
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  ros-noetic-laser-proc ros-noetic-urg-c
+The following NEW packages will be installed:
+  ros-noetic-laser-proc ros-noetic-urg-c ros-noetic-urg-node
+0 upgraded, 3 newly installed, 0 to remove and 16 not upgraded.
+Need to get 339 kB of archives.
+After this operation, 1682 kB of additional disk space will be used.
+Get:1 http://snapshots.ros.org/noetic/final/ubuntu focal/main amd64 ros-noetic-laser-proc amd64 0.1.6-1focal.20250520.001605 [69.1 kB]
+Get:2 http://snapshots.ros.org/noetic/final/ubuntu focal/main amd64 ros-noetic-urg-c amd64 1.0.405-1focal.20250426.010626 [40.4 kB]
+Get:3 http://snapshots.ros.org/noetic/final/ubuntu focal/main amd64 ros-noetic-urg-node amd64 0.1.18-1focal.20250521.003725 [230 kB]
+debconf: delaying package configuration, since apt-utils is not installed
+Fetched 339 kB in 20s (17.1 kB/s)
+Selecting previously unselected package ros-noetic-laser-proc.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 127265 files and directories currently installed.)
+Preparing to unpack .../ros-noetic-laser-proc_0.1.6-1focal.20250520.001605_amd64.deb ...
+Unpacking ros-noetic-laser-proc (0.1.6-1focal.20250520.001605) ...
+Selecting previously unselected package ros-noetic-urg-c.
+Preparing to unpack .../ros-noetic-urg-c_1.0.405-1focal.20250426.010626_amd64.deb ...
+Unpacking ros-noetic-urg-c (1.0.405-1focal.20250426.010626) ...
+Selecting previously unselected package ros-noetic-urg-node.
+Preparing to unpack .../ros-noetic-urg-node_0.1.18-1focal.20250521.003725_amd64.deb ...
+Unpacking ros-noetic-urg-node (0.1.18-1focal.20250521.003725) ...
+Setting up ros-noetic-laser-proc (0.1.6-1focal.20250520.001605) ...
+Setting up ros-noetic-urg-c (1.0.405-1focal.20250426.010626) ...
+Setting up ros-noetic-urg-node (0.1.18-1focal.20250521.003725) ...
+[1mexecuting command [apt-get install -y ros-noetic-velodyne-pointcloud][0m
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  libpcap0.8-dev ros-noetic-velodyne-driver ros-noetic-velodyne-laserscan
+  ros-noetic-velodyne-msgs
+The following NEW packages will be installed:
+  libpcap0.8-dev ros-noetic-velodyne-driver ros-noetic-velodyne-laserscan
+  ros-noetic-velodyne-msgs ros-noetic-velodyne-pointcloud
+0 upgraded, 5 newly installed, 0 to remove and 16 not upgraded.
+Need to get 791 kB of archives.
+After this operation, 3727 kB of additional disk space will be used.
+Get:1 http://snapshots.ros.org/noetic/final/ubuntu focal/main amd64 ros-noetic-velodyne-msgs amd64 1.7.0-1focal.20250426.013011 [17.8 kB]
+Get:2 http://snapshots.ros.org/noetic/final/ubuntu focal/main amd64 ros-noetic-velodyne-driver amd64 1.7.0-1focal.20250521.003741 [180 kB]
+Get:3 http://snapshots.ros.org/noetic/final/ubuntu focal/main amd64 ros-noetic-velodyne-laserscan amd64 1.7.0-1focal.20250521.004110 [90.5 kB]
+Get:4 http://snapshots.ros.org/noetic/final/ubuntu focal/main amd64 ros-noetic-velodyne-pointcloud amd64 1.7.0-1focal.20250521.004448 [259 kB]
+Get:5 http://archive.ubuntu.com/ubuntu focal-updates/main amd64 libpcap0.8-dev amd64 1.9.1-3ubuntu1.20.04.1 [244 kB]
+debconf: delaying package configuration, since apt-utils is not installed
+Fetched 791 kB in 23s (35.1 kB/s)
+Selecting previously unselected package libpcap0.8-dev:amd64.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 127381 files and directories currently installed.)
+Preparing to unpack .../libpcap0.8-dev_1.9.1-3ubuntu1.20.04.1_amd64.deb ...
+Unpacking libpcap0.8-dev:amd64 (1.9.1-3ubuntu1.20.04.1) ...
+Selecting previously unselected package ros-noetic-velodyne-msgs.
+Preparing to unpack .../ros-noetic-velodyne-msgs_1.7.0-1focal.20250426.013011_amd64.deb ...
+Unpacking ros-noetic-velodyne-msgs (1.7.0-1focal.20250426.013011) ...
+Selecting previously unselected package ros-noetic-velodyne-driver.
+Preparing to unpack .../ros-noetic-velodyne-driver_1.7.0-1focal.20250521.003741_amd64.deb ...
+Unpacking ros-noetic-velodyne-driver (1.7.0-1focal.20250521.003741) ...
+Selecting previously unselected package ros-noetic-velodyne-laserscan.
+Preparing to unpack .../ros-noetic-velodyne-laserscan_1.7.0-1focal.20250521.004110_amd64.deb ...
+Unpacking ros-noetic-velodyne-laserscan (1.7.0-1focal.20250521.004110) ...
+Selecting previously unselected package ros-noetic-velodyne-pointcloud.
+Preparing to unpack .../ros-noetic-velodyne-pointcloud_1.7.0-1focal.20250521.004448_amd64.deb ...
+Unpacking ros-noetic-velodyne-pointcloud (1.7.0-1focal.20250521.004448) ...
+Setting up libpcap0.8-dev:amd64 (1.9.1-3ubuntu1.20.04.1) ...
+Setting up ros-noetic-velodyne-msgs (1.7.0-1focal.20250426.013011) ...
+Setting up ros-noetic-velodyne-laserscan (1.7.0-1focal.20250521.004110) ...
+Setting up ros-noetic-velodyne-driver (1.7.0-1focal.20250521.003741) ...
+Setting up ros-noetic-velodyne-pointcloud (1.7.0-1focal.20250521.004448) ...
+Processing triggers for man-db (2.9.1-1) ...
+[1mexecuting command [apt-get install -y ros-noetic-gmapping][0m
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  ros-noetic-openslam-gmapping
+The following NEW packages will be installed:
+  ros-noetic-gmapping ros-noetic-openslam-gmapping
+0 upgraded, 2 newly installed, 0 to remove and 16 not upgraded.
+Need to get 425 kB of archives.
+After this operation, 2519 kB of additional disk space will be used.
+Get:1 http://snapshots.ros.org/noetic/final/ubuntu focal/main amd64 ros-noetic-openslam-gmapping amd64 0.2.1-1focal.20250426.005832 [154 kB]
+Get:2 http://snapshots.ros.org/noetic/final/ubuntu focal/main amd64 ros-noetic-gmapping amd64 1.4.2-1focal.20250520.001832 [272 kB]
+debconf: delaying package configuration, since apt-utils is not installed
+Fetched 425 kB in 22s (19.3 kB/s)
+Selecting previously unselected package ros-noetic-openslam-gmapping.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 127637 files and directories currently installed.)
+Preparing to unpack .../ros-noetic-openslam-gmapping_0.2.1-1focal.20250426.005832_amd64.deb ...
+Unpacking ros-noetic-openslam-gmapping (0.2.1-1focal.20250426.005832) ...
+Selecting previously unselected package ros-noetic-gmapping.
+Preparing to unpack .../ros-noetic-gmapping_1.4.2-1focal.20250520.001832_amd64.deb ...
+Unpacking ros-noetic-gmapping (1.4.2-1focal.20250520.001832) ...
+Setting up ros-noetic-openslam-gmapping (0.2.1-1focal.20250426.005832) ...
+Setting up ros-noetic-gmapping (1.4.2-1focal.20250520.001832) ...
+[1mexecuting command [apt-get install -y ros-noetic-tf-conversions][0m
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  ros-noetic-kdl-conversions
+The following NEW packages will be installed:
+  ros-noetic-kdl-conversions ros-noetic-tf-conversions
+0 upgraded, 2 newly installed, 0 to remove and 16 not upgraded.
+Need to get 27.4 kB of archives.
+After this operation, 144 kB of additional disk space will be used.
+Get:1 http://snapshots.ros.org/noetic/final/ubuntu focal/main amd64 ros-noetic-kdl-conversions amd64 1.13.4-1focal.20250426.014106 [10.1 kB]
+Get:2 http://snapshots.ros.org/noetic/final/ubuntu focal/main amd64 ros-noetic-tf-conversions amd64 1.13.4-1focal.20250520.015950 [17.3 kB]
+debconf: delaying package configuration, since apt-utils is not installed
+Fetched 27.4 kB in 18s (1509 B/s)
+Selecting previously unselected package ros-noetic-kdl-conversions.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 127743 files and directories currently installed.)
+Preparing to unpack .../ros-noetic-kdl-conversions_1.13.4-1focal.20250426.014106_amd64.deb ...
+Unpacking ros-noetic-kdl-conversions (1.13.4-1focal.20250426.014106) ...
+Selecting previously unselected package ros-noetic-tf-conversions.
+Preparing to unpack .../ros-noetic-tf-conversions_1.13.4-1focal.20250520.015950_amd64.deb ...
+Unpacking ros-noetic-tf-conversions (1.13.4-1focal.20250520.015950) ...
+Setting up ros-noetic-kdl-conversions (1.13.4-1focal.20250426.014106) ...
+Setting up ros-noetic-tf-conversions (1.13.4-1focal.20250520.015950) ...
+#All required rosdeps installed successfully

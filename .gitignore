@@ -23,3 +23,8 @@
 
 __pycache__/
 *.pyc
+
+# P0 experiment artifacts
+/results/
+
+/assets/

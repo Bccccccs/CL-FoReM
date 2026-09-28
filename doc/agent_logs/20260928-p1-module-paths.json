@@ -1,0 +1,1 @@
+{"torch": "2.7.1+cu128", "numpy": "1.23.5", "sb3_path": "/root/mm_husky_ws/src/modulation_rl/scripts/stable_baselines3/__init__.py", "wm": "/root/mm_husky_ws/src/modulation_rl/scripts/wm/data.py", "model": "/root/mm_husky_ws/src/modulation_rl/scripts/model.py", "cnn": "/root/mm_husky_ws/src/modulation_rl/scripts/modulation/models/mapencoder.py", "cuda": "12.8", "cudnn": 90701}

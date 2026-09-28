@@ -1,0 +1,34 @@
+....F...............                                                     [100%]
+=================================== FAILURES ===================================
+__________ test_cache_cross_chunk_windows_eviction_and_owned_batches ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-ybc/pytest-1/test_cache_cross_chunk_windows0')
+
+    def test_cache_cross_chunk_windows_eviction_and_owned_batches(tmp_path):
+        ds, cache, eps = cache_dataset(tmp_path)
+        assert all('local_map' not in ep and 'robot_state' not in ep for ep in ds.episodes)
+        idx = np.array([[1, 2], [0, 3], [0, 1]])
+        from wm.train_offline import WindowSource
+        source = WindowSource(ds, cache, 5)
+        batch = source.take(idx, 'cpu')
+        for i, (e, t) in enumerate(idx):
+            expected = np.concatenate([eps[e]['robot_state'][t:t+6], eps[e]['robot_state'][t:t+6, :2]*.25], 1)
+            np.testing.assert_array_equal(batch['h'][i].numpy(), expected)
+            np.testing.assert_array_equal(batch['action'][i].numpy(), eps[e]['action'][t:t+5])
+            np.testing.assert_array_equal(batch['dt'][i].numpy(), eps[e]['dt'][t:t+5])
+        frozen = batch['h'].clone()
+        cache[np.arange(len(cache))[-2:]]
+        assert len(cache._maps) <= 1
+        cache.close()
+        assert torch.equal(batch['h'], frozen)
+        sizes = [len(b['h']) for b in source.batches(4, 'cpu')]
+>       assert sum(sizes) == len(source) and sizes[-1] == len(source) % 4
+E       assert (8 == 8 and 4 == (8 % 4))
+E        +  where 8 = sum([4, 4])
+E        +  and   8 = len(<wm.train_offline.WindowSource object at 0x741a9dbad6c0>)
+E        +  and   8 = len(<wm.train_offline.WindowSource object at 0x741a9dbad6c0>)
+
+src/modulation_rl/scripts/tests/test_wm_streaming.py:86: AssertionError
+=========================== short test summary info ============================
+FAILED src/modulation_rl/scripts/tests/test_wm_streaming.py::test_cache_cross_chunk_windows_eviction_and_owned_batches
+1 failed, 19 passed in 1.50s

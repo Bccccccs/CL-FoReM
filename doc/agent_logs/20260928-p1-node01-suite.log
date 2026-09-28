@@ -1,0 +1,72 @@
+........................................................                 [100%]
+=============================== warnings summary ===============================
+../../../../../opt/python310/lib/python3.10/site-packages/matplotlib/fontconfig_pattern.py:66
+  /opt/python310/lib/python3.10/site-packages/matplotlib/fontconfig_pattern.py:66: PyparsingDeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'
+    ).setParseAction(self._family)
+
+../../../../../opt/python310/lib/python3.10/site-packages/matplotlib/fontconfig_pattern.py:70
+  /opt/python310/lib/python3.10/site-packages/matplotlib/fontconfig_pattern.py:70: PyparsingDeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'
+    ).setParseAction(self._size)
+
+../../../../../opt/python310/lib/python3.10/site-packages/matplotlib/fontconfig_pattern.py:74
+  /opt/python310/lib/python3.10/site-packages/matplotlib/fontconfig_pattern.py:74: PyparsingDeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'
+    ).setParseAction(self._name)
+
+../../../../../opt/python310/lib/python3.10/site-packages/matplotlib/fontconfig_pattern.py:78
+  /opt/python310/lib/python3.10/site-packages/matplotlib/fontconfig_pattern.py:78: PyparsingDeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'
+    ).setParseAction(self._value)
+
+../../../../../opt/python310/lib/python3.10/site-packages/matplotlib/fontconfig_pattern.py:85
+  /opt/python310/lib/python3.10/site-packages/matplotlib/fontconfig_pattern.py:85: PyparsingDeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'
+    ).setParseAction(self._families)
+
+../../../../../opt/python310/lib/python3.10/site-packages/matplotlib/fontconfig_pattern.py:92
+  /opt/python310/lib/python3.10/site-packages/matplotlib/fontconfig_pattern.py:92: PyparsingDeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'
+    ).setParseAction(self._point_sizes)
+
+../../../../../opt/python310/lib/python3.10/site-packages/matplotlib/fontconfig_pattern.py:102
+  /opt/python310/lib/python3.10/site-packages/matplotlib/fontconfig_pattern.py:102: PyparsingDeprecationWarning: 'setParseAction' deprecated - use 'set_parse_action'
+    ).setParseAction(self._property)
+
+../../../../../opt/python310/lib/python3.10/site-packages/matplotlib/fontconfig_pattern.py:127
+../../../../../opt/python310/lib/python3.10/site-packages/matplotlib/fontconfig_pattern.py:127
+../../../../../opt/python310/lib/python3.10/site-packages/matplotlib/fontconfig_pattern.py:127
+../../../../../opt/python310/lib/python3.10/site-packages/matplotlib/fontconfig_pattern.py:127
+../../../../../opt/python310/lib/python3.10/site-packages/matplotlib/fontconfig_pattern.py:127
+  /opt/python310/lib/python3.10/site-packages/matplotlib/fontconfig_pattern.py:127: PyparsingDeprecationWarning: 'parseString' deprecated - use 'parse_string'
+    self._parser.parseString(pattern)
+
+../../../../../opt/python310/lib/python3.10/site-packages/matplotlib/fontconfig_pattern.py:134
+../../../../../opt/python310/lib/python3.10/site-packages/matplotlib/fontconfig_pattern.py:134
+../../../../../opt/python310/lib/python3.10/site-packages/matplotlib/fontconfig_pattern.py:134
+../../../../../opt/python310/lib/python3.10/site-packages/matplotlib/fontconfig_pattern.py:134
+../../../../../opt/python310/lib/python3.10/site-packages/matplotlib/fontconfig_pattern.py:134
+  /opt/python310/lib/python3.10/site-packages/matplotlib/fontconfig_pattern.py:134: PyparsingDeprecationWarning: 'resetCache' deprecated - use 'reset_cache'
+    self._parser.resetCache()
+
+../../../../../opt/python310/lib/python3.10/site-packages/matplotlib/_mathtext.py:30
+  /opt/python310/lib/python3.10/site-packages/matplotlib/_mathtext.py:30: PyparsingDeprecationWarning: 'enablePackrat' deprecated - use 'enable_packrat'
+    ParserElement.enablePackrat()
+
+tests/test_checkpoint_resume.py: 60 warnings
+tests/test_p0_runner.py: 12 warnings
+tests/test_sac_updates.py: 246 warnings
+tests/test_wm_prediction.py: 12 warnings
+  /root/mm_husky_ws/src/modulation_rl/scripts/modulation/models/mapencoder.py:11: DeprecationWarning: `np.int` is a deprecated alias for the builtin `int`. To silence this warning, use `int` by itself. Doing this will not modify any behavior and is safe. When replacing `np.int`, you may wish to use e.g. `np.int64` or `np.int32` to specify the precision. If you wish to review your current use, check the release note link for additional information.
+  Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+    return ((in_size - k + 2 * pad) / stride + 1).astype(np.int)
+
+tests/test_p0_runner.py::test_environment_parser_ignores_outer_resume_flag
+  /opt/python310/lib/python3.10/site-packages/wandb/analytics/sentry.py:90: SentryHubDeprecationWarning: `sentry_sdk.Hub` is deprecated and will be removed in a future major release. Please consult our 1.x to 2.x migration guide for details on how to migrate `Hub` usage to the new API: https://docs.sentry.io/platforms/python/migration/1.x-to-2.x
+    self.hub = sentry_sdk.Hub(client)
+
+tests/test_p0_runner.py::test_environment_parser_ignores_outer_resume_flag
+  /root/mm_husky_ws/src/modulation_rl/scripts/modulation/envs/map.py:14: DeprecationWarning: Please use `rotate` from the `scipy.ndimage` namespace, the `scipy.ndimage.interpolation` namespace is deprecated.
+    from scipy.ndimage.interpolation import rotate
+
+tests/test_sac_updates.py::test_sample_predict_single_squash_and_scaled_density
+  /opt/python310/lib/python3.10/site-packages/gym/logger.py:30: UserWarning: [33mWARN: Box bound precision lowered by casting to float32[0m
+    warnings.warn(colorize('%s: %s'%('WARN', msg % args), 'yellow'))
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+56 passed, 351 warnings in 18.49s

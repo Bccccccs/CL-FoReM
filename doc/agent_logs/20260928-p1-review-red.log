@@ -1,0 +1,36 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+_______________ test_mapping_budget_is_shared_across_live_caches _______________
+
+tmp_path = PosixPath('/tmp/pytest-of-ybc/pytest-5/test_mapping_budget_is_shared_0')
+
+    def test_mapping_budget_is_shared_across_live_caches(tmp_path):
+        from wm.cache import FeatureCache
+        ds, cache, _ = cache_dataset(tmp_path)
+        another = FeatureCache(cache.root, max_open=4)
+        cache.max_open = 4
+        for i in range(4):
+            cache[np.array([i*3])]
+        for i in range(4):
+            another[np.array([i*3])]
+>       assert len(cache._maps) + len(another._maps) <= 4
+E       assert (4 + 4) <= 4
+E        +  where 4 = len(OrderedDict([(0, memmap([[0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.  ,\n         0.  , 0.  , 0.  , 0.  ,...   101.  , 101.  , 101.  , 101.  , 101.  , 101.  , 101.  , 101.  ,\n         101.  ,  25.25,  25.25]], dtype=float32))]))
+E        +    where OrderedDict([(0, memmap([[0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.  ,\n         0.  , 0.  , 0.  , 0.  ,...   101.  , 101.  , 101.  , 101.  , 101.  , 101.  , 101.  , 101.  ,\n         101.  ,  25.25,  25.25]], dtype=float32))]) = <wm.cache.FeatureCache object at 0x754ec3f0ba60>._maps
+E        +  and   4 = len(OrderedDict([(0, memmap([[0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.  ,\n         0.  , 0.  , 0.  , 0.  ,...   101.  , 101.  , 101.  , 101.  , 101.  , 101.  , 101.  , 101.  ,\n         101.  ,  25.25,  25.25]], dtype=float32))]))
+E        +    where OrderedDict([(0, memmap([[0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.  , 0.  ,\n         0.  , 0.  , 0.  , 0.  ,...   101.  , 101.  , 101.  , 101.  , 101.  , 101.  , 101.  , 101.  ,\n         101.  ,  25.25,  25.25]], dtype=float32))]) = <wm.cache.FeatureCache object at 0x754f3ac2af80>._maps
+
+src/modulation_rl/scripts/tests/test_wm_streaming.py:191: AssertionError
+_____________ test_cache_identity_includes_actual_cnn_definitions ______________
+
+    def test_cache_identity_includes_actual_cnn_definitions():
+        from wm.cache import code_identity
+        identity = code_identity()
+>       assert 'model.py' in identity
+E       AssertionError: assert 'model.py' in {'__init__.py': '401384b45094311d7814225685b64bb75ef738d51b067c255486666874719116', 'cache.py': '3b2763aa6da71a6c2b6e4...2e77f7ac8dbd54be457e6944c3ba3', 'dynamics.py': '4af7a98044a97a700d51b826a2c12b2e27df4d84641de923836a63ab2b66d13b', ...}
+
+src/modulation_rl/scripts/tests/test_wm_streaming.py:198: AssertionError
+=========================== short test summary info ============================
+FAILED src/modulation_rl/scripts/tests/test_wm_streaming.py::test_mapping_budget_is_shared_across_live_caches
+FAILED src/modulation_rl/scripts/tests/test_wm_streaming.py::test_cache_identity_includes_actual_cnn_definitions
+2 failed, 9 deselected in 1.20s

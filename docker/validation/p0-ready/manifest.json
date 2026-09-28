@@ -1,0 +1,32 @@
+{
+  "checked_at": "2026-09-22T09:53:29.455250+08:00",
+  "acceptance": "Environment can enter P0; does not complete P0",
+  "container": "/mmhusky-p0-ready",
+  "container_id": "2bc70158fccfc7a9f2687108e2f7a2da510851e035db007777bb09153abd41e7",
+  "image_id": "sha256:a68ab80a0fc135dd7e0bf106f214455f4fc2d98835cea8f526669838c0551f7b",
+  "runtime": "nvidia",
+  "network_mode": "bridge",
+  "shm_size": 8589934592,
+  "algorithm_head": "68b8d0bd4b0abc6b5b6f8dc016b7227ddc35ca11",
+  "algorithm_dirty": false,
+  "checks": {
+    "pip_check": 0,
+    "imports_cuda": 0,
+    "ordinary_sac_synthetic_updates": 0,
+    "analytical_20_steps": 0,
+    "gazebo_startup": 0,
+    "gazebo_cold_startup": 0
+  },
+  "files_sha256": {
+    "docker/Dockerfile": "68ee1a5b1b8e1c848f1b9c75cf4e845461841289fb0610a1ab4ca3d775585413",
+    "docker/requirements-p0.txt": "07d9d5723cad73f26edac5b896a9b3a9e00d8bb233ebae90037fa8fc37ec0d55",
+    "docker/run.sh": "f47e0b67e7f40cb2f7137751cf9f0293b6338753b9a94b1293c512d2478a6e16",
+    "docker/entrypoint.sh": "362cd568529b5bb7daf4cfb9520f6ba43bc79f929d7c6056ca57c1703ccca5f3",
+    "docker/check.py": "0bd6efb2d48a0b28fe5fd2ff6fb6a5a9eb795944f65ebc904195ae16306c63dc",
+    "docker/env_smoke.py": "ba7a64ab42d1dec3a26c7c088b7080688ee9aa286391b2cbe98b76ddacd41d6e",
+    "docker/train_smoke.py": "93d1bd27d12826eb3bbc072f2086cda293b453d2878c29d65d6bc630901046a1",
+    "docker/gazebo_smoke.py": "5d1e66c3a3065dcc5523e126f9703dc237687cae974370bddb05e7266f37168c",
+    "docker/python-freeze.txt": "a512dfbff69becb9ddef51cd8302ac253362e0cfad2f52a8f8195556c9aa9f7a",
+    "docker/dpkg-versions.txt": "ce360a43570af9d645529cb07be7c08d0ecec7538985d91c6b791af251e2f499"
+  }
+}

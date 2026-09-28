@@ -1,0 +1,253 @@
+{
+  "cache_builds": [
+    {
+      "split": "val",
+      "observations": 79893,
+      "seconds": 12.217507600784302,
+      "frames_per_second": 6539.222451138175
+    },
+    {
+      "split": "train",
+      "observations": 2383375,
+      "seconds": 369.15980493463576,
+      "frames_per_second": 6456.214810336693
+    }
+  ],
+  "metadata": {
+    "source_dataset_sha256": "405e1c7de36b5c76928ddc1b02e97c38b8fc66e96f05ba69cb24f7ec56d71e00",
+    "subset_dataset_sha256": "d392456e2a55da68f053b50e5c1f610e5c7608656d995b8a82f953b08b2dd244",
+    "encoder_sha256": "e341262cf0e661151e988662be58317732d480c519a9f5a14993078398d6364d",
+    "code": {
+      "wm/__init__.py": "401384b45094311d7814225685b64bb75ef738d51b067c255486666874719116",
+      "wm/cache.py": "23aa6658fc5563d627c65a54cb4fd34e97972701dde75db040b42626487d00da",
+      "wm/data.py": "ad00e8b20ca3d0afd32347ac43ceaa36736a1d0200a4d5518cefc5918e0749a6",
+      "wm/dynamics.py": "4af7a98044a97a700d51b826a2c12b2e27df4d84641de923836a63ab2b66d13b",
+      "wm/encoder.py": "9a27d3ab596d3af11f535beb520dd06ed401420a4e9c08bd28da0d0e94858932",
+      "wm/evaluate_prediction.py": "0170aa9a11b996e4762e085c85e9e7d85780cf90f737bba1242624f724128cbf",
+      "wm/losses.py": "087b76176d2e0fa88618cc4557b220821aab8431be25ed0847d747a39a1568bf",
+      "wm/train_offline.py": "4b8ce3080302d5e92ff9f3bf5aec59b8cd8720f8016d80a93b216dd6ac39f38c",
+      "wm/val_probe.py": "bdeba1908590701779e3b695d91213cd94c9e971efe6f6bed6f2fb565b1b6fe9",
+      "model.py": "bf95d8840216e8dcaeb90f1d8bf0396967f2a0c8feaff6090b84a172bfbfc17c",
+      "modulation/models/mapencoder.py": "f52e54bc3d335ccc6bb3a3a867fe7ea7557be806c45565ed32b49fca9108de95"
+    },
+    "image": "sha256:e674db49b8156fded725ba4de8c2faf81aa491a367a1e151eddae169a1dfc430",
+    "python": "3.10.18 (main, Sep 22 2026, 14:50:34) [GCC 9.4.0]",
+    "git_head": "2a1348a87b3b5c45f495fafacad526f7eaee7749",
+    "harness_sha256": "46d1f8a33060c2e2c73ecd0b19803f5c309a6e65f18aab877511593ba55a89c2",
+    "host_memory_before": {
+      "MemAvailable": 254933708800,
+      "SwapTotal": 80000053248,
+      "SwapFree": 52311986176,
+      "memory.current": "13475840",
+      "memory.peak": "17494016",
+      "memory.max": "17179869184",
+      "memory.swap.current": "0"
+    },
+    "train_episodes": 9600,
+    "validation_episodes": 300,
+    "scope": "finite engineering; train/val only; D33 corrected"
+  },
+  "phases": {
+    "train": {
+      "command": [
+        "/opt/python310/bin/python3",
+        "-u",
+        "/root/mm_husky_ws/src/modulation_rl/scripts/wm/train_offline.py",
+        "--dataset",
+        "/root/mm_husky_ws/results/p1-fix-20260928/check-9600-r1/dataset.json",
+        "--encoder-checkpoint",
+        "/root/mm_husky_ws/results/p1a-20260923/policy-100k.pt",
+        "--cache-dir",
+        "/root/mm_husky_ws/results/p1-fix-20260928/check-9600-r1/cache",
+        "--batch",
+        "512",
+        "--device",
+        "cuda",
+        "--output",
+        "/root/mm_husky_ws/results/p1-fix-20260928/check-9600-r1/models",
+        "--encode-batch",
+        "128",
+        "--epochs",
+        "1",
+        "--max-train-batches",
+        "8",
+        "--hidden",
+        "64",
+        "--lr",
+        "3e-4",
+        "--weight-decay",
+        "1e-3",
+        "--seed",
+        "11"
+      ],
+      "exit_code": 0,
+      "seconds": 620.8717130599543,
+      "peak_rss_bytes": 2389950464,
+      "peak_uss_bytes": 2359373824,
+      "memory_before": {
+        "MemAvailable": 254892969984,
+        "SwapTotal": 80000053248,
+        "SwapFree": 52311986176,
+        "memory.current": "50786304",
+        "memory.peak": "59707392",
+        "memory.max": "17179869184",
+        "memory.swap.current": "0"
+      },
+      "memory_after": {
+        "MemAvailable": 254807416832,
+        "SwapTotal": 80000053248,
+        "SwapFree": 52311986176,
+        "memory.current": "11398537216",
+        "memory.peak": "12734066688",
+        "memory.max": "17179869184",
+        "memory.swap.current": "0"
+      }
+    },
+    "probe": {
+      "command": [
+        "/opt/python310/bin/python3",
+        "-u",
+        "/root/mm_husky_ws/src/modulation_rl/scripts/wm/val_probe.py",
+        "--dataset",
+        "/root/mm_husky_ws/results/p1-fix-20260928/check-9600-r1/dataset.json",
+        "--encoder-checkpoint",
+        "/root/mm_husky_ws/results/p1a-20260923/policy-100k.pt",
+        "--cache-dir",
+        "/root/mm_husky_ws/results/p1-fix-20260928/check-9600-r1/cache",
+        "--batch",
+        "512",
+        "--device",
+        "cuda",
+        "--model",
+        "action=/root/mm_husky_ws/results/p1-fix-20260928/check-9600-r1/models/action.pt",
+        "--model",
+        "no_action=/root/mm_husky_ws/results/p1-fix-20260928/check-9600-r1/models/no_action.pt"
+      ],
+      "exit_code": 0,
+      "seconds": 8.326841757632792,
+      "peak_rss_bytes": 1344253952,
+      "peak_uss_bytes": 1313959936,
+      "memory_before": {
+        "MemAvailable": 254806900736,
+        "SwapTotal": 80000053248,
+        "SwapFree": 52311986176,
+        "memory.current": "11398537216",
+        "memory.peak": "12734066688",
+        "memory.max": "17179869184",
+        "memory.swap.current": "0"
+      },
+      "memory_after": {
+        "MemAvailable": 254644084736,
+        "SwapTotal": 80000053248,
+        "SwapFree": 52311986176,
+        "memory.current": "11398873088",
+        "memory.peak": "12734066688",
+        "memory.max": "17179869184",
+        "memory.swap.current": "0"
+      }
+    },
+    "prediction": {
+      "command": [
+        "/opt/python310/bin/python3",
+        "-u",
+        "/root/mm_husky_ws/src/modulation_rl/scripts/wm/evaluate_prediction.py",
+        "--dataset",
+        "/root/mm_husky_ws/results/p1-fix-20260928/check-9600-r1/dataset.json",
+        "--encoder-checkpoint",
+        "/root/mm_husky_ws/results/p1a-20260923/policy-100k.pt",
+        "--cache-dir",
+        "/root/mm_husky_ws/results/p1-fix-20260928/check-9600-r1/cache",
+        "--batch",
+        "512",
+        "--device",
+        "cuda",
+        "--split",
+        "val",
+        "--models",
+        "/root/mm_husky_ws/results/p1-fix-20260928/check-9600-r1/models",
+        "--output",
+        "/root/mm_husky_ws/results/p1-fix-20260928/check-9600-r1/prediction-val"
+      ],
+      "exit_code": 0,
+      "seconds": 9.532495703548193,
+      "peak_rss_bytes": 1764978688,
+      "peak_uss_bytes": 1730772992,
+      "memory_before": {
+        "MemAvailable": 254644084736,
+        "SwapTotal": 80000053248,
+        "SwapFree": 52311986176,
+        "memory.current": "11398873088",
+        "memory.peak": "12734066688",
+        "memory.max": "17179869184",
+        "memory.swap.current": "0"
+      },
+      "memory_after": {
+        "MemAvailable": 254749159424,
+        "SwapTotal": 80000053248,
+        "SwapFree": 52311986176,
+        "memory.current": "11399348224",
+        "memory.peak": "12734066688",
+        "memory.max": "17179869184",
+        "memory.swap.current": "0"
+      }
+    }
+  },
+  "training": {
+    "task_id": "P1-A2",
+    "results": {
+      "no_action": {
+        "best_val": 0.2537753104210598,
+        "best_epoch": 1,
+        "epochs_run": 1,
+        "completed_train_batches": 8,
+        "validation_windows": 79593
+      },
+      "action": {
+        "best_val": 0.2537594766842955,
+        "best_epoch": 1,
+        "epochs_run": 1,
+        "completed_train_batches": 8,
+        "validation_windows": 79593
+      }
+    },
+    "feature_dim": 1041,
+    "robot_dim": 41,
+    "map_feature_dim": 1000,
+    "encoder_sha256": "e341262cf0e661151e988662be58317732d480c519a9f5a14993078398d6364d",
+    "dataset_sha256": "d392456e2a55da68f053b50e5c1f610e5c7608656d995b8a82f953b08b2dd244",
+    "train_transitions": 2373775,
+    "val_transitions": 79593,
+    "dead_feature_dims": 441,
+    "seconds": 618.285710811615,
+    "gpu_peak_allocated_bytes": 44830208,
+    "selection_rule": "min validation standardized block-MSE; patience 20; max 1 epochs",
+    "gpu_peak_reserved_bytes": 69206016,
+    "feature_cache_train": "/root/mm_husky_ws/results/p1-fix-20260928/check-9600-r1/cache/17c4c1d128997b071ac599ddc27260959e076087e9e4151e2847956d32b5501e",
+    "feature_cache_val": "/root/mm_husky_ws/results/p1-fix-20260928/check-9600-r1/cache/70a6de06aa34af85ffd9d9140484ad70e04f2cb4076d9ed5c48f9294a30f5d14",
+    "window_semantics": "time-aligned-v2"
+  },
+  "cache_disk_bytes": 10262199538,
+  "rss_peak_bytes": 2389950464,
+  "uss_peak_bytes": 2359373824,
+  "cgroup_peak_bytes": 12734066688,
+  "gpu_allocated_peak_bytes": 72609792,
+  "gpu_reserved_peak_bytes": 121634816,
+  "gpu_process_peak_mib": 784,
+  "total_seconds": 638.7310505211353,
+  "train_diagnostic_windows_per_second": 3823.293846487055,
+  "validation_horizons": {
+    "1": 79593,
+    "5": 78393
+  },
+  "host_swap_delta_bytes": 0,
+  "memory_after": {
+    "MemAvailable": 254737289216,
+    "SwapTotal": 80000053248,
+    "SwapFree": 52311986176,
+    "memory.current": "11409477632",
+    "memory.peak": "12734066688",
+    "memory.max": "17179869184",
+    "memory.swap.current": "0"
+  },
+  "passed_budget": true
+}
