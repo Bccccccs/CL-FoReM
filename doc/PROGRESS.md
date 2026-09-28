@@ -17,6 +17,8 @@
 
 | ID | 阶段/任务 | Agent | 状态 | 范围与依赖 | 记录 |
 |---|---|---|---|---|---|
+| VENUE-REASSESS-028 | 会议/期刊适配复核 | Codex /root（本会话） | done（咨询核查） | 2026-09-28T16:37:00+08:00起；2026-09-28T16:38:26+08:00完成；结合Husky范围与现有证据，核对官方投稿信息；仅咨询与文档，不改D37/ROADMAP | [日志](agent_logs/20260928-venue-reassessment.md) |
+| TIME-EST-028 | 现有流程分阶段耗时估算 | Codex /root（本会话） | done（估算） | 2026-09-28T16:44:53+08:00起；2026-09-28T16:46:05+08:00完成；计算约7–14天/含工程约2–4周条件估算，并发与闭环吞吐未实测；未启动实验 | [日志](agent_logs/20260928-time-estimate.md) |
 | ONBOARD-028 | 项目了解及 P/G/F 关系说明 | Codex /root（本会话） | done（了解与讲解） | 2026-09-28T16:22:10+08:00起；2026-09-28T16:22:41+08:00完成研究/控制链/入口与历史证据核对；2026-09-28T16:29:27+08:00补充P/G/F关系；仅文档，不启动实验或修改算法 | [日志](agent_logs/20260928-project-onboarding.md) |
 | DOCREV-028 | 全量文档审查：过时路径/指令清理，更新Stage0提示词 | Claude Opus 5.5 /ybc | done | 2026-09-28T16:11+08:00起；AGENTS/ENV重写、run.sh默认node01、P0–P5去除失效技能指令、状态同步到D34/D36、断链清零、Stage0提示词v3（D43） | [日志](agent_logs/20260928-doc-review.md) |
 | PATHSYNC-028 | 改名后路径同步、容器重挂载、新建Git远端 | Claude Opus 5.5 /ybc | done | 2026-09-28T15:58+08:00起；路径同步与两容器重建并验证（D41）；modulation_rl subtree并入根仓库（D42）；已推送 GitHub 私有仓库 Bccccccs/CL-FoReM | [日志](agent_logs/20260928-path-sync.md) |

@@ -117,6 +117,7 @@ def evaluate(args,agent,env,output,config):
                  perfect_success=False,checkpoint_sha256=sha(args.checkpoint))
         total_reward=0.; info={}; step=0
         obs_rob=[]; obs_map=[]; rewards=[]; step_dt=[]; subgoal=[]; step_done=[]
+        mismatch_cmd=[]; mismatch_exec=[]
         sim_start=rospy.get_time() if args.world_type=='gazebo' else None
         ages=[]
         try:
@@ -140,6 +141,8 @@ def evaluate(args,agent,env,output,config):
                     ages.append({k:rospy.get_time()-stamp for k,stamp in sensor_stamps.items()})
                 poses.append(env.get_robot_obs().base_tf[:2])
                 states.append(np.asarray(next_state[0],dtype=np.float32));actions.append(action)
+                if 'mismatch_cmd_base_vel' in info:
+                    mismatch_cmd.append(info['mismatch_cmd_base_vel']);mismatch_exec.append(info['mismatch_exec_base_vel'])
                 tail.append(dict(step=step,state=state[0],action=action,info=info,next_state=next_state[0]))
                 trajectory_hash.update(observation_fingerprint(next_state).encode())
                 trajectory_hash.update(np.asarray(action,dtype='<f4').tobytes())
@@ -157,12 +160,22 @@ def evaluate(args,agent,env,output,config):
                        final_state=state[0],final_info=info,trajectory_sha256=trajectory_hash.hexdigest())
         except Exception as exc:
             row.update(exception=repr(exc),primary_reason='exception',reasons=['exception'],terminated=False,truncated=False)
+        if mismatch_cmd:
+            # STAGE0-028 mismatch-v1: only present when RobotEnv actually injected a mismatch
+            # (base_vel_gain!=1.0, base_vel_gain_range set, or action_delay_steps!=0); a default
+            # (off) run never populates mismatch_cmd, so no new field is added here or below.
+            mismatch_diff=np.asarray(mismatch_exec,dtype=np.float64)-np.asarray(mismatch_cmd,dtype=np.float64)
+            row.update(mismatch_base_vel_gain=info.get('mismatch_base_vel_gain'),
+                       mismatch_action_delay_steps=info.get('mismatch_action_delay_steps'),
+                       mismatch_cmd_exec_mean_abs_diff=float(np.abs(mismatch_diff).mean()),
+                       mismatch_cmd_exec_max_abs_diff=float(np.abs(mismatch_diff).max()))
         row.update(steps=step,reward=total_reward,wall_seconds=time.monotonic()-started,
                    trajectory_length_m=float(np.linalg.norm(np.diff(np.asarray(poses),axis=0),axis=1).sum()) if len(poses)>1 else 0.,
                    simulation_seconds=step*.1 if args.world_type=='sim' else rospy.get_time()-sim_start,
                    sensor_age_seconds=ages)
         dump(output/('episode-%05d-tail.json'%seed),list(tail))
-        np.savez_compressed(output/('episode-%05d-trajectory.npz'%seed),base_xy=poses,states=states,actions=actions,control_seconds=episode_latency)
+        mismatch_npz=dict(mismatch_cmd_base_vel=mismatch_cmd,mismatch_exec_base_vel=mismatch_exec) if mismatch_cmd else {}
+        np.savez_compressed(output/('episode-%05d-trajectory.npz'%seed),base_xy=poses,states=states,actions=actions,control_seconds=episode_latency,**mismatch_npz)
         if args.save_observations:
             # observations[0:T+1] with actions[0:T]; the normalized action is what env.step received.
             complete=row['exception'] is None and len(obs_rob)==len(actions)+1
@@ -207,8 +220,12 @@ def episode_command(args,output,seed):
             '--max-episode-steps',str(args.max_episode_steps),
             '--ik-mode',getattr(args,'ik_mode','legacy'),
             '--ik-iterations',str(getattr(args,'ik_iterations',0)),
-            '--policy-mode',getattr(args,'policy_mode','deterministic')]+(
-            ['--save-observations'] if getattr(args,'save_observations',False) else [])
+            '--policy-mode',getattr(args,'policy_mode','deterministic'),
+            '--base-vel-gain',str(getattr(args,'base_vel_gain',1.0)),
+            '--action-delay-steps',str(getattr(args,'action_delay_steps',0))]+(
+            ['--save-observations'] if getattr(args,'save_observations',False) else [])+(
+            ['--base-vel-gain-range',str(args.base_vel_gain_range[0]),str(args.base_vel_gain_range[1])]
+            if getattr(args,'base_vel_gain_range',None) else [])
 
 
 def evaluate_isolated(args,output,config):
@@ -325,8 +342,17 @@ def main():
                    help='eval action selection; stochastic only for world-model data collection')
     p.add_argument('--save-observations',action='store_true',
                    help='world-model data collection: save observations[0:T+1] incl. maps; training seeds only')
+    p.add_argument('--base-vel-gain',type=float,default=1.0,
+                   help='STAGE0-028 mismatch-v1: fixed chassis velocity gain applied after exec clipping/delay. Default 1.0 is identity.')
+    p.add_argument('--base-vel-gain-range',type=float,nargs=2,default=None,metavar=('LO','HI'),
+                   help='STAGE0-028 mismatch-v1: sample chassis velocity gain uniformly in [LO,HI] once per episode; overrides --base-vel-gain when set.')
+    p.add_argument('--action-delay-steps',type=int,default=0,
+                   help='STAGE0-028 mismatch-v1: delay chassis commands by this many steps (0 = no delay, identity).')
     args=p.parse_args()
     if args.ik_mode=='fixed' and args.ik_iterations<1:p.error('fixed IK requires positive --ik-iterations')
+    if args.base_vel_gain_range is not None and not (0<args.base_vel_gain_range[0]<=args.base_vel_gain_range[1]):
+        p.error('--base-vel-gain-range requires 0 < LO <= HI')
+    if args.action_delay_steps<0:p.error('--action-delay-steps must be >=0')
     if args.mode=='train' and args.world_type=='gazebo' and args.eval_interval:
         p.error('Gazebo training requires --eval-interval 0; evaluation must use an isolated simulator')
     if args.mode=='eval' and (not args.checkpoint or not args.seeds):p.error('eval requires checkpoint and seeds')
@@ -360,6 +386,11 @@ def main():
         rospy.set_param('/robot_description_kinematics/'+group+'/threads',1)
     config.update(bioik_random_seed=args.seed,bioik_threads=1)
     if args.ik_mode!='legacy':config.update(bioik_mode=args.ik_mode,bioik_iterations=args.ik_iterations,ik_semantics='p0-ik-budget-v1')
+    config.update(base_vel_gain=args.base_vel_gain,
+                 base_vel_gain_range=tuple(args.base_vel_gain_range) if args.base_vel_gain_range else None,
+                 action_delay_steps=args.action_delay_steps)
+    if args.base_vel_gain!=1.0 or args.base_vel_gain_range is not None or args.action_delay_steps!=0:
+        config['mismatch_semantics']='mismatch-v1'
     env=env_creator(config)
     try:
         if args.mode=='eval':

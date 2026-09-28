@@ -36,6 +36,10 @@ def main():
     p.add_argument('--ik-iterations', type=int, default=100)
     p.add_argument('--max-episode-steps', type=int, default=2000)
     p.add_argument('--device', default='cuda')
+    p.add_argument('--base-vel-gain', type=float, default=1.0,
+                   help='STAGE0-028 mismatch-v1: passed through to p0_runner.py eval. Default 1.0 is identity.')
+    p.add_argument('--base-vel-gain-range', type=float, nargs=2, default=None, metavar=('LO', 'HI'))
+    p.add_argument('--action-delay-steps', type=int, default=0)
     a = p.parse_args()
     splits = dict(train=a.train, val=a.val, test=a.test)
     all_seeds = [s for v in splits.values() for s in v]
@@ -56,7 +60,10 @@ def main():
                    '--seeds', str(out / (name + '-seeds.json')), '--episodes', str(len(part)),
                    '--output', str(out / name), '--task', a.task, '--device', a.device,
                    '--max-episode-steps', str(a.max_episode_steps), '--ik-mode', 'fixed',
-                   '--ik-iterations', str(a.ik_iterations), '--policy-mode', a.policy_mode, '--save-observations']
+                   '--ik-iterations', str(a.ik_iterations), '--policy-mode', a.policy_mode, '--save-observations',
+                   '--base-vel-gain', str(a.base_vel_gain), '--action-delay-steps', str(a.action_delay_steps)]
+            if a.base_vel_gain_range:
+                cmd += ['--base-vel-gain-range', str(a.base_vel_gain_range[0]), str(a.base_vel_gain_range[1])]
             jobs.append((split, name, part, cmd))
     started = time.time()
     procs = []

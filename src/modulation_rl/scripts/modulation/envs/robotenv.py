@@ -1,4 +1,6 @@
 import copy
+from collections import deque
+import hashlib
 from typing import Tuple, Optional
 import time
 import numpy as np
@@ -126,7 +128,10 @@ class RobotEnv(Env):
                  exec_acceleration_clip: Optional[float],
                  execute_style: str,
                  perception_style: str,
-                 fake_gazebo: bool = False):
+                 fake_gazebo: bool = False,
+                 base_vel_gain: float = 1.0,
+                 base_vel_gain_range: Optional[Tuple[float, float]] = None,
+                 action_delay_steps: int = 0):
         conf_path = PROJECT_ROOT / "gazebo_world" / env / "robot_config.yaml"
         assert conf_path.exists(), conf_path
         with open(conf_path.absolute()) as f:
@@ -210,6 +215,29 @@ class RobotEnv(Env):
         self.execute_style = execute_style
         self.perception_style = perception_style
 
+        # STAGE0-028 mismatch-v1: versioned, default-off systematic base execution mismatch
+        # (chassis velocity gain + command delay), injected after the existing noise/exec
+        # clipping pipeline and before _calculate_base_command. Arm/torso are untouched.
+        # Defaults (gain=1.0, gain_range=None, delay_steps=0) must reproduce the pre-existing
+        # step() behaviour element-for-element, including emitting no new output fields; see
+        # doc/DECISIONS.md D39 and doc/agent_logs/20260928-stage0.md.
+        if base_vel_gain_range is not None:
+            lo, hi = base_vel_gain_range
+            assert 0 < lo <= hi, ('base_vel_gain_range must be 0 < lo <= hi', base_vel_gain_range)
+        assert action_delay_steps >= 0, action_delay_steps
+        self._base_vel_gain = base_vel_gain
+        self._base_vel_gain_range = tuple(base_vel_gain_range) if base_vel_gain_range is not None else None
+        self._action_delay_steps = int(action_delay_steps)
+        self._mismatch_enabled = (self._base_vel_gain != 1.0 or self._base_vel_gain_range is not None
+                                   or self._action_delay_steps != 0)
+        # Reseeded deterministically from the episode seed in seed(); this default lets the
+        # attribute exist even if step() is somehow called before seed() is. Must never consume
+        # self.np_random (D39: paired comparisons across mismatch configs require identical
+        # layouts/goals for the same episode seed).
+        self._mismatch_rng = np.random.RandomState()
+        self._episode_base_vel_gain = self._base_vel_gain
+        self._mismatch_delay_queue = deque()
+
     def __getattr__(self, name):
         if name.startswith('_'):
             raise AttributeError("attempted to get missing private attribute '{}'".format(name))
@@ -239,12 +267,25 @@ class RobotEnv(Env):
         self.prev_robot_obs = robot_obs
         self._prev_base_actions_scaled = 0.0
 
+        self._reset_mismatch()
+
         self.trajectory = RobotTrajectory()
         self.trajectory.add(robot_obs)
 
         if self.vis_env:
             self._robot_cpp.publish_robot_state()
         return robot_obs
+
+    def _reset_mismatch(self):
+        """Per-episode mismatch-v1 state: fresh delay queue (drops any command still in flight
+        from the previous episode) and, if base_vel_gain_range is set, a freshly sampled gain
+        from the independent mismatch RNG. Disabled (default) state: delay_steps=0 builds an
+        empty queue and gain stays 1.0, so _apply_execution_mismatch is an exact identity."""
+        base_dim = len(self._velocity_ranges) - (1 if self.learn_torso else 0)
+        self._mismatch_delay_queue = deque(np.zeros(base_dim) for _ in range(self._action_delay_steps))
+        self._episode_base_vel_gain = (
+            float(self._mismatch_rng.uniform(*self._base_vel_gain_range))
+            if self._base_vel_gain_range is not None else self._base_vel_gain)
 
     def apply_action_exec(self, base_actions_scaled, prev_base_actions_scaled):
         if self.exec_action_clip:
@@ -287,9 +328,13 @@ class RobotEnv(Env):
             base_actions_scaled += self.np_random.normal(0.0, self._transition_noise_base * velocity_ranges_base / TIME_STEP_TRAIN, size=len(base_actions_scaled))
 
         base_actions_scaled = self.apply_action_exec(base_actions_scaled=base_actions_scaled, prev_base_actions_scaled=self._prev_base_actions_scaled)
-
-        base_translation_relative, base_rotation_relative = self._calculate_base_command(base_actions_scaled)
+        # Commanded value used for the *next* step's acceleration-clip continuity; must stay the
+        # pre-mismatch command so the mismatch injection below cannot feed back into apply_action_exec.
         self._prev_base_actions_scaled = base_actions_scaled
+
+        executed_base_actions_scaled = self._apply_execution_mismatch(base_actions_scaled)
+
+        base_translation_relative, base_rotation_relative = self._calculate_base_command(executed_base_actions_scaled)
 
         robot_obs: RobotObs = self._robot_cpp.step(base_translation_relative, base_rotation_relative,
                                                    next_desired_gripper_tf, self.prev_robot_obs, dt_exec, execute_cmds,
@@ -302,6 +347,11 @@ class RobotEnv(Env):
             self._robot_cpp.publish_robot_state()
 
         robot_info = {}
+        if self._mismatch_enabled:
+            robot_info['mismatch_cmd_base_vel'] = base_actions_scaled.tolist()
+            robot_info['mismatch_exec_base_vel'] = executed_base_actions_scaled.tolist()
+            robot_info['mismatch_base_vel_gain'] = self._episode_base_vel_gain
+            robot_info['mismatch_action_delay_steps'] = self._action_delay_steps
         robot_info['gripper_tf_desired'] = next_desired_gripper_tf
         robot_info['gripper_tf_achieved'] = robot_obs.gripper_tf_achieved
         robot_info['dist_to_desired'] = calc_euclidean_tf_dist(next_desired_gripper_tf, robot_obs.gripper_tf)
@@ -321,6 +371,15 @@ class RobotEnv(Env):
         # NOTE: incosistency, I set this at the end of combined_env.step() instead, so that the metrics there can use it as well
         # self.prev_robot_obs = robot_obs
         return robot_obs, robot_info
+
+    def _apply_execution_mismatch(self, base_actions_scaled: np.ndarray) -> np.ndarray:
+        """mismatch-v1: chassis-only command delay then velocity gain. Default (delay_steps=0,
+        gain=1.0) is an identity: the queue starts empty so append+popleft returns the same
+        command right back, and multiplying by 1.0 is exact. Arm/torso commands never pass
+        through here (only base_actions_scaled, computed before the torso delta is split off)."""
+        self._mismatch_delay_queue.append(np.array(base_actions_scaled))
+        delayed = self._mismatch_delay_queue.popleft()
+        return delayed * self._episode_base_vel_gain
 
     def _calculate_base_command(self, base_actions: list):
         if self.drive == "omni":
@@ -354,6 +413,11 @@ class RobotEnv(Env):
 
     def seed(self, seed=None):
         self.np_random, strong_seed = seeding.np_random(seed)
+        # Independent RNG for mismatch-v1 (base_vel_gain_range sampling), derived from the same
+        # per-episode seed chain but via a distinct hash so it never shares state or draw order
+        # with self.np_random (which transition_noise_base and other callers consume in step()).
+        mismatch_seed = int(hashlib.sha256(f'mismatch-v1:{strong_seed}'.encode()).hexdigest()[:8], 16)
+        self._mismatch_rng = np.random.RandomState(mismatch_seed)
         return [self._robot_cpp.set_rng(strong_seed)]
 
     def get_joint_names(self, joint_model_group: Optional[str] = None):

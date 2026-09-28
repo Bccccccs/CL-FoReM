@@ -487,7 +487,10 @@ def create_env(config,
                          exec_acceleration_clip=config.get('exec_acceleration_clip', None),
                          execute_style=config.get('execute_style', "direct"),
                          perception_style=config.get('perception_style', "base"),
-                         fake_gazebo=config.get('fake_gazebo', False))
+                         fake_gazebo=config.get('fake_gazebo', False),
+                         base_vel_gain=config.get('base_vel_gain', 1.0),
+                         base_vel_gain_range=config.get('base_vel_gain_range', None),
+                         action_delay_steps=config.get('action_delay_steps', 0))
     env = CombinedEnv(robot_env=robot_env,
                       ik_fail_thresh=config["ik_fail_thresh"],
                       learn_vel_norm_penalty=config["learn_vel_norm"],
