@@ -18,7 +18,7 @@
 
 | ID | 阶段/任务 | Agent | 状态 | 范围与依赖 | 记录 |
 |---|---|---|---|---|---|
-| PATHSYNC-028 | 改名后路径同步、容器重挂载、新建Git远端 | Claude Opus 5.5 /ybc | blocked（仅Git远端） | 2026-09-28T15:58+08:00起；路径同步与两容器按新路径重建完成并验证（D41）；新建Git远端待用户提供托管位置与凭据 | [日志](agent_logs/20260928-path-sync.md) |
+| PATHSYNC-028 | 改名后路径同步、容器重挂载、新建Git远端 | Claude Opus 5.5 /ybc | blocked（仅Git远端） | 2026-09-28T15:58+08:00起；路径同步与两容器重建完成并验证（D41）；modulation_rl subtree并入根仓库、本地提交a00d447（D42）；待用户在GitHub建空私有仓库Bccccccs/CL-FoReM后推送 | [日志](agent_logs/20260928-path-sync.md) |
 | DOCS-028 | 文档架构调整：唯一执行计划ROADMAP、README分层、PROGRESS看板、清理 | Claude Opus 5.5 /ybc | review | 2026-09-28T15:44+08:00起；ROADMAP/README/横幅/PROGRESS分表/归档6份文档/清11个退出容器完成（D40）；AGENTS.md同步待用户 | [日志](agent_logs/20260928-docs-restructure.md) |
 | EXP-OVERVIEW-028 | 已执行实验梳理 | Codex /root | active | 2026-09-28T15:09:20.062008+08:00；核对P0/P1/Gazebo既有证据，仅文档讲解 | [日志](agent_logs/20260928-experiment-overview.md) |
 | STAGE0-028 | Stage0 前置验证（ROADMAP §4：M、R0-1～R0-5） | 待用户启动的执行Agent | planned | 前一执行被用户停止，残留已清理；工作区15:53改名CL-FoReM；启动提示词见 agent_logs/20260928-stage0-prompt-v2.md；不进Stage1 | [日志](agent_logs/20260928-stage0.md) |
