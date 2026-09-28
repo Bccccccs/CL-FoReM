@@ -1,0 +1,5 @@
+<library path="lib/libmodulation_p0_bioik">
+  <class name="modulation_rl/P0BioIKKinematicsPlugin" type="p0_bio_ik_kinematics_plugin::BioIKKinematicsPlugin" base_class_type="kinematics::KinematicsBase">
+    <description>Optional P0 BioIK instrumentation and deterministic iteration budget.</description>
+  </class>
+</library>

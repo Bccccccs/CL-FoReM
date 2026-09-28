@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<robot name="husky_ur5" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:include filename="$(find husky_ur5)/urdf/husky_ur5.xacro"/>
+  <!-- Explicit P0 Gazebo sensor supplying the costmap's existing front/scan input. -->
+  <link name="p0_laser"/>
+  <joint name="p0_laser_mount" type="fixed">
+    <parent link="base_link"/><child link="p0_laser"/>
+    <origin xyz="0.55 0 0.15" rpy="0 0 0"/>
+  </joint>
+  <gazebo reference="p0_laser">
+    <sensor type="ray" name="p0_front_laser">
+      <update_rate>10</update_rate>
+      <ray>
+        <scan><horizontal><samples>720</samples><resolution>1</resolution><min_angle>-2.35619</min_angle><max_angle>2.35619</max_angle></horizontal></scan>
+        <range><min>0.05</min><max>10</max><resolution>0.01</resolution></range>
+      </ray>
+      <plugin name="p0_front_laser_ros" filename="libgazebo_ros_laser.so">
+        <topicName>/front/scan</topicName><frameName>p0_laser</frameName>
+      </plugin>
+    </sensor>
+  </gazebo>
+</robot>
