@@ -103,6 +103,16 @@ def evaluate(args,agent,env,output,config):
     agent.policy.eval()
     records=[];latencies=[]
     sensor_stamps={};subscriptions=[]
+    # FOLLOWUP-028: both default off (None/False); when off, nothing below this point runs and
+    # episodes.jsonl/trajectory npz are byte-identical to before these two flags existed (see
+    # 20260928-followup-spec.md S2, regression-tested in the pipeline log).
+    shield=None
+    if getattr(args,'shield_config',None):
+        import foresight  # noqa: F401 (lazy: only touched when --shield-config is set)
+        from shield import Shield
+        shield=Shield.from_config(args.shield_config)
+    elif args.save_step_info:
+        import foresight
     if args.world_type=='gazebo':
         import rospy
         from nav_msgs.msg import OccupancyGrid
@@ -120,6 +130,8 @@ def evaluate(args,agent,env,output,config):
         mismatch_cmd=[]; mismatch_exec=[]
         sim_start=rospy.get_time() if args.world_type=='gazebo' else None
         ages=[]
+        step_info_rows=[] if args.save_step_info else None
+        if shield is not None: shield.reset(seed)
         try:
             state=reset_seeded(env,seed)
             row['initial_observation_sha256']=observation_fingerprint(state)
@@ -134,7 +146,12 @@ def evaluate(args,agent,env,output,config):
             for step in range(1,args.max_episode_steps+1):
                 tick=time.monotonic(); sim_tick=rospy.get_time() if args.world_type=='gazebo' else None
                 with torch.no_grad(): action=agent.select_action(state,eval=args.policy_mode=='deterministic')
+                shield_risk=shield_triggered=None
+                if shield is not None:
+                    action,shield_risk,shield_triggered=shield.decide(state[0],state[1],action)
                 next_state,reward,done,info=step_with_limit(env,action,step,args.max_episode_steps)
+                if shield is not None: shield.observe(env,info)
+                if step_info_rows is not None: step_info_rows.append(foresight.step_info_row(env,info))
                 duration=time.monotonic()-tick
                 episode_latency.append(duration);latencies.append(duration)
                 if args.world_type=='gazebo':
@@ -173,6 +190,25 @@ def evaluate(args,agent,env,output,config):
                    trajectory_length_m=float(np.linalg.norm(np.diff(np.asarray(poses),axis=0),axis=1).sum()) if len(poses)>1 else 0.,
                    simulation_seconds=step*.1 if args.world_type=='sim' else rospy.get_time()-sim_start,
                    sensor_age_seconds=ages)
+        if shield is not None:
+            # FOLLOWUP-028 B3: only present when --shield-config is set; a plain run never gets
+            # this field. shield.episode_summary()'s per-step risk/triggered arrays only go into
+            # the stepinfo npz (gated separately on --save-step-info), not into episodes.jsonl.
+            row.update(shield_arm=shield.arm,shield_trigger_count=shield.episode_summary()['shield_trigger_count'])
+        if step_info_rows is not None:
+            summary=shield.episode_summary() if shield is not None else None
+            np.savez_compressed(output/('episode-%05d-stepinfo.npz'%seed),
+                kin_failure=np.asarray([r['kin_failure'] for r in step_info_rows],dtype=bool),
+                selfcollision=np.asarray([r['selfcollision'] for r in step_info_rows],dtype=bool),
+                base_collision=np.asarray([r['base_collision'] for r in step_info_rows],dtype=bool),
+                dist_to_desired=np.asarray([r['dist_to_desired'] for r in step_info_rows],dtype=np.float32),
+                rot_dist_to_desired=np.asarray([r['rot_dist_to_desired'] for r in step_info_rows],dtype=np.float32),
+                nr_kin_failures=np.asarray([r['nr_kin_failures'] for r in step_info_rows],dtype=np.int32),
+                goal_to_base_distance=np.asarray([r['goal_to_base_distance'] for r in step_info_rows],dtype=np.float32),
+                **({} if summary is None else dict(
+                    shield_arm=summary['arm'],
+                    shield_risk=np.asarray(summary['shield_risk'],dtype=np.float32),
+                    shield_triggered=np.asarray(summary['shield_triggered'],dtype=bool))))
         dump(output/('episode-%05d-tail.json'%seed),list(tail))
         mismatch_npz=dict(mismatch_cmd_base_vel=mismatch_cmd,mismatch_exec_base_vel=mismatch_exec) if mismatch_cmd else {}
         np.savez_compressed(output/('episode-%05d-trajectory.npz'%seed),base_xy=poses,states=states,actions=actions,control_seconds=episode_latency,**mismatch_npz)
@@ -225,7 +261,9 @@ def episode_command(args,output,seed):
             '--action-delay-steps',str(getattr(args,'action_delay_steps',0))]+(
             ['--save-observations'] if getattr(args,'save_observations',False) else [])+(
             ['--base-vel-gain-range',str(args.base_vel_gain_range[0]),str(args.base_vel_gain_range[1])]
-            if getattr(args,'base_vel_gain_range',None) else [])
+            if getattr(args,'base_vel_gain_range',None) else [])+(
+            ['--save-step-info'] if getattr(args,'save_step_info',False) else [])+(
+            ['--shield-config',args.shield_config] if getattr(args,'shield_config',None) else [])
 
 
 def evaluate_isolated(args,output,config):
@@ -348,6 +386,13 @@ def main():
                    help='STAGE0-028 mismatch-v1: sample chassis velocity gain uniformly in [LO,HI] once per episode; overrides --base-vel-gain when set.')
     p.add_argument('--action-delay-steps',type=int,default=0,
                    help='STAGE0-028 mismatch-v1: delay chassis commands by this many steps (0 = no delay, identity).')
+    p.add_argument('--save-step-info',action='store_true',
+                   help='FOLLOWUP-028 B2: write episode-XXXXX-stepinfo.npz (kin_failure/selfcollision/'
+                        'base_collision/dist_to_desired/rot_dist_to_desired/nr_kin_failures/goal_to_base_distance '
+                        'per step). Default off; off produces no new file and no new episodes.jsonl field.')
+    p.add_argument('--shield-config',default=None,
+                   help='FOLLOWUP-028 B3: path to a shield.py JSON config (default None = shield disabled, '
+                        'no new module imported, no new episodes.jsonl/stepinfo field).')
     args=p.parse_args()
     if args.ik_mode=='fixed' and args.ik_iterations<1:p.error('fixed IK requires positive --ik-iterations')
     if args.base_vel_gain_range is not None and not (0<args.base_vel_gain_range[0]<=args.base_vel_gain_range[1]):

@@ -34,6 +34,10 @@ def main():
     p.add_argument('--base-vel-gain', type=float, default=1.0)
     p.add_argument('--base-vel-gain-range', type=float, nargs=2, default=None, metavar=('LO', 'HI'))
     p.add_argument('--action-delay-steps', type=int, default=0)
+    p.add_argument('--save-step-info', action='store_true',
+                    help='FOLLOWUP-028 B2: forwarded to p0_runner.py --save-step-info (default off).')
+    p.add_argument('--shield-config', default=None,
+                    help='FOLLOWUP-028 B3: forwarded to p0_runner.py --shield-config (default off).')
     p.add_argument('--label', default='', help='free-text tag written into manifest.json only')
     a = p.parse_args()
     lo, hi = (int(x) for x in a.seeds.split(':'))
@@ -68,6 +72,10 @@ def main():
             cmd.append('--save-observations')
         if a.base_vel_gain_range:
             cmd += ['--base-vel-gain-range', str(a.base_vel_gain_range[0]), str(a.base_vel_gain_range[1])]
+        if a.save_step_info:
+            cmd.append('--save-step-info')
+        if a.shield_config:
+            cmd += ['--shield-config', a.shield_config]
         jobs.append((name, part, cmd))
     started = time.time()
     procs = []
