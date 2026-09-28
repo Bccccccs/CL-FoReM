@@ -212,3 +212,37 @@ Agent：Claude Sonnet 5 /ybc。背景：R0-3 按 D45 判据不通过（15配置�
 **配置（5组，超出 D45 原登记的增益{0.6–1.4}×延迟{0–2}范围）**：延迟{5,10}步@增益1.0；增益{1.6,1.8}@延迟0；增益1.4+延迟5。每配置20回合，种子10000–10019（D45同名义种子子集，配对比较），policy-100k，`--ik-mode fixed --ik-iterations 100 --policy-mode deterministic`。报告：SR、perfect-success、有IK失败回合比例、collision>0回合比例、命令-执行差均值、`primary_reason`分布，与名义（同20种子子集）配对episode-bootstrap 95%CI。
 
 **同时补充**：D45已登记的15配置全集，按 perfect-success（而非仅success）重算与名义的配对CI（`results/stage0-028-r03/r03-analysis-perfect.json`），作为诊断补充，不改变 D45 以 success 为主判据的既有判定（R0-3不通过）。是否改用 perfect-success 作主指标需用户另行决策（备选方案A），本条不预先采纳。
+
+
+## D48 — R0-3c 更强失配扫描登记（2026-09-28，STAGE0-028，用户确认执行）
+
+Agent：Claude Sonnet 5 /ybc。背景：G0首轮判定不通过后，用户经AskUserQuestion明确选择"都执行"COORD-028-2建议的R0-3c+R0-4b两批追加实验。R0-3b（D47，探索性，n=20）已提示更强失配下有显著信号，本条把范围扩大后按D45同等严格度正式重测。
+
+**配置**：增益{0.6,1.0,1.4,1.6,1.8} × 延迟{0,5,10} 共15组（名义1.0/0**重新跑**，不复用D45已有的`gain1.0_delay0`结果，因为这15组要用同一批同种子完整重跑以保证跨组配对一致）。规模：每配置100回合，种子10000–10099，policy-100k，`--ik-mode fixed --ik-iterations 100 --policy-mode deterministic`；同种子跨配置配对，与D45相同方法（`bootstrap_ci`，episode级，10000次重采样，种子固定为0）。
+
+**判据**：与D45相同——至少一个非名义配置SR相对名义下降≥0.15且配对CI上界<0；不因结果调整。诊断（次要）：perfect-success同款配对分析、有IK失败回合比例、collision>0回合比例、命令-执行差均值、`primary_reason`分布。
+
+**产出用途**：按结果为F1提供training随机化范围（中度掉点档，供S0–S4训练时随机采样使用）与留出测试档（更强/范围外档，供Stage1/2评测但不参与训练随机化）建议，写入Stage0日志，不在本条自行冻结为最终F1决定（F1仍需用户确认后正式登记）。
+
+**并发/资源纪律**（吸取此前两次事故教训）：总episode-worker并发≤72；每批启动前`free -g`确认无持续增长趋势；启动脚本沿用`doc/agent_logs/20260928-stage0-shard-eval.py`（固定迭代IK预算，并发只影响墙钟不影响正确性/确定性）。
+
+
+## D49 — R0-4b 在线适应机制比较登记（2026-09-28，STAGE0-028，用户确认执行）
+
+Agent：Claude Sonnet 5 /ybc。背景：R0-4（D45同批）显示当前"每k步全参数梯度更新"机制虽在7个条件下相对冻结统计显著更优，但挽回的残差仅占失配gap的0.57%~8.65%（多数<2%），效果量过小，S4很可能与S3（仅前瞻修正、无在线更新）区分不开。COORD-028-2建议在换用别的适应机制前先确认是否存在"实质挽回"的可能，避免Stage1开工后才发现S4本质等价于S3。用户已确认执行。
+
+**范围声明**：这是在**已训练WM checkpoint之上做离线机制探测**，不改SAC/奖励/终止、不改WM训练协议、不引入新checkpoint训练；代码放在`scripts/`而非`scripts/wm/`内（沿用`residual_probe.py`已确立的规避`code_identity()`的做法）。这是Stage0范围内的诊断性探测（回答"当前WM能否被某种在线机制实质纠偏"），不是Stage1/F1的机制选型决定——若某变体达标，仍需用户在F1阶段正式登记该机制后才能写入Stage1的S4实现；若不达标，直接支持备选方案D（重审"在线适应"这条设计假设）的证据强度上升。
+
+**数据**：复用R0-4已采的`gain1.0_delay0`（名义）与`gain1.4_delay0`（`results/stage0-028-r04/{gain1.0_delay0,gain1.4_delay0}/`）；新采`gain1.8_delay0`、`gain1.0_delay5`、`gain1.4_delay5` 各100回合，种子9600–9699，`p0_runner.py eval --save-observations --policy-mode stochastic --ik-mode fixed --ik-iterations 100`，policy-100k，与R0-4同协议（`doc/agent_logs/20260928-stage0-shard-eval.py`）。模型统一用`trainval-1000-r1`（seed11）action checkpoint，与R0-4一致，便于直接对比。
+
+**协议**：与R0-4相同的"先预测后更新，只在未用于更新的后续步评估，每回合reset，随机种子固定"（`residual_probe.py`的`episode_errors`已实现，min_step=k过滤已修复）。
+
+**变体**：
+- V0 冻结（对照，R0-4已有）；copy（对照，R0-4已有）。
+- V1 现有全参数梯度更新，取R0-4最佳lr=1e-5、k=1作参照（不重新扫描）。
+- V2 只更新输出层（`MLPDynamics.net[-1]`，含weight+bias）：lr∈{1e-3,1e-2,1e-1}×k∈{1,5}，共6组合。
+- V3 无梯度残差滑动平均修正：`pred_corrected = pred + ema_residual`，`ema_residual`在标准化特征空间逐维指数滑动平均更新（`ema = (1-α)*ema + α*(z_true_prev - pred_prev)`，用上一次实际观测到的残差，同样满足predict-then-update不作弊），α∈{0.05,0.2,0.5}；额外报告只作用于robot块（41维，map块保持冻结预测）的版本，共3+3=6组合。
+
+**指标**：挽回比例 = (冻结残差 − 变体残差) / (该条件冻结残差 − 名义条件冻结残差)，total及robot/map分块分别报告；变体−冻结的配对episode-bootstrap CI（同R0-4方法）。
+
+**判据（登记后不放宽）**：至少一个变体配置在≥2个强失配条件（从`gain1.4_delay0`、`gain1.8_delay0`、`gain1.4_delay5`中选）上挽回比例≥30%且配对CI上界<0；同时该变体在名义条件下"变体−冻结"配对差均值 ≤ 冻结名义残差的1%（不明显变差）。若无变体达标，如实报告并列出方向：残差摘要作为SAC/ψ输入、换失配类型、重审研究动机（备选方案C/D）。
