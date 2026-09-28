@@ -174,3 +174,8 @@ Agent：Claude Opus 5.5 /ybc。用户选择“合并为单仓库”、GitHub 私
 ## D43 — 全量文档审查：过时路径与指令清理（2026-09-28，DOCREV-028）
 
 Agent：Claude Opus 5.5 /ybc。用户：“审查一次全部的文档，把过时的目录修改，过时的指令删除或修改”。范围为维护中与参考文档；`archive/` 不改，已完成任务的历史日志正文不改写（只给作废的提示词加作废标注），DECISIONS 只追加。(1) AGENTS.md 重写 §0/§3–§6：ROADMAP 为唯一执行计划、单仓库与 GitHub 远端、node01 硬件/软件、当前阶段表；删除来源机器 §7/§8（2080 Ti、Python 3.8、`mmhusky-p0-ready`、pip 冲突）与已归档的 REVIEW.md 链接；§1/§2 原文保留。(2) ENV.md 重写为 node01 现行环境，删除来源机器环境、`cd /home/yanbochao/...`、`mm_husky:deps` 构建与“严格复现失败”等过时结论。(3) `docker/run.sh` 默认容器/镜像改为 `mmhusky-node01`/`mm_husky:node01`，`build` 默认用 `Dockerfile.node01`（旧 `Dockerfile` 路径保留为 `MM_DOCKERFILE=Dockerfile`）。(4) P0–P5 删除在当前环境不存在的“executing-plans 技能”指令；P1 文件清单由“拟创建”改为已实现；各参考文档中 D33/D29“待修复”的状态更新为 D34/D36 后的现状，RESEARCH_EXPERIMENTS 旧“下一步”计划删除并给出 B0–C2 与 S0–S4 的对应。(5) 6 份 09-22 P0 日志正文确认无副本，指向它们的跳转占位删除，引用处改为“正文缺失”标注。(6) Stage0 启动提示词更新为 v3（分支 `stage0-028` 提交、不 push；常驻容器可用），v2 作废。AGENTS/ENV/PROGRESS 审查前原文存于 `archive/20260928-docrev/`。不改变任何算法、评测协议或实验语义。
+
+
+## D44 — 来源机器遗留文件与作废提示词移出现行目录（2026-09-28，DOCREV-028）
+
+Agent：Claude Opus 5.5 /ybc。用户：“清理”。(1) `docker/Dockerfile`、`requirements-p0.txt`、`python-freeze.txt`、`dpkg-versions.txt`、`pip-check.txt` 及 `docker/validation/` 顶层与 `p0-ready/` 输出（来源机器 `mm_husky:p0-ready` 相关）`git mv` 至 `docker/legacy/`，附 README；`docker/validation/node01-20260922/`（本机验收证据）保留。`run.sh build` 只保留 `Dockerfile.node01` 路径，D43 中的 `MM_DOCKERFILE=Dockerfile` 选项随之取消。(2) 作废的 Stage0 提示词 handoff 与 v2 移入 `doc/archive/20260928-docrev/`，Stage0 日志中的链接同步更新。未删除任何文件内容；agent_logs 证据文件与 Stage0 正在使用的 patch/R0-1 脚本不动。archive 内快照的相对链接不再维护。

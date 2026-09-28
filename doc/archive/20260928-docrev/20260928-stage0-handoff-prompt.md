@@ -1,6 +1,6 @@
 # STAGE0-028 交接提示词（已作废）
 
-> **作废（2026-09-28 15:56）**：计划已并入 ROADMAP、工作区已改名，改用 [20260928-stage0-prompt-v3.md](20260928-stage0-prompt-v3.md)（v2 亦已作废）。
+> **作废（2026-09-28 15:56）**：计划已并入 ROADMAP、工作区已改名，改用 [20260928-stage0-prompt-v3.md](../../agent_logs/20260928-stage0-prompt-v3.md)（v2 亦已作废）。
 
 以下为交给执行 Agent 的完整提示词（2026-09-28，Claude Opus 5.5 /ybc 生成；用户授权阶段0执行，但要求由其他 Agent 执行）。
 

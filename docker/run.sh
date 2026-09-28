@@ -11,22 +11,9 @@ run() { local runtime_image
   GAZEBO_MODEL_PATH=/root/mm_husky_ws/src/modulation_rl/gazebo_models:/root/mm_husky_ws/assets/gazebo/pal_gazebo_worlds/models:/root/mm_husky_ws/assets/gazebo/aws-bookstore/models:/usr/share/gazebo-11/models "$@"; }
 case "$command" in
   build)
-    dockerfile=${MM_DOCKERFILE:-Dockerfile.node01}
-    if [[ $dockerfile != Dockerfile ]]; then
-      # node01: public Noetic base; direct connection (no proxy build-args), see ENV.md.
-      docker build --network host -f "$root/docker/$dockerfile" -t "$image" "$root/docker"
-      exit
-    fi
-    # Legacy source-machine path: incremental build on the audited local mm_husky:deps.
-    base=${MM_BASE_IMAGE:-mm_husky:deps}
-    expected=sha256:7e08e15e9865c49c7ee903f6e5b9172ac4d1438574c9351c600181a41e75024d
-    actual=$(docker image inspect "$base" --format '{{.Id}}')
-    if [[ -z ${MM_BASE_IMAGE:-} && "$actual" != "$expected" ]]; then
-      echo 'Base image changed; select an audited base with MM_BASE_IMAGE.' >&2; exit 1
-    fi
-    docker build --network host --build-arg HTTP_PROXY --build-arg HTTPS_PROXY \
-      --build-arg http_proxy --build-arg https_proxy --build-arg NO_PROXY \
-      --build-arg "BASE_IMAGE=$base" -t "$image" "$root/docker"
+    # node01: public Noetic base; direct connection (no proxy build-args), see ENV.md.
+    # Source-machine Dockerfile (needs mm_husky:deps) is kept only in docker/legacy/.
+    docker build --network host -f "$root/docker/Dockerfile.node01" -t "$image" "$root/docker"
     ;;
   up)
     if docker container inspect "$container" >/dev/null 2>&1; then

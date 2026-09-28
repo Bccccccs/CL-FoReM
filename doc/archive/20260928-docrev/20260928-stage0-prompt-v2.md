@@ -1,6 +1,6 @@
 # STAGE0-028 启动提示词 v2（2026-09-28，Claude Opus 5.5 /ybc）
 
-> **已作废**（DOCREV-028）：由 [v3](20260928-stage0-prompt-v3.md) 取代。v2 中“不得重建 node01 容器”“不 git commit、wm/* 属他人未提交改动”等指令已过时。
+> **已作废**（DOCREV-028）：由 [v3](../../agent_logs/20260928-stage0-prompt-v3.md) 取代。v2 中“不得重建 node01 容器”“不 git commit、wm/* 属他人未提交改动”等指令已过时。
 
 取代已作废的 `20260928-stage0-handoff-prompt.md`。以下整段交给执行 Agent。
 

@@ -15,3 +15,4 @@
 - 验证（实测）：`bash -n docker/run.sh` 通过；`sg docker -c 'bash docker/run.sh exec true'` 用新默认值成功；p0_runner 参数表核对 ENV 中命令的全部 flag 存在；链接检查：维护中/参考文档 0 断链、agent_logs 0 断链；过时关键词（executing-plans、/home/yanbochao、projects/mm_husky_ws、REVIEW.md、prompt-v2）在现行文档中仅剩带“来源机器/历史”标注的出现。
 - 未改：archive、历史任务日志正文、DECISIONS 旧条目、ENV 中节选保留的 node01 验收原文。
 - 状态：done。
+- 追加清理（用户：“清理”，Stage0 Agent 已启动但尚未登记/建分支，工作区在 main）：见 D44。发现他人未提交改动（`doc/PROGRESS.md` 修改、新增 `doc/agent_logs/20260928-project-onboarding.md`），本次只按路径提交自己的改动，不包含它们。验证：`bash -n docker/run.sh` 通过；现行文档断链 0（archive 快照内断链不维护）。
