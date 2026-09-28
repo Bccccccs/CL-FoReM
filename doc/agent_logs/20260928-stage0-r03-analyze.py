@@ -51,16 +51,23 @@ def main():
         assert sorted(rows.keys()) == seeds, ('seed set mismatch', key)
     nominal_rows = configs[NOMINAL]
     nominal_success = np.array([nominal_rows[s]['success'] for s in seeds], dtype=np.float64)
+    nominal_perfect = np.array([nominal_rows[s]['perfect_success'] for s in seeds], dtype=np.float64)
     nominal_sr = float(nominal_success.mean())
+    nominal_perfect_rate = float(nominal_perfect.mean())
 
-    report = dict(nominal_sr=nominal_sr, episodes=len(seeds), configs={})
+    report = dict(nominal_sr=nominal_sr, nominal_perfect_rate=nominal_perfect_rate, episodes=len(seeds), configs={})
     any_pass = []
     for (gain, delay), rows in sorted(configs.items()):
         success = np.array([rows[s]['success'] for s in seeds], dtype=np.float64)
+        perfect = np.array([rows[s]['perfect_success'] for s in seeds], dtype=np.float64)
         sr = float(success.mean())
+        perfect_rate = float(perfect.mean())
         diff = success - nominal_success  # config - nominal, paired by seed
+        perfect_diff = perfect - nominal_perfect
         ci = bootstrap_ci(diff)
+        perfect_ci = bootstrap_ci(perfect_diff)
         sr_drop = nominal_sr - sr
+        perfect_drop = nominal_perfect_rate - perfect_rate
         passes = (gain, delay) != NOMINAL and sr_drop >= 0.15 and ci[1] < 0
         any_pass.append(passes)
         ik = np.array([rows[s].get('ik_count', 0) for s in seeds], dtype=np.float64)
@@ -76,6 +83,9 @@ def main():
             gain=gain, delay=delay, sr=sr, sr_drop_vs_nominal=sr_drop,
             paired_diff_mean=float(diff.mean()), paired_diff_ci95=ci,
             passes_d45_criterion=bool(passes),
+            perfect_success_rate=perfect_rate, perfect_drop_vs_nominal=perfect_drop,
+            perfect_paired_diff_mean=float(perfect_diff.mean()), perfect_paired_diff_ci95=perfect_ci,
+            perfect_ci_upper_negative=bool(perfect_ci[1] < 0),
             mean_ik_count=float(ik.mean()), mean_collision_count=float(coll.mean()),
             mean_trajectory_length_m=float(traj_len.mean()), mean_subtasks_completed=float(subtasks.mean()),
             mean_mismatch_cmd_exec_diff=(float(np.mean(cmd_exec_diff)) if cmd_exec_diff else None),
@@ -84,11 +94,13 @@ def main():
     report['seeds'] = seeds
     out = ROOT / 'r03-analysis.json'
     out.write_text(json.dumps(report, indent=2))
-    print('nominal SR:', nominal_sr)
+    print('nominal SR:', nominal_sr, 'nominal perfect:', nominal_perfect_rate)
     for name, c in sorted(report['configs'].items()):
-        print('%-16s SR=%.3f drop=%.3f CI=%s pass=%s failures=%s' % (
-            name, c['sr'], c['sr_drop_vs_nominal'], c['paired_diff_ci95'], c['passes_d45_criterion'], c['failure_distribution']))
-    print('G0 R0-3 pass (>=1 config meets D45 criterion):', report['g0_r03_pass'])
+        print('%-16s SR=%.3f drop=%.3f CI=%s pass(D45)=%s | perfect=%.3f drop=%.3f CI=%s ci_upper<0=%s | failures=%s' % (
+            name, c['sr'], c['sr_drop_vs_nominal'], c['paired_diff_ci95'], c['passes_d45_criterion'],
+            c['perfect_success_rate'], c['perfect_drop_vs_nominal'], c['perfect_paired_diff_ci95'],
+            c['perfect_ci_upper_negative'], c['failure_distribution']))
+    print('G0 R0-3 pass (>=1 config meets D45 criterion, success-based):', report['g0_r03_pass'])
 
 
 if __name__ == '__main__':

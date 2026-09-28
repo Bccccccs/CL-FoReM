@@ -199,3 +199,16 @@ Agent：Claude Sonnet 5 /ybc。按 ROADMAP §4 M 行与 v3 提示词实现失配
 Agent：Claude Sonnet 5 /ybc。按 ROADMAP §4 R0-2 与 v3 提示词“先审计种子 9901–9999 在 `results/` 全部 manifest 和 doc 中是否被用过”执行。审计方法：(1) 解析 `results/p1-retrain-20260928/protocol-1000/dataset.json` 的 `train_seeds`/`val_seeds`/`episodes[].seed`，与目标集合 `{9901..9999}` 求交，结果为空。(2) 对 `results/` 全树 `*.json`/`*.jsonl` 用正则 `"seed":\s*99[0-9][1-9]|"seed":\s*99[1-9][0-9]` 搜索，唯一命中的历史占位种子是 9900（`results/p1a-20260923/dataset-v2-10k/test-00/`），不在 9901–9999 范围内。(3) 核对 `doc/RESEARCH_EXPERIMENTS.md`（D32审计正文）：dataset-v1 test=9000–9099，dataset-freshtest test=9100–9199（D28所用），dataset-v2-10k train=0–9599（含旧val8000–8099、旧test9000–9099/9100–9199）、val=9600–9899、test=9900（占位单回合，不作判据）。三处均未触及 9901–9999。**结论：种子 9901–9999 从未被用于任何采集、训练或评测，可登记为 P1 独立 test v1。**
 
 **协议登记**：种子 9901–9999（99个）；采集协议与 protocol-1000 训练数据同款（`p0_runner.py eval --save-observations --policy-mode stochastic --ik-mode fixed --ik-iterations 100`，checkpoint policy-100k）；特征缓存用独立目录 `results/stage0-028-r02/feature-cache`（不复用 protocol-1000 的 train/val 缓存目录，避免身份混淆，但复用同一 `wm/cache.py:FeatureCache` 有界实现）；对种子11/22/33各自训练出的 action/no_action 两模型分别跑 `wm/evaluate_prediction.py --split test`（因非 train/val/test 三分 manifest，需按分片重命名 episodes 的 `split` 字段为 `test`，或用等价的手工单一 split 采集清单，采集时直接以 `--test 9901:10000` 传入而不使用 `--train`/`--val` 的占位区间，避免像 R0-4 那样借用其他已登记区间）。判据（ROADMAP§4 R0-2，不因结果不理想而放宽）：3个种子的 action 模型一步预测相对 copy、no_action 两对照的配对 CI 上界都 <0；五步如实报告（不要求同样通过）。执行依赖 R0-1（s22/s33 训练完成）；本条只完成审计与协议登记，采集与评测尚未执行。
+
+实际执行更新（约17:15）：采集用 `doc/agent_logs/20260928-stage0-shard-eval.py --seeds 9901:10000 --shards 6 --policy-mode stochastic --save-observations`（直接单一区间，未借用 train/val 占位区间，比登记时设想的更简洁），manifest 由新写的 `doc/agent_logs/20260928-stage0-build-manifest.py --split test` 转换为 `wm/data.py:EpisodeDataset.from_manifest` 可读的 `dataset.json` schema（与 `collect_rollouts.py` 同字段：`split`/`seed`/`path`/`sha256`/`usable`/`complete`/`terminated`/`truncated`），复用 `wm/data.py:load_episode` 做同款校验。99回合全部usable。
+
+**结果（约17:42）**：`wm/evaluate_prediction.py --split test` 对种子11/22/33三个action/no_action模型对分别跑完（99回合，59回合success）。一步预测：三个种子的action相对copy配对CI均为`[-0.088,-0.084]`附近（全负）、相对no_action配对CI均为`[-0.0069,-0.0056]`附近（全负）；五步预测同样三个种子相对copy、no_action的CI也全负（约`[-0.10,-0.091]`与`[-0.018,-0.013]`）。**R0-2 通过**（三种子一步、五步对两对照的配对CI上界均<0，五步按登记不要求也通过）。产物：`results/stage0-028-r02/prediction-test-{r1,s22,s33}/report.json`。这是在从未接触过的种子上独立复现的正结果，与D36单种子val上的初步正结果方向一致。
+
+
+## D47 — R0-3b 探索性失配探针（2026-09-28，STAGE0-028，exploratory）
+
+Agent：Claude Sonnet 5 /ybc。背景：R0-3 按 D45 判据不通过（15配置最大SR下降0.09，未达≥0.15）；收到跨会话协调指令 COORD-028（`doc/agent_logs/20260928-stage0-directive.md`，用户授权该会话协调），其只读复算与本任务`r03-analysis.json`一致，并建议在更强失配区间做探索性补充。**本条不修改、不替代 D45 判据，不作为 G0 R0-3 通过依据**，结果只供用户决定后续方向（备选方案B）参考。
+
+**配置（5组，超出 D45 原登记的增益{0.6–1.4}×延迟{0–2}范围）**：延迟{5,10}步@增益1.0；增益{1.6,1.8}@延迟0；增益1.4+延迟5。每配置20回合，种子10000–10019（D45同名义种子子集，配对比较），policy-100k，`--ik-mode fixed --ik-iterations 100 --policy-mode deterministic`。报告：SR、perfect-success、有IK失败回合比例、collision>0回合比例、命令-执行差均值、`primary_reason`分布，与名义（同20种子子集）配对episode-bootstrap 95%CI。
+
+**同时补充**：D45已登记的15配置全集，按 perfect-success（而非仅success）重算与名义的配对CI（`results/stage0-028-r03/r03-analysis-perfect.json`），作为诊断补充，不改变 D45 以 success 为主判据的既有判定（R0-3不通过）。是否改用 perfect-success 作主指标需用户另行决策（备选方案A），本条不预先采纳。

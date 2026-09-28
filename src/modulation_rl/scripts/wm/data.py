@@ -96,12 +96,7 @@ class EpisodeDataset:
 
     @classmethod
     def from_manifest(cls, manifest_path, split):
-        """Only small episode metadata/actions stay resident; maps are loaded one episode at a time.
-
-        split=None includes every usable episode regardless of its manifest split label; only
-        wm/residual_probe.py uses this (R0-4 condition manifests are a single stochastic-collection
-        batch, not a train/val/test partition). train_offline.py/evaluate_prediction.py always pass
-        an explicit split and are unaffected."""
+        """Only small episode metadata/actions stay resident; maps are loaded one episode at a time."""
         manifest_path = Path(manifest_path).resolve()
         manifest = json.loads(manifest_path.read_text())
         ds = cls.__new__(cls)
@@ -109,7 +104,7 @@ class EpisodeDataset:
         ds.episodes, ds.records = [], []
         obs_lengths, act_lengths = [], []
         for rec in manifest['episodes']:
-            if (split is not None and rec['split'] != split) or not rec.get('usable', True):
+            if rec['split'] != split or not rec.get('usable', True):
                 continue
             path = manifest_path.parent / rec['path']
             check_episode_size(path)
