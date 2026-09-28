@@ -64,7 +64,7 @@ def test_windows_never_cross_episodes_and_short_episodes_yield_none(tmp_path):
     assert {tuple(x) for x in w5} == {(0, 0), (0, 1), (0, 2)}  # T=1 and incomplete T=4 (3 targets) give none
     assert len(ds.windows(1)) == 7 + 1 + 3
     batch = ds.gather(w5, 5)
-    ep0 = ds.episodes[0]
+    ep0 = ds.read_episode(0)
     assert np.array_equal(batch['robot'][1], ep0['robot_state'][1:7])
     assert np.array_equal(batch['action'][2], ep0['action'][2:7])
     with pytest.raises(DataError):
