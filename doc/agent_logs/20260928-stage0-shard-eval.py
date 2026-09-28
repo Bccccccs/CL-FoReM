@@ -37,8 +37,15 @@ def main():
     p.add_argument('--label', default='', help='free-text tag written into manifest.json only')
     a = p.parse_args()
     lo, hi = (int(x) for x in a.seeds.split(':'))
-    if not 0 <= lo < hi <= 10000:
-        raise SystemExit('seeds must be lo:hi within 0:10000')
+    # Must match p0_runner.py:read_seeds exactly: --save-observations (data collection) is
+    # restricted to the training range 0-9999; a plain eval uses the validation/test ranges
+    # 10000-10099 (allocated) / 20000-20299 (Stage2), never the 10100-19999 gap.
+    if a.save_observations:
+        if not 0 <= lo < hi <= 10000:
+            raise SystemExit('--save-observations requires seeds within the training range 0:10000')
+    else:
+        if not ((10000 <= lo < hi <= 10100) or (20000 <= lo < hi <= 20300)):
+            raise SystemExit('eval seeds must be within 10000:10100 or 20000:20300 (unallocated 10100:20000 is rejected by read_seeds)')
     seeds = list(range(lo, hi))
     out = Path(a.output)
     out.mkdir(parents=True, exist_ok=False)
