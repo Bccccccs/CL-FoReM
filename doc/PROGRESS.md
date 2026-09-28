@@ -8,7 +8,7 @@
 | 项 | 当前 |
 |---|---|
 | 执行计划 | [ROADMAP](ROADMAP.md)（唯一） |
-| 当前阶段 | **Stage0 前置验证**：待用户按 [启动提示词 v3](agent_logs/20260928-stage0-prompt-v3.md) 启动执行 Agent（前一执行已停止并清理） |
+| 当前阶段 | **Stage0 前置验证**：STAGE0-028 active，Claude Sonnet 5 /ybc 按[启动提示词 v3](agent_logs/20260928-stage0-prompt-v3.md)执行，分支`stage0-028` |
 | 下一检查点 | G0（M、R0-1～R0-4 全部通过）→ F1 设计冻结（需用户确认）→ Stage1 |
 | 已有证据 | P0 analytical 验收；P1 单种子 val 初步正结果（D36） |
 | 投稿 | IJCAI 2027（D37）；最迟 11-20 决定去留 |
@@ -17,11 +17,12 @@
 
 | ID | 阶段/任务 | Agent | 状态 | 范围与依赖 | 记录 |
 |---|---|---|---|---|---|
+| ONBOARD-028 | 项目了解及 P/G/F 关系说明 | Codex /root（本会话） | done（了解与讲解） | 2026-09-28T16:22:10+08:00起；2026-09-28T16:22:41+08:00完成研究/控制链/入口与历史证据核对；2026-09-28T16:29:27+08:00补充P/G/F关系；仅文档，不启动实验或修改算法 | [日志](agent_logs/20260928-project-onboarding.md) |
 | DOCREV-028 | 全量文档审查：过时路径/指令清理，更新Stage0提示词 | Claude Opus 5.5 /ybc | done | 2026-09-28T16:11+08:00起；AGENTS/ENV重写、run.sh默认node01、P0–P5去除失效技能指令、状态同步到D34/D36、断链清零、Stage0提示词v3（D43） | [日志](agent_logs/20260928-doc-review.md) |
 | PATHSYNC-028 | 改名后路径同步、容器重挂载、新建Git远端 | Claude Opus 5.5 /ybc | done | 2026-09-28T15:58+08:00起；路径同步与两容器重建并验证（D41）；modulation_rl subtree并入根仓库（D42）；已推送 GitHub 私有仓库 Bccccccs/CL-FoReM | [日志](agent_logs/20260928-path-sync.md) |
 | DOCS-028 | 文档架构调整：唯一执行计划ROADMAP、README分层、PROGRESS看板、清理 | Claude Opus 5.5 /ybc | done | 2026-09-28T15:44+08:00起；ROADMAP/README/横幅/PROGRESS分表/归档6份文档/清11个退出容器完成（D40）；AGENTS.md 已由 DOCREV-028 同步 | [日志](agent_logs/20260928-docs-restructure.md) |
 | EXP-OVERVIEW-028 | 已执行实验梳理 | Codex /root | active | 2026-09-28T15:09:20.062008+08:00；核对P0/P1/Gazebo既有证据，仅文档讲解 | [日志](agent_logs/20260928-experiment-overview.md) |
-| STAGE0-028 | Stage0 前置验证（ROADMAP §4：M、R0-1～R0-5） | 待用户启动的执行Agent | planned | 前一执行被用户停止，残留已清理；工作区15:53改名CL-FoReM；启动提示词见 agent_logs/20260928-stage0-prompt-v3.md（v2 已作废）；不进Stage1 | [日志](agent_logs/20260928-stage0.md) |
+| STAGE0-028 | Stage0 前置验证（ROADMAP §4：M、R0-1～R0-5） | Claude Sonnet 5 /ybc | active | 2026-09-28T16:45+08:00起接手（提示词v3）；分支`stage0-028`；不push、不合main；不进Stage1 | [日志](agent_logs/20260928-stage0.md) |
 | P0-NODE01-023 | node01 上接手 P0 剩余工作 | Claude P0执行人 /ybc | done（analytical）/ review（Gazebo） | 2026-09-23 10:57–13:40 +08；analytical 出口通过（复现差值0，D24）；Gazebo 实时未达、需决策；接手 P0-CLOSE-022 范围：node01 重验回归、BioIK 固定预算复现、受影响基线重测、Gazebo 耗时/bookstore | [日志](P0/logs/20260923-p0-node01.md) |
 | P0-CLOSE-022 | P0 剩余问题与文档集中 | P0完成人 /root | review | 2026-09-22 14:30 +08；BioIK诊断/固定预算、GPU评测资源、Gazebo性能/场景；日志正文迁移中丢失，2026-09-23 由 P0-NODE01-023 接手 | `20260922-p0-closure.md`（正文缺失） |
 | P0-RUN-022 | P0 执行与验收 | Codex P0完成人 /root | review | 11:21 交付验收记录；ALG通过，严格数值复现失败，整体未完成 | `20260922-p0-execution.md`（正文缺失） |
