@@ -119,6 +119,12 @@ def evaluate(args,agent,env,output,config):
     if getattr(args,'latency_wm_comp',None):
         from latency_comp import WMCompensator
         wm_comp=WMCompensator.from_config(args.latency_wm_comp)
+    # CEIL-028 simple-policy controls (default off): lazily imported, so a plain run never touches
+    # the module and gets no new field. See policy_override.py / D57.
+    override=None
+    if getattr(args,'policy_override',None):
+        from policy_override import PolicyOverride
+        override=PolicyOverride.from_args(args)
     if args.world_type=='gazebo':
         import rospy
         from nav_msgs.msg import OccupancyGrid
@@ -138,6 +144,7 @@ def evaluate(args,agent,env,output,config):
         ages=[]
         step_info_rows=[] if args.save_step_info else None
         if shield is not None: shield.reset(seed)
+        if override is not None: override.reset(seed)
         try:
             state=reset_seeded(env,seed)
             row['initial_observation_sha256']=observation_fingerprint(state)
@@ -152,8 +159,12 @@ def evaluate(args,agent,env,output,config):
             for step in range(1,args.max_episode_steps+1):
                 tick=time.monotonic(); sim_tick=rospy.get_time() if args.world_type=='gazebo' else None
                 with torch.no_grad():
-                    action=(agent.select_action(state,eval=args.policy_mode=='deterministic') if wm_comp is None
-                            else wm_comp.act(env.transform))
+                    if override is not None:
+                        action=override.act(agent.select_action(state,eval=args.policy_mode=='deterministic')
+                                            if override.uses_policy else None)
+                    else:
+                        action=(agent.select_action(state,eval=args.policy_mode=='deterministic') if wm_comp is None
+                                else wm_comp.act(env.transform))
                 shield_risk=shield_triggered=None
                 if shield is not None:
                     action,shield_risk,shield_triggered=shield.decide(state[0],state[1],action)
@@ -198,6 +209,8 @@ def evaluate(args,agent,env,output,config):
                    trajectory_length_m=float(np.linalg.norm(np.diff(np.asarray(poses),axis=0),axis=1).sum()) if len(poses)>1 else 0.,
                    simulation_seconds=step*.1 if args.world_type=='sim' else rospy.get_time()-sim_start,
                    sensor_age_seconds=ages)
+        if override is not None:
+            row.update(policy_override=override.mode)  # CEIL-028: only present when the switch is on
         if shield is not None:
             # FOLLOWUP-028 B3: only present when --shield-config is set; a plain run never gets
             # this field. shield.episode_summary()'s per-step risk/triggered arrays only go into
@@ -267,6 +280,15 @@ def screen_flags(args):
     return out
 
 
+def ceil_flags(args):
+    """CEIL-028 switches, forwarded to per-episode workers only when on (default runs are unchanged)."""
+    out=[]
+    if getattr(args,'policy_override',None):
+        out+=['--policy-override',args.policy_override]
+        if getattr(args,'policy_override_mean_file',None):out+=['--policy-override-mean-file',args.policy_override_mean_file]
+    return out
+
+
 def episode_command(args,output,seed):
     seed_file=output/('seed-%05d.json'%seed)
     dump(seed_file,[seed])
@@ -284,7 +306,7 @@ def episode_command(args,output,seed):
             ['--base-vel-gain-range',str(args.base_vel_gain_range[0]),str(args.base_vel_gain_range[1])]
             if getattr(args,'base_vel_gain_range',None) else [])+(
             ['--save-step-info'] if getattr(args,'save_step_info',False) else [])+(
-            ['--shield-config',args.shield_config] if getattr(args,'shield_config',None) else [])+screen_flags(args)
+            ['--shield-config',args.shield_config] if getattr(args,'shield_config',None) else [])+screen_flags(args)+ceil_flags(args)
 
 
 def evaluate_isolated(args,output,config):
@@ -435,7 +457,17 @@ def main():
                         'policy head acts on world-model-rolled features of the delayed observation. Default None = off.')
     p.add_argument('--replay-compact-maps',action='store_true',
                    help='SCREEN-028: store replay local maps as bool (bit-identical samples, 4x less RAM/disk). Default off.')
+    p.add_argument('--policy-override',choices=['random','mean','slow-ee'],default=None,
+                   help='CEIL-028 (eval only, D57): replace the policy action by a simple control: random (uniform, '
+                        'seeded from the episode seed), mean (fixed action from --policy-override-mean-file) or slow-ee '
+                        '(policy action with dim 0 forced to -1). Default None = off.')
+    p.add_argument('--policy-override-mean-file',default=None,
+                   help='CEIL-028: JSON {"mean":[a0,a1,a2]} used by --policy-override mean.')
     args=p.parse_args()
+    if args.policy_override and (args.mode!='eval' or args.latency_wm_comp or args.shield_config):
+        p.error('--policy-override needs eval mode and cannot be combined with --latency-wm-comp/--shield-config')
+    if args.policy_override=='mean' and not args.policy_override_mean_file:p.error('--policy-override mean needs --policy-override-mean-file')
+    if args.policy_override_mean_file and args.policy_override!='mean':p.error('--policy-override-mean-file only applies to --policy-override mean')
     if args.ik_mode=='fixed' and args.ik_iterations<1:p.error('fixed IK requires positive --ik-iterations')
     if min(args.obs_latency_steps,args.map_latency_steps,args.obs_action_history)<0:p.error('latency/history steps must be >=0')
     if args.dyn_map_horizon<0:p.error('--dyn-map-horizon must be >=0')

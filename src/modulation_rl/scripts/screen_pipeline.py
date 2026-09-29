@@ -153,7 +153,7 @@ def eval_args(cfg, checkpoint, task, flags):
 
 def worker_env(cfg, seed):
     env = dict(os.environ)
-    env['P0_TASK_ID'] = 'SCREEN-028'
+    env['P0_TASK_ID'] = getattr(cfg, 'task_id', 'SCREEN-028')  # CEIL-028 reuses this pool with its own id
     env['P0_AGENT'] = 'Claude Sonnet 5.5 /ybc'
     env['CUDA_VISIBLE_DEVICES'] = str(cfg.gpus[seed % len(cfg.gpus)])
     return env
@@ -303,7 +303,7 @@ def run_training_job(cfg, job, root, pool, status, stage_key, jobs_state, deadli
         pool.acquire()
         try:
             wait_for_memory(MIN_FREE_START_GB)
-            env = dict(os.environ, P0_TASK_ID='SCREEN-028', P0_AGENT='Claude Sonnet 5.5 /ybc',
+            env = dict(os.environ, P0_TASK_ID=getattr(cfg, 'task_id', 'SCREEN-028'), P0_AGENT='Claude Sonnet 5.5 /ybc',
                        CUDA_VISIBLE_DEVICES=str(job['gpu']))
             logf = open(str(job_dir / ('a%d.log' % attempt)), 'w')
             proc = subprocess.Popen(train_command(cfg, job, out, resume), stdout=logf, stderr=subprocess.STDOUT,
