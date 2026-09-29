@@ -1,13 +1,14 @@
 # AGENTS.md - CL-FoReM：Husky 世界模型闭环
 
-更新日期：2026-09-28（DOCREV-028 全量审查）。本文是所有在本工作区工作的 Agent 的执行约束。旧版全文见 [审查前快照](doc/archive/20260928-docrev/AGENTS-pre-docrev.md)，仅作溯源。
+更新日期：2026-09-29（REFLOW-029：非全局模式、PH0–PH8 统一编号，D59）。本文是所有在本工作区工作的 Agent 的执行约束。旧版全文见 [审查前快照](doc/archive/20260928-docrev/AGENTS-pre-docrev.md)，仅作溯源。
 
 ## 0. 最新研究约束
 
 - 用户明确：只把世界模型闭环引入现有 Husky 系统，不考虑 TopAY/NMoMA；现有可沿用的继续沿用。投稿目标暂定 IJCAI 2027（CCF-B，截稿约2027年1月中旬，待官方CFP确认；D37），先完成研究与验证，当前不撰写论文正文。
 - 继续使用 N²M²/SAC、EE planner、BioIK、控制器、已有采数/训练/评测入口；不机械移植候选轨迹评分、优化器调参等不存在的接口。最终动作仍由 SAC 输出。
 - 所有重大修改先关联研究问题、假设、对照和验收。WM预测、一次选择、每步反馈决策、在线模型适应分别命名；现有SAC本身已有观测反馈，不能把它描述成整体open-loop。
-- **唯一执行计划是 [doc/ROADMAP.md](doc/ROADMAP.md)**（D40）：Stage0 前置验证 → G0 → F1 设计冻结 → Stage1 闭环筛查 → G1 → Stage2 正式验证 → G2 → Stage3 写作。P0–P5 只是技术模块编号，不代表执行顺序；最小闭环 = P2 前瞻修正 + 简化 P4 在线更新（D38），失配来源见 D39。
+- **唯一执行计划是 [doc/ROADMAP.md](doc/ROADMAP.md)**。阶段按执行顺序编号 PH0–PH8（D59）：PH0 基线环境 → PH1 世界模型离线预测 → PH2 全局模式闭环探索（已结束，负结果）→ PH3 非全局伤害测试 → G3 → PH4 非全局 SAC 重训与上限摸底 → G4 → PH5 世界模型重训+方法冻结 → G5 → PH6 闭环筛查 → G6 → PH7 正式验证 → G7 → PH8 写作。实验记 N.k，检查点记 GN，对比组记 `B-sac/B-cap/B-hist/M-look/M-full`。Stage0–3、R0-x、S0–S4、F1 等旧编号停止使用（对照见 ROADMAP §12）；P0–P5 只是模块文档文件名。
+- 主线设定为**非全局模式**（D59）：规划器只使用机器人至今观测到的地图，边走边改道；旧的全局模式（规划器用整张真值地图）只作对照与历史。主方法是 `M-look` 还是 `M-full`（前瞻修正 ± 在线更新）由 G4 决定。
 - 用户要求在现有内存内解决扩量问题：数据/编码/训练/评测走有界链路（D31/D34），不用增加内存、swap或仅缩小batch掩盖全量加载问题。
 
 ## 1. 研究目标与职责边界
@@ -41,28 +42,30 @@
 - Git：单仓库，远端 `git@github.com:Bccccccs/CL-FoReM.git`（私有，D42）。`src/modulation_rl` 已并入根仓库，研究代码与文档一起提交；第三方 ROS 包（bio_ik、husky 等）仍是独立仓库、被根仓库忽略，改它们时检查各自的 diff/status。不得丢弃他人改动，不自动改 remote，不把第三方嵌套仓库当作已被根仓库备份。
 - `scripts/modulation（修改后）/`、`scripts/modulation/envs/改过的地图场景/`、根目录 `modulation_rl(复件)/` 仅作参考，禁止在其中实现正式研究功能。
 - 修正现有算法/环境语义必须单独记录（DECISIONS）和重测；新增模块不得偷偷改变奖励、终止或动作语义。
-- 文档入口见 [doc/README.md](doc/README.md)：执行计划看 ROADMAP，状态看 [PROGRESS](doc/PROGRESS.md)，设计变更写入 [DECISIONS](doc/DECISIONS.md)（只追加），通用评测协议见 [EVALUATION](doc/EVALUATION.md)。用户最新明确指令优先，变更必须同步文档。
+- 文档入口见 [doc/README.md](doc/README.md)：执行计划看 ROADMAP，状态看 [PROGRESS](doc/PROGRESS.md)，设计变更写入 [DECISIONS](doc/DECISIONS.md)（新条目只追加、编号不复用；被取代的条目移入 archive，D61），通用评测协议见 [EVALUATION](doc/EVALUATION.md)。用户最新明确指令优先，变更必须同步文档。
 - 环境入口以 [ENV.md](ENV.md) 与 [docker/run.sh](docker/run.sh) 为准。
 - `doc/archive/` 只作溯源，不具备当前指令效力，日常工作无需阅读。
 
 ## 4. 当前阶段（详见 ROADMAP 与 PROGRESS 看板）
 
-| 项 | 状态 |
+| 阶段 | 状态 |
 |---|---|
-| P0 基线环境 | analytical 已验收（node01，fixed-IK 复现差值0，D24）；Gazebo 实时/任务出口未通过，对齐工作并入 Stage0 R0-5 |
-| P1 世界模型 | 索引修复与有界链路已验收（D33/D34）；1000回合单seed val 初步正结果（D36）；跨seed与独立test由 Stage0 R0-1/R0-2 完成 |
-| 当前阶段 | **Stage0 前置验证**（M、R0-1～R0-5），通过 G0 后经用户确认 F1 才进入 Stage1 |
-| P2/P4 | Stage1 一起实现（D38），尚未编写 |
-| P3/P5 | 后置扩展/主线外，未启动 |
+| PH0 基线环境 | analytical 已验收（node01，fixed-IK 复现差值0，D24）；Gazebo 对齐移入 PH7 |
+| PH1 世界模型离线预测 | 通过（D36 val；三种子独立 test，D46） |
+| PH2 全局模式闭环探索 | 结束，负结果（原 Stage0/FOLLOWUP/SCREEN/CEIL） |
+| **PH3 非全局伤害测试** | **当前**：判据已登记（D60），待用户确认后实现 `observed-map-v1` 并运行 |
+| PH4–PH8 | 未开始；PH4 起判据为 ROADMAP 草案，进入前由用户确认登记 |
 
 各模块文档（doc/P0、P1_WORLD_MODEL … P5_LANGUAGE）描述接口与实现细节，不代表功能已实现或超参数已验证。未通过检查点，不得将后续结果用于正式对比。
+
+Git：只有 `main` 长期存在；每个任务从 `main` 建 `phN-主题` 短期分支，完成并经用户确认后快进合入、删除分支；push 由用户决定（ROADMAP §10）。
 
 ## 5. 必须记住的已核实事实
 
 - 正式 analytical 评测一律带 `--ik-mode fixed --ik-iterations 100`（`p0-ik-budget-v1`）；源码默认 `legacy` 为墙钟预算、不可复现。
 - 动作/终止语义为 `p0-action-terminal-v2`；旧语义 checkpoint 与旧 SR=0.60/perfect=0.46 只作历史，不与修复后结果混比。
 - 实际使用仓库内修改过的 `scripts/stable_baselines3/`，pip 同名版本不能替代；manifest 记录模块导入路径。
-- 测试集曝光：旧 test 9000–9199、旧 val 8000–8099 不得再当未见测试（D32）；种子登记以 ROADMAP §9 为准，20000–20299 在 Stage2 前不得使用。
+- 测试集曝光：旧 test 9000–9199、旧 val 8000–8099 不得再当未见测试（D32）；种子登记以 ROADMAP §11 为准，20000–20299 在 PH7 前不得使用。
 
 ## 6. 环境与工程约束
 

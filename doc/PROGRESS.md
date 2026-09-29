@@ -1,19 +1,29 @@
 # 当前进度
 
-更新：2026-09-28（Asia/Shanghai，DOCREV-028 审查）。状态：`planned`、`active`、`blocked`、`review`、`done`。执行计划以 [ROADMAP](ROADMAP.md) 为准；本文件只记任务状态。
+更新：2026-09-29（Asia/Shanghai，REFLOW-029）。状态：`planned`、`active`、`blocked`、`review`、`done`、`stopped`。执行计划以 [ROADMAP](ROADMAP.md) 为准；本文件只记任务状态。阶段统一编号 PH0–PH8（D59），旧编号对照见 ROADMAP §12。
 
-
-## 看板（DOCS-028，随阶段更新）
+## 看板
 
 | 项 | 当前 |
 |---|---|
 | 执行计划 | [ROADMAP](ROADMAP.md)（唯一） |
-| 当前阶段 | **Stage0 前置验证**：M/R0-1/R0-2/R0-3c通过，R0-3(原范围)/R0-4/R0-4b不通过或效果量不足，**G0不通过、不进F1/Stage1**；R0-5暂缓；诊断已清晰化（失配可测但当前适应机制无效，文献支持meta训练或结构化低维修正两条路），已向用户汇报备选方案A/B/B1/B2/C/D，等待决策 |
-| 下一检查点 | G0（M、R0-1～R0-4 全部通过）→ F1 设计冻结（需用户确认）→ Stage1 |
-| 已有证据 | P0 analytical 验收；P1 单种子 val 初步正结果（D36） |
-| 投稿 | IJCAI 2027（D37）；最迟 11-20 决定去留 |
+| 已完成 | PH0 基线环境（analytical）、PH1 世界模型离线预测 |
+| 已结束 | PH2 全局模式闭环探索：负结果（原 Stage0/FOLLOWUP/SCREEN/CEIL），规划器全知是主因（D59） |
+| **当前阶段** | **PH3 非全局伤害测试**（PH3-OBSMAP）：规格与判据已登记（D60），**待用户确认后实现并运行** |
+| 下一检查点 | G3（某 r 下 SR 降 ≥0.15 且 CI 上界 <0）→ PH4 |
+| 分支 | 只有 `main`；任务分支 `phN-主题` 用后即删（ROADMAP §10） |
+| 投稿 | IJCAI 2027（D37）；PH6 最迟 11-20 决定去留 |
 
-## 进行中 / 待验收
+## 当前主线任务
+
+| ID | 阶段 | Agent | 状态 | 范围 | 记录 |
+|---|---|---|---|---|---|
+| REFLOW-029 | 流程重写（跨阶段） | Claude Opus 5.5 /ybc | review | 2026-09-29 约15:10起；非全局模式转向、PH0–PH8 统一命名、ROADMAP 重写、D59/D60、分支收拢到 main；仅文档与分支，不改代码/不跑实验 | [日志](agent_logs/20260929-reflow.md) |
+| PH3-OBSMAP | PH3 | 待定（协调方 [指令](agent_logs/20260929-obsmap-directive.md) 原指派本会话） | planned | `observed-map-v1` 开关（只改规划器地图）+ policy-100k 伤害测试 r∈{3,5,10}；D60；分支 `ph3-obsmap`；待用户确认开工 | 开工时建 `agent_logs/20260929-ph3-obsmap.md` |
+
+以下为 D59 之前的任务行（原编号），内容不改。
+
+## 旧任务：进行中 / 待验收（D59 前）
 
 | ID | 阶段/任务 | Agent | 状态 | 范围与依赖 | 记录 |
 |---|---|---|---|---|---|
@@ -35,7 +45,7 @@
 | P0-GZ | Gazebo 空场景到任务场景 | P0 完成人 /root → Claude /ybc | review | node01：picknplace/bookstore 有限物理 rollout 2/2 有效（均无任务成功）；实时预算未达（p50 52.8ms vs 20ms，RTF0.72），需语义决策；动态障碍未测 | [node01日志](P0/logs/20260923-p0-node01.md) |
 | P1-A | 离线动作条件预测 | Claude /ybc → Codex /root | review（初步预测证据） | D33修复后1000train/300val正式重训完成（D36），seed11一步/五步优于两对照；待跨seed与未曝光独立test，P2继续blocked | [新报告](agent_logs/20260928-p1-retrain-report.md) / [历史](agent_logs/20260923-p1a.md) |
 
-## 已完成
+## 旧任务：已完成（D59 前）
 
 | ID | 阶段/任务 | Agent | 状态 | 范围与依赖 | 记录 |
 |---|---|---|---|---|---|

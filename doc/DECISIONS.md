@@ -1,8 +1,20 @@
 # 决策记录
 
-> **2026-09-28 DOCS-028 清理**：按用户“和现有决策冲突的旧决策也删除”，已将 D02、D10、D14、D25、D26、D28、D29、D30 移至 [archive/20260928-docs028/DECISIONS-superseded.md](archive/20260928-docs028/DECISIONS-superseded.md)（原文保留，编号不再复用）。本文件只保留现行有效决策。
+整理：2026-09-29（REFLOW-029，D61）。**本文件只保留现行有效的决策**；被取代或所属阶段已结束的条目原文移入归档，编号不再复用，索引见下文“已归档条目”。新条目追加到文末，编号取当前最大值+1（写前重读）。阶段编号见 [ROADMAP](ROADMAP.md) §3（PH0–PH8）。
 
-起始日期：2026-09-22；最近增补：2026-09-28。按日期更晚的明确变更执行，保留历史证据与决定。
+## 现行条目速查
+
+| 主题 | 条目 |
+|---|---|
+| 基础约定 | D01、D03–D09、D11–D13（下表） |
+| 环境与评测语义（PH0） | D15–D24（修复语义 v2、Gazebo 链路、复现口径、BioIK 固定预算 fixed100） |
+| 世界模型（PH1） | D27 训练配置、D31 沿用资产与有界内存、D32 测试曝光、D33/D34 窗口修复与有界链路、D36 val 结果、D46 独立 test 种子与结果 |
+| 投稿 | D37 IJCAI 2027 |
+| 失配来源与可复用开关 | D39 注入失配 + Gazebo 自然失配（阶段安排按 D59）、D45 `mismatch-v1` 实现、D55 `--replay-compact-maps` 与评测 checkpoint 导出 |
+| 仓库、环境与数据 | D41 工作区路径、D42 单仓库、D58 数据清理 |
+| 当前主线 | **D59 非全局模式与 PH0–PH8 流程**、**D60 PH3 伤害测试判据**、D61 本次整理 |
+
+## 基础约定
 
 | ID | 决定 | 理由/边界 |
 |---|---|---|
@@ -18,11 +30,30 @@
 | D12 | P5 不自动启动 | 核心修正收益优先，RGB-D/语言是独立扩展 |
 | D13 | 所有 Agent 通过 doc 交流 | 用户硬性要求，包含进度、证据、失败和交接 |
 
+
 ## 变更方式
 
 新增决策记录需包含：日期、任务 ID、Agent、替代的决策 ID、证据、影响的阶段/协议、是否需要重跑基线。禁止通过覆盖旧记录隐藏研究路径变化。
 
 论文原文：[SC²-WM](https://arxiv.org/html/2608.07548)。本项目提出的 GRU、残差接口和评测选择是迁移设计，不宣称逐模块复现。P1b 实施前须逐条建立公式到代码映射；原论文未明确的实现细节应标为本项目约定。
+
+## 已归档条目
+
+原文见 [archive/20260928-docs028/DECISIONS-superseded.md](archive/20260928-docs028/DECISIONS-superseded.md)（DOCS-028）与 [archive/20260929-reflow/DECISIONS-archived.md](archive/20260929-reflow/DECISIONS-archived.md)（REFLOW-029）。
+
+| ID | 内容 | 归档原因 |
+|---|---|---|
+| D02、D10、D14、D25、D26、D28、D29、D30 | 早期 P0/P1 边界、P1a 旧结果与旧研究范围 | 与后续决策冲突（DOCS-028） |
+| D35 | 投稿目标改为 CCF-A/B | 由 D37 具体化 |
+| D38 | 最小闭环 = P2+简化P4，S0–S4 对比组 | 由 D59 取代（主方法由 G4 决定，对比组改名） |
+| D40 | Stage0–3 执行计划与文档架构 | 由 D59 取代（PH0–PH8）；“ROADMAP 唯一执行计划”保留于 D59 |
+| D43、D44 | 全量文档审查、来源机器遗留文件移出 | 一次性整理，结果已体现在现行文件中 |
+| D47、D48、D49 | R0-3b/R0-3c 失配扫描、R0-4b 适应机制比较 | PH2 已结束；结果见 [Stage0 日志](agent_logs/20260928-stage0.md) |
+| D50、D51、D52 | FOLLOWUP A/B 线判据、转入场景筛选 | PH2 已结束；结果见 [FOLLOWUP 日志](agent_logs/20260928-followup-pipeline.md) |
+| D53、D54、D56 | SCREEN 感知延迟/动态障碍判据（`latency-v1`/`dynmap-v1` 开关语义也在其中） | PH2 已结束；复用这两个开关前先读原文 |
+| D57 | CEIL SAC 上限摸底判据 | PH2 已结束；结果见 [CEIL 日志](agent_logs/20260929-ceil-pipeline.md) |
+
+## 现行条目
 
 ## D15 — P0 修复语义 v2（2026-09-22，P0-RUN-022）
 
@@ -129,10 +160,6 @@ Agent：Codex /root。落实D31/D33，沿用原NPZ、固定encoder、1041维FP32
 
 D34完成增补（2026-09-28 10:42 +08）：最终65项测试及100→1000→9600有限三级资源、GPU原始切片参考、SIGINT保留epoch checkpoint与两轮特征/参数一致验证均通过，P1-FIX-028工程任务done。缓存身份进一步绑定数值后端/版本/TF32/encoding batch，统一使用原训练deterministic配置；TF32训练配置继承且FP32存储不变。每epoch原子latest checkpoint和中止标记已实现；不声称精确断点恢复。M5与正式研究出口仍待验收，详见任务记录。
 
-## D35 — 投稿目标改为 CCF-A/B（2026-09-28，VENUE-028）
-
-Agent：Claude Opus 5.5 /ybc。用户明确“我们想投一篇CCFA类的论文”，随后补充“CCFB也可以”。按 CCF 第七版（2026）目录（第三方整理页核对，官网 PDF 本机下载被拒，正式使用前须以 ccf.org.cn 为准），IROS 为 C 类，不满足该要求；ICRA 2027 已于 2026-09-16 截稿。因此 D30 及 AGENTS §0、RESEARCH_GOAL 中“以 IROS 2027 为目标”由本条取代，具体会议待用户在[候选](agent_logs/20260928-venue-ccf.md)中选定后再同步修改这两份文档。本条不改变 P0–P5 门槛、SAC 最终动作职责和当前“只引入 Husky”的范围；若选择 ML 会议路线而需扩展到多机器人/标准基准，属于范围变更，须用户另行确认。
-
 ## D36 — 修复后1000回合正式train/val诊断（2026-09-28，P1-RETRAIN-028）
 
 按用户明确授权执行D27/D34协议：train seeds0–999/val9600–9899、seed11、hidden64/lr3e-4/wd1e-3/batch512/max200epoch/patience20，无max-train-batches。没有修改训练算法或控制语义。无动作86epoch/best66/40678batch；动作107epoch/best87/50611batch，均完整epoch并正常早停。
@@ -145,41 +172,17 @@ Agent：Claude Opus 5.5 /ybc。用户明确“我们想投一篇CCFA类的论文
 
 Agent：Claude Opus 5.5 /ybc。用户要求“今年底投、明年初截稿”，并决定“暂时按IJCAI 2027做准备”。IJCAI 在 CCF 2026 为 B 类；2027 截稿按历年规律约为1月中旬，官方 CFP 未发布，发布后须核对日期、页数、摘要预注册与双投政策。IJCAI 与 ICML 2027 时间重叠，同一论文只投其一。按只计实验时间的倒排：10月中前完成P1出口、最小闭环与差异来源设置及100k筛查；约2026-11-20为去留点，届时核心闭环无正结果则放弃1月会议、改投 NeurIPS 2027；约12-20冻结结果后写作。已同步修改 AGENTS §0、RESEARCH_GOAL、README 的目标描述。本条不改变 P0–P5 门槛、SAC 最终动作职责和“只引入 Husky”范围；闭环阶段顺序（P2+简化P4 合并为最小闭环）与差异来源仍待用户决定（见 LOOP-028）。
 
-
-## D38 — 最小闭环 = P2 + 简化 P4 一起实现与验收（2026-09-28，RUNPLAN-028）
-
-Agent：Claude Opus 5.5 /ybc。用户确认“P2+简化P4一起做”。依据 LOOP-028：P2 单独使用时修正量只是 o_t 的函数；执行后用实际 a_t 与真实 o_(t+1) 更新世界模型，是闭环中引入新信息的部分。因此首个闭环研究验收改为：P2-MIN 前瞻修正 + 简化 P4（执行后一步预测器更新，每回合重置，首轮固定周期、不用 KL 触发）作为主方法 S4；仅 P2（S3）、同容量 adapter（S1）、历史条件 SAC（S2）和原 SAC（S0）为匹配对照。P4 不再依赖“P2 单独稳定、P3 固定”；P3、KL 触发、P1b/GRU 作为后续消融或扩展。P1 出口（D36 后补种子与独立 test）仍是前置条件，SAC 最终动作职责和“只引入 Husky”不变。失配来源、是否使用 Gazebo 仍待用户决定；本条不启动实验（用户：先不跑）。README/P2/P4 的依赖描述待实现开始前同步。
-
-
 ## D39 — 失配来源：analytical 注入执行失配 + Gazebo 自然失配（2026-09-28，RUNPLAN-028）
 
 Agent：Claude Opus 5.5 /ybc。用户决定“注入失配加Gazebo一起用”。分工：(1) analytical 中新增版本化、默认关闭的系统性执行失配开关（每回合底盘速度增益、动作延迟步数），用于训练时随机化和受控主实验（可复现、可画强度-效果曲线）；关闭时必须与现基线逐元素一致。现有 `transition_noise_base` 为零均值噪声，保留但不作为可适应失配。(2) Gazebo 作为“analytical 训练→Gazebo 执行”的自然失配评测，不在 Gazebo 训练。Gazebo 进入正式评测前须先在本文件选定实时方案（P0 日志 A–D），并对齐控制周期（训练 TIME_STEP_TRAIN=0.1s，Gazebo 当前 time_step 0.02s）与回合时长；此前 4 个 Gazebo 回合使用 2000 步策略，不作为可用性结论。未见布局（需解除 map.py:837 间距硬编码）与 dynobstacle 留作泛化备选。两项均属环境语义扩展，实现时单列版本与测试。本条不启动实验。
-
-
-## D40 — 文档架构调整：ROADMAP 为唯一执行计划（2026-09-28，DOCS-028）
-
-Agent：Claude Opus 5.5 /ybc。用户：“现有的流程组织架构太乱……你做一下调整”“没有用的就清理”。(1) 新建 [ROADMAP](ROADMAP.md) 为唯一执行计划：Stage0 前置验证 → G0 → F1 设计冻结 → Stage1 闭环筛查（S0–S4）→ G1（最迟11-20）→ Stage2 正式验证 → G2（约12-20）→ Stage3 写作；每阶段实验、对照、规模、预登记判据、种子登记见其 §4–§9。LOGIC-028 的 L1/L2 并入 R0-3/R0-4 判据，L4/L5/L7 列为 F1 必答项。各阶段规模（如 Stage1 3种子×100k、Stage2 5种子×500k、Stage2 正式测试 20000–20299）以 ROADMAP 为准，EVALUATION v1 中不同的数字不再适用于当前主线，其通用协议保留。P0–P5 仅作技术模块编号，不代表顺序。(2) README 重写为“维护中/参考/历史”三类；参考文档顶部加定位横幅；REVIEW、WORKFLOW_GUIDE、P0_ACCEPTANCE、P0_BASELINE、NODE01_DOCKER_ADMIN、P0/REMEDIATION_PLAN 移入 archive/20260928-docs028/（未删除）。(3) PROGRESS 顶部加看板，任务行不改内容，按“进行中/已完成/旧阶段行”分表。(4) 清理已退出的 11 个 mmhusky-p1-* 容器与 agent_logs/__pycache__；停止并清理被用户中止的 Stage0 执行残留，未完成失配代码备份为 patch 后还原（见 STAGE0-028 日志）。Stage0 从头重新执行。(5) 按用户“和现有决策冲突的旧决策也删除”，将 D02、D10、D14、D25、D26、D28、D29、D30 移至 archive/20260928-docs028/DECISIONS-superseded.md，D27 仅加测试集注释。AGENTS.md 的必读清单与 §4 阶段表尚未同步（本 Agent 读取该段被权限规则拒绝），待用户处理。
-
 
 ## D41 — 工作区改名为 CL-FoReM，常驻容器按新路径重建（2026-09-28，PATHSYNC-028）
 
 Agent：Claude Opus 5.5 /ybc。工作区于约 15:53 由 `/home/ybc/projects/mm_husky_ws` 改名为 `/home/ybc/projects/CL-FoReM`（内容不变）。用户要求“同步一下路径，容器也重新挂载”。(1) 宿主路径以 `/home/ybc/projects/CL-FoReM` 为准；**容器内挂载点仍为 `/root/mm_husky_ws`**，devel、runner、launch 脚本和 docker/ 下的容器内路径不改。D31 等历史条目及已完成任务日志/证据 JSON 中的旧宿主路径是当时实测记录，不改写，按新路径理解。AGENTS §0/§3、ENV 已同步。(2) `mmhusky-node01`、`mmhusky-node01-gz` 用同一镜像 `mm_husky:node01`（`sha256:e674db49…c430`）与原参数（bridge、nvidia runtime、shm 8g、无内存限制）经 `docker/run.sh up` 重建，仅挂载源改为新路径；重建前两容器仅有遗留 analytical launch 与 Xvfb、可写层只有 NVIDIA 注入和缓存。重建后 CUDA、train-smoke、analytical 20 步、Gazebo 启动检查均通过，证据见 [PATHSYNC-028 日志](agent_logs/20260928-path-sync.md)。本条不改变任何算法、评测协议或实验语义。
 
-
 ## D42 — src/modulation_rl 并入根仓库形成单仓库 CL-FoReM（2026-09-28，PATHSYNC-028）
 
 Agent：Claude Opus 5.5 /ybc。用户选择“合并为单仓库”、GitHub 私有仓库。(1) 先在原子仓库 `p0-node01` 分支把 P1-FIX-028 此前未提交的改动原样提交为 `06c0ee1`（wm/data、encoder、evaluate_prediction、train_offline、val_probe、cache、streaming 测试、wm_resource_check）；根仓库待提交的 doc/docker/AGENTS/ENV 提交为 `9293083`。(2) 原 `.git` 移至 `/home/ybc/projects/CL-FoReM-backups/modulation_rl-dotgit-20260928`，另有全引用镜像 `modulation_rl-20260928.git`；根 `.gitignore` 去掉 `/src/modulation_rl/`，以 `merge -s ours --allow-unrelated-histories` + `read-tree --prefix=src/modulation_rl/` 合并为 `ac8d686`，工作区文件未变动。文档引用的 `1ccedd0/68b8d0b/b23aa39/2a1348a` 仍可在本仓库解析；注意 `git log -- src/modulation_rl/...` 不会跨越 subtree 前缀追溯旧提交，查旧历史直接按哈希。(3) 溯源影响：`p0_runner.provenance` 对原子仓库路径将记录 `git unavailable`（有异常兜底），根仓库条目已覆盖全部代码；`wm_resource_check.py` 的 `git_head` 改为读根仓库（原写法会因 .git 不存在直接崩溃），仍用显式 `--git-dir` 以避开容器内 safe.directory。不改变任何算法、评测或实验语义。其他第三方 ROS 包仍为独立仓库。(4) 远端：用户创建 GitHub 私有仓库，根仓库 origin = `git@github.com:Bccccccs/CL-FoReM.git`，首推 `7890c80`。
-
-
-## D43 — 全量文档审查：过时路径与指令清理（2026-09-28，DOCREV-028）
-
-Agent：Claude Opus 5.5 /ybc。用户：“审查一次全部的文档，把过时的目录修改，过时的指令删除或修改”。范围为维护中与参考文档；`archive/` 不改，已完成任务的历史日志正文不改写（只给作废的提示词加作废标注），DECISIONS 只追加。(1) AGENTS.md 重写 §0/§3–§6：ROADMAP 为唯一执行计划、单仓库与 GitHub 远端、node01 硬件/软件、当前阶段表；删除来源机器 §7/§8（2080 Ti、Python 3.8、`mmhusky-p0-ready`、pip 冲突）与已归档的 REVIEW.md 链接；§1/§2 原文保留。(2) ENV.md 重写为 node01 现行环境，删除来源机器环境、`cd /home/yanbochao/...`、`mm_husky:deps` 构建与“严格复现失败”等过时结论。(3) `docker/run.sh` 默认容器/镜像改为 `mmhusky-node01`/`mm_husky:node01`，`build` 默认用 `Dockerfile.node01`（旧 `Dockerfile` 路径保留为 `MM_DOCKERFILE=Dockerfile`）。(4) P0–P5 删除在当前环境不存在的“executing-plans 技能”指令；P1 文件清单由“拟创建”改为已实现；各参考文档中 D33/D29“待修复”的状态更新为 D34/D36 后的现状，RESEARCH_EXPERIMENTS 旧“下一步”计划删除并给出 B0–C2 与 S0–S4 的对应。(5) 6 份 09-22 P0 日志正文确认无副本，指向它们的跳转占位删除，引用处改为“正文缺失”标注。(6) Stage0 启动提示词更新为 v3（分支 `stage0-028` 提交、不 push；常驻容器可用），v2 作废。AGENTS/ENV/PROGRESS 审查前原文存于 `archive/20260928-docrev/`。不改变任何算法、评测协议或实验语义。
-
-
-## D44 — 来源机器遗留文件与作废提示词移出现行目录（2026-09-28，DOCREV-028）
-
-Agent：Claude Opus 5.5 /ybc。用户：“清理”。(1) `docker/Dockerfile`、`requirements-p0.txt`、`python-freeze.txt`、`dpkg-versions.txt`、`pip-check.txt` 及 `docker/validation/` 顶层与 `p0-ready/` 输出（来源机器 `mm_husky:p0-ready` 相关）`git mv` 至 `docker/legacy/`，附 README；`docker/validation/node01-20260922/`（本机验收证据）保留。`run.sh build` 只保留 `Dockerfile.node01` 路径，D43 中的 `MM_DOCKERFILE=Dockerfile` 选项随之取消。(2) 作废的 Stage0 提示词 handoff 与 v2 移入 `doc/archive/20260928-docrev/`，Stage0 日志中的链接同步更新。未删除任何文件内容；agent_logs 证据文件与 Stage0 正在使用的 patch/R0-1 脚本不动。archive 内快照的相对链接不再维护。
-
 
 ## D45 — mismatch-v1 实现与 M/R0-3 判据登记（2026-09-28，STAGE0-028）
 
@@ -193,7 +196,6 @@ Agent：Claude Sonnet 5 /ybc。按 ROADMAP §4 M 行与 v3 提示词实现失配
 
 **R0-3 判据预登记（运行前）**：配置 = 增益{0.6,0.8,1.0,1.2,1.4} × 延迟{0,1,2} 共15组（名义=增益1.0/延迟0，即 M 关闭状态）；规模 = 每配置100回合，种子10000–10099，policy-100k checkpoint，`--ik-mode fixed --ik-iterations 100 --policy-mode deterministic`；同种子跨配置配对。通过判据：至少一个非名义配置的 SR（`success`）相对名义下降 ≥0.15，且该配置与名义的配对 episode-bootstrap 95% CI 上界 <0（`evaluate_prediction.py` 的 `bootstrap_ci` 同款 episode-level bootstrap，10000次重采样，seed固定）。判据登记后不因结果不理想而放宽。诊断记录（区分失败原因，LOGIC L1，不要求严格单调）：`mismatch_cmd_exec_mean_abs_diff/max`（底盘命令-执行差，仅失配开启时存在）作为底盘跟踪代理；`subtasks_completed`/`subtasks_total`/`trajectory_length_m`作为参考进度代理；`primary_reason`/`reasons`/`failure_distribution`/`ik_count`/`collision_count`按配置分布，及每回合 `episode-*-tail.json`（末50步 `dist_to_desired`/`rot_dist_to_desired`/`kin_failure` 时间序列）作为 IK 失败前兆；均为已有字段的分析组合，未新增底盘/末端专用埋点。
 
-
 ## D46 — P1 独立 test v1 种子曝光审计与协议登记（2026-09-28，STAGE0-028 R0-2）
 
 Agent：Claude Sonnet 5 /ybc。按 ROADMAP §4 R0-2 与 v3 提示词“先审计种子 9901–9999 在 `results/` 全部 manifest 和 doc 中是否被用过”执行。审计方法：(1) 解析 `results/p1-retrain-20260928/protocol-1000/dataset.json` 的 `train_seeds`/`val_seeds`/`episodes[].seed`，与目标集合 `{9901..9999}` 求交，结果为空。(2) 对 `results/` 全树 `*.json`/`*.jsonl` 用正则 `"seed":\s*99[0-9][1-9]|"seed":\s*99[1-9][0-9]` 搜索，唯一命中的历史占位种子是 9900（`results/p1a-20260923/dataset-v2-10k/test-00/`），不在 9901–9999 范围内。(3) 核对 `doc/RESEARCH_EXPERIMENTS.md`（D32审计正文）：dataset-v1 test=9000–9099，dataset-freshtest test=9100–9199（D28所用），dataset-v2-10k train=0–9599（含旧val8000–8099、旧test9000–9099/9100–9199）、val=9600–9899、test=9900（占位单回合，不作判据）。三处均未触及 9901–9999。**结论：种子 9901–9999 从未被用于任何采集、训练或评测，可登记为 P1 独立 test v1。**
@@ -204,86 +206,22 @@ Agent：Claude Sonnet 5 /ybc。按 ROADMAP §4 R0-2 与 v3 提示词“先审计
 
 **结果（约17:42）**：`wm/evaluate_prediction.py --split test` 对种子11/22/33三个action/no_action模型对分别跑完（99回合，59回合success）。一步预测：三个种子的action相对copy配对CI均为`[-0.088,-0.084]`附近（全负）、相对no_action配对CI均为`[-0.0069,-0.0056]`附近（全负）；五步预测同样三个种子相对copy、no_action的CI也全负（约`[-0.10,-0.091]`与`[-0.018,-0.013]`）。**R0-2 通过**（三种子一步、五步对两对照的配对CI上界均<0，五步按登记不要求也通过）。产物：`results/stage0-028-r02/prediction-test-{r1,s22,s33}/report.json`。这是在从未接触过的种子上独立复现的正结果，与D36单种子val上的初步正结果方向一致。
 
-
-## D47 — R0-3b 探索性失配探针（2026-09-28，STAGE0-028，exploratory）
-
-Agent：Claude Sonnet 5 /ybc。背景：R0-3 按 D45 判据不通过（15配置最大SR下降0.09，未达≥0.15）；收到跨会话协调指令 COORD-028（`doc/agent_logs/20260928-stage0-directive.md`，用户授权该会话协调），其只读复算与本任务`r03-analysis.json`一致，并建议在更强失配区间做探索性补充。**本条不修改、不替代 D45 判据，不作为 G0 R0-3 通过依据**，结果只供用户决定后续方向（备选方案B）参考。
-
-**配置（5组，超出 D45 原登记的增益{0.6–1.4}×延迟{0–2}范围）**：延迟{5,10}步@增益1.0；增益{1.6,1.8}@延迟0；增益1.4+延迟5。每配置20回合，种子10000–10019（D45同名义种子子集，配对比较），policy-100k，`--ik-mode fixed --ik-iterations 100 --policy-mode deterministic`。报告：SR、perfect-success、有IK失败回合比例、collision>0回合比例、命令-执行差均值、`primary_reason`分布，与名义（同20种子子集）配对episode-bootstrap 95%CI。
-
-**同时补充**：D45已登记的15配置全集，按 perfect-success（而非仅success）重算与名义的配对CI（`results/stage0-028-r03/r03-analysis-perfect.json`），作为诊断补充，不改变 D45 以 success 为主判据的既有判定（R0-3不通过）。是否改用 perfect-success 作主指标需用户另行决策（备选方案A），本条不预先采纳。
-
-
-## D48 — R0-3c 更强失配扫描登记（2026-09-28，STAGE0-028，用户确认执行）
-
-Agent：Claude Sonnet 5 /ybc。背景：G0首轮判定不通过后，用户经AskUserQuestion明确选择"都执行"COORD-028-2建议的R0-3c+R0-4b两批追加实验。R0-3b（D47，探索性，n=20）已提示更强失配下有显著信号，本条把范围扩大后按D45同等严格度正式重测。
-
-**配置**：增益{0.6,1.0,1.4,1.6,1.8} × 延迟{0,5,10} 共15组（名义1.0/0**重新跑**，不复用D45已有的`gain1.0_delay0`结果，因为这15组要用同一批同种子完整重跑以保证跨组配对一致）。规模：每配置100回合，种子10000–10099，policy-100k，`--ik-mode fixed --ik-iterations 100 --policy-mode deterministic`；同种子跨配置配对，与D45相同方法（`bootstrap_ci`，episode级，10000次重采样，种子固定为0）。
-
-**判据**：与D45相同——至少一个非名义配置SR相对名义下降≥0.15且配对CI上界<0；不因结果调整。诊断（次要）：perfect-success同款配对分析、有IK失败回合比例、collision>0回合比例、命令-执行差均值、`primary_reason`分布。
-
-**产出用途**：按结果为F1提供training随机化范围（中度掉点档，供S0–S4训练时随机采样使用）与留出测试档（更强/范围外档，供Stage1/2评测但不参与训练随机化）建议，写入Stage0日志，不在本条自行冻结为最终F1决定（F1仍需用户确认后正式登记）。
-
-**并发/资源纪律**（吸取此前两次事故教训）：总episode-worker并发≤72；每批启动前`free -g`确认无持续增长趋势；启动脚本沿用`doc/agent_logs/20260928-stage0-shard-eval.py`（固定迭代IK预算，并发只影响墙钟不影响正确性/确定性）。
-
-
-## D49 — R0-4b 在线适应机制比较登记（2026-09-28，STAGE0-028，用户确认执行）
-
-Agent：Claude Sonnet 5 /ybc。背景：R0-4（D45同批）显示当前"每k步全参数梯度更新"机制虽在7个条件下相对冻结统计显著更优，但挽回的残差仅占失配gap的0.57%~8.65%（多数<2%），效果量过小，S4很可能与S3（仅前瞻修正、无在线更新）区分不开。COORD-028-2建议在换用别的适应机制前先确认是否存在"实质挽回"的可能，避免Stage1开工后才发现S4本质等价于S3。用户已确认执行。
-
-**范围声明**：这是在**已训练WM checkpoint之上做离线机制探测**，不改SAC/奖励/终止、不改WM训练协议、不引入新checkpoint训练；代码放在`scripts/`而非`scripts/wm/`内（沿用`residual_probe.py`已确立的规避`code_identity()`的做法）。这是Stage0范围内的诊断性探测（回答"当前WM能否被某种在线机制实质纠偏"），不是Stage1/F1的机制选型决定——若某变体达标，仍需用户在F1阶段正式登记该机制后才能写入Stage1的S4实现；若不达标，直接支持备选方案D（重审"在线适应"这条设计假设）的证据强度上升。
-
-**数据**：复用R0-4已采的`gain1.0_delay0`（名义）与`gain1.4_delay0`（`results/stage0-028-r04/{gain1.0_delay0,gain1.4_delay0}/`）；新采`gain1.8_delay0`、`gain1.0_delay5`、`gain1.4_delay5` 各100回合，种子9600–9699，`p0_runner.py eval --save-observations --policy-mode stochastic --ik-mode fixed --ik-iterations 100`，policy-100k，与R0-4同协议（`doc/agent_logs/20260928-stage0-shard-eval.py`）。模型统一用`trainval-1000-r1`（seed11）action checkpoint，与R0-4一致，便于直接对比。
-
-**协议**：与R0-4相同的"先预测后更新，只在未用于更新的后续步评估，每回合reset，随机种子固定"（`residual_probe.py`的`episode_errors`已实现，min_step=k过滤已修复）。
-
-**变体**：
-- V0 冻结（对照，R0-4已有）；copy（对照，R0-4已有）。
-- V1 现有全参数梯度更新，取R0-4最佳lr=1e-5、k=1作参照（不重新扫描）。
-- V2 只更新输出层（`MLPDynamics.net[-1]`，含weight+bias）：lr∈{1e-3,1e-2,1e-1}×k∈{1,5}，共6组合。
-- V3 无梯度残差滑动平均修正：`pred_corrected = pred + ema_residual`，`ema_residual`在标准化特征空间逐维指数滑动平均更新（`ema = (1-α)*ema + α*(z_true_prev - pred_prev)`，用上一次实际观测到的残差，同样满足predict-then-update不作弊），α∈{0.05,0.2,0.5}；额外报告只作用于robot块（41维，map块保持冻结预测）的版本，共3+3=6组合。
-
-**指标**：挽回比例 = (冻结残差 − 变体残差) / (该条件冻结残差 − 名义条件冻结残差)，total及robot/map分块分别报告；变体−冻结的配对episode-bootstrap CI（同R0-4方法）。
-
-**判据（登记后不放宽）**：至少一个变体配置在≥2个强失配条件（从`gain1.4_delay0`、`gain1.8_delay0`、`gain1.4_delay5`中选）上挽回比例≥30%且配对CI上界<0；同时该变体在名义条件下"变体−冻结"配对差均值 ≤ 冻结名义残差的1%（不明显变差）。若无变体达标，如实报告并列出方向：残差摘要作为SAC/ψ输入、换失配类型、重审研究动机（备选方案C/D）。
-
-
-## D50 — FOLLOWUP-028 A 线：结构化低维适应判据预登记（2026-09-28，运行前）
-
-Agent：Claude Opus 5.5 /ybc（协调方，仅文档；实现交执行 Agent）。依据用户“两边都执行一下”与 [设计说明](agent_logs/20260928-followup-spec.md) §3。在 R0-4/R0-4b 已采 10 个条件（种子 9600–9699）上离线比较无梯度的低维适应：V4 增益标量（robot 块最小二乘，截断 [0,3]；另报 robot/map 各一标量）、V5 延迟选择（d∈{0,1,2,3,5,10}，只延迟底盘两维，初始取 0，残差 EMA α=0.2 选择）、V6（V5+V4），对照 V0 冻结。协议沿用 D49：先预测后更新、每回合重置、只在未用于更新的后续步评估、配对 episode-bootstrap。**通过判据（登记后不改）**：至少一个变体在 {gain1.4_delay0, gain1.8_delay0, gain1.4_delay5, gain1.0_delay5} 中 ≥2 个条件上挽回比例 ≥30% 且“变体−冻结”配对 CI 上界 <0，且名义条件下“变体−冻结”均值 ≤ 冻结名义残差的 1%。另报估计增益与真值的相关、所选延迟与真值一致率。解读边界：通过只说明低维辨识改善预测，不证明优于历史条件 SAC（S2）；延迟 5–10 步为压力档，非现实误差（LIT-MISMATCH-028）。
-
-## D51 — FOLLOWUP-028 B 线：IK 失败前瞻判据预登记（2026-09-28，运行前）
-
-Agent：同 D50；设计见 [设计说明](agent_logs/20260928-followup-spec.md) §4。**种子登记**：B1 用 R0-3/R0-3c 已有 10000–10099；B2 新采 1000–1999（确定性策略、名义条件，训练 1000–1699 / 验证 1700–1799 / 测试 1800–1999；当前世界模型仅用 0–999 训练，1000–1999 曾以随机策略采入 dataset-v2-10k 但未被当前模型使用）；B3 用 10000–10099。**B1 判据**：名义 `ik_limit` 失败种子在 8 个温和配置（增益∈[0.8,1.2]、延迟∈{0,1,2}，不含名义）中至少一次成功的比例 ≥0.30，且该比例减去“名义成功种子在同配置中至少一次失败”比例的 bootstrap 95% CI 下界 >0。**B2 判据**（测试集步级 AUROC，标签 H=5：fail[t..t+4] 中是否出现 IK 失败，仅在 fail[t−1]=0 的步评估；按测试回合 bootstrap 10000 次）：AUROC(C-wm)−AUROC(C-cur) ≥0.02 且 CI 下界 >0；AUROC(C-wm)−AUROC(C-hist) CI 下界 >0；AUROC(C-wm)−AUROC(C-geo) CI 下界 >0；三项全满足才通过。C-wm 的推演只用策略对预测特征的确定性动作，不得使用记录的未来动作。H=10 与数据效率曲线为次要报告。**B3**（探索性，不作通过依据）：六臂（none/wm/cur/hist/geo/random），风险超阈值时将末端参考速度维设为 −1；各分类器阈值在 B2 验证集上定为步级触发率 10%，random 臂触发概率取 wm 臂验证集触发率；看 B3 结果后不得调整。所有新行为默认关闭，关闭时输出逐字段不变。
-
-
-## D52 — G0 后续两线均不利，转入前瞻场景筛选（2026-09-29，SCREEN-028）
-
-Agent：Claude Opus 5.5 /ybc（协调方，仅文档）。依据 FOLLOWUP-028 核查（[日志](agent_logs/20260928-followup-pipeline.md)）：D50 不通过（结构化低维适应使预测变差）；D51-B1 不通过（失败/成功翻转比例无差别）；D51-B2 依点估计不通过（C-geo 0.979 ≥ C-wm 0.976，C-wm−C-cur 仅 +0.011，S4 超时未生成 CI）；B3 未运行且不补跑。结论：当前 simpleobstacle 设定下前瞻与在线适应均无空间。用户确认“按你推荐的方式走”：先对“感知延迟”（L 线）与“动态障碍”（D 线）做伤害测试 + 开卷上限测试，要求开卷信息明显优于历史信息，才进入方法实现。**决策规则（预登记）**：仅 L 通过 → 主线改为学习型世界模型感知延迟补偿；仅 D 通过 → 主线改为动态障碍前瞻（需 P1b）；两者都通过 → 取“开卷−历史”差距更大者为主线；都不通过 → 停止“闭环前瞻”论点，11-20 前由用户决定重新定位。最终由用户确认。ROADMAP 的 Stage1 暂停，待筛选结论后重写。设计见 [SCREEN 设计说明](agent_logs/20260929-screen-spec.md)。
-
-## D53 — SCREEN-028 L 线（感知延迟）判据预登记（2026-09-29，运行前）
-
-开关 `latency-v1`（默认关闭）：`--obs-latency-steps k`（完整观测延迟）、`--map-latency-steps k`（仅地图延迟）、`--obs-action-history k`（robot_state 追加最近 k 个已执行动作）；延迟只作用于策略输入，奖励/终止/碰撞/IK 用真实当前状态。**L1**：policy-100k 确定性，种子 10000–10099，配置 = 名义、全延迟 k∈{1,2,3,5}、仅地图 k∈{2,5}；判据：某配置 SR 相对名义下降 ≥0.15 且配对 CI 上界 <0；k≤3 达到为“现实档通过”，仅 k=5 为“压力档通过”。**L2**（仅 L1 通过时）：k_sel = 全延迟中最小通过 k，否则仅地图延迟中最小通过 k；训练 L-oracle（k=0）、L-stale（k_sel）、L-hist（k_sel + 最近 k_sel 个动作）各 2 个种子（11/22）×100k 步，预算末端 checkpoint，在各自输入条件下评测种子 10000–10099；判据：SR(L-oracle)−SR(L-hist) ≥0.10 且“训练种子×回合”分层 bootstrap 95% CI 下界 >0，并且 SR(L-oracle)−SR(L-stale) 的 CI 下界 >0。**L3**（探索性，不作通过依据）：policy-100k 在 k_sel（L1 不通过则 k=3）下比较 stale 与 wm-comp（世界模型用已执行动作把延迟特征推演到当前，送入 SAC 动作头），报告 SR 恢复比例与配对 CI。
-
-## D54 — SCREEN-028 D 线（动态障碍）判据预登记（2026-09-29，运行前）
-
-使用现有 `dynObstacle` 任务；开关 `dynmap-v1`（默认关闭）：`--dyn-freeze`（评测时障碍不动）、`--dyn-map-mode {current,future,past}`（策略输入地图中另叠加障碍 5 步后/前的位置，并集单通道；future 须复制障碍对象与随机数状态前推，不得改变真实障碍序列；碰撞与奖励用真实当前位置）。训练 D-std（current）、D-oracle（future）、D-hist（past）各 2 个种子（11/22）×100k 步，评测种子 10000–10099（本任务首次使用）。**D54-harm**：SR(D-std, 冻结)−SR(D-std, 移动) ≥0.15 且 CI 下界 >0。**D54-headroom**：SR(D-oracle)−SR(D-hist) ≥0.10 且 CI 下界 >0，并且 SR(D-oracle)−SR(D-std) 的 CI 下界 >0。两者都满足才通过。D-std 移动条件 SR <0.2 时结论标注“任务过难，谨慎解读”。D0 可行性不通过则 D 线终止并报告原因。
-
-
-## D56 — 修订 D54：动态障碍线前瞻/历史时长由 5 步改为 20 步（2026-09-29，SCREEN-028，运行前）
-
-Agent：Claude Opus 5.5 /ybc（协调方），用户同意（“我同意”）。依据 SCREEN-028 执行 Agent 的早期实测（[日志](agent_logs/20260929-screen-pipeline.md)“早期实测发现”第 4 条）：障碍直径 0.3 m、速度 0.10–0.15 m/s，5 步（0.5 s）内仅移动 5–7.5 cm（约 2–3 像素），D54 登记的 `future`/`past` 地图信息量过小，可能使 D 线因开卷过弱而出现假阴性。**修订**：`--dyn-map-mode future/past` 叠加的障碍位置改为 **20 步（2.0 s）后/前**（2 s 内位移约 20–30 cm，约一个障碍直径），`future` 与 `past` 保持对称；其余 D54 内容（训练臂、种子、D54-harm 与 D54-headroom 判据及阈值）不变。前推 20 步时障碍可能到达目标并重新采样目标，须用复制的障碍对象与随机数状态前推（执行 Agent 已确认 deepcopy 共享 memo 可与真实未来一致且不触碰真实 RNG），并以测试证明。本修订发生在任何 D 线数据产生之前，属于运行前预登记修订，不是看结果后调整。编号说明：D55 预留给 SCREEN-028 执行 Agent 的 `--replay-compact-maps` 决策。
-
 ## D55 — SCREEN-028 实现决策：replay 地图紧凑存储、观测对齐、评测 checkpoint 导出（2026-09-29，运行前）
 
 Agent：Claude Sonnet 5.5 /ybc（SCREEN-028 执行 Agent）。三条只影响实现方式、不改 D52–D54/D56 判据的决策：(1) **`--replay-compact-maps`（默认关闭，SCREEN 全部训练开启）**：replay 里的局部地图以 bool 存储、采样时还原 float32。地图严格是 0/1，采样出的 batch 与 float32 存储逐位相同（单测 `test_replay_compact_maps_samples_bit_identical_to_float32_storage`），只是把进程内 replay 与 checkpoint 缩小 4 倍。理由：policy-100k 训练的单个 checkpoint 11.7 GB，12 个进程并行常驻约 140 GB 再加保存时 pickle 缓冲的瞬时峰值，会逼近 251 GiB，且用户要求不靠加内存/swap 解决；未改 batch、replay 容量与更新规则。写入训练 protocol（`replay_compact_maps`），关闭时 protocol 与之前一致。(2) **观测对齐**：`CombinedEnv.step` 先取局部地图和做碰撞检查、后移动障碍，故策略在第 k 步看到的障碍位置是 P_{k−1}（重置时为 P_0）；dynmap-v1 的“当前”定义为观测里实际出现的位置，future/past 为 P_{c±h}（c = max(k−1,0)，h = 20，D56）。以“h=0 时叠加图逐位等于原观测”的环境级测试验证对齐。(3) **评测 checkpoint 导出**：训练 checkpoint 含 replay，64 个评测 worker 各加载一份会耗尽内存，故训练结束后导出仅含策略权重的 v2 checkpoint（与 `policy-100k.pt` 同布局，`derived_from` 记录源文件与 SHA-256），评测用它；预算末端 checkpoint（100k 步），不挑最优。另：`--obs-latency-steps` 与 `--map-latency-steps` 同时给出时，robot 延迟 k、地图延迟 max(k, m)（流水线不组合使用）。
 
-
-## D57 — CEIL-028：SAC 上限摸底判据预登记（2026-09-29，运行前）
-
-Agent：Claude Opus 5.5 /ybc（协调方，仅文档），用户确认（“那先做一个实验，看看能不能涨”“确认”）；SCREEN-028 已按用户要求停止（L1 不通过，D 线无结果）。设计见 [CEIL 设计说明](agent_logs/20260929-ceil-spec.md)。**依据**：`sac.py:45` 学习率按总预算指数衰减，policy-100k 在 10 万步已衰减到底，且续训协议记录 `total_steps`，故不续训，改为从零训练预算 300000 步、训练种子 11/22、其余配置同 policy-100k（可用 D55 `--replay-compact-maps`），每 5 万步存检查点并在种子 10000–10099 上确定性评测 100 回合（fixed100）；主结论只用 300k 预算末端检查点。简单策略（`--policy-override`，默认关闭）：random（均匀随机，回合种子派生）、mean（policy-100k 在 R0-3c 名义 100 回合动作的逐维均值）、slow-ee（policy-100k，第 0 维固定为 −1，探索性）。**判据**：C-learn = 两个 300k 末端检查点 SR 相对 policy-100k（0.70，同评测种子）提升 ≥0.10 且“训练种子×回合”分层 bootstrap 95% CI 下界 >0；C-policy = SR(policy-100k) − max(SR(random), SR(mean)) ≥ 0.30。**下一步规则**：两者通过 → 世界模型帮 SAC 学习（先做 IK 可行性辅助预测，比较学习曲线）；C-learn 不通过而 C-policy 通过 → 换任务（door/drawer 等）并先做同样摸底；两者都不通过 → 换任务；C-learn 通过而 C-policy 不通过 → 核查实验。最终方向由用户确认。
-
-
 ## D58 — 清理无用数据与 policy-100k 训练过程检查点（2026-09-29，CLEAN-028）
 
 Agent：Claude Opus 5.5 /ybc（协调方），用户确认（“AB删掉吧，我们不是要重新训练吗”）。删除：冒烟/探测输出（screen-028-smoke、followup-028-smoke、screen-028-probe）、SCREEN-028 叫停且无检查点的 D 线训练目录、P1-FIX 资源检查的可再生特征缓存（6 个 `check-*/cache`），以及 `p1a-20260923/sac-screen-100k/` 下 11 个含经验池的完整训练检查点（latest、step-*、validation-*.pt）。这修订了 AGENTS §1 “保留旧 checkpoint” 在该目录上的适用：运行与评测使用的 `policy-100k.pt`（sha256 e341262c…）完整保留，因此已验证基线仍可恢复；失去的只是从这些中间状态精确续训的能力（D57 已决定不续训）。清单与大小见 [清理记录](agent_logs/20260929-data-cleanup.md)。results/ 123 GiB → 20 GiB。
+
+## D59 — 转入非全局模式；全流程重写为 PH0–PH8 统一编号；分支收拢到 main（2026-09-29，REFLOW-029）
+
+Agent：Claude Opus 5.5 /ybc。用户：“之前SAC拿到的是全局地图，然后对于整个路线的规划导致控制误差难以起作用，世界模型也就无法接入，这里我们要调整为非全局模式的地图，一步一步的走……重新设计这里的流程和对比”“整理出一份完整的新流程”“测试无用的分支就删掉”“统一整个项目的流程阶段名的顺序”。(1) **依据**：代码核对（[REFLOW 日志](agent_logs/20260929-reflow.md)）确认 `PointToPointPlanner` 用整张真值地图生成 A* 代价并每步重跑（`eeplanner.py:579,617,651`），路径高度也读全图（`eeplanner.py:629`）；结合阶段2（原 Stage0/FOLLOWUP/SCREEN/CEIL）全部负结果，主线改为非全局模式：规划器只用至今观测到的地图。(2) **统一命名**：阶段按执行顺序编号 PH0–PH8（PH0 基线环境、PH1 世界模型离线预测、PH2 全局模式闭环探索〔结束〕、PH3 非全局伤害测试、PH4 非全局 SAC 重训与上限摸底、PH5 世界模型重训+方法冻结、PH6 闭环筛查、PH7 正式验证、PH8 写作），实验记 N.k，检查点记 GN，对比组改为 `B-sac/B-cap/B-hist/M-look/M-full`，任务 ID 记 `PHN-主题`，分支记 `phN-主题`。Stage0–3、R0-x、S0–S4、F1、G0–G2 及各流水线内部的 A/B、L/D、E1/E2 线名停止使用，对照表见 ROADMAP §12。P0–P5 只作模块文档文件名。(3) **取代**：D40 的 Stage 结构、D38 中 S0–S4 的命名与“P2+简化P4 为首个验收”的固定安排（改由 G4 决定主方法是 `M-full` 还是 `M-look`）；D39 的注入失配保留为 PH4.2 与 PH6/PH7 的条件，Gazebo 对齐（原 R0-5）移入 PH7。PH4 及以后的判据在 ROADMAP 中为草案，进入该阶段、产生数据前由用户确认后另行登记。(4) **分支**：`main`、`screen-028`、`ceil-028` 为同一条直线历史；本地 `main` 快进到 `ceil-028` 顶端（92778d0），删除已完全并入的 `screen-028`、`ceil-028`；不 push（由用户决定）。此后只有 `main` 长期存在，任务分支用后即删（ROADMAP §10）。本条不改任何算法、环境或评测语义。
+
+## D60 — PH3-OBSMAP 非全局伤害测试判据预登记（2026-09-29，运行前）
+
+Agent：Claude Opus 5.5 /ybc。规格采自协调方 OBSMAP 指令（[原文](agent_logs/20260929-obsmap-directive.md)，该指令原拟编号 D59，因 D59 已用于流程重写而顺延为 D60，内容不变）。**开关 `observed-map-v1`（默认关闭，关闭时输出逐字段不变）**：规划器 A* 代价与路径高度插值只使用“已观测地图”——每步以底盘为中心、朝前 270° 视角、半径 r 射线投射写入真值，被遮挡区域不写入，未观测区域按空地处理，回合开始只含初始位置一次扫描；SAC 局部地图、碰撞、IK、奖励、终止保持真值。**配置**：r ∈ {3, 5, 10} m + 名义全图；policy-100k 确定性，`--ik-mode fixed --ik-iterations 100`，种子 10000–10099 同种子配对；名义须复现 R0-3c 名义 SR 0.70。**判据**：某个 r 下 SR 相对名义下降 ≥0.15，且配对 episode-bootstrap 95% CI（10000 次重采样，种子 0）上界 <0，为“伤害通过”。**必报**：perfect-success、IK 失败/碰撞回合比例、失败原因分布；改道统计——相邻两步完整规划路线最大偏离 >0.3 m 记一次改道，报告每回合改道次数、改道后 20 步内 IK 失败/碰撞率。**G3 后续**：通过则 PH4 取 r_sel = 满足判据的最大 r；不通过则停下与用户讨论（SAC 局部地图也遮挡、更小 r、随机布局等需新登记）。登记后不因结果修改；实现细节（遮挡高度规则、增量更新）不属于判据，但须在任务日志写明依据。
+
+## D61 — DECISIONS 整理：只保留现行条目（2026-09-29，REFLOW-029）
+
+Agent：Claude Opus 5.5 /ybc。用户：“决策本来就删除了一些，你可以都整理一下”。延续 DOCS-028 的做法，把被取代的 D35、D38、D40、D43、D44 与 PH2 已结束的实验判据 D47–D54、D56、D57 原文移入 [archive/20260929-reflow/DECISIONS-archived.md](archive/20260929-reflow/DECISIONS-archived.md)（仅把相对链接改为从归档目录出发），本文件顶部新增“现行条目速查”与“已归档条目”索引。保留的条目正文一字不改，编号不复用。今后规则：新条目追加到文末；某条被新决策取代或其所属阶段结束时，由做出新决策的 Agent 在同一次提交中移入当期归档并更新索引。AGENTS §3 的“只追加”相应改为“新条目只追加、编号不复用；被取代的条目移入 archive”。不改任何算法、环境或评测语义。
