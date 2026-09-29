@@ -309,3 +309,42 @@ def test_find_step_checkpoints_takes_the_newest_complete_file_per_step(tmp_path)
     (tmp_path / 'a0' / 'latest.pt').write_bytes(b'x')
     found = pp.find_step_checkpoints(tmp_path)
     assert sorted(found) == [20000, 40000] and found[20000].parent.name == 'a1'
+
+
+# ---- ROS masters (measured bottleneck: one rosmaster saturated by ~47 processes doing costmap inflations) --------------
+
+def test_every_training_job_has_its_own_ros_master_and_evaluation_is_spread_over_four_more():
+    c = cfg()
+    c.long_steps, c.long_save_interval, c.long_timeout_hours, c.train_timeout_hours = 300000, 50000, 72.0, 24.0
+    jobs = pp.all_jobs(c)
+    ports = [int(j['env']['ROS_MASTER_URI'].rsplit(':', 1)[1]) for j in jobs]
+    assert ports == list(range(pp.TRAIN_MASTER_BASE, pp.TRAIN_MASTER_BASE + 7)) and all(j['env']['ROS_IP'] == '127.0.0.1' for j in jobs)
+    assert pp.ros_ports() == ports + [pp.EVAL_MASTER_BASE + i for i in range(pp.EVAL_MASTERS)] and len(set(pp.ros_ports())) == 11
+    assert not set(ports) & {11311} and not set(pp.ros_ports()) & {11311}                        # never the shared default master
+    used = {pp.eval_master_port(s) for s in SEEDS}
+    assert used == {pp.EVAL_MASTER_BASE + i for i in range(pp.EVAL_MASTERS)}
+    env = pp.worker_env(cfg(), 10003)
+    assert env['ROS_MASTER_URI'] == 'http://127.0.0.1:%d' % (pp.EVAL_MASTER_BASE + 10003 % pp.EVAL_MASTERS) and env['P0_TASK_ID'] == 'PH4-1'
+    assert env['CUDA_VISIBLE_DEVICES'] == str([0, 1, 2, 3][10003 % 4])                            # the original GPU mapping is kept
+    assert pp.worker_env(cfg(), 10003) == env                                                    # deterministic
+
+
+def test_training_job_env_is_merged_into_the_training_process_environment(monkeypatch, tmp_path):
+    import screen_pipeline as sp
+    captured = {}
+
+    class Boom(Exception):
+        pass
+
+    def fake_popen(cmd, **kw):
+        captured['env'] = kw['env']
+        raise Boom()
+    monkeypatch.setattr(sp.subprocess, 'Popen', fake_popen)
+    monkeypatch.setattr(sp, 'wait_for_memory', lambda *a, **k: None)
+    c = cfg()
+    c.max_attempts, c.train_timeout_hours = 1, 1.0
+    job = pp.train_jobs(c)[0]
+    status = SimpleNamespace(update=lambda *a, **k: None)
+    with pytest.raises(Boom):
+        sp.run_training_job(c, job, tmp_path, sp.SlotPool(4), status, 'S1', {}, 1e18)
+    assert captured['env']['ROS_MASTER_URI'] == 'http://127.0.0.1:%d' % pp.TRAIN_MASTER_BASE and captured['env']['CUDA_VISIBLE_DEVICES'] == '0'

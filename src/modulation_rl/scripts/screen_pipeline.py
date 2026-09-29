@@ -305,6 +305,7 @@ def run_training_job(cfg, job, root, pool, status, stage_key, jobs_state, deadli
             wait_for_memory(MIN_FREE_START_GB)
             env = dict(os.environ, P0_TASK_ID=getattr(cfg, 'task_id', 'SCREEN-028'), P0_AGENT='Claude Sonnet 5.5 /ybc',
                        CUDA_VISIBLE_DEVICES=str(job['gpu']))
+            env.update(job.get('env') or {})  # PH4.1: a private ROS master per training job (default jobs carry no env)
             logf = open(str(job_dir / ('a%d.log' % attempt)), 'w')
             proc = subprocess.Popen(train_command(cfg, job, out, resume), stdout=logf, stderr=subprocess.STDOUT,
                                     env=env, cwd=str(SCRIPTS_DIR))

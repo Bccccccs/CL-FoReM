@@ -18,6 +18,12 @@ reused; DONE markers skip finished jobs. Status: <output-root>/status.json.
   S5 analysis         PH3 (D60, diagnostic) as soon as S2 is done; PH4.1 interim report (D62, 100k runs) when those are evaluated;
                       final report (D62 + D64) when the long runs are evaluated too; reports + analysis.json
 
+ROS masters: every training job gets its own analytical ROS stack (rosmaster + move_group, ports TRAIN_MASTER_BASE+i) and the
+evaluation workers are spread over EVAL_MASTERS further stacks (by seed). Reason (measured 2026-09-29): non-global planning
+recomputes the planner weights through three ROS-costmap inflations per recompute, each of which talks to the master; 47
+processes on the single default master saturated it (rosmaster at 100% CPU) and slowed training ~4x. The stacks are started
+(if not alive) by the pipeline as detached processes and are identical to the default one (verified: same trajectory hashes).
+
 Resources (enforced in code, one shared slot pool of --max-workers, default 47 = 7 training + <=40 evaluation workers so
 training keeps priority): a new batch starts only with >=60 GiB MemAvailable and no new process starts below 40 GiB.
 """
@@ -57,6 +63,31 @@ PH3_CONFIGS = [('nominal', dict(obsmap_log_reroutes=True)), ('r10', dict(obsmap_
 RANDOM_CONFIGS = [('random-r3', dict(policy_override='random', obsmap_radius=3.0)),
                   ('random-r5', dict(policy_override='random', obsmap_radius=5.0))]
 
+TRAIN_MASTER_BASE = 11421   # one master per training job (7 jobs)
+EVAL_MASTER_BASE, EVAL_MASTERS = 11431, 4
+ROS_IP = '127.0.0.1'
+
+
+def master_env(port):
+    return {'ROS_MASTER_URI': 'http://%s:%d' % (ROS_IP, port), 'ROS_IP': ROS_IP}
+
+
+def eval_master_port(seed):
+    return EVAL_MASTER_BASE + seed % EVAL_MASTERS
+
+
+_orig_worker_env = sp.worker_env
+
+
+def worker_env(cfg, seed):
+    """screen_pipeline.worker_env + the ROS master of this evaluation seed (spread over EVAL_MASTERS stacks)."""
+    env = _orig_worker_env(cfg, seed)
+    env.update(master_env(eval_master_port(seed)))
+    return env
+
+
+sp.worker_env = worker_env  # run_eval_arms looks the function up in its own module at call time
+
 _orig_train_command = sp.train_command
 
 
@@ -74,13 +105,54 @@ def log(*args):
 
 
 def train_jobs(cfg):
-    return [dict(name=name, task='simpleobstacle', seed=seed, flags=dict(flags), gpu=cfg.gpus[i % len(cfg.gpus)])
+    return [dict(name=name, task='simpleobstacle', seed=seed, flags=dict(flags), gpu=cfg.gpus[i % len(cfg.gpus)],
+                 env=master_env(TRAIN_MASTER_BASE + i))
             for i, (name, seed, flags) in enumerate(JOB_SPECS)]
 
 
 def long_jobs(cfg):
-    return [dict(name=name, task='simpleobstacle', seed=seed, flags=dict(flags), gpu=cfg.gpus[(len(JOB_SPECS) + i) % len(cfg.gpus)])
+    return [dict(name=name, task='simpleobstacle', seed=seed, flags=dict(flags), gpu=cfg.gpus[(len(JOB_SPECS) + i) % len(cfg.gpus)],
+                 env=master_env(TRAIN_MASTER_BASE + len(JOB_SPECS) + i))
             for i, (name, seed, flags) in enumerate(LONG_SPECS)]
+
+
+def ros_ports():
+    return [TRAIN_MASTER_BASE + i for i in range(len(JOB_SPECS) + len(LONG_SPECS))] + [EVAL_MASTER_BASE + i for i in range(EVAL_MASTERS)]
+
+
+def stack_alive(port):
+    import os
+    import subprocess
+    env = dict(os.environ, **master_env(port))
+    try:
+        out = subprocess.run(['rosnode', 'list'], env=env, capture_output=True, text=True, timeout=15).stdout
+    except Exception:
+        return False
+    return '/move_group' in out
+
+
+def ensure_ros_stacks(root, ports, wait_s=180):
+    """Start (detached, surviving a pipeline restart) the analytical stacks that are not alive and wait until move_group is up."""
+    import os
+    import subprocess
+    logdir = Path(root) / 'ros-stacks'
+    logdir.mkdir(parents=True, exist_ok=True)
+    started = []
+    for port in ports:
+        if not stack_alive(port):
+            logf = open(str(logdir / ('ros-%d.log' % port)), 'a')
+            subprocess.Popen(['roslaunch', 'modulation_rl', 'n2m2_husky_analytical.launch', 'gui:=false'],
+                             env=dict(os.environ, **master_env(port)), stdout=logf, stderr=subprocess.STDOUT, start_new_session=True)
+            started.append(port)
+    t0 = time.monotonic()
+    pending = list(ports)
+    while pending:
+        pending = [p for p in pending if not stack_alive(p)]
+        if pending and time.monotonic() - t0 > wait_s:
+            raise RuntimeError('ROS stacks not up after %ds: %s' % (wait_s, pending))
+        if pending:
+            time.sleep(3)
+    return started
 
 
 def all_jobs(cfg):
@@ -117,7 +189,9 @@ def s0_preflight(cfg, root, status):
     d = root / 's0-preflight'
     d.mkdir(parents=True, exist_ok=True)
     status.update('S0', state='running', started=now())
-    m = dict(checked=now(), available_memory_gb=available_memory_gb(), disk_free_gb=_disk_free_gb(root), gpu=_gpu_status(),
+    started_stacks = ensure_ros_stacks(root, ros_ports())
+    m = dict(checked=now(), ros_stacks=dict(train_base=TRAIN_MASTER_BASE, eval_base=EVAL_MASTER_BASE, eval_masters=EVAL_MASTERS,
+                                            started_now=started_stacks), available_memory_gb=available_memory_gb(), disk_free_gb=_disk_free_gb(root), gpu=_gpu_status(),
              analytical_running=_ensure_analytical_running(), git=sp._git_status(), policy_sha256=p0_runner.sha(cfg.policy),
              baseline_dir=cfg.baseline_dir, eval_seeds=[cfg.eval_seeds[0], cfg.eval_seeds[-1]], max_workers=cfg.max_workers, gpus=cfg.gpus,
              train_commands={j['name']: train_command(job_cfg(cfg, j['name']), j, root / 'train' / j['name'] / 'a0') for j in all_jobs(cfg)},
@@ -382,6 +456,8 @@ def main(argv=None):
         else:
             status.update('S0', state='done (resumed)')
 
+    if wanted is None or 'S0' in wanted:
+        ensure_ros_stacks(root, ros_ports())   # no-op when alive; after a restart/reboot the detached stacks must be back
     train_finished = threading.Event()      # both training stages ended
     training_ended = {'S1': threading.Event(), 'S1L': threading.Event()}
     main_evaluated = threading.Event()      # the five 100k policies are evaluated (or failed)
