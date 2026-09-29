@@ -9,7 +9,7 @@
 | 执行计划 | [ROADMAP](ROADMAP.md)（唯一） |
 | 已完成 | PH0 基线环境（analytical）、PH1 世界模型离线预测 |
 | 已结束 | PH2 全局模式闭环探索：负结果（原 Stage0/FOLLOWUP/SCREEN/CEIL），规划器全知是主因（D59） |
-| **当前阶段** | **PH3 非全局伤害测试**（PH3-OBSMAP）：规格与判据已登记（D60），**待用户确认后实现并运行** |
+| **当前阶段** | **PH3 非全局伤害测试**（PH3-OBSMAP）：判据 D60；用户已确认开始，Sonnet 5.5 子 Agent 实现与运行中 |
 | 下一检查点 | G3（某 r 下 SR 降 ≥0.15 且 CI 上界 <0）→ PH4 |
 | 分支 | 只有 `main`；任务分支 `phN-主题` 用后即删（ROADMAP §10） |
 | 投稿 | IJCAI 2027（D37）；PH6 最迟 11-20 决定去留 |
@@ -19,7 +19,7 @@
 | ID | 阶段 | Agent | 状态 | 范围 | 记录 |
 |---|---|---|---|---|---|
 | REFLOW-029 | 流程重写（跨阶段） | Claude Opus 5.5 /ybc | review | 2026-09-29 约15:10起；非全局模式转向、PH0–PH8 统一命名、ROADMAP 重写、D59/D60、分支收拢到 main；仅文档与分支，不改代码/不跑实验 | [日志](agent_logs/20260929-reflow.md) |
-| PH3-OBSMAP | PH3 | 待定（协调方 [指令](agent_logs/20260929-obsmap-directive.md) 原指派本会话） | planned | `observed-map-v1` 开关（只改规划器地图）+ policy-100k 伤害测试 r∈{3,5,10}；D60；分支 `ph3-obsmap`；待用户确认开工 | 开工时建 `agent_logs/20260929-ph3-obsmap.md` |
+| PH3-OBSMAP | PH3 | 设计：Claude Opus 5.5 /ybc；实现与运行：Claude Sonnet 5.5 子 Agent | active | 2026-09-29 约16:25起；`observed-map-v1` 开关（只改规划器地图）+ policy-100k 伤害测试 r∈{3,5,10}+名义；D60；分支 `ph3-obsmap` | [日志](agent_logs/20260929-ph3-obsmap.md) / [设计](agent_logs/20260929-ph3-obsmap-spec.md) |
 
 以下为 D59 之前的任务行（原编号），内容不改。
 

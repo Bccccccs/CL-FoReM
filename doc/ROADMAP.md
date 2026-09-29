@@ -206,4 +206,4 @@ PH0 基线环境 ✔ ─ PH1 世界模型离线预测 ✔ ─ PH2 全局模式�
 
 ## 13. 当前位置（2026-09-29 约15:40）
 
-PH0、PH1 完成；PH2 结束（负结果）。**下一步 PH3-OBSMAP**：规格与判据已登记（D60），等用户确认后在 `ph3-obsmap` 分支实现 `observed-map-v1` 并运行伤害测试。仓库只剩 `main` 分支。
+PH0、PH1 完成；PH2 结束（负结果）。**PH3-OBSMAP 进行中**（用户 16:15 确认）：判据 D60，[设计说明](agent_logs/20260929-ph3-obsmap-spec.md)，Sonnet 5.5 子 Agent 在 `ph3-obsmap` 分支实现 `observed-map-v1` 并运行伤害测试。
