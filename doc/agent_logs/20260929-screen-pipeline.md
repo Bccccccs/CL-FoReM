@@ -29,12 +29,20 @@
 
 ## 进度记录
 
-（随实现补充）
+- 2026-09-29T10:35+08:00 收到协调方会话（“项目文档阅读”）跨会话消息：D 线 future/past 时长 5 步 → **20 步（2.0 s）**，用户已同意，已写入 DECISIONS **D56** 与设计说明 §1/§4；核对磁盘上 D56 与 spec 修改内容与消息一致。**已采用 D56**：`DYN_HORIZON=20`，`--dyn-map-horizon` 默认 20；测试改为 20 步并覆盖前推期间重采样目标；past 保留最近 20 步位置（历史列表按时间索引）。`--replay-compact-maps` 决策登记为 **D55**（保留 D56 未覆盖）。
+- 10:15–10:45 已实现并通过单测（容器内）：`policy_input.py`（延迟线、动作历史、future/past/freeze、outermost wrapper）、`latency_comp.py`（L3）、`screen_stats.py`（向量化分层 bootstrap，点估计先行）、`screen_analysis.py`、`screen_pipeline.py`；`p0_runner.py` 新增默认关闭开关 `--obs-latency-steps/--map-latency-steps/--obs-action-history/--dyn-map-mode/--dyn-map-horizon/--dyn-freeze/--latency-wm-comp/--replay-compact-maps`；`replay_memory.py` 增加 `compact_maps`。新增 3 个测试文件共 44 项（含环境级：future/past 不改变真实障碍位置、RNG 序列、奖励与当前地图；h=0 叠加图逐位等于原观测；freeze；latency wrapper 不改奖励）全部通过。
 
 ## 改动与验证
 
 | 时间 | 文件/命令 | 预期 | 实际结果/退出码 | 证据路径 |
 |---|---|---|---|---|
+| 10:45 | 容器内 `python3 -m pytest tests/ -q`（含新增 `test_policy_input.py` 25、`test_latency_comp.py` 5、`test_screen_stats.py` 13、`test_screen_pipeline.py` 13、共 56 项+参数化） | 全部通过 | **189 passed**（0 failed；此前基线 132） | `results/screen-028-probe/full-tests-1.log` |
+| 10:50 | 默认关闭回归：`results/screen-028-regression/launch.sh`；基线=`f7a6427` 的 `p0_runner.py`（临时副本，已删除，未提交）；policy-100k、`--ik-mode fixed --ik-iterations 100`、确定性、`--device cpu`；simpleobstacle 种子 10000–10019 三组（改动前 / 新代码无开关 / 新代码显式默认值）、dynobstacle 种子 10000–10009 两组（改动前 / 新代码无开关） | 除计时字段外 episodes.jsonl 全部键与值、trajectory npz、tail.json 逐位一致 | `compare.py`（容器内）：三项比较 mismatches=0，**ALL PASS** | `results/screen-028-regression/{baseline,no-args,explicit-defaults,dyn-baseline,dyn-no-args}/`，`compare.py` |
+| 10:17–10:35 | 冒烟：`screen_pipeline.py --output-root results/screen-028-smoke --train-steps 2000 --save-interval 1000 --random-steps 200 --eval-seeds 10000:10004 --d0-steps 2000 --smoke-force-l1 full:3 --train-timeout-hours 2`（12 训练 + D0 + L1 七配置 + L3 + D2/L2 评测 + 报告） | 全流程跑通并生成报告 | S0–S8 全部 done（约 18 min）；28 个评测臂共约 120 回合、0 异常；12 个训练均 2000 步完成并导出仅策略 checkpoint；报告生成。冒烟结论（SR 全 0 等）无意义，L1 结论被 `--smoke-force-l1` 强制覆盖，已在报告标注 | `results/screen-028-smoke/`（`report.md`、`status.json`、`pipeline.log`） |
+
+**冒烟实测的训练吞吐（12 进程并行、batch 256）**：`dynobstacle` 约 4.1–4.4 步/s（约 0.24 s/步，L-线仅 20 s⁻¹ 量级但早期回合极短，不代表 100k 步全程），据此 `dynobstacle` 100k 步需约 6.6 h，超过设计说明的 6 h 训练超时；故 `--train-timeout-hours` 默认改为 10（超时前可续训，判据不变）。这是运行参数，不是判据；如实记录。
+
+**冒烟发现并已修复**：容器内 git “dubious ownership” 使报告与预检 manifest 里 git 信息为空 → `screen_pipeline._git_status` 用私有 HOME 的 `.gitconfig`（容器 git 版本旧，无 `GIT_CONFIG_GLOBAL`）。
 
 ## 长任务
 

@@ -268,3 +268,12 @@ Agent：Claude Opus 5.5 /ybc（协调方，仅文档）。依据 FOLLOWUP-028 �
 ## D54 — SCREEN-028 D 线（动态障碍）判据预登记（2026-09-29，运行前）
 
 使用现有 `dynObstacle` 任务；开关 `dynmap-v1`（默认关闭）：`--dyn-freeze`（评测时障碍不动）、`--dyn-map-mode {current,future,past}`（策略输入地图中另叠加障碍 5 步后/前的位置，并集单通道；future 须复制障碍对象与随机数状态前推，不得改变真实障碍序列；碰撞与奖励用真实当前位置）。训练 D-std（current）、D-oracle（future）、D-hist（past）各 2 个种子（11/22）×100k 步，评测种子 10000–10099（本任务首次使用）。**D54-harm**：SR(D-std, 冻结)−SR(D-std, 移动) ≥0.15 且 CI 下界 >0。**D54-headroom**：SR(D-oracle)−SR(D-hist) ≥0.10 且 CI 下界 >0，并且 SR(D-oracle)−SR(D-std) 的 CI 下界 >0。两者都满足才通过。D-std 移动条件 SR <0.2 时结论标注“任务过难，谨慎解读”。D0 可行性不通过则 D 线终止并报告原因。
+
+
+## D56 — 修订 D54：动态障碍线前瞻/历史时长由 5 步改为 20 步（2026-09-29，SCREEN-028，运行前）
+
+Agent：Claude Opus 5.5 /ybc（协调方），用户同意（“我同意”）。依据 SCREEN-028 执行 Agent 的早期实测（[日志](agent_logs/20260929-screen-pipeline.md)“早期实测发现”第 4 条）：障碍直径 0.3 m、速度 0.10–0.15 m/s，5 步（0.5 s）内仅移动 5–7.5 cm（约 2–3 像素），D54 登记的 `future`/`past` 地图信息量过小，可能使 D 线因开卷过弱而出现假阴性。**修订**：`--dyn-map-mode future/past` 叠加的障碍位置改为 **20 步（2.0 s）后/前**（2 s 内位移约 20–30 cm，约一个障碍直径），`future` 与 `past` 保持对称；其余 D54 内容（训练臂、种子、D54-harm 与 D54-headroom 判据及阈值）不变。前推 20 步时障碍可能到达目标并重新采样目标，须用复制的障碍对象与随机数状态前推（执行 Agent 已确认 deepcopy 共享 memo 可与真实未来一致且不触碰真实 RNG），并以测试证明。本修订发生在任何 D 线数据产生之前，属于运行前预登记修订，不是看结果后调整。编号说明：D55 预留给 SCREEN-028 执行 Agent 的 `--replay-compact-maps` 决策。
+
+## D55 — SCREEN-028 实现决策：replay 地图紧凑存储、观测对齐、评测 checkpoint 导出（2026-09-29，运行前）
+
+Agent：Claude Sonnet 5.5 /ybc（SCREEN-028 执行 Agent）。三条只影响实现方式、不改 D52–D54/D56 判据的决策：(1) **`--replay-compact-maps`（默认关闭，SCREEN 全部训练开启）**：replay 里的局部地图以 bool 存储、采样时还原 float32。地图严格是 0/1，采样出的 batch 与 float32 存储逐位相同（单测 `test_replay_compact_maps_samples_bit_identical_to_float32_storage`），只是把进程内 replay 与 checkpoint 缩小 4 倍。理由：policy-100k 训练的单个 checkpoint 11.7 GB，12 个进程并行常驻约 140 GB 再加保存时 pickle 缓冲的瞬时峰值，会逼近 251 GiB，且用户要求不靠加内存/swap 解决；未改 batch、replay 容量与更新规则。写入训练 protocol（`replay_compact_maps`），关闭时 protocol 与之前一致。(2) **观测对齐**：`CombinedEnv.step` 先取局部地图和做碰撞检查、后移动障碍，故策略在第 k 步看到的障碍位置是 P_{k−1}（重置时为 P_0）；dynmap-v1 的“当前”定义为观测里实际出现的位置，future/past 为 P_{c±h}（c = max(k−1,0)，h = 20，D56）。以“h=0 时叠加图逐位等于原观测”的环境级测试验证对齐。(3) **评测 checkpoint 导出**：训练 checkpoint 含 replay，64 个评测 worker 各加载一份会耗尽内存，故训练结束后导出仅含策略权重的 v2 checkpoint（与 `policy-100k.pt` 同布局，`derived_from` 记录源文件与 SHA-256），评测用它；预算末端 checkpoint（100k 步），不挑最优。另：`--obs-latency-steps` 与 `--map-latency-steps` 同时给出时，robot 延迟 k、地图延迟 max(k, m)（流水线不组合使用）。

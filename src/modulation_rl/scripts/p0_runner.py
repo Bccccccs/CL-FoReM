@@ -113,6 +113,12 @@ def evaluate(args,agent,env,output,config):
         shield=Shield.from_config(args.shield_config)
     elif args.save_step_info:
         import foresight
+    # SCREEN-028 L3 (default off): world-model compensation of a delayed observation. Needs the
+    # latency-v1 wrapper (env.transform); lazily imported so a plain run never touches the module.
+    wm_comp=None
+    if getattr(args,'latency_wm_comp',None):
+        from latency_comp import WMCompensator
+        wm_comp=WMCompensator.from_config(args.latency_wm_comp)
     if args.world_type=='gazebo':
         import rospy
         from nav_msgs.msg import OccupancyGrid
@@ -145,7 +151,9 @@ def evaluate(args,agent,env,output,config):
             trajectory_hash=hashlib.sha256()
             for step in range(1,args.max_episode_steps+1):
                 tick=time.monotonic(); sim_tick=rospy.get_time() if args.world_type=='gazebo' else None
-                with torch.no_grad(): action=agent.select_action(state,eval=args.policy_mode=='deterministic')
+                with torch.no_grad():
+                    action=(agent.select_action(state,eval=args.policy_mode=='deterministic') if wm_comp is None
+                            else wm_comp.act(env.transform))
                 shield_risk=shield_triggered=None
                 if shield is not None:
                     action,shield_risk,shield_triggered=shield.decide(state[0],state[1],action)
@@ -246,6 +254,19 @@ def summarize(records,latencies,world_type,config):
                  semantics=SEMANTICS)
 
 
+def screen_flags(args):
+    """SCREEN-028 switches, forwarded to per-episode workers only when non-default (a default run
+    builds exactly the same worker command line as before these flags existed)."""
+    out=[]
+    for name,default in [('obs_latency_steps',0),('map_latency_steps',0),('obs_action_history',0),
+                         ('dyn_map_horizon',20)]:
+        if getattr(args,name,default)!=default:out+=['--'+name.replace('_','-'),str(getattr(args,name))]
+    if getattr(args,'dyn_map_mode','current')!='current':out+=['--dyn-map-mode',args.dyn_map_mode]
+    if getattr(args,'dyn_freeze',False):out+=['--dyn-freeze']
+    if getattr(args,'latency_wm_comp',None):out+=['--latency-wm-comp',args.latency_wm_comp]
+    return out
+
+
 def episode_command(args,output,seed):
     seed_file=output/('seed-%05d.json'%seed)
     dump(seed_file,[seed])
@@ -263,7 +284,7 @@ def episode_command(args,output,seed):
             ['--base-vel-gain-range',str(args.base_vel_gain_range[0]),str(args.base_vel_gain_range[1])]
             if getattr(args,'base_vel_gain_range',None) else [])+(
             ['--save-step-info'] if getattr(args,'save_step_info',False) else [])+(
-            ['--shield-config',args.shield_config] if getattr(args,'shield_config',None) else [])
+            ['--shield-config',args.shield_config] if getattr(args,'shield_config',None) else [])+screen_flags(args)
 
 
 def evaluate_isolated(args,output,config):
@@ -299,11 +320,12 @@ def evaluate_isolated(args,output,config):
 
 
 def train(args,agent,prior,env,output,config):
-    memory=ReplayMemory(args.replay_capacity,args.seed)
+    memory=ReplayMemory(args.replay_capacity,args.seed,compact_maps=args.replay_compact_maps)
     counters=dict(steps=0,updates=0,episodes=0)
     protocol=dict(environment=config,algorithm=args.algorithm,beta=args.beta,seed=args.seed,
                   total_steps=args.steps,batch=args.batch,random_steps=args.random_steps,
                   max_episode_steps=args.max_episode_steps,replay_capacity=args.replay_capacity)
+    if args.replay_compact_maps:protocol['replay_compact_maps']=True  # SCREEN-028: only recorded when on
     if args.resume:
         counters=load_training(args.resume,agent,memory,protocol,prior)['counters']
     episode_step=0;started=time.monotonic(); losses=[]
@@ -393,8 +415,34 @@ def main():
     p.add_argument('--shield-config',default=None,
                    help='FOLLOWUP-028 B3: path to a shield.py JSON config (default None = shield disabled, '
                         'no new module imported, no new episodes.jsonl/stepinfo field).')
+    p.add_argument('--obs-latency-steps',type=int,default=0,
+                   help='SCREEN-028 latency-v1: the policy at step t sees the full observation of step t-k '
+                        '(initial obs for t<k). Env reward/termination/collision/IK use the true state. Default 0 = off.')
+    p.add_argument('--map-latency-steps',type=int,default=0,
+                   help='SCREEN-028 latency-v1: delay only local_map by k steps (robot_state stays current). Default 0 = off.')
+    p.add_argument('--obs-action-history',type=int,default=0,
+                   help='SCREEN-028 latency-v1: append the k most recent executed actions (3k dims, oldest first, '
+                        'zero padded) to robot_state; changes the observation dimension. Default 0 = off.')
+    p.add_argument('--dyn-map-mode',choices=['current','future','past'],default='current',
+                   help='SCREEN-028 dynmap-v1 (dynObstacle task only): additionally draw the obstacles h steps ahead '
+                        '(future) or behind (past) in the policy-input local map (union, single channel). Collision '
+                        'and reward always use the real current map. Default current = off.')
+    p.add_argument('--dyn-map-horizon',type=int,default=20,help='SCREEN-028 dynmap-v1: h in steps of 0.1 s (default 20 = 2.0 s, D56; D54 originally 5).')
+    p.add_argument('--dyn-freeze',action='store_true',
+                   help='SCREEN-028 dynmap-v1 (harm test): obstacles stay at their initial positions. Default off.')
+    p.add_argument('--latency-wm-comp',default=None,
+                   help='SCREEN-028 L3 (eval only): JSON with encoder_checkpoint/dynamics_checkpoint(/device); the '
+                        'policy head acts on world-model-rolled features of the delayed observation. Default None = off.')
+    p.add_argument('--replay-compact-maps',action='store_true',
+                   help='SCREEN-028: store replay local maps as bool (bit-identical samples, 4x less RAM/disk). Default off.')
     args=p.parse_args()
     if args.ik_mode=='fixed' and args.ik_iterations<1:p.error('fixed IK requires positive --ik-iterations')
+    if min(args.obs_latency_steps,args.map_latency_steps,args.obs_action_history)<0:p.error('latency/history steps must be >=0')
+    if args.dyn_map_horizon<0:p.error('--dyn-map-horizon must be >=0')
+    if (args.dyn_map_mode!='current' or args.dyn_freeze) and args.task.lower()!='dynobstacle':
+        p.error('--dyn-map-mode/--dyn-freeze require --task dynobstacle')
+    if args.latency_wm_comp and not (args.mode=='eval' and (args.obs_latency_steps or args.map_latency_steps) and not args.obs_action_history):
+        p.error('--latency-wm-comp needs eval mode, a latency switch, and no --obs-action-history')
     if args.base_vel_gain_range is not None and not (0<args.base_vel_gain_range[0]<=args.base_vel_gain_range[1]):
         p.error('--base-vel-gain-range requires 0 < LO <= HI')
     if args.action_delay_steps<0:p.error('--action-delay-steps must be >=0')
@@ -437,6 +485,11 @@ def main():
     if args.base_vel_gain!=1.0 or args.base_vel_gain_range is not None or args.action_delay_steps!=0:
         config['mismatch_semantics']='mismatch-v1'
     env=env_creator(config)
+    # SCREEN-028: policy-input wrapper only when a latency/dynmap switch is on; tags land in config
+    # (=> manifest and the training protocol) only then, so default runs are unchanged.
+    from policy_input import wrap_if_needed
+    env,screen_tags=wrap_if_needed(env,args)
+    config.update(screen_tags)
     try:
         if args.mode=='eval':
             agent_config['model']['custom_model_config']['post_fcnet_hiddens']=checkpoint_hidden_sizes(args.checkpoint)
