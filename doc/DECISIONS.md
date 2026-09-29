@@ -12,7 +12,7 @@
 | 投稿 | D37 IJCAI 2027 |
 | 失配来源与可复用开关 | D39 注入失配 + Gazebo 自然失配（阶段安排按 D59）、D45 `mismatch-v1` 实现、D55 `--replay-compact-maps` 与评测 checkpoint 导出 |
 | 仓库、环境与数据 | D41 工作区路径、D42 单仓库、D58 数据清理 |
-| 当前主线 | **D59 非全局模式与 PH0–PH8 流程**、D60 PH3 诊断口径、D61 本次整理、**D62 PH4.1 预登记（r∈{3,5}，当晚训练）**、D63 开关实现选择、**D64 收敛检查（30 万步长训练）**、**D65 3.2 更强非全局版本诊断** |
+| 当前主线 | **D59 非全局模式与 PH0–PH8 流程**、D60 PH3 诊断口径、D61 本次整理、**D62 PH4.1 预登记（r∈{3,5}，当晚训练）**、D63 开关实现选择、**D64 收敛检查（30 万步长训练）**、**D65 3.2 更强非全局版本诊断**、D66 3.2 实现选择 |
 
 ## 基础约定
 
@@ -241,3 +241,7 @@ Agent：Claude Opus 5.5 /ybc。用户：“跑一个收敛检查吧”（针对�
 ## D65 — PH3 实验 3.2：更强的非全局版本（诊断预登记，2026-09-29，运行前）
 
 Agent：Claude Opus 5.5 /ybc。用户：“可以开始准备”（针对 PH3 诊断几乎无伤害：r=3/5/10 仅 −0.03/−0.02/−0.01，只有约 1/4 回合改道）。**依据**：只换规划器地图时，SAC 仍看得到身边 3 m 的真值障碍、规划器很快发现障碍，任务几乎没变；PH4.1 很可能不通过，需预先准备更强的设定。**三个新开关（均默认关闭，关闭时输出逐字段不变）**：(1) `--obsmap-policy-map`（需同时开 `--obsmap-radius`）：SAC 输入的局部地图也改为从“已观测地图”裁剪（与规划器同一张：同视角、半径、遮挡、跨步累积，未观测=空地）；**碰撞判定、奖励、终止仍用真值局部地图**。语义标签 `observed-map-v1+policy`。(2) 更小半径 r=1.5 m（已有开关，无需新代码）。(3) `--obstacle-spacing S`（默认不设 = 现有硬编码 3.0 m，`map.py:837`）：simpleobstacle 障碍网格间距；语义标签 `layout-spacing-v1`。**诊断 3.2**（policy-100k 确定性，fixed100，种子 10000–10099 同种子配对，各 100 回合；不训练）：V1 = r3 + policy-map；V2 = r1.5 + policy-map；V3 = r1.5 仅规划器；V4 = 间距 2.0 全局（V5 的名义）；V5 = 间距 2.0 + r3 + policy-map。伤害口径同 D60：SR 相对各自名义（V1–V3 对 PH3 名义 0.70；V5 对 V4）下降 ≥0.15 且配对 episode-bootstrap 95% CI（10000 次，种子 0）上界 <0。**用途与选择规则**：3.2 只作“是否值得训练”的必要条件筛查（未训练的策略不掉点，重训更不会掉；掉点则仍需 PH4.1 式重训确认）。若 PH4.1（D62/D64）不通过，按真实性优先顺序 V1 → V2 → V3 → V5，取**第一个**通过伤害口径的版本作为下一轮 PH4.1 的训练设定（届时另行登记训练与判据，经用户确认）；全部不通过 → 停下与用户讨论。若 PH4.1 通过，3.2 结果仅作记录。**工程约束**：正在运行的 PH4.1 流水线会不断启动读取 `scripts/` 的新进程，故 3.2 在独立 git worktree（`worktrees/ph3-strong`，分支 `ph3-strong`）中实现、测试与运行，不改动主工作区被 import 的文件；运行时评测 worker ≤16，不影响训练。登记后不因结果修改。
+
+## D66 — PH3-STRONG 实现选择（补充 D65，2026-09-29，运行前）
+
+Agent：Claude Sonnet 5.5 /ybc。不改 D65 的任何判据、版本或选择规则，只记录 D65 未规定的实现细节：(1) **策略地图**：`observed-map-v1+policy` 不另写裁剪代码，而是把 `Map._get_local_map_gt`（真值局部图的旋转裁剪函数）绑定到 `ObservedMapView`，以视图自身（已观测的 `_floorplan_img`，未观测=0）为底图运行，因此全可见时逐位等于真值局部图；地图内容以“当步扫描后”为准（`step` 里 `on_step_robot` 先扫描，再裁剪；回合开始在初始扫描之后）。`step` 中传给 `check_collision`、奖励与终止的仍是 `self.get_local_map(...)` 的真值图，只替换传给 `_to_agent_obs` 的那张；`use_ground_truth_map` 参数无调用者，不影响。(2) **间距**：`--obstacle-spacing S` 经 `config['layout_spacing']` → `env_creator` → `SimpleObstacleTask(layout_spacing=)` → `SimpleObstacleMap`，只有该键存在（非 None）时才覆盖 3.0 m；偏移标准差保持 0.8；`--obstacle-spacing 3.0` 与默认逐位一致（回归已验证）。仅 simpleobstacle。(3) **manifest**：`layout_semantics='layout-spacing-v1'`、`layout_spacing`，`obsmap_semantics='observed-map-v1+policy'` 只在开启时写入 `environment`；`arguments` 一栏是 `vars(args)`，会多出默认值的 `obsmap_policy_map=False`、`obstacle_spacing=None`（同 D63 的做法）；`episodes.jsonl` 不新增字段。(4) **评测执行**：3.2 用独立调度器 `ph3_strong_eval.py`（复用 `screen_pipeline.run_eval_arms`），自己的两个 ROS 栈 11441/11442（种子 % 2 分配），worker ≤16，`--device cuda`（GPU = 种子 % 4，与 PH3 名义同设备），V1–V3 复用 `results/ph3-obsmap/nominal`；代码在 worktree 分支 `ph3-strong`（提交 19717e9，分析脚本表格函数追加于 c851420，不被 worker 导入）。(5) 提交 worktree 的 manifest `repositories` 字段因 `.git` 为文件而显示 `git unavailable`，溯源以 `source_sha256` 与提交哈希为准。
