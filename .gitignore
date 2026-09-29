@@ -27,3 +27,6 @@ __pycache__/
 /results/
 
 /assets/
+
+# 独立 git worktree（运行中流水线不受影响的开发目录）
+/worktrees/
