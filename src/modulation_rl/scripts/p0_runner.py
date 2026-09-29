@@ -125,6 +125,7 @@ def evaluate(args,agent,env,output,config):
     if getattr(args,'policy_override',None):
         from policy_override import PolicyOverride
         override=PolicyOverride.from_args(args)
+    obsmap_on=bool(getattr(args,'obsmap_radius',0) or getattr(args,'obsmap_log_reroutes',False))  # PH3-OBSMAP
     if args.world_type=='gazebo':
         import rospy
         from nav_msgs.msg import OccupancyGrid
@@ -211,6 +212,8 @@ def evaluate(args,agent,env,output,config):
                    sensor_age_seconds=ages)
         if override is not None:
             row.update(policy_override=override.mode)  # CEIL-028: only present when the switch is on
+        if obsmap_on and row['exception'] is None:
+            row.update(env.unwrapped.obsmap_summary())  # PH3-OBSMAP: only present when a switch is on
         if shield is not None:
             # FOLLOWUP-028 B3: only present when --shield-config is set; a plain run never gets
             # this field. shield.episode_summary()'s per-step risk/triggered arrays only go into
@@ -289,6 +292,18 @@ def ceil_flags(args):
     return out
 
 
+def obsmap_flags(args):
+    """PH3-OBSMAP switches, forwarded to per-episode workers only when non-default (a default run builds the
+    same worker command line as before these flags existed)."""
+    out=[]
+    if getattr(args,'obsmap_radius',0):
+        out+=['--obsmap-radius',str(args.obsmap_radius)]
+        if getattr(args,'obsmap_fov_deg',270.0)!=270.0:out+=['--obsmap-fov-deg',str(args.obsmap_fov_deg)]
+        if getattr(args,'obsmap_occlusion_height',0.5)!=0.5:out+=['--obsmap-occlusion-height',str(args.obsmap_occlusion_height)]
+    if getattr(args,'obsmap_log_reroutes',False):out+=['--obsmap-log-reroutes']
+    return out
+
+
 def episode_command(args,output,seed):
     seed_file=output/('seed-%05d.json'%seed)
     dump(seed_file,[seed])
@@ -306,7 +321,7 @@ def episode_command(args,output,seed):
             ['--base-vel-gain-range',str(args.base_vel_gain_range[0]),str(args.base_vel_gain_range[1])]
             if getattr(args,'base_vel_gain_range',None) else [])+(
             ['--save-step-info'] if getattr(args,'save_step_info',False) else [])+(
-            ['--shield-config',args.shield_config] if getattr(args,'shield_config',None) else [])+screen_flags(args)+ceil_flags(args)
+            ['--shield-config',args.shield_config] if getattr(args,'shield_config',None) else [])+screen_flags(args)+ceil_flags(args)+obsmap_flags(args)
 
 
 def evaluate_isolated(args,output,config):
@@ -463,7 +478,25 @@ def main():
                         '(policy action with dim 0 forced to -1). Default None = off.')
     p.add_argument('--policy-override-mean-file',default=None,
                    help='CEIL-028: JSON {"mean":[a0,a1,a2]} used by --policy-override mean.')
+    p.add_argument('--obsmap-radius',type=float,default=0.0,
+                   help='PH3-OBSMAP observed-map-v1 (D60/D62, eval and train): the planner only knows the map the robot has seen '
+                        'within this sensing radius (m); SAC local map/collision/IK/reward stay true. 0 = off (default).')
+    p.add_argument('--obsmap-fov-deg',type=float,default=270.0,help='PH3-OBSMAP: field of view centred on the chassis heading (default 270).')
+    p.add_argument('--obsmap-occlusion-height',type=float,default=0.5,
+                   help='PH3-OBSMAP: obstacles higher than this (m) hide what is behind them (default 0.5 = 3D sensor height).')
+    p.add_argument('--obsmap-log-reroutes',action='store_true',
+                   help='PH3-OBSMAP: only record reroute statistics on the untouched (global-map) planner; planning is unchanged.')
     args=p.parse_args()
+    obsmap_active=args.obsmap_radius>0 or args.obsmap_log_reroutes
+    if args.obsmap_radius<0:p.error('--obsmap-radius must be >=0')
+    if args.obsmap_radius==0 and (args.obsmap_fov_deg!=270.0 or args.obsmap_occlusion_height!=0.5):
+        p.error('--obsmap-fov-deg/--obsmap-occlusion-height need --obsmap-radius > 0')
+    if args.obsmap_radius>0 and not 0<args.obsmap_fov_deg<=360:p.error('--obsmap-fov-deg must be in (0, 360]')
+    if args.obsmap_occlusion_height<0:p.error('--obsmap-occlusion-height must be >=0')
+    if obsmap_active and (args.task.lower()!='simpleobstacle' or args.dyn_map_mode!='current' or args.dyn_freeze
+                          or args.latency_wm_comp or args.shield_config):
+        p.error('--obsmap-* needs --task simpleobstacle and cannot be combined with --dyn-*/--latency-wm-comp/--shield-config')
+    if args.obsmap_log_reroutes and args.mode!='eval':p.error('--obsmap-log-reroutes is eval only')
     if args.policy_override and (args.mode!='eval' or args.latency_wm_comp or args.shield_config):
         p.error('--policy-override needs eval mode and cannot be combined with --latency-wm-comp/--shield-config')
     if args.policy_override=='mean' and not args.policy_override_mean_file:p.error('--policy-override mean needs --policy-override-mean-file')
@@ -517,6 +550,15 @@ def main():
     if args.base_vel_gain!=1.0 or args.base_vel_gain_range is not None or args.action_delay_steps!=0:
         config['mismatch_semantics']='mismatch-v1'
     env=env_creator(config)
+    if obsmap_active:
+        # PH3-OBSMAP: tags land in the manifest only when a switch is on; the manager hooks are inert otherwise
+        env.unwrapped.enable_observed_map(radius_m=args.obsmap_radius,fov_deg=args.obsmap_fov_deg,
+                                          occlusion_height=args.obsmap_occlusion_height,observe=args.obsmap_radius>0,
+                                          stats=args.mode=='eval')
+        if args.obsmap_radius>0:
+            config.update(obsmap_semantics='observed-map-v1',obsmap_radius=args.obsmap_radius,
+                          obsmap_fov_deg=args.obsmap_fov_deg,obsmap_occlusion_height=args.obsmap_occlusion_height)
+        config.update(obsmap_log_reroutes=True)
     # SCREEN-028: policy-input wrapper only when a latency/dynmap switch is on; tags land in config
     # (=> manifest and the training protocol) only then, so default runs are unchanged.
     from policy_input import wrap_if_needed

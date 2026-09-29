@@ -108,6 +108,9 @@ class CombinedEnv(Env):
                  concat_prev_action: bool,
                  collision_penalty: float,
                  learn_joint_values):
+        # PH3-OBSMAP (observed-map-v1): None = off; set through enable_observed_map(). Every hook below is
+        # skipped while it is None, so a default run executes exactly the code it did before.
+        self._obsmap = None
         self.np_random, _ = seeding.np_random(None)
         self._robot = robot_env
         self._ee_planner: EEPlanner = None
@@ -226,6 +229,16 @@ class CombinedEnv(Env):
             ee_plan_rel = None
         return self.map.get_local_map(base_tf, ee_plan_rel, use_ground_truth=use_ground_truth)
 
+    def enable_observed_map(self, radius_m: float, fov_deg: float = 270.0, occlusion_height: float = 0.5, observe: bool = True, stats: bool = True):
+        """PH3-OBSMAP: planner only sees the observed map (observe=True) or only logs reroutes (observe=False).
+        Only the planner's map changes; SAC local map, collision, IK, reward and termination keep the true map."""
+        assert self._robot.is_analytical_world() or not observe, "observed-map-v1 is analytical-only"
+        from modulation.envs.observed_map import ObservedMapManager
+        self._obsmap = ObservedMapManager(radius_m=radius_m, fov_deg=fov_deg, occlusion_height=occlusion_height, observe=observe, stats=stats)
+
+    def obsmap_summary(self) -> dict:
+        return self._obsmap.summary()
+
     def set_ee_planner(self,
                        ee_planner: EEPlanner,
                        robot_obs=None):
@@ -234,9 +247,14 @@ class CombinedEnv(Env):
             robot_obs = self._robot.get_robot_obs()
 
         self._ee_planner = ee_planner
+        if self._obsmap is not None:
+            # scan at the current pose and give the planner the observed map *before* it plans (reset computes the weights)
+            self._obsmap.on_planner_set(ee_planner, robot_obs.base_tf, self.map)
         ee_obs_train_freq, ee_plan = self._ee_planner.reset(robot_obs=robot_obs,
                                                             is_analytic_env=is_analytical,
                                                             plan_horizon_meter=self.plan_horizon_meter)
+        if self._obsmap is not None:
+            self._obsmap.on_plan(ee_planner)
 
         if self.vis_env:
             self.map.publish_floorplan_rviz()
@@ -260,6 +278,8 @@ class CombinedEnv(Env):
             self._collision_cb = CollisionCB(self._gazebo_object_to_ignore)
             self._sub = rospy.topics.Subscriber("/modulation_bumpers", ContactsState, self._collision_cb.cb, queue_size=1)
         self.map.map_reset()
+        if self._obsmap is not None:
+            self._obsmap.new_episode()  # the observed map only ever resets here, never in set_ee_planner
 
         # arm controllers (particularly for the pr2) can sometimes be unable to reach to drawn joint values in gazebo, in that case draw new ones
         max_i = 10
@@ -364,7 +384,11 @@ class CombinedEnv(Env):
 
         ee_obs, last_dt = self._ee_planner.step(self.prev_robot_obs, vel_norm)
         robot_obs, robot_info = self._robot.step(base_actions, joint_value_deltas=joint_value_deltas, next_desired_gripper_tf=ee_obs.next_gripper_tf, execute_cmds=execute_cmds)
+        if self._obsmap is not None:
+            self._obsmap.on_step_robot(self._ee_planner, robot_obs.base_tf)  # scan at the new pose, maybe recompute weights
         ee_obs_train_freq, ee_plan = self._ee_planner.generate_obs_step(robot_obs, plan_horizon_meter=self.plan_horizon_meter)
+        if self._obsmap is not None:
+            self._obsmap.on_plan(self._ee_planner)
 
         local_map = self.get_local_map(robot_obs.base_tf, ee_plan, use_ground_truth=use_ground_truth_map)
 
@@ -378,6 +402,8 @@ class CombinedEnv(Env):
         self.nr_kin_failures += robot_info['kin_failure']
         robot_info['nr_base_collisions'] = self.nr_base_collisions
         robot_info['nr_kin_failures'] = self.nr_kin_failures
+        if self._obsmap is not None:
+            self._obsmap.on_step_end(robot_info)
 
         done = (((not robot_info['kin_failure']) and ee_obs_train_freq.done)
                 or (robot_info['nr_kin_failures'] >= self._ik_fail_thresh)
