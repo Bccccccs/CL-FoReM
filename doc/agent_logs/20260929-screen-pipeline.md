@@ -77,3 +77,10 @@
 - 下一位（或用户）：等 S8 生成 `doc/agent_logs/20260929-screen-report.md`（预计 17:30–18:30），核对 `status.json` 各阶段，然后按 D52 表格由用户决定主线；把报告与本日志更新提交到 `screen-028`（勿 push/合 main，除非用户要求）。
 - 禁止：重复启动第二个编排器；在 `results/screen-028/` 运行期间修改 `scripts/` 下被 import 的文件（`p0_runner.py`、`policy_input.py`、`screen_*.py` 等），否则 worker 会加载到改动后的代码。
 - 需保留：编排器与 6 个训练进程、`results/screen-028/`、`results/screen-028-smoke/`（冒烟证据）、`results/screen-028-regression/`（回归证据）。
+
+## 用户要求停止（2026-09-29 11:16+08:00，协调方 Claude Opus 5.5 /ybc 执行）
+
+- 用户：“把现在的停了”。按本日志第 58 行的停止方式执行：容器内 `pkill -f screen_pipeline.py`、`pkill -f 'p0_runner.py (train|eval)'`；编排进程 PID 160091 未响应 SIGTERM（未重启任何任务），随后 `kill -9 160091`。复核：容器内无 `screen_pipeline`/`p0_runner` 进程，宿主无启动器残留，4 张 GPU 回到 14 MiB，可用内存 231 GiB。
+- 停止时状态：S0/S1(L1)/S2(D0)/S5(L3) 已完成；S4/S7（L2）按 D53 因 L1 未通过被跳过；S3（D 线 6 个训练）运行约 28 分钟，各约 6900–7400 步，**未到首个 2 万步检查点，无可续训产物**；S6（D2 评测）与 S8（报告）未运行。`results/screen-028/status.json` 中 S3 仍显示 running，为停止前的陈旧状态。
+- 已有结论：**L1 不通过**——全观测延迟 k∈{1,2,3,5}、仅地图延迟 k∈{2,5} 的 SR 为 0.70–0.72（名义 0.70），延迟开关确实生效（轨迹全部不同、2–8 个回合成败翻转）；L3 世界模型补偿 SR 0.70。D 线（D54/D56）未产生结果。
+- 后续：用户转向“先做一个实验，看看能不能涨”（SAC 训练更久 + 简单策略的上限摸底），由协调方另写设计说明。
