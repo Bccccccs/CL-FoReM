@@ -19,7 +19,7 @@
 | ID | 阶段 | Agent | 状态 | 范围 | 记录 |
 |---|---|---|---|---|---|
 | REFLOW-029 | 流程重写（跨阶段） | Claude Opus 5.5 /ybc | review | 2026-09-29 约14:58起；非全局模式转向、PH0–PH8 统一命名、ROADMAP 重写、D59/D60、分支收拢到 main；仅文档与分支，不改代码/不跑实验 | [日志](agent_logs/20260929-reflow.md) |
-| PH3-OBSMAP | PH3 | 设计：Claude Opus 5.5 /ybc；实现与运行：Claude Sonnet 5.5 子 Agent | active | 2026-09-29 约15:14起；`observed-map-v1` 开关（只改规划器地图）+ policy-100k 伤害测试 r∈{3,5,10}+名义；D60；分支 `ph3-obsmap` | [日志](agent_logs/20260929-ph3-obsmap.md) / [设计](agent_logs/20260929-ph3-obsmap-spec.md) |
+| PH3-OBSMAP | PH3 + PH4.1 | 设计：Claude Opus 5.5 /ybc；实现与运行：Claude Sonnet 5.5 子 Agent | active | 2026-09-29 约15:14起；`observed-map-v1` 开关（只改规划器地图，训练+评测）已实现并验证（默认关闭逐位一致、全可见等价、267 项测试）；PH3 诊断评测已完成（D60，名义复现 100/100，r=3/5/10 降幅 ≤0.03，诊断不通过）；**16:26 起无人值守流水线在跑**：PH4.1 的 5 个 10 万步训练 + D64 的 2 个 30 万步长训练 + 评测/学习曲线/分析（D62/D64，`results/ph4-train/`，编排器 PID 236767）；分支 `ph3-obsmap` | [日志](agent_logs/20260929-ph3-obsmap.md) / [设计](agent_logs/20260929-ph3-obsmap-spec.md) / [PH3 报告](agent_logs/20260929-ph3-obsmap-report.md) |
 
 以下为 D59 之前的任务行（原编号），内容不改。
 
