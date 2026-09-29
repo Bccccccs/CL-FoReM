@@ -44,14 +44,36 @@
 
 **冒烟发现并已修复**：容器内 git “dubious ownership” 使报告与预检 manifest 里 git 信息为空 → `screen_pipeline._git_status` 用私有 HOME 的 `.gitconfig`（容器 git 版本旧，无 `GIT_CONFIG_GLOBAL`）。
 
-## 长任务
+## 长任务（正式流水线，2026-09-29T10:50+08:00 启动）
 
-未启动。
+- 提交：分支 `screen-028`，commit `d118fb1`（代码+测试+文档）；启动时工作区干净。
+- 启动命令（宿主项目根目录）：`sg docker -c 'bash doc/agent_logs/20260929-screen-launch.sh'`；容器 `mmhusky-node01` 内 `nohup python3 -u screen_pipeline.py --output-root /root/mm_husky_ws/results/screen-028`。**编排器 PID 160091**（同写入 `results/screen-028/pipeline.pid`；使用前用 `pgrep -f screen_pipeline.py` 重新核实）。独立于 Claude 会话，退出会话不影响。
+- 输出：`results/screen-028/`（宿主上属 root）；状态 `status.json`；顶层日志 `pipeline.log`；各训练 `train/<臂>-s<种子>/a*.log`；评测各臂 `s*/…/episodes.jsonl`；分析 `s*/analysis/{point,result}.json`；自动报告 `doc/agent_logs/20260929-screen-report.md`（S8 生成，跑完后需人工提交）。
+- 监控：
+  ```bash
+  sg docker -c "docker exec mmhusky-node01 cat /root/mm_husky_ws/results/screen-028/status.json"
+  sg docker -c "docker exec mmhusky-node01 tail -f /root/mm_husky_ws/results/screen-028/pipeline.log"
+  sg docker -c "docker exec mmhusky-node01 bash -c 'ps aux | grep -E \"screen_pipeline|p0_runner.py train\" | grep -v grep'"
+  ```
+- 停止（未经用户确认不要执行）：先 `pkill -f screen_pipeline.py`，再 `pkill -f 'p0_runner.py (train|eval)'`，确认 `ps` 无残留；checkpoint（每 2 万步）与已完成评测回合保留。续跑：重新执行启动脚本（跳过 DONE 阶段，训练从最新 checkpoint 以 `--resume` 续训，评测复用已完成回合）。
+- 训练超时 10 h（设计说明 6 h；实测 dynobstacle 约 4.5 步/s，100k 步约 6.2–6.6 h，见上）。
+
+### 运行中的实测状态（10:59）
+
+- S0/S1/S2/S5 已完成，**S4（L2 训练）与 S7（L2 评测）按预登记规则被跳过**：L1 七个配置（名义、全延迟 1/2/3/5、仅地图 2/5，种子 10000–10099）的 SR 为 0.70/0.72/0.70/0.70/0.72/0.70/0.72，相对名义最大变化 +0.02、无任何配置下降；D53-L1 不通过（档位 none）。已核实并非开关失效：延迟配置的轨迹与名义几乎每个回合都不同（identical 0–1/100），worker manifest 记录 `latency_semantics=latency-v1`、`obs_latency_steps=5`；且单测证明策略输入按 t−k 延迟。SAC 在该任务里对 0.5 s 观测延迟不敏感。
+- S2 D0 通过（2000 步训练 + 6 回合评测无异常）。
+- S5 L3（k=3 全延迟）：stale 与名义 SR 均 0.70，差距 0，恢复比例无定义；wm-comp SR 0.70（探索性，不作依据）。
+- S3（D1 训练 6 个）运行中：`D-{std,oracle,hist}-s{11,22}` 各 1 进程，GPU 分配 0–3 轮转，10:59 时约 2900–3100 步/11 min；预计 17:30 前后完成，之后自动 S6（D2 评测，含 D-std 冻结 2 个）与 S8 报告。可用内存约 223 GiB。
+- 因 L2 跳过，本次实际同时运行的训练进程为 6 个（设计说明 §6 写 12 个是 L1 通过时的上限）。
 
 ## 审查与问题
 
-（随实现补充）
+- 冒烟里的 SR 全为 0 只是 2000 步训练的结果，无意义；正式判据只看正式流水线数据。
+- 未解决风险：D 线 20 步 future/past 地图使训练每步略慢（未单独测）；若 D-std 移动条件 SR < 0.2 报告会标注“任务过难”；单个训练进程若崩溃，编排器自动从最新 checkpoint 续训（最多 4 次）。
+- 容器 git “dubious ownership” 已在脚本内规避（私有 HOME），未改容器全局配置。
 
 ## 交接
 
-（结束前补充）
+- 下一位（或用户）：等 S8 生成 `doc/agent_logs/20260929-screen-report.md`（预计 17:30–18:30），核对 `status.json` 各阶段，然后按 D52 表格由用户决定主线；把报告与本日志更新提交到 `screen-028`（勿 push/合 main，除非用户要求）。
+- 禁止：重复启动第二个编排器；在 `results/screen-028/` 运行期间修改 `scripts/` 下被 import 的文件（`p0_runner.py`、`policy_input.py`、`screen_*.py` 等），否则 worker 会加载到改动后的代码。
+- 需保留：编排器与 6 个训练进程、`results/screen-028/`、`results/screen-028-smoke/`（冒烟证据）、`results/screen-028-regression/`（回归证据）。
