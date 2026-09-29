@@ -102,3 +102,15 @@ python3 -u followup_pipeline.py --output-root results/followup-028-smoke --max-w
 - 停止方式：`sg docker -c "docker exec mmhusky-node01 pkill -f followup_pipeline.py"`，然后清理可能残留的per-seed worker：`sg docker -c "docker exec mmhusky-node01 pkill -f 'results/followup-028/'"`；确认`docker exec mmhusky-node01 ps aux | grep followup`无残留后再重新启动（未经用户确认不停止）。
 - 续跑方式：直接重新执行`sg docker -c 'bash doc/agent_logs/20260928-followup-launch.sh'`；`followup_pipeline.py`按`<stage>/DONE`标记跳过已完成阶段，未完成阶段（含S3/S5的`episodes.jsonl`部分产物）会重新从队列头开始（当前实现不做"已完成回合断点续采"，重跑该阶段会重新采集全部回合——已知限制，如实记录，非本次验收范围）。
 - 本任务（FOLLOWUP-028实现部分）到此完成，按要求不等待流水线跑完；后续S4/S5/S6结果与最终`doc/agent_logs/20260928-followup-report.md`留给用户或下一位Agent核查。
+
+## 流水线结果核查（2026-09-29 约09:20+08:00，Claude Opus 5.5 /ybc，协调方只读核查）
+
+来源：`results/followup-028/status.json`、自动报告 [20260928-followup-report.md](20260928-followup-report.md)、`s1-a-structured/probe/report.json`、`s4-b2-foresight/run.log`。
+
+- 运行：S0–S3 正常（S3 采 1000 回合、0 失败，约 7.5 min）；S1 于 2026-09-28 23:16 完成；**S4 在 2 h 超时上限被终止**（01:16），终止时四个分类器已训练完，卡在其后的 bootstrap/次要报告；因此 **S5（B3）被跳过**，S6 生成的报告缺 B2/B3。
+- **A 线（D50）不通过**：V4/V4_both/V5/V6 在 4 个强失配条件上的挽回比例全部 ≤ 约 0（−0.3%～−11%），“变体−冻结”CI 多数整体 >0，即结构化修正反而使预测变差；名义条件同样变差。连同 R0-4b，六类在线适应（无结构与结构化）均未挽回失配残差。
+- **B1（D51-B1）不通过**：失败→成功 0.310，成功→失败 0.286，差值 CI [−0.170, 0.226]，与“结果本身随机”无法区分。
+- **B2（D51-B2）**：无正式 CI（超时）。`run.log` 中测试集 AUROC：C-geo 0.9794、C-wm 0.9761、C-cur 0.9654、C-hist 0.9566。点估计已显示 C-wm 低于 C-geo，且相对 C-cur 仅 +0.011（门槛 +0.02），按 D51 判据**判定不通过不依赖 CI**（CI 只可能进一步确认），记为“不通过（依点估计，CI 未生成）”。
+- 解读：IK 失败的开始可由当前 IK 偏差近乎完全预测（几何预检 0.979），世界模型前瞻不提供额外信息；执行失配可由现有反馈吸收，在线适应无法利用。两条线在当前任务设定下都不给前瞻留出空间。
+- 后续：按用户“按你推荐的方式走”，转入场景筛选 SCREEN-028（D52–D54，[设计说明](20260929-screen-spec.md)）。B3 不补跑（即便有效也归功于几何预检，不影响方向决策）。
+- 状态：FOLLOWUP-028 done（结果不利，已记录）。
