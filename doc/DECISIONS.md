@@ -12,7 +12,7 @@
 | 投稿 | D37 IJCAI 2027 |
 | 失配来源与可复用开关 | D39 注入失配 + Gazebo 自然失配（阶段安排按 D59）、D45 `mismatch-v1` 实现、D55 `--replay-compact-maps` 与评测 checkpoint 导出 |
 | 仓库、环境与数据 | D41 工作区路径、D42 单仓库、D58 数据清理 |
-| 当前主线 | **D59 非全局模式与 PH0–PH8 流程**、D60 PH3 诊断口径、D61 本次整理、**D62 PH4.1 预登记（r∈{3,5}，当晚训练）** |
+| 当前主线 | **D59 非全局模式与 PH0–PH8 流程**、D60 PH3 诊断口径、D61 本次整理、**D62 PH4.1 预登记（r∈{3,5}，当晚训练）**、D63 开关实现选择、**D64 收敛检查（30 万步长训练）** |
 
 ## 基础约定
 
@@ -229,3 +229,11 @@ Agent：Claude Opus 5.5 /ybc。用户：“决策本来就删除了一些，你�
 ## D62 — PH3 不再作为关卡；PH4.1 预登记并在开关验证后立即训练（2026-09-29，运行前）
 
 Agent：Claude Opus 5.5 /ybc。用户：“不应该先训好了非全局的SAC吗”“可以调整，今晚最好就能开始训练”。**依据**：PH3 用全局模式训练的 policy-100k 测非全局伤害，掉点混有“未在该设定下训练”的分布偏移，“通过”不能说明重训后仍有空间，只有 PH4.1 能回答。**调整**：(1) PH3 改为“开关实现 + 诊断评测”，不设 G3；D60 的配置与阈值保留，照常作为诊断报告，不再决定是否训练，也不再用于选 r。(2) **PH4.1 预登记**：感知半径事先固定为 r ∈ {3, 5} m（视角 270°、遮挡高度 0.5 m，同 PH3 开关默认）；训练 `K-std-r3`、`K-std-r5`（非全局训练）各种子 11/22，`G-std` 补训全局种子 22（与 policy-100k 种子 11 组成 2 个），共 5 次；配置同 policy-100k（`--steps 100000 --save-interval 20000 --batch 256 --replay-capacity 100000 --random-steps 1000 --ik-mode fixed --ik-iterations 100 --eval-interval 0 --replay-compact-maps`），用 100k 预算末端 checkpoint（导出仅策略权重，同 D55），不挑最优。评测：各策略在自身训练条件下确定性评测种子 10000–10099；random 策略（`--policy-override random`）在 r=3、r=5 下各评 100 回合。**判据（每个 r 分别判定）**：SR(G-std) − SR(K-std-r) ≥ 0.10，且“训练种子×回合”分层 bootstrap 95% CI（10000 次，种子 0）下界 > 0；并且 SR(K-std-r) ≥ SR(random, r) + 0.30。**r_sel = 通过的最大 r**；两个 r 都不通过 → 重训的反应式 SAC 已足够，停下与用户讨论。4.2/4.3 在 r_sel 下进行，判据仍为 ROADMAP 草案、进入前登记。(3) 开关验证（设计说明 §4）通过后，训练与 PH3 诊断评测并行启动；训练优先，评测并发相应降低。登记后不因结果修改。
+
+## D63 — observed-map-v1 实现选择（2026-09-29，PH3-OBSMAP，运行前）
+
+Agent：Claude Sonnet 5.5 /ybc。不改 D60/D62 的任何判据或实验语义，只记录判据未规定的实现细节：(1) **射线**：从底盘连续位置出发，视角 F 以底盘朝向为中心，射线角间隔在有效半径 R_eff=min(R, 最远地图角+1 像素) 处 ≤0.5 像素（设计说明只要求 ≤1 像素，取更密以便 1 像素宽的细障碍在全可见设置下不漏，全可见等价性需要），径向步长 0.5 像素，采样点四舍五入取格，超出地图的采样终止射线且不标记。(2) **遮挡**：高度 >H 的格挡住其后，遮挡格本身可见；遮挡与可见性读 `_floorplan_img_filled`（实心），`_floorplan_img`（`add_objects_to_floormap` 里只画轮廓）与 `_floorplan_img_filled` 都乘已观测掩码后交给规划器。(3) **规划器地图视图**：`ObservedMapView` 用 `Map` 的未绑定函数（`get_inflated_map`/`binary_floorplan`/`in_collision`/坐标换算）以视图自身为 `self` 运行并有自己的膨胀缓存，只把不可变几何/配置属性转发给真值地图；`planner._map` 在 `set_ee_planner` 里、`planner.reset()` 之前替换，SAC 局部地图、碰撞、IK、奖励、终止仍用真值 `CombinedEnv.map`。(4) **重算权重**：仅当新观测到的格含障碍（真值 filled 或 img >0）时，用当前底盘位姿作为起点调用回合开始同一函数 `generate_base_feasible_eeweights`（膨胀调用为 ROS costmap C++，单次约 47 ms，约占重算 200 ms 的大部分，属规划器自身开销，未改算法）。(5) **改道统计**：每步取 `planner._last_global_plan_meters` 的 xy，改道距离 = 新路径各点到上一步路径点集最近距离的最大值，>0.3 m 记一次；改道发生在第 s 步生成新规划，“改道后 20 步”窗口取第 s+1..s+20 步内出现 `kin_failure`/`base_collision`；已观测占比分母为整张地图格数（含外框）；训练模式不收集统计。(6) **开关**：训练与评测共用 `--obsmap-radius`（>0 开启），`--obsmap-log-reroutes` 仅评测（名义配置的改道基准）；可与 `--policy-override` 组合，不可与 `--dyn-*`/`--latency-wm-comp`/`--shield-config`/非 simpleobstacle 任务组合；参数与 `obsmap_semantics='observed-map-v1'` 只在开启时进入 manifest，`obsmap_*` 字段只在开启时进入 episodes.jsonl。默认关闭时 episodes.jsonl/trajectory npz/tail.json 与干净代码逐位一致（PH3-OBSMAP 日志回归记录），因此不需要重跑任何已有基线。
+
+## D64 — PH4.1 收敛检查（补充 D62，2026-09-29，运行前）
+
+Agent：Claude Opus 5.5 /ybc。用户：“跑一个收敛检查吧”（针对“10万步够吗”）。**依据**：全局模式下 10 万步已收敛（policy-100k 0.70；CEIL 30 万步预算 15–25 万步 0.66–0.69，未超过），但非全局模式无证据；若 `K-std` 只是训练不足，SR(G-std) − SR(K-std) 会被夸大，4.1 可能假通过。**补充内容**（D62 其余不变）：(1) 另训 `K-std-r3-long`、`K-std-r5-long` 各 1 次：种子 11，`--steps 300000`（学习率按 30 万步预算衰减），`--save-interval 50000`，其余同 D62，与 5 次 10 万步训练同时启动；用 30 万预算末端 checkpoint 评测（种子 10000–10099，各自 r）。(2) 学习曲线（诊断）：5 次 10 万步训练的 2 万步间隔 checkpoint 与长训练的 5 万步间隔 checkpoint 各评测 100 回合（种子 10000–10099），报告是否走平。(3) **4.1 通过条件增加一条**：对每个 r，还须 SR(G-std) − SR(K-std-r-long) ≥ 0.10（点估计；长训练只有 1 个种子，CI 按回合 bootstrap 另报、不作判据）；不满足则 4.1 在该 r 记为“训练不足，未通过”。4.1 的最终判定等长训练完成后给出；10 万步部分可先出点估计与 CI 作为中间结果。登记后不因结果修改。

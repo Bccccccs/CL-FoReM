@@ -18,8 +18,8 @@
 
 | ID | 阶段 | Agent | 状态 | 范围 | 记录 |
 |---|---|---|---|---|---|
-| REFLOW-029 | 流程重写（跨阶段） | Claude Opus 5.5 /ybc | review | 2026-09-29 约15:10起；非全局模式转向、PH0–PH8 统一命名、ROADMAP 重写、D59/D60、分支收拢到 main；仅文档与分支，不改代码/不跑实验 | [日志](agent_logs/20260929-reflow.md) |
-| PH3-OBSMAP | PH3 | 设计：Claude Opus 5.5 /ybc；实现与运行：Claude Sonnet 5.5 子 Agent | active | 2026-09-29 约16:25起；`observed-map-v1` 开关（只改规划器地图）+ policy-100k 伤害测试 r∈{3,5,10}+名义；D60；分支 `ph3-obsmap` | [日志](agent_logs/20260929-ph3-obsmap.md) / [设计](agent_logs/20260929-ph3-obsmap-spec.md) |
+| REFLOW-029 | 流程重写（跨阶段） | Claude Opus 5.5 /ybc | review | 2026-09-29 约14:58起；非全局模式转向、PH0–PH8 统一命名、ROADMAP 重写、D59/D60、分支收拢到 main；仅文档与分支，不改代码/不跑实验 | [日志](agent_logs/20260929-reflow.md) |
+| PH3-OBSMAP | PH3 | 设计：Claude Opus 5.5 /ybc；实现与运行：Claude Sonnet 5.5 子 Agent | active | 2026-09-29 约15:14起；`observed-map-v1` 开关（只改规划器地图）+ policy-100k 伤害测试 r∈{3,5,10}+名义；D60；分支 `ph3-obsmap` | [日志](agent_logs/20260929-ph3-obsmap.md) / [设计](agent_logs/20260929-ph3-obsmap-spec.md) |
 
 以下为 D59 之前的任务行（原编号），内容不改。
 
