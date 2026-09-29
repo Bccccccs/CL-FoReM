@@ -11,7 +11,7 @@
 
 ## 2. 开关 `observed-map-v1`（默认关闭，关闭时一切输出逐字段不变）
 
-### 2.1 CLI（`p0_runner.py`，仅 eval；也需在 `episode_command` 转发给逐回合 worker，仅在非默认时转发）
+### 2.1 CLI（`p0_runner.py`，eval 与 **train** 都要支持（D62）；eval 需在 `episode_command` 转发给逐回合 worker，仅在非默认时转发；train 时 `obsmap_semantics` 与参数进入训练 protocol 的 environment，仅在开启时）
 
 | 参数 | 默认 | 含义 |
 |---|---|---|
@@ -20,7 +20,7 @@
 | `--obsmap-occlusion-height H` | 0.5 | 高度 > H 的障碍格挡住其后的视线（本格自身可见）；更低的障碍可被“越过”看到。依据：车载 3D 传感器（深度相机/3D 激光）大约装在 0.5 m 高，能看到低矮障碍但看不到高障碍背后。这是建模选择，须在日志写明 |
 | `--obsmap-log-reroutes` | 关 | 只记录改道统计、不改规划（用于名义配置得到可比的改道基准）；开启时可以新增 episodes.jsonl 字段 |
 
-开启 `--obsmap-radius` 时自动记录改道统计；`config['obsmap_semantics']='observed-map-v1'` 与参数只在开启时写入 manifest。与 `--task` 非 simpleobstacle、`--dyn-*`、`--policy-override`、`--latency-wm-comp`、`--shield-config` 组合时报错（本次不需要）。
+开启 `--obsmap-radius` 时自动记录改道统计；`config['obsmap_semantics']='observed-map-v1'` 与参数只在开启时写入 manifest。与 `--task` 非 simpleobstacle、`--dyn-*`、`--latency-wm-comp`、`--shield-config` 组合时报错（本次不需要）；`--policy-override random` **允许**与 `--obsmap-radius` 组合（D62 的 random 对照需要），其他 override 不需要。
 
 ### 2.2 语义
 
@@ -73,6 +73,23 @@
 - 严格遵守 AGENTS.md §2：日志开头原样记录任务提示词，关键节点与每 30 分钟更新日志；只更新 PROGRESS 中 PH3-OBSMAP 这一行；D60 不改；如需新的实现决策，追加 DECISIONS 新条目（写前重读取最大编号，当前最大 D61）。
 - 遇到与本说明或 D60 冲突、或需要改变实验语义的情况：停下，写入日志，报告协调方，不自行取舍。
 
-## 6. 完成标准
+## 6. PH4.1 训练（D62，用户要求当晚开始）
+
+**2026-09-29 约16:50 追加。** 用户认为应先训好非全局 SAC，D62 据此把 PH3 改为不设关卡的诊断，并预登记 PH4.1。§4 验证全部通过后**立即**启动下列训练，PH3 的 §3 评测与训练并行（训练优先；评测 worker 可降到 ≤40 以免拖慢训练）。
+
+| 臂 | 开关 | 训练种子 | 评测条件 |
+|---|---|---|---|
+| `K-std-r3` | `--obsmap-radius 3`（视角 270、遮挡 0.5 默认） | 11、22 | r=3 |
+| `K-std-r5` | `--obsmap-radius 5` | 11、22 | r=5 |
+| `G-std` | 无（全局） | 22（种子 11 即 policy-100k，不重训） | 全局 |
+
+- 训练参数（同 policy-100k，见 `results/p1a-20260923/sac-screen-100k/manifest.json`）：`p0_runner.py train --steps 100000 --save-interval 20000 --batch 256 --replay-capacity 100000 --random-steps 1000 --ik-mode fixed --ik-iterations 100 --eval-interval 0 --replay-compact-maps --seed <种子>`，4 张 GPU 分摊。
+- 先用冒烟实测非全局训练的每步速度（例如 2000 步），在日志里写预计时长；非全局训练会比全局慢（扫描 + 障碍变化时重算权重）。
+- 训练结束后按 D55 做法导出仅策略权重（`derived_from` 记录源文件与哈希），用 100k 末端 checkpoint，不挑最优；在各自评测条件下确定性评测种子 10000–10099；另评 random（`--policy-override random`）在 r=3、r=5 各 100 回合。
+- 分析按 D62：每个 r 分别计算 SR(G-std) − SR(K-std-r)，“训练种子×回合”分层 bootstrap（可复用 `screen_stats.diff_with_ci` 的分层实现，参考 CEIL 日志“设计核实”第 5 条的读法），10000 次、种子 0；以及 SR(K-std-r) − SR(random, r) ≥ 0.30。r_sel = 通过的最大 r。结果写入 `results/ph4-train/analysis.json` 与报告 `doc/agent_logs/20260929-ph4-1-report.md`。
+- 建议复用 `ceil_pipeline.py`/`screen_pipeline.py` 的训练监督、崩溃续训、导出与评测队列，写成无人值守流水线（例如 `ph4_pipeline.py`），训练+评测+分析全自动；启动后在日志“长任务”段写清 PID、日志、输出目录 `results/ph4-train/`、监控/停止/续跑方法。续训必须保持相同 `--steps`。
+- 资源：5 个训练进程 + 评测 worker；启动前 `free -g` ≥60 GiB；运行中低于 40 GiB 暂停新评测。
+
+## 7. 完成标准
 
 日志与报告给出 §3 的全部必报项、D60 判定与 G3 建议；代码与文档按路径提交到 `ph3-obsmap`；PROGRESS 行更新为 `review`。
