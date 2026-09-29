@@ -282,3 +282,8 @@ Agent：Claude Sonnet 5.5 /ybc（SCREEN-028 执行 Agent）。三条只影响实
 ## D57 — CEIL-028：SAC 上限摸底判据预登记（2026-09-29，运行前）
 
 Agent：Claude Opus 5.5 /ybc（协调方，仅文档），用户确认（“那先做一个实验，看看能不能涨”“确认”）；SCREEN-028 已按用户要求停止（L1 不通过，D 线无结果）。设计见 [CEIL 设计说明](agent_logs/20260929-ceil-spec.md)。**依据**：`sac.py:45` 学习率按总预算指数衰减，policy-100k 在 10 万步已衰减到底，且续训协议记录 `total_steps`，故不续训，改为从零训练预算 300000 步、训练种子 11/22、其余配置同 policy-100k（可用 D55 `--replay-compact-maps`），每 5 万步存检查点并在种子 10000–10099 上确定性评测 100 回合（fixed100）；主结论只用 300k 预算末端检查点。简单策略（`--policy-override`，默认关闭）：random（均匀随机，回合种子派生）、mean（policy-100k 在 R0-3c 名义 100 回合动作的逐维均值）、slow-ee（policy-100k，第 0 维固定为 −1，探索性）。**判据**：C-learn = 两个 300k 末端检查点 SR 相对 policy-100k（0.70，同评测种子）提升 ≥0.10 且“训练种子×回合”分层 bootstrap 95% CI 下界 >0；C-policy = SR(policy-100k) − max(SR(random), SR(mean)) ≥ 0.30。**下一步规则**：两者通过 → 世界模型帮 SAC 学习（先做 IK 可行性辅助预测，比较学习曲线）；C-learn 不通过而 C-policy 通过 → 换任务（door/drawer 等）并先做同样摸底；两者都不通过 → 换任务；C-learn 通过而 C-policy 不通过 → 核查实验。最终方向由用户确认。
+
+
+## D58 — 清理无用数据与 policy-100k 训练过程检查点（2026-09-29，CLEAN-028）
+
+Agent：Claude Opus 5.5 /ybc（协调方），用户确认（“AB删掉吧，我们不是要重新训练吗”）。删除：冒烟/探测输出（screen-028-smoke、followup-028-smoke、screen-028-probe）、SCREEN-028 叫停且无检查点的 D 线训练目录、P1-FIX 资源检查的可再生特征缓存（6 个 `check-*/cache`），以及 `p1a-20260923/sac-screen-100k/` 下 11 个含经验池的完整训练检查点（latest、step-*、validation-*.pt）。这修订了 AGENTS §1 “保留旧 checkpoint” 在该目录上的适用：运行与评测使用的 `policy-100k.pt`（sha256 e341262c…）完整保留，因此已验证基线仍可恢复；失去的只是从这些中间状态精确续训的能力（D57 已决定不续训）。清单与大小见 [清理记录](agent_logs/20260929-data-cleanup.md)。results/ 123 GiB → 20 GiB。
