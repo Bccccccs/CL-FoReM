@@ -1,1 +1,0 @@
-{"indices": [[0, 3], [1, 2], [139, 53], [999, 180]], "cross_chunk_boundary": 32232, "max_abs_feature_difference": 0.0, "reference": "independent raw episode GPU encoding batch128 vs GPU cache batch128", "tolerance": {"rtol": 1e-05, "atol": 1e-05}, "result": "passed"}

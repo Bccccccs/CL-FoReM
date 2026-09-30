@@ -1,0 +1,22 @@
+{
+  "required_directories": [
+    "doc",
+    "config",
+    "src",
+    "scripts",
+    "docker",
+    "data",
+    "results",
+    "logs",
+    "build",
+    "devel"
+  ],
+  "config_directory": "config",
+  "activity_progress": "forem/doc/PROGRESS.md",
+  "root_compatibility_links": true,
+  "checked_markdown_files": 12,
+  "broken_links": [],
+  "output_ignore_rules_passed": true,
+  "container_entry_shell_syntax_passed": true,
+  "compiled_or_simulated": false
+}

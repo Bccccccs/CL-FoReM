@@ -1,7 +1,0 @@
-vit-pytorch 1.5.1 has requirement torch>=1.10, but you have torch 1.8.1+cu111.
-scikit-image 0.21.0 has requirement scipy>=1.8, but you have scipy 1.7.3.
-referencing 0.35.1 has requirement attrs>=22.2.0, but you have attrs 19.3.0.
-opencensus 0.11.4 has requirement six~=1.16, but you have six 1.14.0.
-jsonschema 4.23.0 has requirement attrs>=22.2.0, but you have attrs 19.3.0.
-gym 0.18.0 has requirement Pillow<=7.2.0, but you have pillow 9.5.0.
-gpustat 1.1.1 has requirement psutil>=5.6.0, but you have psutil 5.5.1.

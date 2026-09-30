@@ -1,32 +1,36 @@
-# catkin 构建产物
-/build/
-/devel/
-/logs/
-/install/
-/.catkin_tools/
-
-# ---- 自带 .git 的包，在各自仓库里管理，根仓库不跟踪 ----
-# 算法主包 src/modulation_rl 已于 2026-09-28 以 subtree 方式并入本仓库（保留历史，D42）
-# 第三方包：有本地改动的已在各自仓库的 husky-ws 分支上提交
-/src/bio_ik/
-/src/gripper_breakdown_solution/
-/src/husky/
-/src/realsense2_description/
-/src/realsense_ros_gazebo/
-/src/roboticsgroup_upatras_gazebo_plugins/
-/src/tf_lookup/
-/src/tmc_control_msgs/
-
-# 早期整包快照，728M 且自带 .git；保留在磁盘上，不入库
-/modulation_rl(复件)/
-
+# 独立参考仓库
+/nmoma/
+/topay/
+/scwm/
+# Husky运行资源与历史产物
+/husky/assets/
+/husky/results/
+/husky/logs/
+/husky/build/
+/husky/devel/
+/husky/install/
+/husky/.catkin_tools/
+/husky/modulation_rl(复件)/
+# 自带Git的ROS包
+/husky/src/bio_ik/
+/husky/src/gripper_breakdown_solution/
+/husky/src/husky/
+/husky/src/realsense2_description/
+/husky/src/realsense_ros_gazebo/
+/husky/src/roboticsgroup_upatras_gazebo_plugins/
+/husky/src/tf_lookup/
+/husky/src/tmc_control_msgs/
 __pycache__/
 *.pyc
 
-# P0 experiment artifacts
-/results/
+/forem/build/
+/forem/devel/
+/forem/install/
+/forem/.catkin_tools/
+/forem/results/
+/forem/logs/
+/forem/assets/
 
-/assets/
-
-# 独立 git worktree（运行中流水线不受影响的开发目录）
-/worktrees/
+# 原始数据不入Git，保留目录说明
+/forem/data/*
+!/forem/data/README.md

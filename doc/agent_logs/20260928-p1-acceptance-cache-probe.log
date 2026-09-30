@@ -1,2 +1,0 @@
-CACHE {"split": "train", "episodes": 4, "observations": 18, "seconds": 0.016849208623170853}
-{"result": "PASS", "episodes": 4, "observations": 18, "horizons": [1, 5], "goal_switch_modes": 2, "tail_batch": 3, "cache_block_rows": 2, "global_lru_limit": 4, "zero_transition_episode": true, "corrupt_block_rejected": true}
