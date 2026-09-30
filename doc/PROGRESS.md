@@ -9,7 +9,7 @@
 | 执行计划 | [ROADMAP](ROADMAP.md)（唯一） |
 | 已完成 | PH0 基线环境（analytical）、PH1 世界模型离线预测 |
 | 已结束 | PH2 全局模式闭环探索：负结果（原 Stage0/FOLLOWUP/SCREEN/CEIL），规划器全知是主因（D59） |
-| **当前阶段** | **PH3 开关实现 + 诊断评测**（不设关卡，D62）→ 验证通过后**当晚**并行启动 **PH4.1** 训练（K-std-r3/r5 ×种子11/22、G-std 种子22；D62 已预登记）；Sonnet 5.5 子 Agent 执行 |
+| **当前阶段** | **PH4.1 不通过（D62/D64）**：非全局重训 SAC 与全局 SAC 无差别；3.2 更强版本（D65）对现有 SAC 也无伤害；**按规则停下，等用户决定方向** |
 | 下一检查点 | G4 的 4.1 部分：SR(G-std) − SR(K-std-r) ≥0.10 且分层 CI 下界 >0（每个 r 分别判定），r_sel = 通过的最大 r |
 | 分支 | 只有 `main`；任务分支 `phN-主题` 用后即删（ROADMAP §10） |
 | 投稿 | IJCAI 2027（D37）；PH6 最迟 11-20 决定去留 |
@@ -19,7 +19,7 @@
 | ID | 阶段 | Agent | 状态 | 范围 | 记录 |
 |---|---|---|---|---|---|
 | REFLOW-029 | 流程重写（跨阶段） | Claude Opus 5.5 /ybc | review | 2026-09-29 约14:58起；非全局模式转向、PH0–PH8 统一命名、ROADMAP 重写、D59/D60、分支收拢到 main；仅文档与分支，不改代码/不跑实验 | [日志](agent_logs/20260929-reflow.md) |
-| PH3-OBSMAP | PH3 + PH4.1 | 设计：Claude Opus 5.5 /ybc；实现与运行：Claude Sonnet 5.5 子 Agent | active | 2026-09-29 约15:14起；`observed-map-v1` 开关（只改规划器地图，训练+评测）已实现并验证（默认关闭逐位一致、全可见等价、267 项测试）；PH3 诊断评测已完成（D60，名义复现 100/100，r=3/5/10 降幅 ≤0.03，诊断不通过）；**16:26 起无人值守流水线在跑**：PH4.1 的 5 个 10 万步训练 + D64 的 2 个 30 万步长训练 + 评测/学习曲线/分析（D62/D64，`results/ph4-train/`，编排器 PID 236767）；分支 `ph3-obsmap` | [日志](agent_logs/20260929-ph3-obsmap.md) / [设计](agent_logs/20260929-ph3-obsmap-spec.md) / [PH3 报告](agent_logs/20260929-ph3-obsmap-report.md) |
+| PH3-OBSMAP | PH3 + PH4.1 | 设计：Claude Opus 5.5 /ybc；实现与运行：Claude Sonnet 5.5 子 Agent | review | 2026-09-29 15:14起；开关实现与验证通过（回归逐位一致、267 测试）；PH3 诊断 r=10/5/3 SR 0.69/0.68/0.67（名义 0.70，D60 均不通过）；PH4.1 流水线 09-30 06:22 完成：**D62/D64 两个 r 均不通过**（r=3：G 0.63 vs K 0.605，长训练 0.66；r=5：K 0.585，长训练 0.65）；待用户决定方向；11 套 ROS 栈（11421–11427、11431–11434）待清理 | [日志](agent_logs/20260929-ph3-obsmap.md) / [设计](agent_logs/20260929-ph3-obsmap-spec.md) / [PH3 报告](agent_logs/20260929-ph3-obsmap-report.md) |
 | PH3-STRONG | PH3（3.2） | 设计：Claude Opus 5.5 /ybc；实现与运行：Claude Sonnet 5.5 子 Agent | review | 2026-09-29 约16:52起；`--obsmap-policy-map`、`--obstacle-spacing` 两个新开关 + V1–V5 用 policy-100k 诊断（D65）；在 worktree `worktrees/ph3-strong` 开发，不干扰运行中的 PH4.1 流水线；不训练；**完成（17:29）**：V1–V5 各100回合，D65 全部不通过（V1 −0.04、V2 −0.08、V3 −0.07、V5 −0.07，点估计均未达 −0.15），无“第一个通过的版本”，按 D65 停下与用户讨论；代码分支 `ph3-strong`（19717e9、c851420，未合并），292 项 pytest 通过，默认关闭回归逐位一致；自己的 ROS 栈已停 | [日志](agent_logs/20260929-ph3-strong.md) / [设计](agent_logs/20260929-ph3-strong-spec.md) / [报告](agent_logs/20260929-ph3-strong-report.md) |
 
 以下为 D59 之前的任务行（原编号），内容不改。
