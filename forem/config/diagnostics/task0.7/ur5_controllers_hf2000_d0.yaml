@@ -1,0 +1,39 @@
+# task0.7 diagnostic config. Differs from ur5_controllers_hf2000.yaml ONLY in: all six D gains = 0 (P, I unchanged; DIAGNOSTIC ONLY)
+# task0.7 diagnostic config. Differs from config/control/ur5_controllers.yaml ONLY in: joint_state/state publish rate 125 -> 2000 (sampling only; no control change)
+# FoReM task0 normal controller configuration (no injected error).
+# Source: husky/src/husky_ur5/config/ur5_controllers.yaml
+#   sha256 d9821dd6839275ee1c3e1df35139c0426335a4ece40d8a01963605f5f4e654ca
+# Gains, constraints, rates and joint names are copied unchanged. Removed: the stopped
+# joint_group_eff_controller and the gripper controller (no gripper in this scene).
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: &loop_hz 2000
+
+eff_joint_traj_controller:
+  type: effort_controllers/JointTrajectoryController
+  joints: &robot_joints
+    - ur5_shoulder_pan_joint
+    - ur5_shoulder_lift_joint
+    - ur5_elbow_joint
+    - ur5_wrist_1_joint
+    - ur5_wrist_2_joint
+    - ur5_wrist_3_joint
+  gains: # Required because we're controlling an effort interface
+    ur5_shoulder_pan_joint: {p: 4000, d: 0, i: 1, i_clamp: 1}
+    ur5_shoulder_lift_joint: {p: 10000, d: 0, i: 1, i_clamp: 1}
+    ur5_elbow_joint: {p: 2000, d: 0, i: 1, i_clamp: 1}
+    ur5_wrist_1_joint: {p: 500, d: 0, i: 1, i_clamp: 1}
+    ur5_wrist_2_joint: {p: 500, d: 0, i: 1, i_clamp: 1}
+    ur5_wrist_3_joint: {p: 100, d: 0, i: 0, i_clamp: 1}
+  constraints:
+    goal_time: 0.6
+    stopped_velocity_tolerance: 0.05
+    ur5_shoulder_pan_joint: {trajectory: 0.1, goal: 0.1}
+    ur5_shoulder_lift_joint: {trajectory: 0.1, goal: 0.1}
+    ur5_elbow_joint: {trajectory: 0.1, goal: 0.1}
+    ur5_wrist_1_joint: {trajectory: 0.1, goal: 0.1}
+    ur5_wrist_2_joint: {trajectory: 0.1, goal: 0.1}
+    ur5_wrist_3_joint: {trajectory: 0.1, goal: 0.1}
+  stop_trajectory_duration: 0.5
+  state_publish_rate: *loop_hz
+  action_monitor_rate: 10

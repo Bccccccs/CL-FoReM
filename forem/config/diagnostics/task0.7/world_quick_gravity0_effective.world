@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+<!--
+  FoReM task0 empty world. Physics values copied from
+  husky/src/modulation_rl/gazebo_world/worlds/modulation_tasks.world (erp 0.2, step 0.0005 s,
+  2000 Hz => real-time factor 1) EXCEPT the ODE solver: task0.7 changed solver type
+  quick -> world (direct solve). With quick (50/200/1000 iters, sor 0.5/1.0) every joint of the
+  held UR5 shows a sustained ~1 kHz step-to-step alternation; with world it is at numerical
+  noise level (see doc/tasks/task0/task0.7/RESULTS.md and DECISIONS.md). iters/sor below are
+  ignored by the world solver and kept only to document the reference values.
+  Ground plane and sun only.
+-->
+<!-- task0.7 diagnostic world. Differs from world_quick_baseline.world (quick solver) ONLY in: gravity 0 0 0 placed in <world> (effective; the earlier world_gravity0/world_formal_gravity0 put it in <physics> where it is ignored) -->
+<sdf version="1.6">
+  <world name="default">
+    <gravity>0 0 0</gravity>
+    <physics type="ode">
+      <ode>
+        <solver>
+          <type>quick</type>
+          <iters>50</iters>
+          <sor>1.0</sor>
+        </solver>
+        <constraints>
+          <cfm>0.0</cfm>
+          <erp>0.2</erp>
+          <contact_max_correcting_vel>100.0</contact_max_correcting_vel>
+          <contact_surface_layer>0.0</contact_surface_layer>
+        </constraints>
+      </ode>
+      <real_time_update_rate>2000</real_time_update_rate>
+      <max_step_size>0.0005</max_step_size>
+    </physics>
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+  </world>
+</sdf>

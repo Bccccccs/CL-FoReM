@@ -1,0 +1,9 @@
+{
+  "nodes_checked": 7,
+  "recursive_numbered_directories": true,
+  "three_documents_per_node": true,
+  "project_rules_in_root_agents": true,
+  "delegation_rules_in_every_procedure": true,
+  "broken_links": [],
+  "environment_or_subagents_started": false
+}

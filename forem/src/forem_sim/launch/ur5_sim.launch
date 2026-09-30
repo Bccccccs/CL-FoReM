@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Fixed-base UR5, effort trajectory controller, empty world. No error injection. -->
+  <arg name="gui" default="false"/>
+  <arg name="controllers" default="[joint_state_controller, eff_joint_traj_controller]"
+       doc="Controllers start_controllers.py loads and starts (diagnostics may drop the effort controller)."/>
+  <arg name="world" default="$(find forem_sim)/worlds/ur5_empty.world"/>
+  <arg name="controller_config" default="$(find forem_sim)/../../config/control/ur5_controllers.yaml"
+       doc="Defaults to forem/config/control (two levels above the package source dir)."/>
+  <arg name="init_shoulder_pan" default="0.0"/>
+  <arg name="init_shoulder_lift" default="-1.5708"/>
+  <arg name="init_elbow" default="0.0"/>
+  <arg name="init_wrist_1" default="-1.5708"/>
+  <arg name="init_wrist_2" default="0.0"/>
+  <arg name="init_wrist_3" default="0.0"/>
+
+  <param name="/use_sim_time" value="true"/>
+  <param name="robot_description"
+         command="$(find xacro)/xacro '$(find forem_sim)/urdf/ur5_fixed.urdf.xacro'"/>
+  <rosparam file="$(arg controller_config)" command="load"/>
+
+  <!-- Gazebo starts paused; start_controllers.py unpauses once controllers are loaded. -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(arg world)"/>
+    <arg name="paused" value="true"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="$(arg gui)"/>
+    <arg name="headless" value="true" unless="$(arg gui)"/>
+  </include>
+
+  <node name="spawn_ur5" pkg="gazebo_ros" type="spawn_model" output="screen"
+        args="-urdf -param robot_description -model forem_ur5"/>
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
+    <param name="publish_frequency" value="125"/>
+  </node>
+
+  <!-- Sets the initial pose while paused, loads/starts controllers, then unpauses physics. -->
+  <node name="start_controllers" pkg="forem_sim" type="start_controllers.py" output="screen">
+    <param name="model_name" value="forem_ur5"/>
+    <rosparam param="controllers" subst_value="true">$(arg controllers)</rosparam>
+    <rosparam param="init_pose" subst_value="true">
+      ur5_shoulder_pan_joint: $(arg init_shoulder_pan)
+      ur5_shoulder_lift_joint: $(arg init_shoulder_lift)
+      ur5_elbow_joint: $(arg init_elbow)
+      ur5_wrist_1_joint: $(arg init_wrist_1)
+      ur5_wrist_2_joint: $(arg init_wrist_2)
+      ur5_wrist_3_joint: $(arg init_wrist_3)
+    </rosparam>
+  </node>
+</launch>

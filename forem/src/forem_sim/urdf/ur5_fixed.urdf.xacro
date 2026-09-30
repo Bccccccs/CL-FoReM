@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+  FoReM task0: UR5 rigidly mounted to the world, effort (torque) hardware interface.
+  Arm model: apt ur_description (ur5_macro, default UR5 parameters), joint prefix "ur5_"
+  (same prefix and macro call as husky/src/husky_ur5/urdf/husky_ur5.xacro, but without
+  Husky base, lidars, gripper or MoveIt plugins). The world link + fixed joint welds the
+  base; the arm joints stay movable.
+-->
+<robot name="forem_ur5" xmlns:xacro="http://wiki.ros.org/xacro">
+  <xacro:arg name="transmission_hw_interface" default="hardware_interface/EffortJointInterface"/>
+  <xacro:include filename="$(find ur_description)/urdf/inc/ur5_macro.xacro"/>
+  <xacro:ur5_robot prefix="ur5_" transmission_hw_interface="$(arg transmission_hw_interface)"/>
+
+  <link name="world"/>
+  <joint name="world_to_ur5_base" type="fixed">
+    <parent link="world"/>
+    <child link="ur5_base_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/</robotNamespace>
+      <legacyModeNS>true</legacyModeNS>
+    </plugin>
+  </gazebo>
+</robot>

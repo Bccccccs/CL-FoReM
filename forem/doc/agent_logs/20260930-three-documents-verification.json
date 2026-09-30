@@ -1,0 +1,9 @@
+{
+  "task_nodes_checked": 7,
+  "three_files_per_node": true,
+  "recursive_rule_in_every_procedure": true,
+  "models_in_all_three_files": true,
+  "checked_markdown_files": 27,
+  "broken_links": [],
+  "new_environment_executed": false
+}

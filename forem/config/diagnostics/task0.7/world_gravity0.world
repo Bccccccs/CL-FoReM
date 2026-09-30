@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+<!--
+  FoReM task0 empty world. Physics values copied from
+  husky/src/modulation_rl/gazebo_world/worlds/modulation_tasks.world (ODE quick, 50 iters,
+  erp 0.2, step 0.0005 s, 2000 Hz => real-time factor 1). Ground plane and sun only.
+-->
+<!-- task0.7 diagnostic world. Differs from src/forem_sim/worlds/ur5_empty.world ONLY in: gravity 0 0 -9.81 -> 0 0 0 (DIAGNOSTIC ONLY) -->
+<!-- INVALID DIAGNOSTIC (task0.7): gravity is written inside <physics>, which Gazebo ignores; this world still has gravity 0 0 -9.8. Do not use; see *_effective.world -->
+<sdf version="1.6">
+  <world name="default">
+    <physics type="ode">
+      <gravity>0 0 0</gravity>
+      <ode>
+        <solver>
+          <type>quick</type>
+          <iters>50</iters>
+          <sor>1.0</sor>
+        </solver>
+        <constraints>
+          <cfm>0.0</cfm>
+          <erp>0.2</erp>
+          <contact_max_correcting_vel>100.0</contact_max_correcting_vel>
+          <contact_surface_layer>0.0</contact_surface_layer>
+        </constraints>
+      </ode>
+      <real_time_update_rate>2000</real_time_update_rate>
+      <max_step_size>0.0005</max_step_size>
+    </physics>
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+  </world>
+</sdf>
