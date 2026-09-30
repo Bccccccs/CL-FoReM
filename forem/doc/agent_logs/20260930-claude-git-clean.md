@@ -28,3 +28,10 @@
 ## 交接
 
 提交后如需回到旧状态：`git checkout backup/husky-before-reset-20260930` 或按 commit 回退。
+
+## 追加（2026-09-30，用户后续指令）
+
+- “分支切换主分支，如有重复请整理删除”：`git switch -C main` 将 `main` 快进到当时 HEAD（旧 `main`=f2a266b 是其祖先，未丢提交），已删除重复分支 `ph4-workspace-layout`（同一提交）和 `ph3-obsmap`（与备份分支同指 177a367）。保留 `backup/husky-before-reset-20260930`（AGENTS.md 引用）和 `ph3-strong`（2 个未合并提交，工作树在备份目录）。
+- “git只对forem起作用”：根 `.gitignore` 改为 `/*` 忽略、仅放行 `/forem/` 与 `.gitignore`；710 个非 forem 路径用 `git rm --cached` 取消跟踪，磁盘文件不动（husky 371 个文件仍在）。提交 094a149。历史与备份分支仍保留这些内容。
+- 影响：根 `AGENTS.md`、`README.md`、`doc/` 兼容链接、`husky/` 不再受 Git 保护；如需让根 AGENTS.md 继续入库，在 `.gitignore` 加 `!/AGENTS.md`。
+- 未触碰：Codex 正在进行的 forem 内未提交改动（ENV-HANDOFF-DOC）。未推送。
