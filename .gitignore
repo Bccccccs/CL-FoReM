@@ -1,28 +1,9 @@
-# 独立参考仓库
-/nmoma/
-/topay/
-/scwm/
-# Husky运行资源与历史产物
-/husky/assets/
-/husky/results/
-/husky/logs/
-/husky/build/
-/husky/devel/
-/husky/install/
-/husky/.catkin_tools/
-/husky/modulation_rl(复件)/
-# 自带Git的ROS包
-/husky/src/bio_ik/
-/husky/src/gripper_breakdown_solution/
-/husky/src/husky/
-/husky/src/realsense2_description/
-/husky/src/realsense_ros_gazebo/
-/husky/src/roboticsgroup_upatras_gazebo_plugins/
-/husky/src/tf_lookup/
-/husky/src/tmc_control_msgs/
-__pycache__/
-*.pyc
+# 根Git只管理forem/：根目录其余内容（husky、三个参考仓库、兼容链接、根文档）一律不入Git
+/*
+!/.gitignore
+!/forem/
 
+# forem内不入Git的内容
 /forem/build/
 /forem/devel/
 /forem/install/
@@ -30,6 +11,8 @@ __pycache__/
 /forem/results/
 /forem/logs/
 /forem/assets/
+__pycache__/
+*.pyc
 
 # 原始数据不入Git，保留目录说明
 /forem/data/*
