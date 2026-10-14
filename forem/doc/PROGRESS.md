@@ -29,3 +29,15 @@
 当前容器：仅forem-dev运行。用户确认废弃的3个旧容器已删，镜像/宿主数据保留；清理完成不能代替task0.7修正验收。
 
 最新（Claude，2026-09-30 11:53）：task0.7 已执行并置 review，证据与问题—修正—证据对应表见 [task0.7 RESULTS](tasks/task0/task0.7/RESULTS.md)；实测入口见 [ENV](../ENV.md)。task0 父节点仍 review，等 Codex 复核；task1 尚未开始。
+
+
+## 2026-10-14 项目级世界模型 + RL 文献调研
+
+|任务ID|类型|负责人|状态|范围|开始|记录|
+|---|---|---|---|---|---|---|
+|PROJECT-WM-RL-LITERATURE-20261014|项目级文献调研|Codex /root|review|用户指定文献原文阅读、笔记、SOURCES追加；仅三文档，不修改任务协议/实现、不仿真/训练/委派|2026-10-14T11:04:22+08:00|[阅读笔记与交接](agent_logs/project/20261014-codex-wm-rl-literature.md)|
+
+
+## 2026-10-14T11:28:19+08:00 世界模型 + RL 文献调研交付review
+
+PROJECT-WM-RL-LITERATURE-20261014：用户清单35项已形成九字段笔记、方法对比表、Task4待授权建议与4项候选补读。34篇原文PDF+Genie 3官方博客；优先9篇分全文/部分精读，逐篇深度见[阅读笔记](agent_logs/project/20261014-codex-wm-rl-literature.md#交接review)。新增来源SRC-0274–0308（35条）；旧编号重复仅报告不修。World4RL表III BC汇总冲突、WMPO正式稿403/arXiv替代与跨平台限制已披露；未复现、待独立复核或用户确认，不标done。仅本日志/PROGRESS/SOURCES，未改Task协议/源码/配置，未仿真、训练、安装或委派。
