@@ -1,0 +1,20 @@
+--- a/husky/src/modulation_rl/CMakeLists.txt
++++ b/forem/src/modulation_rl/CMakeLists.txt
+@@ -27,7 +27,6 @@
+   bio_ik
+   interactive_markers
+   moveit_core
+-  tmc_control_msgs
+ )
+ #find_package(OpenCV REQUIRED )
+ find_package(Eigen REQUIRED)
+@@ -169,9 +168,6 @@
+         src/worlds.cpp
+         src/validity_fun.cpp
+         src/robot_env.cpp
+-        src/robot_pr2.cpp
+-        src/robot_tiago.cpp
+-        src/robot_hsr.cpp
+         src/robot_husky.cpp)
+ target_link_libraries(robots myutils ${catkin_LIBRARIES})
+ 

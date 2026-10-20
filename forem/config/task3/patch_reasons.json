@@ -1,0 +1,50 @@
+{
+ "forem/src/modulation_rl/CMakeLists.txt": {
+  "reason": "Husky-only closure: drop robot_pr2/robot_tiago/robot_hsr sources and the tmc_control_msgs catkin dependency (only robot_hsr.cpp used it). Husky RobotEnv/RobotHusky targets and flags (including the reference CMAKE_BUILD_TYPE Debug) unchanged.",
+  "semantic_impact": "none"
+ },
+ "forem/src/modulation_rl/package.xml": {
+  "reason": "remove exec_depend on hsrb_description, hsrb_moveit_config and range_sensor_layer (HSR/range-sensor-only; range_sensor_layer has no Noetic binary and no launch/yaml references it).",
+  "semantic_impact": "none"
+ },
+ "forem/src/modulation_rl/src/pybindings_robots.cpp": {
+  "reason": "bind RobotEnv + RobotHusky only (PR2/Tiago/HSR classes are not compiled). The RobotEnv and RobotHusky bindings are byte-identical in the diff.",
+  "semantic_impact": "none"
+ },
+ "forem/src/modulation_rl/scripts/modulation/envs/robotenv.py": {
+  "reason": "import only RobotHusky and keep only the husky_ur5 branch (drive diff, ik group, robot_fn) plus the no-limit-joint default; other robots now fall through to the existing `Unknown env` ValueError. The husky_ur5 code path is unchanged (see diff: only deletions of other-robot branches and the pr2-specific no_lim_joints).",
+  "semantic_impact": "none"
+ },
+ "forem/src/modulation_rl/gazebo_world/common/plugins/modulation_bumper.gazebo.xacro": {
+  "reason": "the bumper macro no longer applies <turnGravityOff>true</turnGravityOff> by default: it gets a parameter gravity_off (default false) and emits the tag only when gravity_off is true. In the reference every bumper link (chassis, wheels, arm, gripper) had gravity off, which leaves the Gazebo base undrivable (wheels hover/spin: 0.0075 m/s for a 0.2 m/s command, t3.2-motion-r1). Contact sensors, selfCollide=false and topics unchanged.",
+  "semantic_impact": "declared"
+ },
+ "forem/src/husky_control/CMakeLists.txt": {
+  "reason": "the launch/ directory is not imported (replaced by forem_husky/launch/husky_core.launch); drop roslaunch_add_file_check(launch) and the launch install.",
+  "semantic_impact": "none"
+ },
+ "forem/src/robotiq_85_description/CMakeLists.txt": {
+  "reason": "the launch/ directory is not imported; drop roslaunch_add_file_check(launch) and the launch install.",
+  "semantic_impact": "none"
+ },
+ "forem/src/robotiq_85_moveit_config/CMakeLists.txt": {
+  "reason": "only config/joint_limits.yaml is imported (used by the gripper_planning namespace); drop the launch install.",
+  "semantic_impact": "none"
+ },
+ "forem/src/robotiq_85_description/urdf/robotiq_85_gripper.transmission.xacro": {
+  "reason": "mimic-joint plugin file name libroboticsgroup_gazebo_mimic_joint_plugin.so -> libroboticsgroup_upatras_gazebo_mimic_joint_plugin.so: the imported package roboticsgroup_upatras_gazebo_plugins builds the latter (same <joint>/<mimicJoint>/<multiplier>/<offset> parameters); the former library is not in the source snapshot.",
+  "semantic_impact": "none"
+ },
+ "forem/src/robotiq_85_description/urdf/robotiq_85_gripper.urdf.xacro": {
+  "reason": "remove the gazebo_grasp_fix plugin block: libgazebo_grasp_fix.so is not in the source snapshot (plugin load would fail) and only serves attach/grasp tasks, which are out of the Task3 scope.",
+  "semantic_impact": "none"
+ },
+ "forem/src/husky_ur5/urdf/husky_ur5.xacro": {
+  "reason": "(1) remove the libgazebo_ros_moveit_planning_scene.so plugin block (prebuilt binary of unknown ABI, not in the source closure; RobotEnv does not use /planning_scene and reads joint_states). (2) pass gravity_off=\"true\" to the 15 bumper macro calls of the UR5 arm links and gripper links so the ARM KEEPS the reference's gravity-free dynamics, while chassis/wheel/mount links get gravity (needed to drive). Measured: with gravity on for the arm too, the reference effort PID (p=100,d=0.1 on wrist_3, trajectory tolerance 0.1 rad) is violently unstable after random-policy episodes and arm resets abort ('wrist_3 path error', 'Could not set start pose after 50 trials'): t3.5-int-r2, t3.5-resets-r1, t3.5-resets-quick1; with the arm gravity-free: 12/12 episodes reset without failure (t3.5-resets-r2).",
+  "semantic_impact": "declared"
+ },
+ "forem/src/modulation_rl/scripts/sac.py": {
+  "reason": "SAC.__init__: the compute device is read from args[\"device\"] (default remains the reference torch.device(\"cuda\")) because forem-dev has no visible GPU. The update functions (update_parameters, update_parameters_modified), networks, schedulers, alpha cap and checkpoint functions are unchanged byte for byte.",
+  "semantic_impact": "none"
+ }
+}

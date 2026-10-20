@@ -1,0 +1,39 @@
+--- a/husky/src/robotiq_85_gripper/robotiq_85_description/urdf/robotiq_85_gripper.transmission.xacro
++++ b/forem/src/robotiq_85_description/urdf/robotiq_85_gripper.transmission.xacro
+@@ -16,31 +16,31 @@
+         
+         <gazebo>
+                 <!-- loading plugin: mimic joints works in gazebo now -->
+-            <plugin filename="libroboticsgroup_gazebo_mimic_joint_plugin.so" name="${prefix}mimic_robotiq_85_1">
++            <plugin filename="libroboticsgroup_upatras_gazebo_mimic_joint_plugin.so" name="${prefix}mimic_robotiq_85_1">
+                 <joint>${prefix}gripper_finger1_joint</joint>
+                 <mimicJoint>${prefix}gripper_finger2_joint</mimicJoint>
+                 <multiplier>1.0</multiplier>
+                 <offset>0.0</offset>
+             </plugin>
+-            <plugin filename="libroboticsgroup_gazebo_mimic_joint_plugin.so" name="${prefix}mimic_robotiq_85_2">
++            <plugin filename="libroboticsgroup_upatras_gazebo_mimic_joint_plugin.so" name="${prefix}mimic_robotiq_85_2">
+                 <joint>${prefix}gripper_finger1_joint</joint>
+                 <mimicJoint>${prefix}gripper_finger2_inner_knuckle_joint</mimicJoint>
+                 <multiplier>1.0</multiplier>
+                 <offset>0.0</offset>
+             </plugin>
+-            <plugin filename="libroboticsgroup_gazebo_mimic_joint_plugin.so" name="${prefix}mimic_robotiq_85_3">
++            <plugin filename="libroboticsgroup_upatras_gazebo_mimic_joint_plugin.so" name="${prefix}mimic_robotiq_85_3">
+                 <joint>${prefix}gripper_finger1_joint</joint>
+                 <mimicJoint>${prefix}gripper_finger1_inner_knuckle_joint</mimicJoint>
+                 <multiplier>1.0</multiplier>
+                 <offset>0.0</offset>
+             </plugin>
+-            <plugin filename="libroboticsgroup_gazebo_mimic_joint_plugin.so" name="${prefix}mimic_robotiq_85_4">
++            <plugin filename="libroboticsgroup_upatras_gazebo_mimic_joint_plugin.so" name="${prefix}mimic_robotiq_85_4">
+                 <joint>${prefix}gripper_finger1_joint</joint>
+                 <mimicJoint>${prefix}gripper_finger1_finger_tip_joint</mimicJoint>
+                 <multiplier>-1.0</multiplier>
+                 <offset>0.0</offset>
+             </plugin>
+-            <plugin filename="libroboticsgroup_gazebo_mimic_joint_plugin.so" name="${prefix}mimic_robotiq_85_5">
++            <plugin filename="libroboticsgroup_upatras_gazebo_mimic_joint_plugin.so" name="${prefix}mimic_robotiq_85_5">
+                 <joint>${prefix}gripper_finger1_joint</joint>
+                 <mimicJoint>${prefix}gripper_finger2_finger_tip_joint</mimicJoint>
+                 <multiplier>-1.0</multiplier>

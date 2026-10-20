@@ -1,3 +1,4 @@
+<!-- 存放位置：agent_logs/project/（项目级）、agent_logs/taskN/、agent_logs/taskN/taskN.M/（与 tasks/ 编号一致）；文件名 YYYYMMDD-agent-topic.md -->
 # <任务ID：主题>
 
 - Agent：Codex / Claude

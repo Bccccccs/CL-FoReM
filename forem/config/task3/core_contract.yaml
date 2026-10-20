@@ -1,0 +1,79 @@
+# task3 core (robot / control / pose-chain) contract, schema 1.
+# Values come from the reference source (task3.1) or are marked `measured:` with the run that measured them (task3.2/3.3).
+# Anything not yet measured is marked `source-only`. The final freeze (task3.5 execution_freeze.json) hashes this file.
+schema: 1
+robot: husky_ur5
+world_type: gazebo
+pose_source: gazebo_reference      # nav_msgs/Odometry /ground_truth/state (Gazebo p3d, 50 Hz, frame world) -> pose_bridge -> TF odom->base_footprint
+task: simpleobstacle
+
+environment:
+  image: mm_husky:node01
+  image_id: sha256:e674db49b8156fded725ba4de8c2faf81aa491a367a1e151eddae169a1dfc430
+  ros: noetic
+  gazebo: "11.15.1 (measured)"
+  python: "3.10.18 (measured; pybind modules built for cp310 with catkin cmake args PYTHON_EXECUTABLE=/opt/python310/bin/python3, see logs/task3/t3.2-build3)"
+  torch: "2.7.1+cu128 (container; CUDA not visible in forem-dev)"
+  gym: 0.18.0
+  numpy: 1.23.5
+  ray: 1.13.0
+  moveit: 1.1.16
+  bio_ik: "source copy of bio_ik@1de267840678fc3237ee90c8788e835e1966fbf4"
+  import_order: "import ray before import torch / pybindings in every process that uses the pybind modules (task3.2: torch then pybindings aborts with std::bad_cast; ray first is fine)"
+  catkin_workspace: "forem (devel linked layout); packages: forem_sim forem_husky modulation_rl husky_ur5 husky_description husky_control bio_ik robotiq_85_description robotiq_85_moveit_config roboticsgroup_upatras_gazebo_plugins"
+
+frames:
+  world_map_odom: identity            # tf2 static publishers world->map->odom
+  base_pose_edge: [odom, base_footprint]   # the ONLY policy-facing dynamic edge; single publisher: /pose_bridge
+  base_link: base_link                 # robot_state_publisher fixed joint from base_footprint (z +0.1323)
+  planning_frame: odom                 # MoveIt planning frame (measured: "Planning frame: odom")
+  ee_link: gripper_base_link           # robot_config global_link_transform
+  tip_to_gripper_offset: [0.15, 0.0, 0.0]
+  gripper_to_base_rot_offset: [0.0, 0.0, 0.0, 1.0]
+
+joints:
+  arm_group: manipulator               # measured group order below (get_joint_names)
+  arm_joint_order: [ur5_shoulder_pan_joint, ur5_shoulder_lift_joint, ur5_elbow_joint, ur5_wrist_1_joint, ur5_wrist_2_joint, ur5_wrist_3_joint]
+  position_limits_rad: {ur5_shoulder_pan_joint: [-6.283185, 6.283185], ur5_shoulder_lift_joint: [-6.283185, 6.283185], ur5_elbow_joint: [-3.141593, 3.141593], ur5_wrist_1_joint: [-6.283185, 6.283185], ur5_wrist_2_joint: [-6.283185, 6.283185], ur5_wrist_3_joint: [-6.283185, 6.283185]}
+  max_velocity_rad_s: 3.141593         # /robot_description_planning/joint_limits (measured via RobotEnv.max_joint_velocities)
+  start_pose_rad: [-0.0111197, -1.5705043, -0.00078635, -1.5713909, -0.00059688, -0.00654094]   # robot_config.yaml initial_joint_values (RobotEnv.drawJointValues always returns it; planned/IK order differs by group, see source)
+  gripper: {controller: gripper_controller, joint: gripper_finger1_joint, closed_at_start: true}
+
+timing:
+  gazebo_physics_step_s: 0.0005
+  gazebo_update_rate_hz: 2000
+  real_time_factor: "measured 0.75-0.82 (world solver), 0.87-0.93 (quick solver) in the idle motion check (task3.2)"
+  rl_step_dt_exec_s: 0.02              # RobotEnv rate.sleep_dur (time_step); passed to the planner/IK as dt
+  rl_step_measured: "measured t3.3-env-r1: sim 0.0152 s / wall 0.0173 s per env.step (mean, 20 steps, no learning)"
+  planner_time_step_train_s: 0.1       # eeplanner.TIME_STEP_TRAIN
+  controller_rates: {joint_state_controller_hz: 125, eff_joint_traj_state_hz: 125, husky_joint_publisher_hz: 50, diff_drive_odom_hz: 50, p3d_hz: 50, front_laser_hz: 50, costmap_update_hz: 50}
+  note: "the env runs against an UNPAUSED real-time Gazebo: policy compute time passes in simulation (reference behaviour)"
+
+control_chain:
+  base: "action -> RobotEnv._calculate_base_command -> RobotEnv.sendBaseCommand (execute_style=direct) geometry_msgs/Twist on /cmd_vel -> twist_mux -> /husky_velocity_controller/cmd_vel -> diff_drive_controller -> Gazebo wheels (skid steer, wheel_separation_multiplier 1.875)"
+  base_limits: {action_scale_linear_m_s: 0.3, action_scale_angular_rad_s: 1.0, controller_max_linear_m_s: 1.0, controller_max_angular_rad_s: 2.0, cmd_vel_timeout_s: 0.25}
+  arm: "planned gripper pose -> BioIK (manipulator group, timeout 0.01 s, weights: regularization mindispl 1.0, avoid_joint_limits 1.0, center_joints 0.0) -> joint values -> FollowJointTrajectory goal (single point, time_from_start = dt_exec) on /eff_joint_traj_controller/follow_joint_trajectory -> effort_controllers/JointTrajectoryController (PID gains verbatim from husky_ur5/config/ur5_controllers.yaml)"
+  arm_pid_gains: {pan: {p: 4000, d: 200, i: 1}, lift: {p: 10000, d: 200, i: 1}, elbow: {p: 2000, d: 20, i: 1}, wrist1: {p: 500, d: 1, i: 1}, wrist2: {p: 500, d: 1, i: 1}, wrist3: {p: 100, d: 0.1, i: 0}}
+  planned_vs_actual: >-
+    perception_style=base: the base pose is re-read from TF every step (actual, pose_source), the arm joint values in the observation
+    are the IK/planned values. The Gazebo-measured arm joints are reported separately (info['actual_arm_joints']).
+    measured t3.3-env-r1: max |planned - actual| over 20 steps 0.120 rad (mean 0.040), i.e. the two channels differ.
+
+pose_chain:
+  source: {topic: /ground_truth/state, type: nav_msgs/Odometry, plugin: libgazebo_ros_p3d (URDF husky_ur5.xacro p3d_base_controller, bodyName base_footprint, frameName world, updateRate 50)}
+  bridge: {node: /pose_bridge, input_topic_arg: pose_topic, source_arg: pose_source, tf_edge: [odom, base_footprint], stamp: original message stamp, status_topic: /pose_bridge/status}
+  reference_difference: "the reference pcl_configure/gdt_tf re-stamped every sample with ros::Time::now() and had no validation; replaced (task3.2)"
+  measured: "t3.2-motion-r4: TF values == p3d values (max diff 2e-16), 99.9% of samples matched by original stamp, single authority /pose_bridge"
+  task4_replacement_interface: "publish nav_msgs/Odometry (header.frame_id in {world,map,odom}, child_frame_id base_footprint, stamp = sensor/estimate time in simulation time) on a topic and launch with pose_topic:=<topic> pose_source:=<name>; pose_bridge stays the only TF publisher of odom->base_footprint; costmap, MoveIt and RobotEnv keep reading TF"
+  evaluation_truth: "/gazebo/model_states (Task3Env.evaluation_truth()) -- evaluation only, never an observation or reward input"
+
+physical_model_patches:
+  gravity: "chassis/wheels: gravity ON (base drives); UR5 arm + gripper links: gravity OFF as in the reference (task3.2/3.5); see world.yaml and patch_reasons.json"
+  front_laser: "UST10 front laser enabled by xacro arg (needed by the local costmap observation)"
+
+unreached_package_references:           # `$(find X)` text present in imported files but never expanded in the Task3 launch
+  - package: realsense2_description
+    reason: "macro body of husky_description/urdf/accessories/intel_realsense.urdf.xacro, expanded only when HUSKY_REALSENSE_ENABLED=1 (default 0)"
+    evidence: "forem_husky/husky_core.launch xacro expansion and all t3.2/t3.3 runs succeed with the package absent"
+
+system_ros_packages: [gazebo_ros, xacro, ur_description, velodyne_description, lms1xx, ur5_moveit_config, robot_state_publisher, moveit_ros_move_group, controller_manager, twist_mux, hector_gazebo_plugins, forem_sim]

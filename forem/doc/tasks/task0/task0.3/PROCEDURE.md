@@ -26,7 +26,7 @@
 
 父流程列出子节点顺序、依赖和进入/完成条件，并链接子节点三份文档；具体操作在对应子流程里维护。子节点再拆分时重复本规则。子结果记录实际证据，父结果汇总子结果，不复制原始日志。节点编号用于顺序，不能代表验收通过。
 
-同一节点的多次运行按run-id追加到RESULTS，历史事实不被新计划覆盖；大量原始日志和轨迹在forem/logs与forem/results，Agent过程记录在doc/agent_logs。不要在节点内另建第四份README/PLAN或重复的reports目录。
+同一节点的多次运行按run-id追加到RESULTS，历史事实不被新计划覆盖；大量原始日志和轨迹在forem/logs与forem/results，Agent过程记录在forem/doc/agent_logs。不要在节点内另建第四份README/PLAN或重复的reports目录。
 
 ## 前置与控制顺序
 

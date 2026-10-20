@@ -24,8 +24,16 @@ import argparse
 import csv
 import json
 import math
+import sys
 
 MIN_PAIRS = 100
+MIN_TRIPLES = 100   # declared in task0.7 RESULTS: fewer consecutive-step triples per joint = evidence insufficient = FAIL
+JOINTS = ["ur5_shoulder_pan_joint", "ur5_shoulder_lift_joint", "ur5_elbow_joint",
+          "ur5_wrist_1_joint", "ur5_wrist_2_joint", "ur5_wrist_3_joint"]
+
+
+class InvalidInput(Exception):
+    """Input cannot be analysed at all (empty, missing columns, non-finite or non-increasing time/values)."""
 
 
 def rms(xs):
@@ -38,7 +46,7 @@ def median(xs):
     return None if not n else (s[n // 2] if n % 2 else 0.5 * (s[n // 2 - 1] + s[n // 2]))
 
 
-def analyze(rows, names, step, vel_eps, t_min=None, t_max=None):
+def analyze(rows, names, step, vel_eps, t_min=None, t_max=None, min_coverage=0.5):
     rows = [r for r in rows if (t_min is None or r["t"] >= t_min) and (t_max is None or r["t"] <= t_max)]
     out = {"n_samples": len(rows), "physics_step_s": step}
     if len(rows) < 3:
@@ -48,6 +56,11 @@ def analyze(rows, names, step, vel_eps, t_min=None, t_max=None):
     dts = [b - a for a, b in zip(ts, ts[1:])]
     tol = step * 0.02
     consec = [i for i, d in enumerate(dts) if abs(d - step) <= tol]
+    win = (t_max - t_min) if (t_min is not None and t_max is not None) else (ts[-1] - ts[0])
+    expected_pairs = win / step if win > 0 else 0
+    out["window_s"] = win
+    out["expected_consecutive_pairs"] = expected_pairs
+    out["coverage_of_expected_pairs"] = (len(consec) / expected_pairs) if expected_pairs else 0.0
     out.update({
         "span_s": ts[-1] - ts[0], "mean_hz": (len(ts) - 1) / (ts[-1] - ts[0]) if ts[-1] > ts[0] else None,
         "dt_min": min(dts), "dt_max": max(dts), "non_increasing_dt_count": sum(1 for d in dts if d <= 0),
@@ -83,19 +96,75 @@ def analyze(rows, names, step, vel_eps, t_min=None, t_max=None):
         j["median_abs_vel"] = median([abs(x) for x in v])
         j["vel_minus_position_derivative_median_abs"] = median(resid)
         j["vel_minus_position_derivative_max_abs"] = max(resid) if resid else None
+        why = []
         if len(consec) < MIN_PAIRS:
-            j["insufficient_evidence"] = "only %d consecutive-step pairs (<%d)" % (len(consec), MIN_PAIRS)
+            why.append("only %d consecutive-step pairs (<%d)" % (len(consec), MIN_PAIRS))
+        if len(rq) < MIN_TRIPLES:
+            why.append("only %d consecutive-step triples (<%d)" % (len(rq), MIN_TRIPLES))
+        if out["coverage_of_expected_pairs"] < min_coverage:
+            why.append("consecutive pairs cover %.2f of the window (<%.2f)" % (out["coverage_of_expected_pairs"], min_coverage))
+        if why:
+            j["insufficient_evidence"] = "; ".join(why)
         joints[n] = j
     out["joints"] = joints
     return out
 
 
+def evaluate(res, names, crit):
+    """Apply declared criteria to an analyze() result. NaN/None/insufficient evidence never pass."""
+    verdict = {}
+    for n in names:
+        jn = res.get("joints", {}).get(n)
+        if jn is None or "insufficient_evidence" in jn:
+            verdict[n] = "INSUFFICIENT_EVIDENCE"
+            continue
+        bad = []
+
+        def over(val, limit):
+            return val is None or not (val <= limit)
+        if crit.get("alt_frac_max") is not None and jn["alternation_fraction"] is not None and over(jn["alternation_fraction"], crit["alt_frac_max"]):
+            bad.append("alternation")
+        if crit.get("vel_rms_max") is not None and over(jn["vel_rms"], crit["vel_rms_max"]):
+            bad.append("vel_rms")
+        if crit.get("pos_p2p_max") is not None and over(jn["pos_peak_to_peak"], crit["pos_p2p_max"]):
+            bad.append("pos_p2p")
+        if crit.get("vel_hf_max") is not None and over(jn["vel_hf_residual_rms"], crit["vel_hf_max"]):
+            bad.append("vel_hf")
+        if crit.get("pos_hf_max") is not None and over(jn["pos_hf_residual_rms"], crit["pos_hf_max"]):
+            bad.append("pos_hf")
+        verdict[n] = "FAIL:" + ",".join(bad) if bad else "PASS"
+    ok = ("insufficient_evidence" not in res) and len(verdict) == len(JOINTS) and all(v == "PASS" for v in verdict.values())
+    return verdict, ok
+
+
 def load(path):
-    with open(path) as f:
-        rd = csv.DictReader(f)
-        rows = [{k: float(v) for k, v in r.items()} for r in rd]
-        names = [k[4:] for k in rd.fieldnames if k.startswith("pos_")]
-    return rows, names
+    """Read and VALIDATE a joint_states CSV. Raises InvalidInput on anything that would make a verdict meaningless."""
+    try:
+        with open(path) as f:
+            rd = csv.DictReader(f)
+            fields = rd.fieldnames or []
+            raw = list(rd)
+    except OSError as e:
+        raise InvalidInput("cannot read %s: %s" % (path, e))
+    missing = [c for c in ["t"] + [pre + n for n in JOINTS for pre in ("pos_", "vel_", "eff_")] if c not in fields]
+    if missing:
+        raise InvalidInput("missing columns (all six joints need pos_/vel_/eff_): %s" % missing[:6])
+    if not raw:
+        raise InvalidInput("no data rows")
+    rows = []
+    for k, r in enumerate(raw):
+        try:
+            row = {c: float(r[c]) for c in fields}
+        except (TypeError, ValueError):
+            raise InvalidInput("row %d has a non-numeric or missing value" % (k + 2))
+        bad = [c for c, v in row.items() if not math.isfinite(v)]
+        if bad:
+            raise InvalidInput("row %d has non-finite values in %s" % (k + 2, bad[:4]))
+        rows.append(row)
+    ts = [r["t"] for r in rows]
+    if any(b <= a for a, b in zip(ts, ts[1:])):
+        raise InvalidInput("time column is not strictly increasing")
+    return rows, list(JOINTS)
 
 
 def main():
@@ -111,28 +180,26 @@ def main():
     ap.add_argument("--pos-p2p-max", type=float, default=None)
     ap.add_argument("--vel-hf-max", type=float, default=None, help="max vel_hf_residual_rms (rad/s)")
     ap.add_argument("--pos-hf-max", type=float, default=None, help="max pos_hf_residual_rms (rad)")
+    ap.add_argument("--min-coverage", type=float, default=0.5, help="required fraction of the window's expected consecutive-step pairs")
     a = ap.parse_args()
-    rows, names = load(a.joint_states)
-    res = analyze(rows, names, a.physics_step, a.vel_eps, a.t_min, a.t_max)
+    criteria_given = any(x is not None for x in (a.alt_frac_max, a.vel_rms_max, a.pos_p2p_max, a.vel_hf_max, a.pos_hf_max))
+    try:
+        rows, names = load(a.joint_states)
+    except InvalidInput as e:
+        with open(a.out, "w") as f:
+            json.dump({"input": a.joint_states, "error": str(e), "pass": False, "verdict": {}}, f, indent=2)
+        print("INVALID INPUT: %s" % e, file=sys.stderr)
+        raise SystemExit(2)
+    res = analyze(rows, names, a.physics_step, a.vel_eps, a.t_min, a.t_max, a.min_coverage)
     res["input"] = a.joint_states
     res["params"] = {"vel_eps": a.vel_eps, "t_min": a.t_min, "t_max": a.t_max}
-    if any(x is not None for x in (a.alt_frac_max, a.vel_rms_max, a.pos_p2p_max, a.vel_hf_max, a.pos_hf_max)):
+    if criteria_given:
         crit = {"alt_frac_max": a.alt_frac_max, "vel_rms_max": a.vel_rms_max, "pos_p2p_max": a.pos_p2p_max,
                 "vel_hf_max": a.vel_hf_max, "pos_hf_max": a.pos_hf_max}
-        verdict = {}
-        for n, j in res.get("joints", {}).items():
-            if "insufficient_evidence" in j:
-                verdict[n] = "INSUFFICIENT_EVIDENCE"; continue
-            bad = []
-            if a.alt_frac_max is not None and (j["alternation_fraction"] or 0) > a.alt_frac_max: bad.append("alternation")
-            if a.vel_rms_max is not None and j["vel_rms"] > a.vel_rms_max: bad.append("vel_rms")
-            if a.pos_p2p_max is not None and j["pos_peak_to_peak"] > a.pos_p2p_max: bad.append("pos_p2p")
-            if a.vel_hf_max is not None and (j["vel_hf_residual_rms"] is None or j["vel_hf_residual_rms"] > a.vel_hf_max): bad.append("vel_hf")
-            if a.pos_hf_max is not None and (j["pos_hf_residual_rms"] is None or j["pos_hf_residual_rms"] > a.pos_hf_max): bad.append("pos_hf")
-            verdict[n] = "FAIL:" + ",".join(bad) if bad else "PASS"
+        verdict, ok = evaluate(res, names, crit)
         res["criteria"] = crit
         res["verdict"] = verdict
-        res["pass"] = all(v == "PASS" for v in verdict.values())
+        res["pass"] = ok
     with open(a.out, "w") as f:
         json.dump(res, f, indent=2)
     print(json.dumps({"n": res["n_samples"], "consecutive_pairs": res.get("consecutive_step_pairs"),
@@ -140,6 +207,9 @@ def main():
                                      "vel_rms": j["vel_rms"], "pos_p2p": j["pos_peak_to_peak"],
                                      "vel_hf": j.get("vel_hf_residual_rms"), "pos_hf": j.get("pos_hf_residual_rms")} for n, j in res.get("joints", {}).items()},
                       "verdict": res.get("verdict")}, indent=1))
+    if "insufficient_evidence" in res:  # any top-level shortage of evidence is a failure, criteria or not
+        print("INSUFFICIENT EVIDENCE: %s" % res["insufficient_evidence"], file=sys.stderr)
+        raise SystemExit(1)
     if "pass" in res:
         raise SystemExit(0 if res["pass"] else 1)
 

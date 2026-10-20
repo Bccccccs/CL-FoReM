@@ -1,0 +1,336 @@
+{
+  "schema": 1,
+  "freeze_id": "t4.4-freeze-20261008-6",
+  "budget_authorization": "SRC-0155 user 2026-10-08 (fault tolerance + budget); fixes SRC0156-SRC0158",
+  "created": "2026-10-08T14:09:09.040015+00:00",
+  "quality_passed": true,
+  "public_instances_passed": true,
+  "formal_runner_complete": true,
+  "formal_runner_note": "v2 runner installed from t4.4.1 draft (manifest hashes verified) + 42 installed tests OK; first real CUDA/ROS use is the check/campaign of this freeze",
+  "budget_sha256": "8fd8d4e1e97234ba6b787ebe61f2439ddb314e86d4fd6bf982e36e84a209a6d6",
+  "seals_sha256": "e8d12ed9f7a0e0c66b6b31d1c2ed3ecca346eb0d86a531d3d7f37880902a34fd",
+  "evidence": {
+    "quality": {
+      "path": "results/task4/t4.3.5-complete-analysis/complete_receipt.json",
+      "sha256": "da4407b405803812246a1d1b38802faa27214c98a61474ab8edeb3b93572bcf6"
+    },
+    "sealed_instances": {
+      "path": "results/task4/t4.3.5-complete-r1/episode_instances.json",
+      "sha256": "79c22801817e28335ad37ace3e1a881670264a0902d2ffbf7b69608c58e58d8e"
+    },
+    "runtime_guard_tests": {
+      "path": "logs/task4/t4.4-formal-install/r6-all-task4-tests.log",
+      "sha256": "83a67e544fbb2cddee8c0659d4949bac18d933f83b23979e998ad30ef2ef7085"
+    }
+  },
+  "required_identity_groups": [
+    "binary:ov_core/libov_core_lib.so",
+    "binary:ov_init/libov_init_lib.so",
+    "binary:ov_msckf/libov_msckf_lib.so",
+    "binary:ov_msckf/ros1_serial_msckf",
+    "binary:ov_msckf/run_subscribe_msckf",
+    "config/task4",
+    "config:task3",
+    "inherited_binary:libbio_ik.so",
+    "inherited_binary:libmygeneral.so",
+    "inherited_binary:libmyutils.so",
+    "inherited_binary:librobots.so",
+    "inherited_binary:pybindings.cpython-310-x86_64-linux-gnu.so",
+    "inherited_binary:pybindings_robots.cpython-310-x86_64-linux-gnu.so",
+    "ros:lms1xx",
+    "ros:ur5_moveit_config",
+    "ros:ur_description",
+    "ros:velodyne_description",
+    "runtime:analyze_task4_localization.py",
+    "runtime:audit_task4_inputs.py",
+    "runtime:check_task4_localization.py",
+    "runtime:check_task4_quality.py",
+    "runtime:check_task4_sensors.py",
+    "runtime:collect_task4_instances.py",
+    "runtime:diagnose_task4_init.py",
+    "runtime:evaluate_task4_baseline.py",
+    "runtime:record_task4_quality.py",
+    "runtime:run_task4_formal.sh",
+    "runtime:run_task4_localization.sh",
+    "runtime:task0_proc.py",
+    "runtime:task3_env.py",
+    "runtime:task3_identity.py",
+    "runtime:task3_sac_entry.py",
+    "runtime:task4_budget.py",
+    "runtime:task4_budget_watchdog.py",
+    "runtime:task4_env.py",
+    "runtime:task4_formal_entry.py",
+    "runtime:task4_formal_gate.py",
+    "runtime:task4_formal_resumable.py",
+    "runtime:task4_history_raw.py",
+    "runtime:task4_identity.py",
+    "runtime:task4_init_survey.py",
+    "runtime:task4_instances.py",
+    "runtime:task4_motion_raw.py",
+    "runtime:task4_preflight.py",
+    "runtime:task4_resources.py",
+    "runtime:task4_sac_entry.py",
+    "src/forem_localization",
+    "src/open_vins",
+    "src:bio_ik",
+    "src:forem_husky",
+    "src:forem_sim",
+    "src:husky_control",
+    "src:husky_description",
+    "src:husky_ur5",
+    "src:modulation_rl",
+    "src:roboticsgroup_upatras_gazebo_plugins",
+    "src:robotiq_85_description",
+    "src:robotiq_85_moveit_config"
+  ],
+  "semantic_identity": {
+    "schema": 4,
+    "namespace": "task4_openvins_stereo_imu",
+    "pose_source": "openvins_stereo_imu",
+    "groups": {
+      "src:modulation_rl": {
+        "files": 127,
+        "sha256": "61a55a6e4797e788a291116a902a5805e32f64138041929bf28d597736a61e2b"
+      },
+      "src:forem_husky": {
+        "files": 10,
+        "sha256": "c1dfb44e068bf6ddbdb2565bf990e4f6ef1e35555e1f955cf6074caece6f4496"
+      },
+      "src:husky_ur5": {
+        "files": 46,
+        "sha256": "19c3cdc1d0262c86d449e4a4acabd7f62ee2ec343faf7c7d05e85f7b2ca9b72e"
+      },
+      "src:husky_description": {
+        "files": 35,
+        "sha256": "555a6c1a9d9530296ecf929737ad001bf161bf960d10e335fa6c8e1f9a4e54ff"
+      },
+      "src:husky_control": {
+        "files": 5,
+        "sha256": "e0bd00b794c3f39deb20d1c8829e0be20b3118faf47b56a3aa39fe11f9c73c66"
+      },
+      "src:bio_ik": {
+        "files": 23,
+        "sha256": "d56b005accae838eec6acd8f89295292538bbc669ed8efb6d5b77e19a5b4ed96"
+      },
+      "src:robotiq_85_description": {
+        "files": 20,
+        "sha256": "4c8794836360e1a3d18df11d112708a72881de6e653206d77a77b67c8a54c318"
+      },
+      "src:robotiq_85_moveit_config": {
+        "files": 3,
+        "sha256": "3e40a873baaa6b70d4a980e805de6e5ee7387d13cd945f95c32b43a93ba49964"
+      },
+      "src:roboticsgroup_upatras_gazebo_plugins": {
+        "files": 7,
+        "sha256": "2518cf51f0a809fade38a770e4f74f9bfa267e3fb49759e12565f4edecea745e"
+      },
+      "src:forem_sim": {
+        "files": 6,
+        "sha256": "904c24c476135ba6533ccd6dd3eb837f0de5f97effa4e7aa883e283c5d52411e"
+      },
+      "config:task3": {
+        "files": 18,
+        "sha256": "9a6d7eb771eb80a43bef9f052aaadea22dcd1ac1dec9965a23b4e4706dbebac5"
+      },
+      "runtime:task3_env.py": {
+        "files": 1,
+        "sha256": "88f17bb9499b0715a32136b5001b5a8b6292dc27219cd9614b334ea58dec2c06"
+      },
+      "runtime:task3_sac_entry.py": {
+        "files": 1,
+        "sha256": "f8c4ec318ce643b58e4ee415431592efe1d51803c6184d0f89af477d105ec893"
+      },
+      "runtime:task3_identity.py": {
+        "files": 1,
+        "sha256": "373a511f587e46c75dc6b5c0186ac36a24fe23ad50883a70bf820a9d4afa0edd"
+      },
+      "ros:ur_description": {
+        "files": 231,
+        "sha256": "2304854c665c76443ce859a8ce0fc2b46b33f1d298c4b62b0e7e049ddcb0221c"
+      },
+      "ros:ur5_moveit_config": {
+        "files": 29,
+        "sha256": "c23571a65c25b0ce5269198cfb00f2638fba6cab66a62bb7a87495d0832163ee"
+      },
+      "ros:velodyne_description": {
+        "files": 19,
+        "sha256": "9f1fffb758da75aa110358c6fe02881ee61264544326cd5894944ef329b90b00"
+      },
+      "ros:lms1xx": {
+        "files": 7,
+        "sha256": "5b783c8603ca1a76caef98eee10d4a9b28264e6355857a7703856ab3e29ce0f5"
+      },
+      "src/open_vins": {
+        "files": 204,
+        "sha256": "17010041d1bae522f27eeff17931deb233aa4a14814d041e5a1482c2e73acfe0"
+      },
+      "src/forem_localization": {
+        "files": 6,
+        "sha256": "a27aec965bff4ddddf2c8088a7b8d64e8d9b9806c4a5104aa2ec9422ea696993"
+      },
+      "config/task4": {
+        "files": 16,
+        "sha256": "43990bb0d64897dca0004403a2c95664870106f24e7e565aa68d1a148035b412"
+      },
+      "runtime:task4_motion_raw.py": {
+        "files": 1,
+        "sha256": "66cb9252d42fa14cf4b4a4bc16b265e84019879aa5eb176a9054fc36d2c49177"
+      },
+      "runtime:task4_history_raw.py": {
+        "files": 1,
+        "sha256": "a1818381f8ffe156e60cd68da5d9939a0690b7776f64fea23b304bae75d1abf4"
+      },
+      "runtime:task4_init_survey.py": {
+        "files": 1,
+        "sha256": "380bb88423bb0f5080fcb80f3ac76bc9ec820e7b7254769775a71c69a7c28949"
+      },
+      "runtime:task4_preflight.py": {
+        "files": 1,
+        "sha256": "f61f82a5a160af71b8753c068f28e0ca98d41b7490eb4025975cd5d4837782e0"
+      },
+      "runtime:collect_task4_instances.py": {
+        "files": 1,
+        "sha256": "ab3683f8a6ccdfb46456dbe165792028ce8011464e0b785fedbb98c175fc95d8"
+      },
+      "runtime:diagnose_task4_init.py": {
+        "files": 1,
+        "sha256": "2206901efed246f53df16f751c467899db70b594f053bb7226ef83a4b9c6f72c"
+      },
+      "runtime:task4_env.py": {
+        "files": 1,
+        "sha256": "157998ba1fe1e3c8436cdd37e1ba538ed904f56fdbacc1309c04d32fc81b7712"
+      },
+      "runtime:task4_identity.py": {
+        "files": 1,
+        "sha256": "4e59a4e845c6679030ba7ab5e340830bc536eb2762049c480849c82e0c84c685"
+      },
+      "runtime:check_task4_localization.py": {
+        "files": 1,
+        "sha256": "302c5ab5ee5cdb560a44d450cc95c1dbd91aa77bfa52a67051c39eabd1c8f26a"
+      },
+      "runtime:run_task4_localization.sh": {
+        "files": 1,
+        "sha256": "84959eb7d1a5eb4319244c29068793fa4f3360b1cc35b7325026e97a17cae8f7"
+      },
+      "runtime:audit_task4_inputs.py": {
+        "files": 1,
+        "sha256": "3d2849b2d657892be8d806473804d5cf7ecdc8de55009730de9c1d9ac73e1491"
+      },
+      "runtime:analyze_task4_localization.py": {
+        "files": 1,
+        "sha256": "d362cd0b99c24c27d7b70e385b7eac7a30b842d95562d094313db14a7aca903b"
+      },
+      "runtime:check_task4_sensors.py": {
+        "files": 1,
+        "sha256": "51d62819b87f52aca0508d202abe6b36e3d88caa4d3a768a3d6c7465567711f1"
+      },
+      "runtime:task0_proc.py": {
+        "files": 1,
+        "sha256": "962c03e98aaa50bc9e3888730fedfacba9360b1fd9a5e209d4a718c52a930934"
+      },
+      "runtime:task4_sac_entry.py": {
+        "files": 1,
+        "sha256": "e59f2908ed4a4a8d5f56f97638c6d40f53fb0dc9b86e1d4a6169f65ee139e6be"
+      },
+      "runtime:record_task4_quality.py": {
+        "files": 1,
+        "sha256": "9baaa097783861d4ca35e563bdb71d361d803c8de61ba0cac5f704de0510de51"
+      },
+      "runtime:check_task4_quality.py": {
+        "files": 1,
+        "sha256": "05a97feb500be9dd416067c82bddf9698e910a9a8e4efda45ed65d32e96edef9"
+      },
+      "runtime:evaluate_task4_baseline.py": {
+        "files": 1,
+        "sha256": "a4d0957bcec53cae5022778e0f9d610ac31cd11aa1f8f738fb88d59d84fda191"
+      },
+      "runtime:task4_budget.py": {
+        "files": 1,
+        "sha256": "3343bdd5083794249002d97def4913e612eb9c35c03f46b8950138f2f6635a32"
+      },
+      "runtime:task4_instances.py": {
+        "files": 1,
+        "sha256": "f16fb3b8caca184ed2103c34c75dcd72e0ef1b13d2b82737d1d7a70bc6c1bfaf"
+      },
+      "runtime:task4_formal_entry.py": {
+        "files": 1,
+        "sha256": "e11d206cd83799f30df06dd70cb05de1f5397f695e561fee2a92680b3548b8ea"
+      },
+      "runtime:task4_formal_gate.py": {
+        "files": 1,
+        "sha256": "4b8b9bfe056e76d04d40d3d929846c499b03f6f7cbb7e8aeeaa4402fbe5ba71f"
+      },
+      "runtime:task4_resources.py": {
+        "files": 1,
+        "sha256": "2ed861d5bfed00fe69d4731778ffbe849f9d5864da7430d4317a7bb24706aadf"
+      },
+      "runtime:task4_budget_watchdog.py": {
+        "files": 1,
+        "sha256": "30b54452e054340a524a9896e7d730033a138a49fb6dc9f4fd73161d663c2a3e"
+      },
+      "runtime:run_task4_formal.sh": {
+        "files": 1,
+        "sha256": "f26415fa13f6ba24bbd4497ae53be18213a1b68bd5309ce5aa3d6887d60365fb"
+      },
+      "runtime:task4_formal_resumable.py": {
+        "files": 1,
+        "sha256": "c64c4f581ccfdc78919ebdea53c12c7a1cb53177128a1b15ecc9937db975b2fe"
+      },
+      "binary:ov_core/libov_core_lib.so": {
+        "files": 1,
+        "sha256": "327d488d80ad91f28ca855382592e597817a822af5fe09e0315fb2dd781320a7"
+      },
+      "binary:ov_init/libov_init_lib.so": {
+        "files": 1,
+        "sha256": "0d79097b6b9932537fd4ec5216cae892da7bf6693a5e664bc5e3dff0d968a5a1"
+      },
+      "binary:ov_msckf/libov_msckf_lib.so": {
+        "files": 1,
+        "sha256": "dca669bc224f76a72a1d456006920100c4d25d07392730d993ac44f150e00061"
+      },
+      "binary:ov_msckf/run_subscribe_msckf": {
+        "files": 1,
+        "sha256": "f3b6f711675b31da792660b9d4075bded9c89f58829f906aab5e9f0e64e26600"
+      },
+      "binary:ov_msckf/ros1_serial_msckf": {
+        "files": 1,
+        "sha256": "ea4d6422edf93946cd0143bd0e0465ee97b4b40b835961876a1f677885be53ab"
+      },
+      "inherited_binary:pybindings.cpython-310-x86_64-linux-gnu.so": {
+        "files": 1,
+        "sha256": "9ed2a620d8c614a79e6017c7cb8614d489b364c5461cf53ff946b563ddb9ec53"
+      },
+      "inherited_binary:pybindings_robots.cpython-310-x86_64-linux-gnu.so": {
+        "files": 1,
+        "sha256": "255aa7e8208ebd8d0b2039ed86158108e7cd7ab710c51559637ab15ec4fdb268"
+      },
+      "inherited_binary:librobots.so": {
+        "files": 1,
+        "sha256": "d3e750b510c56767e33b1f3814727f84707a4c9560f8f913e86f9a733e41e25d"
+      },
+      "inherited_binary:libmygeneral.so": {
+        "files": 1,
+        "sha256": "5b0dca280b4996df17afe10a428fc76187755d5a5ff2617c9ad59b08180b0efe"
+      },
+      "inherited_binary:libmyutils.so": {
+        "files": 1,
+        "sha256": "18bd40a99741d52e2763b2c09aea2223a3d87217a29434b7321db182f11d8c8c"
+      },
+      "inherited_binary:libbio_ik.so": {
+        "files": 1,
+        "sha256": "31ad6fc04b71533cd9b464298b471400c2d610c28dd7af50ba4dbc0d71a7d455"
+      }
+    }
+  },
+  "sources": [
+    "SRC-0108",
+    "SRC-0148",
+    "SRC-0149",
+    "SRC-0153",
+    "SRC-0155",
+    "SRC-0156",
+    "SRC-0157",
+    "SRC-0158"
+  ],
+  "changes_since_t4.4.2": "task4.3.5 fixes + r2 training redraw/30 s training init timeout/DiskMeter/freeze-derived ledger; new budget SRC0153; r3 fault tolerance/resume SRC0155"
+}

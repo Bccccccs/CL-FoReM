@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<!--
+  FoReM task3 core: Husky + UR5 in Gazebo (world_type=gazebo), single-robot SimpleObstacle chain.
+  Rewritten from the reference husky/src/modulation_rl/gazebo_world/husky_ur5/n2m2_husky_empty_world.launch.
+  Differences (each recorded in doc/tasks/task3/task3.2/RESULTS.md):
+   - Gazebo starts paused; start_controllers.py (forem_sim, task0) sets the initial arm pose, loads+starts the
+     controllers and unpauses (the reference unpaused at spawn and spawned controllers asynchronously).
+   - pose_bridge replaces pcl_configure/gdt_tf: ONE TF publisher for odom->base_footprint, original sample stamp,
+     source/status published. Input topic and pose_source are launch arguments (Task4 replaces the source only).
+   - map/odom/world frames come from tf2 static publishers (/tf_static) instead of the tf static_transform_publisher
+     nodes (which publish future-dated /tf). The reference's sensor/vehicle/laser_link/imu_link static stubs are
+     dropped (imu_link already exists in the URDF; the others are not used by the RL chain).
+   - front Hokuyo UST10 enabled via xacro arg: the local costmap observation (costmap_common.yaml) reads front/scan,
+     and the reference left that sensor off unless an external HUSKY_UST10_ENABLED env var was set.
+   - joystick teleop, interactive twist marker server, rviz, move_obstacles and the cloud/PCL nodes are not started.
+   - the libgazebo_ros_moveit_planning_scene and gazebo_grasp_fix plugins are removed from the URDF.
+-->
+<!-- Independent Task4 raw capture launch derived from accepted Task3 core; SRC-0071. Truth bridge is for raw-stage motion only. -->
+<launch>
+  <arg name="gui" default="false"/>
+  <arg name="world" default="$(find forem_husky)/worlds/husky_empty.world"/>
+  <arg name="pose_topic" default="/forem/pose/estimated" doc="nav_msgs/Odometry the pose bridge turns into TF odom->base_footprint"/>
+  <arg name="pose_source" default="openvins_stereo_imu"/>
+  <arg name="local_costmap_frame" default="none"/>
+  <arg name="unpause" default="true"/>
+  <arg name="spawn_z" default="0.05" doc="base_footprint height at spawn: the value RobotEnv.setJointValuesFromDict sets at every reset (reference launch spawned at 0.2)"/>
+
+  <param name="/use_sim_time" value="true"/>
+
+  <!-- SRC0156/0157: glibc libSegFault prints a backtrace if gzserver segfaults; APPENDED to vglrun LD_PRELOAD (VirtualGL GPU rendering must stay) -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <env name="LD_PRELOAD" value="$(optenv LD_PRELOAD) /lib/x86_64-linux-gnu/libSegFault.so"/>
+    <env name="SEGFAULT_SIGNALS" value="segv abrt bus ill fpe"/>
+    <arg name="world_name" value="$(arg world)"/>
+    <arg name="paused" value="true"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="$(arg gui)"/>
+    <arg name="headless" value="true" unless="$(arg gui)"/>
+    <arg name="debug" value="false"/>
+  </include>
+
+  <!-- robot_description: reference husky_ur5/launch/description.launch (xacro) + front laser enabled -->
+  <param name="robot_description"
+         command="$(find xacro)/xacro '$(find forem_husky)/urdf/task4_husky_ur5.xacro' robot_namespace:=/ laser_ust10_front_enabled:=1"/>
+
+  <!-- controller configuration, verbatim from the reference packages -->
+  <rosparam file="$(find husky_control)/config/control.yaml" command="load"/>
+  <rosparam param="wheel_radius_multiplier" ns="husky_velocity_controller">1.0</rosparam>
+  <rosparam file="$(find husky_ur5)/config/ur5_controllers.yaml" command="load"/>
+
+  <node name="spawn_husky_model" pkg="gazebo_ros" type="spawn_model" output="screen"
+        args="-x 0.0 -y 0.0 -z $(arg spawn_z) -Y 0.0 -urdf -param robot_description -model husky_ur5"/>
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+
+  <node pkg="twist_mux" type="twist_mux" name="twist_mux">
+    <rosparam command="load" file="$(find husky_control)/config/twist_mux.yaml"/>
+    <remap from="cmd_vel_out" to="husky_velocity_controller/cmd_vel"/>
+  </node>
+
+  <node name="start_controllers" pkg="forem_sim" type="start_controllers.py" output="screen">
+    <param name="model_name" value="husky_ur5"/>
+    <param name="unpause" value="$(arg unpause)"/>
+    <rosparam param="controllers">[husky_joint_publisher, husky_velocity_controller, joint_state_controller, eff_joint_traj_controller, gripper_controller]</rosparam>
+    <!-- initial arm pose = robot_config.yaml initial_joint_values (the pose RobotEnv.drawJointValues always returns) -->
+    <rosparam param="init_pose">
+      ur5_shoulder_pan_joint: -0.01111974792726489
+      ur5_shoulder_lift_joint: -1.5705042627235626
+      ur5_elbow_joint: -0.0007863513851198434
+      ur5_wrist_1_joint: -1.5713908974689739
+      ur5_wrist_2_joint: -0.0005968816301642477
+      ur5_wrist_3_joint: -0.006540936480208259
+    </rosparam>
+  </node>
+
+  <!-- frames: world == map == odom (identity), as in the reference -->
+  <node pkg="tf2_ros" type="static_transform_publisher" name="world_to_map" args="0 0 0 0 0 0 world map"/>
+  <node pkg="tf2_ros" type="static_transform_publisher" name="map_to_odom" args="0 0 0 0 0 0 map odom"/>
+
+  <node name="pose_bridge" pkg="forem_localization" type="pose_adapter.py" output="screen" required="true"/>
+
+  <!-- MoveIt move_group (robot model / semantic / bio_ik kinematics for RobotEnv), reference launch -->
+  <include file="$(find husky_ur5)/launch/n2m2_moveit_planning_execution.launch">
+    <arg name="sim" value="true"/>
+  </include>
+
+  <group ns="gripper_planning">
+    <rosparam command="load" file="$(find robotiq_85_moveit_config)/config/joint_limits.yaml"/>
+  </group>
+
+  <include file="$(find modulation_rl)/gazebo_world/husky_ur5/costmap/husky_costmap_2d.launch">
+    <arg name="local_costmap_frame" value="$(arg local_costmap_frame)"/>
+  </include>
+<node name="task4_input_adapter" pkg="forem_husky" type="task4_input_adapter.py" output="screen"/>
+</launch>

@@ -1,6 +1,6 @@
 # task0 环境配置 — 流程
 
-状态：初次搭建与审核已执行，父任务仍review；task0.7修正与重新验收尚未执行。
+状态：review。task0.1–0.5初次搭建、0.6审核、0.7修正、0.8容器清理、0.9/0.11复核、0.10修正均已交付；task0.12（修正task0.11新P2）执行中。子任务实际状态以PROGRESS和各子RESULTS为准，父任务done需全部关闭复核发现。
 
 ## 项目规则在本流程中的执行
 
@@ -26,19 +26,30 @@
 
 父流程列出子节点顺序、依赖和进入/完成条件，并链接子节点三份文档；具体操作在对应子流程里维护。子节点再拆分时重复本规则。子结果记录实际证据，父结果汇总子结果，不复制原始日志。节点编号用于顺序，不能代表验收通过。
 
-同一节点的多次运行按run-id追加到RESULTS，历史事实不被新计划覆盖；大量原始日志和轨迹在forem/logs与forem/results，Agent过程记录在doc/agent_logs。不要在节点内另建第四份README/PLAN或重复的reports目录。
+同一节点的多次运行按run-id追加到RESULTS，历史事实不被新计划覆盖；大量原始日志和轨迹在forem/logs与forem/results，Agent过程记录在forem/doc/agent_logs。不要在节点内另建第四份README/PLAN或重复的reports目录。
 
-## 子任务入口、依赖与负责人
+## 子任务总表（顺序、依赖、负责人、验收入口）
 
-|节点|任务|流程|结果|
-|---|---|---|---|
-|task0.1 基础环境核对|[任务](task0.1/TASK.md)|[流程](task0.1/PROCEDURE.md)|[结果](task0.1/RESULTS.md)|
-|task0.2 最小包与容器入口|[任务](task0.2/TASK.md)|[流程](task0.2/PROCEDURE.md)|[结果](task0.2/RESULTS.md)|
-|task0.3 独立构建|[任务](task0.3/TASK.md)|[流程](task0.3/PROCEDURE.md)|[结果](task0.3/RESULTS.md)|
-|task0.4 启动与反馈|[任务](task0.4/TASK.md)|[流程](task0.4/PROCEDURE.md)|[结果](task0.4/RESULTS.md)|
-|task0.5 简单运动与重复启动|[任务](task0.5/TASK.md)|[流程](task0.5/PROCEDURE.md)|[结果](task0.5/RESULTS.md)|
+每个子任务在本目录内都有自己的TASK/PROCEDURE/RESULTS三文档；依赖满足后才进入下一节点，“状态”取自PROGRESS，编号不代表通过。
 
-按task0.1至task0.5依赖执行，每个子节点完成并记录证据后才进入依赖它的下一节点。父结果只汇总，不把“计划已写”当“环境已通过”。
+|节点|名称|依赖|负责人|状态|流程与结果|说明|
+|---|---|---|---|---|---|---|
+|[task0.1](task0.1/TASK.md)|基础环境核对|—|Claude|review|[流程](task0.1/PROCEDURE.md) · [结果](task0.1/RESULTS.md)|核验ROS入口与解释器|
+|[task0.2](task0.2/TASK.md)|最小包与容器入口|0.1|Claude|review|[流程](task0.2/PROCEDURE.md) · [结果](task0.2/RESULTS.md)|UR5模型/控制配置与容器入口|
+|[task0.3](task0.3/TASK.md)|独立构建|0.2|Claude|review|[流程](task0.3/PROCEDURE.md) · [结果](task0.3/RESULTS.md)|forem_sim构建|
+|[task0.4](task0.4/TASK.md)|启动与反馈|0.3|Claude|review|[流程](task0.4/PROCEDURE.md) · [结果](task0.4/RESULTS.md)|暂停生成、初始姿态、控制器与物理推进顺序|
+|[task0.5](task0.5/TASK.md)|简单运动与重复启动|0.4|Claude|review|[流程](task0.5/PROCEDURE.md) · [结果](task0.5/RESULTS.md)|发送指令、采样、两次独立启动|
+|[task0.6](task0.6/TASK.md)|独立审核|0.1–0.5|Codex（子Agent做代码审核）|done|[流程](task0.6/PROCEDURE.md) · [结果](task0.6/RESULTS.md)|发现1kHz振荡与验收漏项|
+|[task0.7](task0.7/TASK.md)|审核问题修正与重新验收|0.6|Claude|review|[流程](task0.7/PROCEDURE.md) · [结果](task0.7/RESULTS.md)|振荡定位与最小修正→验收补齐→运行管理→报告更正/最终复测；推荐medium|
+|[task0.8](task0.8/TASK.md)|废弃容器清理|用户确认|Codex|done|[流程](task0.8/PROCEDURE.md) · [结果](task0.8/RESULTS.md)|保留forem-dev；不恢复旧容器；常规low|
+|[task0.9](task0.9/TASK.md)|修正后独立复核|0.7|Codex（子Agent做代码审核）|done|[流程](task0.9/PROCEDURE.md) · [结果](task0.9/RESULTS.md)|振荡修正通过；4项失败路径待修|
+|[task0.10](task0.10/TASK.md)|task0.9复核问题修正|0.9|Claude|review|[流程](task0.10/PROCEDURE.md) · [结果](task0.10/RESULTS.md)|进程所有权、高频分析严格校验、按窗口评价|
+|[task0.11](task0.11/TASK.md)|四项修正的最终复核|0.10|Codex（子Agent做代码审核）|done|[流程](task0.11/PROCEDURE.md) · [结果](task0.11/RESULTS.md)|原4项关闭；新P2：中断时采集器遗留|
+|[task0.12](task0.12/TASK.md)|task0.11复核P2修正|0.11|Claude|active|[流程](task0.12/PROCEDURE.md) · [结果](task0.12/RESULTS.md)|采集器纳入监督与回归；完成后需Codex复核|
+
+顺序：task0.1→0.5为首次搭建（逐级依赖）；0.6审核发现问题→0.7修正；0.8为用户确认后的独立清理（不阻塞修正，但0.7采用清理后的容器状态）；0.9→0.10→0.11→0.12为“复核—修正”循环，直到复核无遗留发现。父结果只汇总，不把“计划已写”当“环境已通过”。
+
+进度追踪见[PROGRESS](../../PROGRESS.md)，Agent过程记录见[agent_logs/task0](../../agent_logs/task0/)及其各子目录。
 
 ## 完整控制链路
 
@@ -48,7 +59,7 @@ ROS入口与解释器在task0.1/task0.2核验；构建在task0.3；暂停生成�
 
 ## 父节点验收与移交
 
-task0.1–task0.5全部有实测完成证据，并且task0.5包含两次启动证据、ENV实际入口和停止方法，父节点才可标done；否则按问题标review/blocked。移交task1，不自动启动误差注入或世界模型。
+task0.1–task0.5全部有实测完成证据，并且task0.5包含两次启动证据、ENV实际入口和停止方法；同时0.6以来的所有复核发现（含0.11的P2）均有独立关闭证据，父节点才可标done；否则按问题标review/blocked。移交task1，不自动启动误差注入或世界模型。
 
 ## Agent模型与推理强度
 
@@ -58,16 +69,8 @@ task0.1–task0.5全部有实测完成证据，并且task0.5包含两次启动�
 
 ## 执行责任与当前选择
 
-主任务task0初次实施由Claude完成并提交review；Codex已完成task0.6审核。当前默认由Claude按task0.7流程顺序修正；可在没有依赖与文件冲突的范围内委派独立子任务。具体委派由父Agent在PROGRESS和对应TASK登记，不默认启动多个Agent。task0.1负责环境核对，task0.2负责UR5模型/控制配置与入口，task0.3构建，task0.4启动反馈，task0.5运动与重复启动；依赖前序完成证据。
+task0初次实施由Claude完成；Codex负责独立审核/复核（0.6、0.9、0.11）与容器清理（0.8），Claude负责修正（0.7、0.10、0.12）。修正与复核依次进行，不并行改同一批文件。可在没有依赖与文件冲突的范围内委派独立子任务，由父Agent在PROGRESS和对应TASK登记，不默认启动多个Agent。
 
-## task0.6 用户要求的独立审核
+## task0.13 采集器修正独立复核
 
-依赖 task0.1–0.5 交付，负责人 Codex /root；独立代码审核由 Codex 子Agent执行，只写专用日志；父Agent负责运行复核与最终验收。输入为现有源码和证据，完成条件是有可核验的审核结论。入口：[TASK](task0.6/TASK.md)、[PROCEDURE](task0.6/PROCEDURE.md)、[RESULTS](task0.6/RESULTS.md)。
-
-## task0.7 审核问题修正与重新验收
-
-依赖task0.6审核交付；拟负责人Claude，顺序自行执行，不自动委派。输入现有源码、审核与原始证据，输出有根因依据的正常配置、可靠验收与清理、纠正报告和全新复测证据。入口：[TASK](task0.7/TASK.md)、[PROCEDURE](task0.7/PROCEDURE.md)、[RESULTS](task0.7/RESULTS.md)。本节点内按安全接手→振荡定位与最小修正→验收补齐→运行管理→报告更正/最终复测推进。task0.7自测全部有证据后进入review，由Codex复核；父任务done还需关闭task0.6发现，旧task0.1–0.5通过不能替代本轮修正验收。推荐Codex GPT6.1sol/Claude Sonnet5.5 medium，跨模块因果核对；实际配置如实记载。
-
-## task0.8 废弃容器清理
-
-负责人Codex；用户明确确认旧任务废弃后执行，已完成；task0.7接手采用清理后的容器状态，不恢复旧任务。入口：[TASK](task0.8/TASK.md)、[PROCEDURE](task0.8/PROCEDURE.md)、[RESULTS](task0.8/RESULTS.md)。推荐GPT6.1sol/Sonnet5.5 low/默认，常规执行。
+依赖task0.12提交review，负责人Codex；代码复核子Agent只写专用日志，父Agent核验及运行测试。入口：[TASK](task0.13/TASK.md)、[PROCEDURE](task0.13/PROCEDURE.md)、[RESULTS](task0.13/RESULTS.md)。完整进程检查及证据通过后决定父任务验收状态。

@@ -1,6 +1,8 @@
 # task0.7 审核问题修正与重新验收 — 结果
 
-状态：**review**（Claude 于 2026-09-30 11:08–11:53 +08:00 完成修正与自测；提交 Codex 复核，父 task0 不标 done）。执行 Agent：Claude，Sonnet5.5（claude-sonnet-5-5）；推理强度：任务推荐 medium，平台实际档位未能从会话内核实，记“未知/平台默认”；未启动子 Agent；会话无 executing-plans/systematic-debugging 技能，按 PROCEDURE 文本手工执行。授权范围内只改 forem，未提交、未推送、未启动 task1/误差注入/IK/SAC/世界模型。
+状态：done（经task0.13独立复核；当前固定底座UR5环境范围验收通过）。
+
+历史状态记录：状态：**review**（Claude 于 2026-09-30 11:08–11:53 +08:00 完成修正与自测；提交 Codex 复核，父 task0 不标 done）。执行 Agent：Claude，Sonnet5.5（claude-sonnet-5-5）；推理强度：任务推荐 medium，平台实际档位未能从会话内核实，记“未知/平台默认”；未启动子 Agent；会话无 executing-plans/systematic-debugging 技能，按 PROCEDURE 文本手工执行。授权范围内只改 forem，未提交、未推送、未启动 task1/误差注入/IK/SAC/世界模型。
 
 ## 问题闭环表（问题—修正—证据）
 
@@ -113,3 +115,12 @@ sg docker -c 'bash forem/scripts/run_task0_smoke.sh --bag --hf-mode move --launc
 ## 模型与推理强度
 
 - Codex：GPT6.1sol，medium；Claude：Sonnet5.5，medium。需要核对控制器、物理步长、采样和验收逻辑的跨模块因果关系。本次实际：Claude Sonnet5.5，档位平台默认（未知）；未提高到 high（单因素诊断可直接对照，没有难复现的现象）。
+
+## Codex独立复核结论（2026-09-30，task0.9）
+
+本轮构建、20项测试、8项现有入口回归、两次新启动、60s保持及高频保持/运动均通过；原始quick→world→quick对照复算支持振荡修正，裁到请求窗口后world数据仍通过。任务继续review：P1 root身份失效后按裸PID收养外来子树；P2 root先退出时孤儿子进程漏清理；P2 高频空/NaN/不足100triples假通过；P2 高频整bag分析未绑定请求窗口。具体复现与修正要求见[task0.9 RESULTS](../task0.9/RESULTS.md)，以上自测通过不能关闭新增失败路径。下一轮Claude按该清单修正并补回归后再审；不启动task1。推荐GPT6.1sol/Sonnet5.5 medium，因需跨进程身份和采样判据核对；实际当前复核模型/档位未知。
+
+
+## 后续更正（task0.10，2026-09-30）
+
+task0.9 复核指出本节点交付的 `task0_proc.py` 有进程所有权缺陷（PID 复用、孤儿漏清理）、高频分析对空/NaN/不足三元组假通过、高频判定使用整个 bag 而非请求窗口。上文“已完成”的进程清理与高频自动判定结论应以 [task0.10 RESULTS](../task0.10/RESULTS.md) 为准；旧数据按正确窗口重算后结论不变（world 通过、quick 失败）。上文中的 `hf_analysis.json` 为旧的整 bag 结果，保留为历史，新 run 写 `hf_analysis_windows.json`。

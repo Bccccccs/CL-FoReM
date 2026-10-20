@@ -1,0 +1,127 @@
+# task3 task contract, schema 1. The first task is the reference SimpleObstacleTask (static obstacle field, gazebo world).
+# Values are READ from the reference source (husky/src/modulation_rl, read-only) in task3.1; `provenance` says where each
+# value comes from. `effective_override` lists values the reference CODE overrides after construction (the constructor
+# arguments are NOT the effective values). Runtime confirmation (obs shape/field map, IK/obstacle behaviour) is in task3.3.
+schema: 1
+task: simpleobstacle           # SimpleObstacleTask.taskname() == "simpleObstacle"
+robot: husky_ur5
+world_type: gazebo             # RobotEnv/RobotHusky "gazebo": Gazebo physics + ros_control controllers (no analytical shortcut)
+pose_source: gazebo_reference  # base pose = Gazebo p3d (/ground_truth/state) -> pose_bridge -> TF; replaced by an estimator in Task4
+
+env_config:                    # exactly the keys modulation.utils.create_env reads (as main.py's env_config dict builds them)
+  env: husky_ur5
+  task: simpleobstacle
+  node_handle: train_env
+  seed: null                   # set per run/episode; reference default -1 => random.randint(10,1000)
+  world_type: gazebo
+  init_controllers: true       # parse_args: world_type != sim => controllers needed
+  time_step: 0.02
+  penalty_scaling: 0.0
+  acceleration_penalty: 0.05
+  learn_vel_norm: 0.1
+  collision_penalty: 10
+  vis_env: false
+  transition_noise_base: 0.04
+  ikslack_dist: 0.1
+  ikslack_rot_dist: 0.05
+  ikslack_sol_dist_reward: l2
+  ikslack_penalty_multiplier: 1.0
+  ik_fail_thresh: 20
+  use_map_obs: true
+  global_map_resolution: 0.025
+  local_map_resolution: 0.025
+  overlay_plan: false
+  concat_plan: false
+  concat_prev_action: true
+  gamma: 0.99
+  obstacle_config: rnd         # unused by SimpleObstacleTask
+  simpleobstacle_spacing: 1.75 # constructor argument; OVERRIDDEN to 3.0 inside SimpleObstacleMap.__init__
+  simpleobstacle_offsetstd: 0.4375  # constructor argument 1.75/4; OVERRIDDEN to 0.8 inside SimpleObstacleMap.__init__
+  eval: false
+  frame_skip: 0                # => no TaskSettableEnvSkip wrapper
+  frame_skip_observe: true
+  frame_skip_curriculum: 0
+  algo: sac
+  use_fwd_orientation: false
+  iksolver: bioik
+  selfcollision_as_failure: false
+  bioik_center_joints_weight: 0.0
+  bioik_avoid_joint_limits_weight: 1.0
+  bioik_regularization_weight: 1.0
+  bioik_regularization_type: mindispl
+  learn_torso: false
+  learn_joint_values: false
+  # NOT in main.py's env_config, therefore create_env falls back to its own defaults (this is the main.py/eval.py path):
+  #   execute_style: direct  (config.get default; argparse default would be 'track')
+  #   perception_style: base (config.get default)
+  #   exec_action_clip/exec_action_scaling/exec_acceleration_clip: None, fake_gazebo: False
+  execute_style: direct
+  perception_style: base
+  exec_action_clip: null
+  exec_action_scaling: null
+  exec_acceleration_clip: null
+  fake_gazebo: false
+
+provenance:
+  argparse_defaults: husky/src/modulation_rl/scripts/modulation/utils.py get_parser()
+  husky_best_defaults: scripts/configs/best_defaults_ray.yaml husky_ur5 (lr_start 1e-4, transition_noise_base 0.04, ikslack_*, acceleration_penalty 0.05, ikslack_sol_dist_reward l2, iksolver bioik, learn_vel_norm 0.1, learn_torso False)
+  main_py_env_config: scripts/main.py ray_config["env_config"] (the keys it passes; execute_style/perception_style are not among them)
+  caveat: >-
+    The reference training/eval CLI used for the Husky checkpoints is unknown (main.py reads sys.argv through parse_args and
+    its env defaults to pr2). The values above are the argparse defaults overlaid with best_defaults_ray.yaml[husky_ur5],
+    with env=husky_ur5, task=simpleobstacle, world_type=gazebo. This is an engineering reconstruction, not a recovered run config.
+
+effective_override:
+  SimpleObstacleMap._obstacle_spacing: 3.0     # source line `self._obstacle_spacing = 3.0  #obstacle_spacing`
+  SimpleObstacleMap.offset_std: 0.8            # source line `self.offset_std = 0.8  #offset_std`
+  MaxCloseStepsWrapper.max_close_steps: 500    # wrap_in_task: ikslack_dist/ikslack_rot_dist set => 50 if analytical else 500
+  TIME_STEP_TRAIN: 0.1                         # eeplanner.py module constant (planning step); env dt_exec = time_step 0.02
+  RobotEnv.base_z_at_reset: 0.05               # robot_env.cpp setJointValuesFromDict sets base z=0.05 via /gazebo/set_model_state
+  drawJointValues: fixed arm start pose        # robot_env.cpp ignores the sampled values: always the folded UR5 pose in robot_config initial_joint_values
+
+action:
+  dim: 3                       # learn_vel_norm=True (vel_norm) + diff drive (rot, forward)
+  names: [vel_norm, base_rot, base_vel]   # combined_env.get_ranges: ['vel_norm','tiago_base_vel','tiago_base_angle'] (label order in code)
+  range: [-1.0, 1.0]           # all scaled; env does the scaling
+  scaling:
+    vel_norm: "unscale_action(a0, 0.01, base_vel_rng=0.3)  -> [0.01, 0.3] m/s of the end-effector plan speed"
+    base_rot: "a1 * base_rot_rng (1.0 rad/s)"
+    base_vel: "a2 * base_vel_rng (0.3 m/s)"
+  note: >-
+    The policy does NOT command the six arm joints. The base action moves the base; the end-effector plan (PointToPointPlanner,
+    speed vel_norm) gives the next desired gripper pose; BioIK solves the arm joints for that pose relative to the next base;
+    the solved (PLANNED) joint values are sent to the arm controller each step.
+
+observation:
+  structure: tuple(robot_state[41] float, local_map[120,120,1])
+  robot_state_fields:         # index ranges; verified at runtime in task3.3 (check_task3_env.py)
+    - {name: relative_gripper_tf, idx: [0, 7], origin: planned_arm_and_actual_base}
+    - {name: next_gripper_tf_rel, idx: [7, 14], origin: plan}
+    - {name: ee_velocities_rel, idx: [14, 21], origin: plan}
+    - {name: goal_relative_to_base, idx: [21, 28], origin: plan_and_actual_base}
+    - {name: joint_values_scaled, idx: [28, 34], origin: PLANNED_ik_joints_not_actual_feedback}
+    - {name: wrist_to_goal_relative_to_base, idx: [34, 37], origin: plan_and_actual_base}
+    - {name: in_selfcollision, idx: [37, 38], origin: planned_ik_state}
+    - {name: previous_action_mean, idx: [38, 41], origin: policy_actions}
+  local_map: "3.0 m x 3.0 m rolling local costmap_2d window at 0.025 m (120x120), channel 0 = (cost>=20); source = front laser (HUSKY_UST10 enabled) obstacles; not ground truth"
+  perception_style_base: >-
+    perception_style=base: after every command the BASE pose is re-read from TF (Gazebo p3d, via pose_bridge) but the arm
+    joint values stay the IK/planned values (setWorldJoint(latest_base) only). Actual arm feedback exists separately
+    (RobotEnv.get_joint_values_world, info['gripper_tf_achieved']) and is NOT in the observation.
+
+reward:
+  terms:
+    - ee_reward: "PointToPointPlanner reward (progress + goal)"
+    - collision: "-collision_penalty(10) * base_collision (use_map_obs)"
+    - ik: "l2: -0.5*((dist_to_desired/0.1)^2 + (rot_dist_to_desired/0.05)^2) * ikslack_penalty_multiplier(1.0)"
+    - action_penalty: "- penalty_scaling(0.0)*|a|^2 - acceleration_penalty(0.05)*|a - a_prev_mean|^2"
+    - vel_norm: "reward *= vel_norm/max_vel; reward -= learn_vel_norm(0.1)*((max_vel-vel_norm)/max_vel)^2"
+  range_declared: [-10, 0]    # CombinedEnv.reward_range (not enforced)
+termination:
+  done_if_any:
+    - "ee_obs.done and not kin_failure   (goal reached: ee goal within success_thres_dist 0.025 m / success_thres_rot 0.05 rad)"
+    - "nr_kin_failures >= ik_fail_thresh (20)"
+    - "nr_base_collisions >= ik_fail_thresh (20)"
+    - "MaxCloseStepsWrapper: close steps >= 500 (info['max_close_steps']=True) -- a time-limit-like truncation"
+  success: "episode_is_success = nr_kin_failures == 0 and nr_base_collisions == 0 and ee_done   (modulation.utils.episode_is_success)"
+  gym_api: "classic 4-tuple (obs, reward, done, info); the reference SAC loop stores mask = float(not done) for EVERY done"

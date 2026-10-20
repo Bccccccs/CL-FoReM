@@ -1,0 +1,34 @@
+[
+  {
+    "path": "ov_msckf/src/ros/ROS1Visualizer.h",
+    "old_sha256": "36501cfc3a3896c5b0edb8b320057f68e772747aad226a360a80562e4921c546",
+    "new_sha256": "b5b7a660c9b85e9765c90699da79d3c0f0d0ff1ae15061eebc552a6cb5fdd2be",
+    "reason": "ROS1 stereo message_filters destruction order: synchronizer disconnect requires living input Signal mutex; no estimator algorithm change",
+    "evidence": "results/task4/t4.3-offline-debug-r4/shutdown_backtrace.txt",
+    "source": "SRC-0075"
+  },
+  {
+    "path": "ov_msckf/src/run_subscribe_msckf.cpp",
+    "old_sha256": "6a81931f2a0bfec726dd54b5d159484cc9c8c16a062bcf9d15b99943994e4546",
+    "new_sha256": "791ea953883969edfb9d77ea79bb4f299cf485393eb5dcceaebb4bb03ffda3ad",
+    "reason": "Join configured synchronous subscribers, stop ROS spinner and release global ROS1Visualizer/estimator while plugin registry alive; no estimator equations change",
+    "evidence": "results/task4/t4.3-offline-debug-r6/shutdown_backtrace.txt",
+    "source": "SRC-0075"
+  },
+  {
+    "path": "ov_msckf/src/core/VioManager.h",
+    "old_sha256": "7afa93033a85656f16a32bba9324887bfdc4a1272c3fe53567d16bd28da4c1e2",
+    "new_sha256": "d0c15017504ccfd547014b1b931a3f2be4b41f9224f6e80da31cecc43e7028c8",
+    "reason": "Expose genuine raw static initialized CAMERA/ZUPT-updated state without requiring first policy motion; existing initialized/internal filter/fast IMU odom logic unchanged",
+    "evidence": "results/task4/t4.3-online-r1/summary.json; logs/task4/t4.3-online-r1/launch.log static initialization and41feature ZUPT; original VioManager::initialized/timelastupdate gate",
+    "source": "SRC-0075"
+  },
+  {
+    "path": "ov_msckf/src/ros/ROS1Visualizer.cpp",
+    "old_sha256": "7061cd84d132c2256ae911e1ab3cb7af77216ff0e606b4ac982437d9d8a63427",
+    "new_sha256": "8840e3c3e04d5c3ba8d104628eb3e7a09dbdf0a76763ecda1ee5adb736b14d5f",
+    "reason": "Expose genuine raw static initialized CAMERA/ZUPT-updated state without requiring first policy motion; existing initialized/internal filter/fast IMU odom logic unchanged",
+    "evidence": "results/task4/t4.3-online-r1/summary.json; logs/task4/t4.3-online-r1/launch.log static initialization and41feature ZUPT; original VioManager::initialized/timelastupdate gate",
+    "source": "SRC-0075"
+  }
+]

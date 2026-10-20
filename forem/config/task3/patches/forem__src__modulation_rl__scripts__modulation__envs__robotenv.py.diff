@@ -1,0 +1,49 @@
+--- a/husky/src/modulation_rl/scripts/modulation/envs/robotenv.py
++++ b/forem/src/modulation_rl/scripts/modulation/envs/robotenv.py
+@@ -8,7 +8,7 @@
+ import yaml
+ from dataclasses import dataclass, field
+ from pybindings import RobotObs, RobotConfig, multiply_tfs  # , gripper_to_tip_goal, tip_to_gripper_goal
+-from pybindings_robots import RobotPR2, RobotTiago, RobotHSR, RobotHusky
++from pybindings_robots import RobotHusky
+ 
+ from modulation.envs.eeplanner import TIME_STEP_TRAIN
+ from modulation.envs.env_utils import PROJECT_ROOT, IDENTITY_TF, calc_euclidean_tf_dist, calc_rot_dist, \
+@@ -136,24 +136,10 @@
+             solver_param = "/robot_description_kinematics/" + self.robot_config["joint_model_group_name"] + "/kinematics_solver"
+             assert (rospy.get_param(solver_param) == "bio_ik/BioIKKinematicsPlugin") == (iksolver == "bioik"), (iksolver, rospy.get_param(solver_param))
+ 
+-        if env == 'pr2':
+-            self.robot_config['ik_joint_model_group_name'] = 'right_arm' if learn_torso else self.robot_config['joint_model_group_name']
+-            robot_fn = RobotPR2
+-            self.drive = "omni"
+-        elif env == 'husky_ur5':
++        if env == 'husky_ur5':
+             self.robot_config['ik_joint_model_group_name'] = 'manipulator' if learn_torso else self.robot_config['joint_model_group_name']
+             robot_fn = RobotHusky
+             self.drive = "diff"
+-        elif env == 'tiago':
+-            self.robot_config['ik_joint_model_group_name'] = 'arm' if learn_torso else self.robot_config['joint_model_group_name']
+-            robot_fn = RobotTiago
+-            self.drive = "diff"
+-        elif env == 'hsr':
+-            self.robot_config['ik_joint_model_group_name'] = 'arm_no_torso' if learn_torso else self.robot_config['joint_model_group_name']
+-            robot_fn = RobotHSR
+-            self.drive = "omni"
+-            rospy.set_param("/robot_description_planning/joint_limits/wrist_ft_sensor_frame_joint/has_velocity_limits", False)
+-            rospy.set_param("/robot_description_planning/joint_limits/wrist_ft_sensor_frame_joint/max_velocity", 1000)
+         else:
+             raise ValueError('Unknown env')
+         self._robot_cpp = robot_fn(seed,
+@@ -165,10 +151,7 @@
+                                    bioik_avoid_joint_limits_weight,
+                                    bioik_regularization_weight,
+                                    bioik_regularization_type)
+-        if env == "pr2":
+-            no_lim_joints = ['r_wrist_roll_joint', 'r_forearm_roll_joint']
+-        else:
+-            no_lim_joints = [None]
++        no_lim_joints = [None]
+         self.no_limit_joints = np.any(np.stack([np.array(self.get_joint_names()) == jn for jn in no_lim_joints], 0), axis=0)
+         self.np_random, _ = seeding.np_random(None)
+ 

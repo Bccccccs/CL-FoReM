@@ -1,5 +1,7 @@
 # 论据与引用来源台账
 
+> **2026-10-16文档整理**：task1、task2、experiment/、task4.1–4.6、task4.11–4.13及其日志已删除；下方条目中指向这些路径的链接已失效，原文见[SRC-0321](#src-0321)所列备份。条目本身保留，编号不复用。
+
 本文件统一保存需要论据的数据、参数、方法和观点的出处，规则见[根AGENTS](../../AGENTS.md)。使用论据的文档须链接到对应稳定编号，例如 `SOURCES.md#src-0001`（按所在目录调整相对路径）。同一来源可支撑多个条目，但必须分别说明它支持什么，不能只列论文标题。
 
 ## 当前覆盖范围
@@ -3720,3 +3722,1141 @@ SRC-0266运行对照输入续记（2026-10-14 Codex）：只读重算task5原eva
 - 使用位置：[阅读笔记第A Step Toward World Models: A Survey on Robotic Manipulation条及比较/建议](agent_logs/project/20261014-codex-wm-rl-literature.md#paper-survey4)。
 - 核查人及日期：Codex /root；实际模型GPT-6（系统仅披露系列，精确型号未知），实际推理档位未知；2026-10-14。推荐配置不冒充实际配置。
 - 待办与变更：独立复核所列数表、正式版差异与适用性；未报告/未核出字段保持未知；原文不能作为FoReM验收。
+
+
+<a id="src-0309"></a>
+## SRC-0309 — task6.5 T65-D1包装修正与原作者PR2 Gazebo50阶段一结果
+
+- 支撑主张：原作者PR2模型simpleobstacle Gazebo新run t6.5-pr2-gz-r2 seed999–1048完整50回合，26/50=52%（goal26、success_nojumps21），23个非成功回合各底盘碰撞50次（累计1150），另一非成功回合无底盘碰撞且max_close_steps_reached，IK仅1回合1次。总55921步/均1118.42/范围245–2706；selfcollision上游指标4/50。Collision打印879条、16种环境对象字符串，全部机器人侧为PR2底盘；逐回合计数与打印事件分别保留。sim沿已核43/50=86%，Gazebo−sim=-34个百分点；原文Gazebo81.6%对照，当前低29.6个百分点。
+- 类型：项目实测（stdout/ROS health/原W&B单文件导出）＋算术推导；不是因果分离实验。比例success_count/50；百分点=100*(Gazebo−sim或paper)。论文值沿SRC0269，sim沿SRC0272–0273。
+- 作者/版本：Codex /root，实际GPT-6系列（系统仅披露系列，精确型号未知），实际推理档位未知，未切换/委派。forem-t6.4-pr2，镜像sha256:42a779abba40da560e9a80a392513df9b2c8db3c5fb037192530f30b97714915；原作者checkpoint SHA a4d24df66107ba4cd90cdbbaed99d7d99a84c1ade8c1a3fc009b718add66f49d，四模型文件复制前后/源目录末检一致；五上游入口首尾sha一致，未改上游。
+- 精确证据：`forem/logs/task6/t6.5-pr2-gz-r2/eval.log` Eval ep0–49、最后汇总与W&B写出后卸载警告；同run export.log（单offline run-1agru0to.wandb导出0）；`forem/results/task6/t6.5-pr2-gz-r2/{commands,status,health,cleanup,offline_raw_export,verified_eval,model_copy_verification}.json`。`forem/results/task6/t6.5-R2/{fix_verification,preflight_commands,source_freeze,model_freeze,episode_statistics,cpu_sampling_summary,final_verification,closed_ports,final_top}.json`和wrapper.diff；summary/{comparison,manifest,PR2_collision_objects}.json逐回合原日志行号与碰撞对象。
+- 包装修正/验证：T65-D1放行仅移除health生成字符串多余整体一空格，不改评估参数/上游；旧health编译可复现IndentationError，修后health/observer/launcher的实际Python2与cleanup实际Python3 compile均rc0。wrapper前SHA97103e8f82c1f09b472abf8e879c2f5b7f8e8930c2ae26aabed14f1efcbef6fc，后74737b71f4e18b532b88c463ddcf0191c931760e581167bd930f79f8a62944a7。监控只更新run-id与独立R2输出/stop目录。旧gz证据SHA核查保留、不计入；sim不重跑。
+- 原始配置/有效性：PR2 track，原启动器30 s等待后physics实测0.002 s/500 Hz/unpaused，九控制器running，policy time_step0.02/确定性/eval_seed999/50/num_gpus0/自由运行，无人为时延/步时长/动作缩放；IK评估CLI50覆盖保存100；策略真实CPU。完整50条Eval ep且指标已导出，success/epoch_len/IK均/base_collision比例与stdout一致；退出134在完成/指标写出后，按T64-D3有效并记偏差，不把rc改0，不宣称已查明退出根因。无D21。
+- 耗时/资源：R2 runner2783.387 s（46.390 min），含启动/评估/收尾/清理；有效sim+gz runner累计3001.619 s（50.027 min），不含用户交接间隔和旧失败run，不是项目全局墙钟或CPU时间。CPU563个约5秒主机CPU-time样本，加权均7.412核、峰20.934核，>56样本0；不证明未观测更短峰。
+- 原始结论与项目采用：阶段一review交Claude，原作者模型sim数值达86%，本栈Gazebo52%低于论文81.6%，公开原作者模型并未在本栈复现论文Gazebo量级；不能只由我们的A训练解释所有本地PR2低表现，但传感器/地图/版本/控制时序各贡献未分离。本轮未执行原因诊断、其他任务/机器人、训练或阶段二。同期A/B/F0只引用已有结果并列，不作单因素归因。
+- 适用限制：论文多训练种子均值，本地一个发布模型/50回合；sim与Gazebo障碍几何/感知不完全相同。success使用上游定义，不是独立物理成功判据；碰撞/IK/selfcollision可重叠，打印事件不等于控制器counter。事后success且IK≤100为26/50，不能当100阈值重跑。原镜像/task5已批准依赖差异沿task6.4保留。
+- 清理/下一步：cleanup after=[]，容器仅sleep，11311/11345无监听；R2监控按自身stop退出0。task5只读top与开工一致，G-B未进入/改动/发信号。负责人Codex已停止，Claude独立复核及阶段二决定尚未执行。旧partial comparison/manifest已另存blocked-r1版本，不覆盖历史运行证据。
+- 使用位置：task6.5 RESULTS末节、独立日志；核查日期与核查人：2026-10-14T12:14:01.852764+08:00 Codex。推荐Codex GPT6.1sol / Claude Sonnet5.5，low/默认（明确执行），必要跨指标/链路复核medium；推荐不冒充实际配置。
+
+
+<a id="src-0310"></a>
+## SRC-0310 — task5.4用户要求与B必须从头训练5M的代码依据
+
+- 支撑主张：(1) 用户2026-10-14要求“对cbl这个sac多训练一些，训练500w步，做好性能优化”；“cbl”指Husky快照作者路径`/home/cbl/...`，即task5.2对照B（`main_ray.py`+`husky_ur5`，sim）。(2) B不能从t5.2的1M checkpoint续训，须从头训练5M；5M run的前1M与t5.2不同。
+- 类型：用户指令（聊天原话）＋原始代码核查（Husky快照1ccedd0，只读）。
+- 精确位置：`husky/src/modulation_rl/scripts/main_ray.py:30` `assert not wandb_config.restore_model and not wandb_config.resume_id, "Not implemented yet"`；`main_ray.py:247–260` stop=`timesteps_total: total_steps`、ASHA `max_t=max(75000,total_steps)`、`grace_period=min(800000,total_steps)`；`main_ray.py:276–277` `checkpoint_freq=100`、`checkpoint_at_end=True`；`modulation/myray/ray_utils.py:121–126` 四个优化器lr_schedule均为`[[0, lr_start],[total_steps, lr_end]]`；`ray_utils.py:176` 探索噪声`scale_timesteps=total_steps`；`modulation/utils.py:54–55` `lr_start`默认1e-4、`lr_end`默认1e-6；`utils.py:46` `total_steps`默认10,000,000。
+- 原始结论：上游入口不实现续训；lr与探索噪声随total_steps线性衰减，t5.2在1M时lr已到1e-6。
+- 本项目采用：task5.4从头训练`--total_steps 5000000`，其余同t5.2；按步数与t5.2比较时注明日程差异。
+- 适用限制：未核查RLlib 1.6内部lr_schedule插值细节与噪声类的精确衰减形状，只按配置写法认定为随total_steps缩放；单试验下ASHA实际不淘汰试验属推断，待执行时由日志确认。
+- 使用位置：[task5.4 TASK](tasks/task5/task5.4/TASK.md)、[PROCEDURE](tasks/task5/task5.4/PROCEDURE.md)、[Claude日志](agent_logs/task5/task5.4/20261014-claude-task5.4-plan.md)。
+- 核查人及日期：Claude（claude-opus-5-5，强度未知），2026-10-14。
+
+<a id="src-0311"></a>
+## SRC-0311 — t5.2训练耗时分解（learner为瓶颈）与task5.4性能门槛的工程选择
+
+- 支撑主张：t5.2（B，1M，与A并行）每1000步迭代中位58.0 s、均60.1 s，合计16.70 h；每迭代100次SAC更新、单次`learn_time_ms`约420–550 ms（CPU，`num_gpus 0`），learner约占迭代墙钟85%；`mean_env_wait_ms`约16 ms；训练中评估迭代（每75迭代）约190–250 s，13次共额外约0.55 h；`perf/cpu_util_percent`约8%。
+- 类型：项目实测（t5.2原始progress.csv/params.json）＋推导。
+- 精确证据：`forem/results/task5/t5.2-train-s40/ray/husky_ur5_.../SACTrainerCustom_modulation_rl_env_d27fe_00000_0_2026-10-11_15-09-58/progress.csv`（1000行）与同目录`params.json`（train_batch_size 256、training_intensity 25.6、timesteps_per_iteration 1000、num_workers 20、evaluation_num_workers 1、evaluation_parallel_to_training true、num_gpus 0.0）。
+- 推导：更新次数/迭代=`(info/num_steps_trained/info/num_steps_sampled)×1000/256`=25.6×1000/256=100；learner合计≈100×0.5 s≈50 s；占比≈50/58≈85%。5M线性估计≈5000×60 s≈83 h，评估额外≈66×150 s≈2.8 h，合计约86 h（未优化、单独运行时可能不同）。
+- 假设（待task5.4 §1实测）：learner在Tune trainable进程中以单线程执行（Ray默认给actor设OMP_NUM_THREADS=1）。尚未核实，不得当作事实。
+- 工程选择（理由）：O1等价性判据loss相对差≤1e-5、参数最大绝对差≤1e-6，取浮点归约顺序差异量级；采用门槛为中位迭代时间下降≥10%且两次重复一致，用以排除短程噪声。两者均非外部文献依据，可由Claude复核时调整。
+- 适用限制：t5.2与A同时训练，CPU争用可能影响计时；未单独测过checkpoint写入耗时；GPU不可用沿task5父流程允许偏差1（torch 1.7.1不支持Blackwell，禁止换栈）。
+- 使用位置：[task5.4 TASK](tasks/task5/task5.4/TASK.md#已知性能事实来自t52实测非新测量)、[PROCEDURE §1–§2](tasks/task5/task5.4/PROCEDURE.md)。
+- 核查人及日期：Claude（claude-opus-5-5，强度未知），2026-10-14，读取原始CSV复算。
+
+
+<a id="src-0312"></a>
+## SRC-0312 — task5.4接手冻结与单线程learner路径现场实测
+
+- 支撑主张：当前Husky工作副本147个源码/配置SHA与t5.2最终冻结一致；t5.4-prof-r1 learner intra-op1、model/optimizer CPU，20 rollout各1线程；前10迭代丢弃前3后中位52.7916秒、100次更新、单次learn计时中位414.624ms，learner占比中位78.54%，因此达到§1≥50%进入O1门槛。
+- 类型：项目实测＋推导；不是t5.2数据复用。
+- 作者/版本：Codex /root，实际模型/强度未知；镜像未换，代码task5.0 Husky snapshot1ccedd0与允许兼容；r1只加默认关闭只读探针。
+- 原始证据/精确位置：`forem/results/task5/t5.4-preflight-r1/freeze_check.json`147项及`container_processes.txt`；输入对照`forem/logs/task5/t5.2-eval-r2/source-model-r1-d22-d23-final.log`。`forem/logs/task5/t5.4-prof-r1/train.log`的FOREM_T54_LEARNER_PROBE；`forem/results/task5/t5.4-prof-r1/learner_threads_top.txt`、learner_status_and_save_api.txt、rollout_worker_proc.txt；该run ray trial progress.csv第1–10迭代；`forem/build/task5/t54_analyze_profile.py`公式，profile_summary.json随后追加迭代重算，完整原CSV保留。
+- 推导：每迭代更新数=相邻num_steps_trained差/256=100；learner秒=更新数×learn_time_ms/1000；占比=learner秒/time_this_iter_s，各迭代占比取中位；非learner残差包含环境/搬运/日志等，未进一步独立剖分。
+- 原始结论：本次learner仍是主要开销；CPU主线程约100%，OS线程25不等于intra-op线程数。初始一次探针在初始化阶段，worker.foreach_worker读取不消耗环境步数、不采样、不改RNG。
+- 本项目采用：依已冻结§1门槛进入O1；尚无候选线程收益/采用结论；默认关闭O1的隔离测试3项通过，before/diff/SHA和红绿证据在preflight目录。
+- 适用限制：r1单独运行、仅短程20k仍在跑，当前10迭代读数；不将短程计时或CPU-only解释成5M完训或GPU加速。r1监控初次nohup未独立，后改start_new_session，最早阶段CPU5s缺样本；探针interop32，不证明实际32线程并行。评估worker线程仍需独立记录。
+- 核查：2026-10-14T15:28:42.315543+08:00，Codex /root，直接读取原始日志与CSV。
+- 使用：[task5.4 RESULTS](tasks/task5/task5.4/RESULTS.md)、[日志](agent_logs/task5/task5.4/20261014-codex-task5.4.md)。
+
+
+<a id="src-0313"></a>
+## SRC-0313 — task5.4 r1正常20k完成、等价性脚本pickle协议异常停止
+
+- 支撑主张：t5.4-prof-r1从头20000步/20迭代正常退出0；丢弃前3后中位迭代53.604544秒、P90 54.943775秒、learner计时中位422.727ms×100≈42.2727秒/迭代，占比中位79.4968%，time_total_s=1059.081788秒。O1等价性尚未执行SAC更新即反序列化异常，候选/正式训练未启动。
+- 类型：项目实测＋基于原始计时的推导；执行脚本失败，不是科学等价性不通过。
+- 作者/版本：Codex /root，实际模型/强度未知；容器forem-t5-husky，原镜像/torch未改，conda Python3.7.13、标准pickle最高protocol4；RLlib1.6原RolloutWorker.save使用ray.cloudpickle，其loads模块pickle5._pickle。
+- 原始证据/精确位置：`forem/results/task5/t5.4-prof-r1/exit_code.txt`=0、run下ray trial progress.csv第1–20迭代/result.json/checkpoint_000020/checkpoint-20；`profile_summary.json`为完整20迭代汇总（CPU monitor183/184样本差为采样收尾，冻结最终以文件为准）；`forem/logs/task5/t5.4-preflight-r1/equivalence.log`唯一Traceback：`/forem_build/t54_equivalence.py:16`标准pickle双层loads读取worker字节时`ValueError: unsupported pickle protocol: 5`；`profile_sequence_status.json`blocked、`profile_sequence.log`。只读API证据`pickle_protocol_readonly.txt`：rollout_worker.py import ray.cloudpickle及sys.version/HIGHEST_PROTOCOL/loads.__module__。
+- 原始结论：测试脚本使用与RLlib保存时不一致的加载器；失败发生在构造policy/batch前，无loss/参数差值，不能认定多线程不等价或无收益。单线程CPU learner瓶颈门槛通过。
+- 本项目采用：依冻结异常规则停止§2后续，交Claude。建议待Claude放行后仅修自有等价性脚本采用现有ray.cloudpickle，重新构造固定随机权重/batch256/RNG；不升级栈、不加载t5.2权重。建议尚未实施，不算放行。
+- 清理证据：`cleanup_ros.json/log`按PID及cmdline身份向本run roscore107/roslaunch175发SIGINT；`processes_final.txt`仅sleep；profile监控PID680802和序列PID714356均已退出。其他容器/参考仓库未操作。
+- 适用限制：等价性与候选端到端收益没有结果；默认关闭hook仅隔离单测通过，未获数值等价性验收。无5M、训练中正式评估、最终9任务或comparison.json，不能置review/done或称优化完成。r1是20k且lr/噪声日程按20k缩放，非5M先导性能曲线。
+- 核查人/日期：2026-10-14T15:40:42.591415+08:00，Codex /root，读取当前原始日志/代码/进程；没有重跑等价性或进行替代反序列化。
+- 使用：[RESULTS](tasks/task5/task5.4/RESULTS.md)、[日志](agent_logs/task5/task5.4/20261014-codex-task5.4.md)。
+
+
+<a id="src-0314"></a>
+## SRC-0314 — task5.4 R1审批：等价性脚本加载器修正放行（T54-D1）
+
+- 支撑主张：task5.4 §2阻塞系执行者脚本`forem/build/task5/t54_equivalence.py:16`用标准pickle读取RLlib checkpoint（protocol 5，容器Python 3.7.13标准pickle最高4），非候选优化或训练语义问题；放行改用`ray.cloudpickle`后继续§2→§3。
+- 类型：用户指令（2026-10-14“审批”）＋Claude只读核查项目证据（工程决策）。
+- 精确证据：`forem/logs/task5/t5.4-preflight-r1/equivalence.log`（Traceback，line 16 ValueError: unsupported pickle protocol: 5）；`forem/results/task5/t5.4-preflight-r1/{O1.diff,pickle_protocol_readonly.txt,profile_sequence_status.json}`；Codex RESULTS §0–§2、SRC-0312/0313。核查时`docker top forem-t5-husky`仅`sleep infinity`。
+- 本项目采用：T54-D1，见[task5.4 RESULTS Claude复核R1](tasks/task5/task5.4/RESULTS.md#claude复核)。
+- 适用限制：仅审批脚本加载修正与继续执行；O1尚无数值等价性和端到端收益证据，不能视为已采用。
+- 核查人及日期：Claude（claude-opus-5-5，强度未知），2026-10-14。
+
+
+<a id="src-0315"></a>
+## SRC-0315 — task5.4 T54-D1新run固定batch完整SAC更新等价性
+
+- 支撑主张：t5.4-equiv-r1中N=4/8/16对N=1，actor/critic/alpha三loss相对差全部0，模型与target全部参数最大绝对差7.4505805969e-9/2.2351741791e-8/9.6857547760e-8，RNG序列一致；均满足冻结loss≤1e-5/参数≤1e-6，因此可进入候选profile。尚未证明端到端收益。
+- 类型：项目实测（离线工程等价性单步测试），非性能验收。
+- 版本/作者：Codex /root，实际模型/强度未知；镜像/torch/Ray不变，FOREM_T54_PROBE/O1保留Claude R1批准的默认关闭改动。只修t54_equivalence.py的checkpoint/worker/ray_config.pkl加载为现有ray.cloudpickle；旧失败preflight-r1不写。
+- 精确证据：`forem/results/task5/t5.4-equiv-r1/{loader.diff,loader_sha.json,t54_equivalence.before.py,t54_equivalence.after.py,launch.json,equivalence.json,equivalence_inputs.pkl,resume_freeze_check.json}`；`forem/logs/task5/t5.4-equiv-r1/equivalence.log`四条N=1/4/8/16 JSON。固定输入脚本symbol master/policy.learn_on_batch/policy.update_target/allparams，profilecheckpoint仅取policy_specs与ray_config.pkl配置，不取checkpoint.state权重/optimizer/replay；不读t5.2权重。
+- 输入/条件：fresh随机权重seed40，固定合成256样本batch由独立RandomState54生成，obs14441/action3，恢复同一fresh policy+target+optimizer state与Python/NumPy/Torch RNG；每个N重建policy且set_state相同初态，完成actor、双critic、alpha四优化器learn_on_batch及target软更新；检查thread setter未消耗Torch RNG。
+- 原始结论：该固定单batch更新数值差在冻结门槛内；alpha loss因初始log_alpha为0而为0，但完整alpha optimizer仍执行。单次更新wall秒0.5855/0.1983/0.0989/0.0961只作测试时间，不能代替端到端profile或承诺工期。
+- 采用/限制：允许测试全部三个候选，是否正式采用仍待各30k×2端到端、≥10%与两次方向一致及主机≤56核；仅一个合成batch和fresh初态，不等于任意训练状态数学恒等或统计结果。
+- 核查日期/人：2026-10-14T16:01:17.905526+08:00，Codex /root，实际读取新JSON/log与完整输入文件；后续独立Claude复核待执行。
+- 使用：[task5.4 RESULTS](tasks/task5/task5.4/RESULTS.md)、[日志](agent_logs/task5/task5.4/20261014-codex-task5.4.md)。
+
+
+<a id="src-0316"></a>
+## SRC-0316 — task5.4 R2：用户要求learner线程加到32（T54-D2）
+
+- 支撑主张：用户2026-10-14 16:5x“能加大一些吗”“加到32核心”；Claude决定将N=32加入O1候选，等价性与端到端收益通过且不比N16慢超过5%时采用32。
+- 类型：用户指令＋项目实测（只读）＋工程决策。
+- 精确证据：`lscpu`（2 socket×32核、Thread(s) per core 1、NUMA0 0–31/NUMA1 32–63）；`forem/results/task5/t5.4-prof-r{2,3,4,5}/ray/**/progress.csv`丢弃前3迭代的time_this_iter_s中位54.92/27.00/21.53/17.82（r5仅11迭代，未完成）与learn_time_ms中位430.6/159.7/104.0/70.5；`t5.4-equiv-r1/{equivalence.json,profile_sequence_status.json,formal_launcher_status.json}`。
+- 推导：非learner耗时≈迭代中位−learn_ms×100/1000，基线≈11.8 s、N16≈10.7 s；N32最多再省learner剩余约7 s中的一部分。
+- 适用限制：r5未完成、第二轮重复未做；跨NUMA线程的实际收益未测。
+- 使用位置：[task5.4 RESULTS R2](tasks/task5/task5.4/RESULTS.md#r2--用户要求learner加到32线程claude2026-10-14-165x)。
+- 核查人及日期：Claude（claude-opus-5-5，强度未知），2026-10-14。
+
+
+<a id="src-0317"></a>
+## SRC-0317 — task5.4首轮30k基线/N4实测与分离后台执行链
+
+- 支撑主张：r2原配置30k/30迭代/rc0，丢弃前3中位54.918678秒、P90 56.386786秒、learn_time_ms430.567；r3仅learnerN4同30k/rc0，中位26.999634秒、P90 28.988838秒、learn_time_ms159.742；首轮中位下降50.837065%。两run远程rollout20及远程eval1均Torch1线程；learner分别1/4。尚未通过两次重复最终采用门槛。
+- 类型：项目实测＋推导＋后台执行包装核查；不是正式5M完成或最终性能采用。
+- 版本/作者：Codex /root，实际模型/强度未知；源/镜像/torch/ray不变，O1默认关闭改动已Claude R1接受。自有监督脚本SHA见equiv-r1/execution_scripts_sha256.json，不是另一个Agent。
+- 精确证据：`forem/results/task5/t5.4-prof-r2/`和`r3/`的exit_code.txt、ray trial progress.csv/params.json、profile_summary.json、host_cpu_5s.jsonl/process_samples.jsonl；train.log初始化FOREM_T54_LEARNER_PROBE。主机CPU峰分别14.274368/12.696787核；learner ps生命周期CPU平均85.5722%/300.1852%，非瞬时线程利用率。
+- 推导：中位下降=1−26.99963402748108/54.91867804527283=0.50837065；固定30k/seed40、前3丢弃、剩27迭代，完整环境+采样+CPU搬运+learner+日志。30k没有75000步周期评估/100迭代周期checkpoint，正式外推须沿冻结公式加旧t5.2评估额外开销，不把此短测说成涵盖全部长周期成本。
+- 原始结论/采用：等价性在SRC-0315已过，首轮N4有明显整体收益，但还需所有通过候选和基线各30k×2；最终门槛与选N按PROCEDURE/T54-D1，不提前采用。
+- 后台证据：equiv-r1/profile_sequence.pid、profile_sequence_status.json、formal_launcher.pid/formal_launcher_status.json；build/task5/t54_profile_sequence.py、t54_start_formal.py、t54_monitor_train.py、t54_posttrain.py与t54_reporting.py源码；logs/task5/t5.4-equiv-r1各监督日志；posttrain-accounting-checks.log离线5项通过（50seed/cap失败/D10 N/A/两朝向/未覆盖异常，非仿真实验）。cgroup读权限只读核查已存。
+- 后续行为为已授权计划（尚未执行）：全profile完成后自动核验门槛/冻结/无活跃客户端，再正式5M；实际params对t5.2只允许四项total_steps派生差，记录model/optimizer CPU及实际learner线程/远程worker1，监控CPU56仅告警；训练正常≥5M后才9任务sim、D10/D21/D23、comparison/review。异常保留证据交Claude，不自修/续训/重跑/标done。
+- 限制：当前正式5M尚未启动，N8/16与第二轮尚未全完成；后台代码存在不可事先实测的长训/评估路径，未知失败停下，不包装为已验收。计数5项仅脚本逻辑检查。
+- 核查日期/人：2026-10-14T17:07:53.873664+08:00，Codex /root，读取实际新日志/JSON、存活PID/只读cgroup；Claude独立复核待执行。
+- 使用：[RESULTS](tasks/task5/task5.4/RESULTS.md)、[日志](agent_logs/task5/task5.4/20261014-codex-task5.4.md)。
+
+
+<a id="src-0318"></a>
+## SRC-0318 — 2026-10-16用户所附SC²-WM逐段阅读与解释边界
+
+- 支撑主张：VLN-CE任务定义；VCM历史视觉检索/融合；候选动作→动作条件预测→潜态差异→表示细化→最终动作；Δ不是最小化目标；修正前后动作专家监督、先验后验KL与未来视觉特征预测三损失；测试时KL百分位与低熵条件触发、不包含策略的模型参数更新；正文与算法2重建目标不一致。
+- 类型：外部文献原文已读；“决策变化大不推出预测错误”等为基于公式的逻辑分析；教学类比、模仿/强化/深度学习区分是概念解释，不是本项目实测或本文新增实验结论。
+- 作者/标题/版本：Xuan Yao、Yuze Zhu、Junyu Gao、Zongmeng Wang、Changsheng Xu，SC²-WM: A Self-Correcting World Model with Closed-Loop Feedback for Vision-and-Language Navigation in Continuous Environments。用户所附PDF自述PMLR 306/ICML 2026，本轮未独立核验出版状态，不假定与既有arXiv登记完全同版。
+- 原始证据：`/home/ybc/.codex/attachments/7c2e58fa-66b4-44a4-8f6d-1e7f35c5d685/Yao 等 - SC2-WM A Self-Correcting World Model with Closed-Loop Feedback for Vision-and-Language Navigation i.pdf`；SHA256 `e77f42e075484b5b78756bdff7bfecc4222b98d60e47f18247b6521a472a9d7a`。临时提取文本`/tmp/forem-sc2wm-reading.txt`非长期证据，原PDF及哈希为准。
+- 精确位置：pp.1–3摘要/§1–2/任务定义；p.4图2、式1–8；p.5 §3.1–3.2、式9–13、算法1；p.6 §3.3式14、算法2第9行与§4开头。
+- 原始结论：作者用预测后果引导状态表示，并按反馈导致的动作分布变化和确定性选择测试时适应。正文明确Δ为引导而非最小化目标；式11同时监督原始与细化状态的动作。正文引用式13下一步特征目标，算法2却用当前校准特征，存在待核对文本差异。
+- 推导/解释：Δ=s̃_(t+1)−s_t比较不同时间的状态，故不是预测与实际之差；动作分布KL大度量决策变化，逻辑上不足以单独确认预测不准，低熵也不保证正确。该判断仅基于比较量的定义，无新增实验数据。
+- 项目采用及限制：仅供共同阅读和纠正聊天遗漏，不据此调整FoReM机制/协议。尚未逐段阅读主结果、消融或完整审计实现；不宣称触发机制已获本轮验证，不把内部潜态漂移等同机械臂执行误差。类比遮挡门控只是可能行为，不是网络已测能力；学习方法概念解释未另行文献综述。
+- 核查日期/人：2026-10-16，Codex /root；用户PDF原文阅读及图式核对，非仅二手摘要。
+- 使用：[当天阅读笔记](agent_logs/project/20261016-codex-sc2wm-reading.md)。
+
+<a id="src-0319"></a>
+## SRC-0319 — SC²-WM参考源码GateFusion门控权重计算
+
+- 支撑主张：视觉融合门控由当前特征与历史检索特征拼接，经线性层和sigmoid产生逐维度权重；并非固定人工比例。
+- 类型：官方参考仓库本地源码静态核查，无运行/训练验证。
+- 作者/版本：SC²-WM作者代码，本地`scwm/` commit `f2f2f5ff2e1f21a08f7d7c51fbbd5c17b0d6778b`；该文件git status为空（无本地修改）。
+- 原始证据/精确位置：`scwm/utils_p/vln_memory.py:108–160`，`GateFusion.__init__`与`forward`；`nn.Linear(dim*2,dim)`，`torch.cat([x1,x2],dim=-1)`，`torch.sigmoid(self.proj(...))`及加权融合；同文件416–417行传入original_query和retrieved。
+- 原始结论：scale=sigmoid(W[x1;x2]+b)，fused=scale*x1+(1-scale)*x2。输出末维dim，支持逐特征门控；W、b为可训练层参数，scale按输入计算。
+- 项目采用及限制：只解释论文α的本地实现对应，不修改代码、不宣称已核对所有训练调用/梯度；无证据证明学到了固定的遮挡—权重规律，也不估算整个模块参数规模。
+- 核查日期/人：2026-10-16，Codex /root，只读代码与commit核查。
+- 使用：[当天阅读笔记§3](agent_logs/project/20261016-codex-sc2wm-reading.md)。
+
+
+<a id="src-0320"></a>
+## SRC-0320 — SC²-WM基线指标与强化学习扩展说明（2026-10-16补读）
+
+- 类型：外部论文原文选读；未复现，不是FoReM实测。
+- 作者/版本/原文：Yao等SC²-WM，2026，用户所附PDF，文件路径及SHA256同[SRC-0318](#src-0318)。
+- 精确位置：表1（p.7）R2R-CE、表2/3（p.8）RxR-CE与消融；附录B指标定义；附录D末尾“Difference from critic-based feedback”“Potential extension to reinforcement learning”。
+- 支撑主张及原始结果：R2R-CE单目Val Unseen基线VLN-3DFF*→SC²-WM：表3精确SR43.77→50.90、SPL29.39→37.17、TL26.16→17.65m、NE6.05→5.37m、OSR54.92→58.84；表1Test Unseen SR43.8→47.0、SPL28.6→32.1。RxR-CE单目Val Unseen表2：SR26.7→35.8、SPL20.1→27.2、NE9.40→8.36m。表3无模型适应State-C+VCM→条件适应：SR49.86→50.90、SPL36.05→37.17；固定每2步适应SR50.30、SPL36.58。上述百分数相减为百分点，TL减少8.51m；正文称约5m与表格不一致，本次以表格计算。单目与全景基线不同，全景对应ETPNav*/HNR*，不跨摄像头条件直接排名。
+- RL原始表述：当前实现采用模仿学习，理由为部分可观测与稀疏奖励下纯奖励优化不稳定，作者认为示范有助于先建立可靠行为；未以此证明RL普遍不适合导航。作者把Δ描述为高维状态转移引导，与critic标量期望回报不同，明确目标不是RL与世界模型的范式比较。未来可把Δ用于内在奖励或辅助潜在表示，核心机制与策略学习范式正交；这是未来方向，不是已实现/验证的RL算法，未给出内在奖励的具体标量化公式，不支持直接用差值范数当奖励或已验证SAC收益。
+- 项目采用/限制：仅回答用户论文问题，补充当天阅读笔记；不改变FoReM协议、不新增实验、不启动训练。本轮选读表格与指定附录段，未全面审计统计显著性/完整公平性。
+- 核查：2026-10-16，Codex /root，直接读取用户PDF提取文本的表格、附录段落；差值为表中数字直接相减。
+- 使用：[阅读笔记补读](agent_logs/project/20261016-codex-sc2wm-reading.md#补读主要对比与强化学习)。
+
+
+<a id="src-0321"></a>
+## SRC-0321 — 2026-10-16用户指令：现有任务归为CBL复现、task7起从头构建世界模型闭环、删除无用文档
+
+- 支撑主张：task0、task3–task6归入阶段一“CBL项目复现”；task7起为阶段二“世界模型闭环”；删除task1、task2、experiment/、task4.1–4.6、task4.11–4.13及对应日志；根AGENTS末尾按日期追加的旧状态段精简为当前状态。
+- 类型：用户明确指令与确认（项目管理），不是技术依据。
+- 原始依据：用户原话“我们现在的干扰很多，请你检查现在的文档，把现有的task作为对CBL项目的复现，然后task7开始我们从头构建我们的世界模型闭环项目，把无用文档删掉”；随后在选项中确认四项均按推荐处理（删task1/2；删task4.1–4.6与4.9–4.13；删整个experiment/；精简根AGENTS）。
+- 执行偏差及更正：Claude提问时把task4.9–4.13描述为“旧WM计划”，删除后核对备份发现task4.9/4.10含实际运行结果（WM负结果与反馈臂实现），已从备份恢复，只删除未执行的4.11–4.13。
+- 备份：删除前整个`forem/doc`、`forem/AGENTS.md`与根`AGENTS.md`打包为`/home/ybc/projects/CL-FoReM-reset-backups/20261016-doc-cleanup/forem-doc-before-cleanup.tar.gz`（465个文件，SHA256 `fd3f52c81e4137636fbf7c260ef7a49f945bd7180123c790bff7be76d2acec06`）。本台账中指向已删除文档的链接以该备份为准。
+- 限制：只改文档；`forem/src`、`config`、`logs`、`results`中与已删除任务相关的代码与产物未动。
+- 核查日期/人：2026-10-16，Claude（claude-opus-5-5）。
+- 使用：[README](README.md) · [PLAN](PLAN.md) · [task4 TASK](tasks/task4/TASK.md) · [task7 TASK](tasks/task7/TASK.md)。
+
+
+<a id="src-0322"></a>
+## SRC-0322 — SC²-WM的地图类型、训练环境与真机验证
+
+- 支撑主张：SC²-WM建立在ETPNav/HNR框架上，策略使用拓扑图（节点为已访问视点及全景特征，幽灵节点为航路点预测器给出的候选点），动作是选点；单目设置另用语义可通行栅格辅助航路点预测。训练与主要评估都在Habitat（VLN-CE，R2R-CE/RxR-CE）中、采用模仿学习；低层动作为前进0.25 m/转向15°的运动学动作；附录E在Unitree GO2真机上做了部署验证。
+- 类型：外部论文与官方源码静态核查；未复现。
+- 来源：SC²-WM论文（同[SRC-0318](#src-0318)的用户所附PDF）；本地`scwm/` commit同[SRC-0319](#src-0319)。
+- 精确位置：附录C“Implementation Details/The Baseline Framework”（拓扑图构建与单目语义可通行图）；正文§4实验设置（ETPNav/HNR集成）；附录D“Potential extension to reinforcement learning”；附录E“Real-World Verification”（100任务×5次，SC²-WM 85%、基线70%，动作与仿真一致，测试期梯度更新异步）。源码：`scwm/vlnce_baselines/models/graph_utils.py:139` `GraphMap`；`scwm/vlnce_baselines/ss_trainer_ETP.py:1728` `SemanticGrid`；`scwm/run_r2r/iter_train.yaml` `IL:`、`expert_policy: spl`、`sample_ratio: 0.75`；`scwm/run_r2r/r2r_vlnce.yaml` `FORWARD_STEP_SIZE: 0.25`、`TURN_ANGLE: 15`、`ALLOW_SLIDING: True`。
+- 本项目采用：作为task7地图选型与“sim训练+测试期适应”结构的参照；不采用拓扑图。
+- 适用限制：其sim→真机差距主要是视觉/场景外观，未研究连续动作的执行偏差；RL扩展只是作者展望，未实测；真机结果为单平台一组对比。
+- 核查日期/人：2026-10-16，Claude（claude-opus-5-5），读论文提取文本与源码。
+- 使用：[task7 TASK](tasks/task7/TASK.md)。
+
+
+<a id="src-0323"></a>
+## SRC-0323 — FoReM/CBL局部地图在sim与Gazebo中的生成方式不同
+
+- 支撑主张：策略观测的局部地图是以机器人为中心的3 m×3 m、0.025 m（120×120）栅格。sim中从真实平面图裁剪（二值、360°完整、无膨胀）；Gazebo中来自costmap_2d局部代价地图，由前置激光`front/scan`实时建图，含障碍层与膨胀层，3 m滚动窗口，代价≥20判为占据。
+- 类型：本地源码/配置静态核查；膨胀半径实际取值与时延未实测。
+- 精确位置：`forem/src/modulation_rl/scripts/modulation/envs/map.py:34`（`local_map_size_meters=3.0`）、`:85`、`:221`（`_get_local_map_gt`）、`:288–303`（`_get_local_map_from_costmap`，`>= 20`）、`:305–313`（sim用GT、Gazebo用costmap，`use_ground_truth`可强制GT）；`scripts/modulation/utils.py:99`（`local_map_resolution` 0.025）；`gazebo_world/common/costmap/costmap_common_local.yaml`（rolling_window、3.0 m、0.025）；`gazebo_world/husky_ur5/costmap/costmap_common.yaml`（ObstacleLayer+InflationLayer，`observation_sources: laser`，`front/scan`，obstacle_range 2.5）。
+- 推论（待验证）：sim→Gazebo零样本损失中混有地图（感知）差距与执行差距，两者比例未测。
+- 核查日期/人：2026-10-16，Claude（claude-opus-5-5），只读。
+- 使用：[task7 TASK](tasks/task7/TASK.md)。
+
+
+<a id="src-0324"></a>
+## SRC-0324 — SC²-WM实机平台与传感器使用边界
+
+- 支撑主张：实机为Unitree GO2四足机器人，配Intel RealSense D435i RGB-D相机；正文说明其提供视觉感知，附录E特别说明深度仅用于安全避碰。论文未在这些部署说明中明确IMU、激光雷达、关节反馈是否输入SC²-WM，不据整机可能搭载的硬件推断算法输入。仿真为Habitat导航agent，论文同时比较单视角RGB-D与12方向、30°间隔全景RGB-D设置，不能将全景设置解释为实机安装12台相机。
+- 类型：外部论文原文及官方代码静态核查；未运行。
+- 作者/版本：Xuan Yao等，SC²-WM，2026，arXiv:2608.07548v1；本地scwm commit f2f2f5ff2e1f21a08f7d7c51fbbd5c17b0d6778b。
+- 来源与精确位置：https://arxiv.org/html/2608.07548v1 ，§4.1、§4.3 Real-world Experiments、附录C、附录E（PDF印刷页17–18）；本地scwm/paper/SC2-WM-ICML2026.pdf；scwm/run_r2r/r2r_vlnce.yaml 的AGENT_0.SENSORS、RGB_SENSOR、DEPTH_SENSOR。
+- 原始结论：Unitree GO2 + D435i；“Depth sensing is utilized only for collision avoidance as a safety mechanism.”
+- 本项目采用及限制：仅回答平台与传感器问题；仿真RGB-D输入与实机深度安全用途分别陈述，不宣称部署模块的数据流已获代码验证；不授权task7实施。
+- 核查日期/人：2026-10-16，Codex /root；已读取本地PDF对应段落并核对在线原文。
+- 使用：[核查记录](agent_logs/project/20261016-codex-scwm-sensors.md)。
+
+
+<a id="src-0325"></a>
+## SRC-0325 — SC²-WM训练RGB的虚拟相机采集及使用
+
+- 支撑主张：训练在Habitat场景中由虚拟相机生成观测，不是用GO2实拍采集训练画面；默认前向RGB配置224×224、HFOV90°。运行时复制RGB/DEPTH传感器，增加30°到330°的11个朝向，连同原前向构成12方向观测；无需通过12次机器人转向动作实现这些相机朝向。环境reset与step返回观测，非依据固定视频帧率的录制协议。
+- 类型：官方源码静态核查；未运行Habitat，未测渲染耗时/采样频率。
+- 作者/版本：SC²-WM作者代码，scwm commit f2f2f5ff2e1f21a08f7d7c51fbbd5c17b0d6778b；论文2026，https://arxiv.org/html/2608.07548v1 §4.1及附录C。
+- 精确位置：scwm/run_r2r/r2r_vlnce.yaml RGB_SENSOR与AGENT_0；scwm/vlnce_baselines/utils.py:166–173 get_camera_orientations12；scwm/vlnce_baselines/ss_trainer_ETP.py:133–165 _set_config、:1609 reset、:2625 envs.step；scwm/vlnce_baselines/models/Policy_ViewSelection_ETP.py:236–297 初步12方向/后续单方向编码、:302–338 前向编码+forward_nerf补其他方向特征、:374–402 获取其他方向真实渲染特征。
+- 原始结论及适用限制：配置中可生成12方向观测，不代表所有设置每步把全部图像直接作为策略输入。当前发布路径有首步12视角初始化、后续以前向输入与场景记忆预测周围特征，且保留其他方向渲染特征的使用代码；不能将单视角描述为整个训练过程完全无法访问其他方向图像，也不能把预测特征称为当步新拍RGB。仿真本身的渲染实现未在此逐行审计。
+- 项目采用：仅解释采集与输入区别，不启动实验、不改变task7。
+- 核查日期/人：2026-10-16，Codex /root，直接读上述源码与此前已核对论文。
+- 使用：[平台与传感器记录补读](agent_logs/project/20261016-codex-scwm-sensors.md)。
+
+
+<a id="src-0326"></a>
+## SRC-0326 — SC²-WM环境资产格式与策略地图数据结构
+
+- 支撑主张：主要基准为Habitat中的Matterport3D室内扫描重建场景，R2R-CE/RxR-CE为导航任务数据；场景资产包含.glb三维网格和.navmesh导航网格。算法GraphMap为运行时拓扑图，节点含位置/视觉特征、边含距离，另有候选ghost节点；单视角分支还有占据/语义网格张量与3D特征场。场景资产与算法地图不是同一数据结构，不能把仿真器完整场景直接称为策略已知全图。
+- 类型：官方源码/文档及论文原文静态核查，无运行实测。
+- 作者/版本：Yao等SC²-WM（2026）；本地scwm commit f2f2f5ff2e1f21a08f7d7c51fbbd5c17b0d6778b；VLN-CE上游README在线当前版本（未固定commit）。
+- 来源与精确位置：https://github.com/jacobkrantz/VLN-CE README Data/Scenes（MP3D、data/scene_datasets/mp3d/{scene}/{scene}.glb）；https://arxiv.org/html/2608.07548v1 附录C；本地scwm/README.md Data Preparation、scwm/data/scene_datasets/PLACE_HERE.txt（.glb/.navmesh）；scwm/vlnce_baselines/models/graph_utils.py:139–245 GraphMap.__init__/update_graph；scwm/vlnce_baselines/waypoint_networks/semantic_grid.py:7–27 SemanticGrid；任务路径见run_r2r/r2r_vlnce.yaml DATASET。
+- 原始结论：GraphMap使用nx.Graph()，node_pos、node_embeds等字典；semantic_grid/occupancy_grid为[batch,类别通道,H,W]的torch张量。
+- 采用及限制：仅说明环境与格式，不下载场景、不执行仿真；本地场景目录为占位说明，未验证资产完整性；.navmesh为行走区域表征而非给策略的视觉地图，未审计全部底层导航实现。不把存储结构当成已验证的实机建图能力。
+- 核查日期/人：2026-10-16，Codex /root，原文与代码直接核对。
+- 使用：[机器人传感器核查补读](agent_logs/project/20261016-codex-scwm-sensors.md)。
+
+
+<a id="src-0327"></a>
+## SRC-0327 — 2026-10-16用户对task7的设计决定
+
+- 支撑主张：task7采用自写训练环境（随机立方体场景）；机器人Husky+UR5，带一个可直接获得全景观测的传感器；底盘动作采用方案一，即训练时只输出(v, ω)、执行层转换留到验证仿真中再写；训练用自写环境，ManiSkill只作验证（“训练用这个可能有些昂贵了”）；每步流程：SAC先输出初步动作→世界模型模拟执行→预测的动作后状态与当前对比→更新当前潜在状态→输出最终动作→视情况更新世界模型；随机立方体地图需按Husky尺寸确定，场景大小需定。
+- 类型：用户明确指令（设计决定），不是技术依据。
+- 原始依据（用户原话摘录）：“我们这里希望就用一个自己写的环境吧，然后就是也是随机立方体这样，然后机器人你推荐husky吗，上面有一个传感器可以直接获得全景观测……先让SAC输出一个动作，然后模拟执行，得到动作后状态后跟现在做对比，更新现在的潜在状态，然后输出最终动作，并视情况更新世界模型”；“我们在训练的时候不应该关心这个底盘的指令，这到时候上仿真环境再写一层转换什么的就行了”；“我选择方案一”；“我们可以用manskill做验证吧，训练用这个可能有些昂贵了”；随后要求把上述设计写入task7三文档、未定事项单列、不实施。
+- 本项目采用：作为[task7 TASK](tasks/task7/TASK.md)“已确定”部分的依据；“全景传感器”具体为360°扫描是Claude的建议，用户在写入指令中确认为当前设计。
+- 核查日期/人：2026-10-16，Claude（claude-opus-5-5）。
+
+
+<a id="src-0328"></a>
+## SRC-0328 — N²M²训练环境、感知选择与随机障碍参数（论文与代码）
+
+- 支撑主张：N²M²在自写的“解析环境”中训练：程序化随机矩形/椭圆障碍，运动学积分并直接把IK解作为下一步关节角；感知为以机器人为中心、边长3 m的局部占据地图（解析环境用真值，其他环境由传感器建图）；作者选择占据地图而非RGB的理由；Gazebo验证中动作以约30–70 Hz发给底层控制器、由激光与测距数据建二值costmap；评估在CPU上进行。
+- 类型：外部论文原文与上游/迁移代码静态核查；未复现。
+- 来源：Honerkamp等，N²M²，IEEE T-RO 39(5)，2023（arXiv:2206.08737，书目同[SRC-0198](#src-0198)）；本次读取的PDF为`/tmp/research-028-literature/n2m2.pdf`（临时位置，pdftotext提取）；迁移代码`forem/src/modulation_rl/scripts/modulation/envs/`。
+- 精确位置（论文）：§III-C Obstacle Avoidance（局部地图3 m；粗0.1 m＋细0.75 m@0.025 m；占据地图的三点理由：可由LiDAR/RGB-D/测距传感器构建、对RGB图像的几何抽象“we hypothesize is easier to generalize”、训练时无需复杂仿真器）；§III-F Training Environment（矩形与椭圆、规则网格加正态偏移、随机朝向、尺寸均匀采样、目标0.5–5 m、0.4 m膨胀可解性检查、“integrate the robot kinematics over time and directly use the inverse kinematics solutions as next joint values”）；§IV-C（RL智能体只用局部地图；在AMD Ryzen 9 5900X或AMD EPYC 7452 CPU上评估；PR2 Gazebo车轮/旋转关节力矩25、比例增益200）；§IV-I（动作约30–70 Hz发给底层控制器，LiDAR与测距传感器积分成二值costmap）。
+- 精确位置（代码）：`map.py:43`缺省平面图(11, 11) m；`map.py:838–839`网格间距3.0 m、偏移标准差0.8 m（覆盖构造参数）；`map.py:856–866`隔列错开半格、朝向U(0, π)、长U(0.025, 1.5) m、宽U(0.025, 1.0) m、高67%为U(0.2, 0.8) m否则为最大高度；`map.py:845–847`起点在离边界0.5 m内均匀抽取；`tasks.py:339` SimpleObstacleTask `goal_dist_rng=(0.5, 8)`（与论文0.5–5 m不一致）。
+- 本项目采用：task7的“自写环境训练＋物理仿真验证”结构、随机立方体参数的参照与对比基准。
+- 限制：论文数值为作者自述；代码参数以迁移副本为准，与上游HEAD的一致性未逐行核对。
+- 核查日期/人：2026-10-16，Claude（claude-opus-5-5）。
+- 使用：[task7 TASK](tasks/task7/TASK.md)。
+
+
+<a id="src-0329"></a>
+## SRC-0329 — N²M²解析sim中的执行语义与差速底盘处理（代码）
+
+- 支撑主张：解析sim中底盘直接设到命令积分位姿、机械臂直接取IK解，执行与读回实际状态只在非解析世界进行；读实际关节的接口在解析世界抛异常；底盘命令噪声加在命令上；Husky按差速处理，策略输出(ω, v)并映射为[v, 0, 0]，积分为先转后走；从期望位姿反算差速命令的函数未实现。
+- 类型：本地代码静态核查（迁移副本，源自Husky快照/N²M²）。
+- 精确位置：`forem/src/modulation_rl/src/robot_env.cpp:192–194`（`calcDesiredBaseTf`后`setWorldJoint`）、`:239`（`if (!world_->isAnalytical() && execute_cmd)`包住发送底盘/机械臂命令与读回位姿）、`:562–564`（`getJointValuesWorld`在解析世界抛`"Not defined for analytical world"`）；`scripts/modulation/envs/robotenv.py:142`（husky_ur5 `drive="diff"`）、`:269–270`（`transition_noise_base`高斯噪声加在底盘命令上）、`:313–317`（diff：`[vel_forward, 0, 0]`）；`src/myutils.cpp:405–421`（`calcDesiredBaseTfDiffDrive`：先旋转ω·dt再沿新朝向前进）、`:432`（`calcDesiredBaseCommandDiffDrive`抛`"Not implemented for diff-drive yet"`）。
+- 推论：在解析sim中“实际状态”与命令/IK解相同，执行偏差只在物理执行环境中出现；直接输出(v, ω)的映射没有奇点。
+- 本项目采用：task7方案一动作设计与“理想执行训练＋物理仿真验证”的依据。
+- 核查日期/人：2026-10-16，Claude（claude-opus-5-5）。
+- 使用：[task7 TASK](tasks/task7/TASK.md)。
+
+
+<a id="src-0330"></a>
+## SRC-0330 — Husky+UR5几何与运动参数（本地URDF/配置）及推导量
+
+- 支撑主张与精确位置：
+  - 底盘轮廓0.99×0.67 m：`forem/src/modulation_rl/gazebo_world/husky_ur5/robot_config.yaml:29`；costmap轮廓[-0.5, 0.5]×[-0.33, 0.33] m加0.01 m余量：`gazebo_world/husky_ur5/costmap/costmap_common.yaml:1–2`。
+  - 车身0.9874×0.5709×0.2475 m、轴距0.512 m、轮距0.5708 m、车轮竖直偏移0.03282 m、轮半径0.1651 m：`forem/src/husky_description/urdf/husky.urdf.xacro:83–94`；base_footprint到base_link高度=轮半径−偏移≈0.132 m：同文件`:122`。
+  - UR5安装在base_link上方(0.13, 0, 0.25) m：`forem/src/husky_ur5/urdf/husky_ur5.xacro:12–15`。
+  - 线速度上限0.3 m/s、角速度上限1.0 rad/s：`robot_config.yaml:16–17`；末端目标高度0.7–1.15 m、受限工作空间0.4–1.1 m：`:19–22`；`arm_range` 0.8 m：`:25`。
+- 推导（Claude）：原地转向外接圆半径=√(0.495²+0.335²)≈0.60 m；半车宽0.335 m；UR5底座与车顶高度≈0.132+0.25≈0.38 m；360°扫描每1°一束时，距离r处相邻束间距≈r×0.01745（3 m处≈0.05 m），因此在3 m处至少2束命中需物体宽度≳0.1 m。
+- 未核实：底盘离地间隙（配置中没有）；UR5官方臂展0.85 m为一般常识，未在本项目核对说明书。
+- 类型：本地代码/配置静态核查＋推导。
+- 核查日期/人：2026-10-16，Claude（claude-opus-5-5）。
+- 使用：[task7 TASK](tasks/task7/TASK.md)。
+
+
+<a id="src-0331"></a>
+## SRC-0331 — 已有mapgen语义地图：规格、内容与问题
+
+- 支撑主张：`CL-FoReM/mapgen/outputs/all_maps/`有8类场景（home、hospital、laboratory、library、office、restaurant、warehouse、workshop）各3张，共24张；每张10×10×1.6 m，含围墙与门洞及房间分区；每张65–167个长方体，高0.04–1.6 m，占地19–53 m²；每张同时有.pcd（0.05 m实心体素点云）与.json（每个长方体`[x, y, z, sx, sy, sz, cosθ, sinθ]`及名称/类别）。
+- 精确位置：`mapgen/README.md`“地图规格”“输出文件”；`outputs/all_maps/*.json`的`num_boxes`、`map_size`、`boxes`、`objects`、`scene`字段（Claude用脚本统计）；`mapgen/prompts/system.txt:11`（position为底面角点而非中心）；`mapgen/mapgen/map_builder.py:15–41`（体素化以角点为原点旋转，采样`np.arange(0, n)*res`）、`:67–84`（重叠检测SAT按角点）、`:101–108`（`_check_spawn_clearance`按中心点计算角点）、`:155–168`（JSON写出）。
+- 发现的问题：①起点净空检查与其他代码坐标约定不一致，“原点0.5 m内无障碍”保证可能不成立；②体素末层比真实边界短最多一个体素（0.05 m）；③最低障碍0.04 m，需定义是否计为底盘碰撞。
+- 本项目采用：task7中优先使用JSON长方体做几何计算，PCD仅用于可视化/ROS；与程序化随机立方体混用并划分见过/未见过场景类型。
+- 核查日期/人：2026-10-16，Claude（claude-opus-5-5），只读代码与输出。
+- 使用：[task7 TASK](tasks/task7/TASK.md)。
+
+
+<a id="src-0332"></a>
+## SRC-0332 — ManiSkill3/MS-HAB的自报吞吐与基线；本机硬件实测
+
+- 支撑主张：ManiSkill3自报ReplicaCAD带渲染约2000+ FPS、简单环境RGB-D采集30,000+ FPS（4090）；内置PPO、SAC、TD-MPC2基线及ReplicaCAD、AI2-THOR、RoboCasa场景；MS-HAB（Fetch，ReplicaCAD公寓）自报带2路128×128 RGB-D、与多个动态物体碰撞时超过4000 SPS，基线为pick/place用SAC、open/close用PPO。
+- 类型：外部论文/文档（作者自报，未独立复现）＋本机命令实测。
+- 来源：ManiSkill3 arXiv:2410.00425（https://arxiv.org/html/2410.00425v1 ）；ManiSkill文档 https://maniskill.readthedocs.io ；MS-HAB arXiv:2412.13211（https://arxiv.org/pdf/2412.13211 ）。以上经网络搜索摘要获取，未逐段阅读原文。
+- 本机实测（2026-10-16 15:32，`nvidia-smi`、`nproc`、`lscpu`、`free -g`、`df -h`）：4×NVIDIA RTX PRO 6000 Blackwell Server Edition，每张97,887 MiB，驱动590.48.01，CUDA 13.1；2×Xeon Gold 6530共64核；内存251 GB；/home空闲19 TB；宿主无`vulkaninfo`。
+- 未知/待验证：ManiSkill/SAPIEN在Blackwell（sm_120）上是否可用、容器内Vulkan渲染；Husky+UR5能否导入以及底盘是轮地接触还是虚拟平面关节。
+- 本项目采用：选择ManiSkill作验证环境的可行性依据；吞吐数字不作为本机承诺。
+- 核查日期/人：2026-10-16，Claude（claude-opus-5-5）。
+- 使用：[task7 TASK](tasks/task7/TASK.md)。
+
+
+<a id="src-0333"></a>
+## SRC-0333 — Mapgen 工具定位、输出协议与实现边界
+
+- 支撑主张：mapgen 为上层 Husky 世界模型项目制作静态地图；默认 10×10×1.6 m、0.05 m 采样、出生区意图半径0.5 m。当前输出 PCD xyz、障碍物 JSON、索引与提示词，不包含世界模型训练与完整机器人接入。
+- 类型：用户明确用途指令、本地源码静态核查、历史说明；参数为现有工程选择，未验证其机器人安全性。
+- 用户依据：2026-10-16 本聊天要求阅读项目并补 Agent 文档，“是为了上层的husky世界模型项目做地图”。
+- 版本/精确位置：独立 mapgen 仓库 main，HEAD `765e06448758dfbe34282edcac00f39ffad36aa5`，源码未改；`mapgen/mapgen/generator.py::generate_maps/_save_prompt`；`parser.py::parse_llm_response/validate_obstacles`；`map_builder.py` 常量及 `_voxelize_box/_check_spawn_clearance/_check_overlap/build_pcd/generate_map/save_boxes_json`；`config.py::get_api_config/_find_dotenv`、`llm_client.py::call_llm`、`prompt_loader.py`、`cli.py`；`mapgen/pyproject.toml`、`prompts/system.txt`。路径相对 CL-FoReM，后续模块名相对 mapgen/mapgen。
+- 原始核查结论：角点旋转与出生区中心形式检查不一致，净空只查角点；重叠只告警，无通道宽度/连通性保证；裁剪后的点云、JSON、索引计数可能不同；边界墙不含在 box 元数据中；下一编号按索引长度计算，跳过后可能冲突；未强制地图数量；成功提示词覆盖且未保存所有成功响应。tests 只有缓存，无测试源码；源码根目录缺 .env.example，README 返回值与模型回退示例不匹配实际代码。
+- 历史记录：`mapgen/outputs/scenes/README.md`、`summary.json` 为六场景各3张的快照，声明尚未做机器人通行性或 Nmoma 接入验收；其他历史资产不能据此当作当前 CLI 能力或本次实测。
+- 资产补查：`mapgen/outputs/all_maps/` 按文件名统计 home/hospital/laboratory/library/office/restaurant/warehouse/workshop 各3份JSON，共24份，均存在同名PCD；抽查 library_map_000.json 与 workshop_map_001.json 含 objects/schema_version/frame_id/length_unit/point_representation/point_bounds/sampling_boundary_policy/scene 等扩展字段，当前生成器未输出这些字段。未逐点验收。
+- 运行核查：本轮 `python3 -m mapgen --help` 与 `--dry-run` 均在导入阶段因宿主缺 numpy 退出1，未访问 LLM；不声称命令运行成功。
+- 项目采用/限制：新增 `mapgen/AGENTS.md`；用途由用户指定，维护边界沿用根 AGENTS。只读核查与文档，不修代码、不安装依赖、不调用 LLM、不启动 ROS/Gazebo/训练、不声称地图可通行。
+- 核查日期/人：2026-10-16，Codex /root，直接阅读上述本地代码与历史说明；机器人验收尚未执行。
+- 使用：[Mapgen AGENTS](../../mapgen/AGENTS.md)；[任务记录](agent_logs/project/20261016-codex-mapgen-agents.md)。
+
+
+<a id="src-0334"></a>
+## SRC-0334 — SC²-WM发布代码中下一步目标的产生、世界模型调用与执行方式
+
+- 支撑主张：发布代码中，每次决策的候选来自航路点预测器（单目分支：局部占据/语义栅格→U-Net热力图→12个30°扇区各取峰值，去掉占据格、合并近点）及拓扑图中尚未访问的幽灵节点；先由`global_sap_head`对全部候选打分，世界模型对每个候选并行预测（`world_model`为三层MLP，输入[NAV令牌, 候选融合特征, 候选原始视觉特征]，输出`H_rebuild`，`vis_predictor`预测视觉特征`V_pred`），再按候选做门控修正、由`enhanced_sap_head`二次打分，推理时取二次打分最高者为下一步目标；已访问节点被屏蔽，STOP可选。执行时必要时先瞬移回邻接已访问节点（`back_algo: teleport`），再按15°转向、0.25 m前进走到目标。
+- 与论文写法的差异：论文式（§3.1）为π̃给出一个候选动作、Δ=s̃_{t+1}−s_t；代码中世界模型对所有候选并行预测，且δ=Linear([H_rebuild; a_t])为学习量而非相减，a_t为候选特征。
+- 频率：仿真中无时间节拍，一次决策为选一个航路点；每回合最多30次决策（`max_traj_len: 30`），底层动作上限5000（`MAX_EPISODE_STEPS: 5000`）；消融中固定间隔更新取T=2以匹配其方法的平均更新频率（附录D）。
+- 类型：官方源码与论文静态核查；未运行。
+- 精确位置：本地`scwm/` commit `f2f2f5ff2e1f21a08f7d7c51fbbd5c17b0d6778b`：`vlnce_baselines/models/etp/vilmodel_cmt.py:596–621、880–1000`；`vlnce_baselines/ss_trainer_ETP.py:1713、1900–1990`（栅格与扇区取峰值）、`:2095`（cand_angles/cand_distances）、`:2137–2175`（以enhanced_logits选动作）、`:2550–2600`（执行动作构造）；`vlnce_baselines/models/graph_utils.py:139、194`（GraphMap、update_graph）；`habitat_extensions/nav.py:30–100`（MoveHighToLowAction）；`run_r2r/iter_train.yaml:46–53`；`run_r2r/r2r_vlnce.yaml:2、8–9`；论文§3.1、附录D（同[SRC-0318](#src-0318)）。
+- 本项目采用：task7按代码形式采用“候选→世界模型逐个预测→两轮打分选择”。
+- 核查日期/人：2026-10-16，Claude（claude-opus-5-5）。
+- 使用：[task7 TASK](tasks/task7/TASK.md)。
+
+
+<a id="src-0335"></a>
+## SRC-0335 — SC²-WM航路点预测器的来源与训练方式（VLN-3DFF、CWP）
+
+- 支撑主张：SC²-WM训练中加载`pretrained/cwp_predictor.pth`到策略并冻结除`vln_bert`、`vln_memory`外的全部参数，航路点U-Net不更新。该U-Net的训练来自VLN-3DFF：输入192×192（5 cm/格）的语义（27类）与占据（3类）栅格，真值热力图由CWP标注的附近航路点各画二维高斯（σ=5格）平均而成，损失为MSE，训练2万个15步回合（2×RTX 3090）。CWP的真值航路点来自离散R2R数据集的Matterport3D连通图，经启发式调整以适应Habitat连续场景；输出120角度×12距离（0.25–3 m）热力图，高斯展开，MSE训练，用61个场景图（9,556节点），推理NMS最多5个。
+- 类型：本地代码静态核查（SC²-WM部分）＋外部论文经网页摘要抽取（VLN-3DFF、CWP部分，未逐页阅读PDF）。
+- 来源与位置：SC²-WM `vlnce_baselines/ss_trainer_ETP.py:262–264、308–313、985–996、1057–1059`，`vlnce_baselines/common/base_il_trainer.py:93–100`，`data/wp_pred/PLACE_HERE.txt`，`README.md` Data Preparation；Wang等，Sim-to-Real Transfer via 3D Feature Fields for Vision-and-Language Navigation，CoRL 2024（PMLR 270:2982–2995），https://arxiv.org/html/2406.09798v2 §3.2、§4.1；Hong等，Bridging the Gap Between Learning in Discrete and Continuous Environments for Vision-and-Language Navigation，CVPR 2022，https://ar5iv.labs.arxiv.org/html/2203.02764 §4.1–4.3、附录A.1。
+- 本项目采用：说明候选生成器可选“规则生成”或“仿真自动标注后训练”；task7首版采用规则生成。
+- 限制：外部论文细节为网页抽取，待需要时补读原文核对。
+- 2026-10-20补注（Claude）：VLN-3DFF与CWP原文相关章节已由Codex于2026-10-19补核，见[SRC-0389](#src-0389)、[SRC-0390](#src-0390)；本条的网页抽取限制由该两条取代，原句保留作历史。
+- 核查日期/人：2026-10-16，Claude（claude-opus-5-5）。
+- 使用：[task7 TASK](tasks/task7/TASK.md)。
+
+
+<a id="src-0336"></a>
+## SRC-0336 — N²M²的决策频率、末端目标与逐步末端位姿的产生
+
+- 支撑主张：N²M²训练时决策周期0.1 s（10 Hz），Gazebo执行参数默认0.02 s、论文报告约30–70 Hz发给底层控制器；末端规划器按实际经过时间推进（单步dt截到0.5 s）。每回合只抽一个末端目标位姿（距离在`goal_dist_rng`内、高度在`goal_height_rng`内、三个欧拉角各U(0, 2π)，位置截到离边界0.5 m内）；每步从末端当前规划位姿到目标重新做A*规划（0.05 m栅格，高障碍代价10000、矮障碍轻微代价，高度沿路径插值、朝向球面插值），取路径下一个点为子目标，向其移动“学到的末端速度×dt”，朝向转动受0.30 rad/s限制，再以IK求关节；末端规划器使用环境真值地图，强化学习智能体只用局部地图。
+- 类型：本地代码静态核查＋论文原文。
+- 精确位置：`forem/src/modulation_rl/scripts/modulation/envs/eeplanner.py:17–22`（`MIN/MAX_PLANNER_VELOCITY`、`TIME_STEP_TRAIN = 0.1`、`MAX_PLANNER_ANGULAR_VELOCITY`）、`:224–244`（step与dt截断）、`:468–580`（PointToPointPlanner权重与`_cpp_step`）、`:654–660`（每步`_calc_6Dplan`重规划）；`envs/robotenv.py:247`；`scripts/modulation/utils.py:106`（`--time_step` 0.02）；`envs/simulator_api.py:27–48`（`sample_circle_goal`）；`mobile-rl/scripts/configs/best_defaults_ray.yaml:32–34`（tiago frame_skip）；论文§IV-C（末端规划器用真值地图、智能体只用局部地图）、§IV-I（约30–70 Hz）、表II（MPC 30 Hz）（书目同[SRC-0198](#src-0198)）。
+- 本项目采用：task7中末端路线作为任务给定输入可由地图JSON规划；候选生成器只用传感器观测；决策与执行节拍须在训练与验证中一致。
+- 核查日期/人：2026-10-16，Claude（claude-opus-5-5）。
+- 使用：[task7 TASK](tasks/task7/TASK.md)。
+
+
+<a id="src-0337"></a>
+## SRC-0337 — 2026-10-16用户决定：改用SC²-WM式子目标决策，候选先用简单规则生成
+
+- 支撑主张：task7的上层决策改为像SC²-WM一样先确定一个位姿子目标、再由下层朝它执行，而不是按速度和固定间隔卡死；候选子目标先采用简单的规则生成（不训练航路点预测器）。
+- 原始依据（用户原话）：“我们就换用SCWM的方式，先确定一个姿态子目标，然后朝着这个目标去实现，而不是根据速度和间隔卡死吧”；对Claude提出的“规则候选生成、离散SAC两轮打分、世界模型逐候选预测、先转后走的底层执行器”处理方案答复“可以，这里先弄一个简单的”。
+- 类型：用户明确设计决定。
+- 本项目采用：[task7 TASK](tasks/task7/TASK.md) §2.3、§2.7、§2.8。
+- 核查日期/人：2026-10-16，Claude（claude-opus-5-5）。
+
+
+<a id="src-0338"></a>
+## SRC-0338 — 2026-10-16用户确认的前瞻闭环大方向；CBL/N²M²“先移底盘、再求IK、再执行”的代码顺序
+
+- 支撑主张：①用户确认每次决策流程为：360°扫描→VCM式记忆综合历史观测与动作得到当前状态→SAC给出初步策略→由仿真器模拟底盘执行、再模拟IK→用模拟后状态与当前状态的差异反馈SAC重新生成→真实执行；“先跟大方向走，不要扣细节”。此确认取代[SRC-0337](#src-0337)处理方案中“世界模型对每个候选并行预测”的部分，候选仍用简单规则生成。②CBL的Husky快照、上游N²M²与FoReM迁移副本中，每步执行均先按(v, ω)算出期望底盘位姿并在运动学模型中设置（注释：使findIk相对于下一步期望底盘求解），再求IK，最后仅在非解析世界发送机械臂与底盘命令并读回实际底盘。
+- 原始依据（用户原话）：“先让相机观测，然后VCM综合过往的历史和动作生成当前状态，然后SAC根据现在的状态去给出一个初步的策略，底盘执行该策略，然后机械臂也模拟IK过去，然后用这个状态和现在的状态的差异送回策略SAC策略重新生成，然后在真实执行”；随后更正“这里是360扫描没错我讲错了，然后这里先跟大方向走，不要扣细节，然后底盘执行这些由sim执行，我记得CBL和N2M2的项目里关于3都是这样做的吧”。
+- 代码位置：`husky/src/modulation_rl/src/robot_env.cpp:193–194、236、239`（Husky快照commit 1ccedd0）；`mobile-rl/src/robot_env.cpp:192–193、235、238`（上游HEAD 6281205）；`forem/src/modulation_rl/src/robot_env.cpp:192–194、239`。
+- 类型：用户设计决定＋本地代码静态核查。
+- 本项目采用：[task7 TASK](tasks/task7/TASK.md) §2.7；前瞻在训练环境中与真实执行一致，在验证中不含物理偏差，是否加学习修正项列为U21。
+- 核查日期/人：2026-10-16，Claude（claude-opus-5-5）。
+
+
+<a id="src-0339"></a>
+## SRC-0339 — task7整体实验设计文档审查（2026-10-19）
+
+- 支撑主张：现有task7仍是设计草案；主线为子目标决策＋运动学前瞻，学习修正与测试期适应尚未确定；设计中存在下述待冻结或需澄清项。
+- 类型：本地文档核对＋基于文档假设的条件推导；不是外部文献结论、实现缺陷实测或新增实验授权。
+- 作者/版本：FoReM工作区main，2026-10-19读取的未提交文档；本轮审查由Codex完成。
+- 原始证据与精确位置：`tasks/task7/TASK.md` §1术语、§2.1、§2.7–2.9、U1–U22、§4–5；`tasks/task7/PROCEDURE.md`阶段5–9；`PLAN.md`阶段二；`PROGRESS.md`阶段二；本轮独立日志记录具体观察。
+- 原始文档结论：运动学前瞻不训练；U21决定是否加入学习修正项。训练执行理想，执行偏差只在验证环境出现。上层选择候选子目标，下层用(v, ω)。各对照组、预算与多项网络设计尚待确认。
+- 审查推导与限制：
+  1. 若学习项只拟合执行状态相对同一理想运动学模型的残差，则在两者完全一致、相同动作/时域/终止条件下，监督残差e=x_exec−x_kin=0（位姿用相应坐标差/流形误差；单位随状态分量），不能从此类数据获得非零物理偏差的经验监督。不意味着闭环无效，也不意味着理想环境不能学习观测预测；必须先确定学习对象。
+  2. TASK §2.7终点式前瞻与§2.9逐底层步执行的等价性尚未由协议保证，中途碰撞、IK失败、提前停止与持续时间必须明确。不能直接将“完全一致”当成已验收结果。
+  3. U20含未来扫描编码，但前瞻的信息权限、遮挡后区域处理、真值地图访问边界未定义。仅凭运动学不能确定未观测场景的未来扫描，若调用真值射线则须明确该特权信息；现文档不能判定已发生泄漏。
+  4. §4组4到组5同时加入学习项和适应，缺少明确写出的同一学习模型“冻结/适应”配对口径；现有组定义尚不能单独归因适应收益。PROCEDURE阶段9只列组4–6，也未完整纳入§4约定的普通SAC物理验证对照。
+  5. U4仅由模型损失训练表示的倾向，与不加学习修正项时的记忆训练目标尚未衔接；任务奖励/成功/终止、预算计数、评估集、checkpoint选择及适应状态何时重置等未冻结。此为协议缺项，不是要求新增机制。
+  6. PROGRESS仍写U1–U15，实际TASK已列到U22；PLAN阶段二仍以(v, ω)动作概括且无条件写测试期适应；SRC-0334“本项目采用”仍写全部候选预测，被SRC-0338所述新决定取代。
+- 核查日期/人：2026-10-19，Codex /root；直接读取上述本地文档，未重新核查其引用的外部论文、硬件或仿真可行性。
+- 本项目采用及限制：用于本轮设计审查与后续讨论排序；不修改已定设计，不选择U事项，不增加实验组，不安装/训练/评估。
+- 使用：[审查记录](agent_logs/task7/20261019-codex-design-review.md)。
+
+
+<a id="src-0340"></a>
+## SRC-0340 — 2026-10-19用户提出子目标内滚动动作序列、状态反馈与IK调研
+
+- 支撑主张：用户确认先自写CBL/N²M²式理想执行训练环境；提出SAC初步策略→世界模型预测执行后状态→将状态变化编码反馈到SAC隐层→更新策略→运动学模拟底盘、求IK并执行。讨论在子目标内按固定周期分步，借鉴TD-MPC2采样多条动作序列、评选后执行一步再规划；明确允许子Agent调研可借鉴成果，并要求考虑IK失败优化。
+- 类型：当前聊天用户指令与设计提议；不是外部技术证据，不代表混合算法已获验证或各超参数已冻结。
+- 原始依据：2026-10-19本聊天用户消息，首句“首先我们是要先自己写一个SIM训练环境吧”，末句“关于IK失败的问题，我们有什么优化办法呢，这里也要思考一下”。完整语义按上述主张记录，不将用户对SCWM的归属判断当已核实论文事实。
+- 版本/精确位置：当前会话消息；关联task7.1–7.3调研节点及task7父三文档2026-10-19讨论记录。
+- 核查日期/人：2026-10-19，Codex /root，直接读取用户消息。
+- 用户后续补充：除其提出的方法外，明确要求推荐相关论文，并允许指出、纠正现构想的不合理之处；随后说明子目标＋频率结合的动机是担心10 Hz下单步状态变化过小、世界模型失效。后者登记为用户提出的风险假设，不是已证明的失败结论；授权的是研究建议与设计分析，不是直接加入实现。
+- 本项目采用/限制：授权调研、并行子Agent和设计分析，不实施/安装/训练/评估。学习世界模型、子目标、序列规划、SAC最终采样分布与IK行为的具体组合仍需讨论。
+- 使用：[task7 TASK](tasks/task7/TASK.md)；[调研记录](agent_logs/task7/20261019-codex-sequence-design.md)。
+
+
+<!-- SRC-0341–0355：2026-10-19 Codex重新核查后补登。旧子日志没有实际登记正文；以下不是恢复出的旧原稿。核查范围逐条记录，不追认旧会话全文阅读状态。 -->
+
+<a id="src-0341"></a>
+## SRC-0341 — TD-MPC2论文：隐式世界模型与策略先验MPC
+
+- 支撑主张/类型：外部原文；潜态转移、奖励、终端价值共同学习，用策略先验辅助动作序列采样，只执行首步后重规划；不是SAC，也未给出“未来差异接入SAC隐层”的现成模块。
+- 作者/标题/版本：Nicklas Hansen、Hao Su、Xiaolong Wang，TD-MPC2: Scalable, Robust World Models for Continuous Control，ICLR 2024；arXiv 2310.16828v2，2024-03-21。
+- URL/精确位置：[原文HTML](https://arxiv.org/html/2310.16828v2)，§2、§3.1式(2)–(4)、§3.2式(6)，附录H为实现设置定位。论文描述均值/方差移位warm start；实际当前代码差异见SRC-0342。
+- 原始结论：以joint embedding、奖励及TD目标训练控制相关潜态；策略先验引导短期轨迹优化并以终端Q延伸规划时域。没有通用秒级Husky控制周期结论。
+- 核查：2026-10-19，Codex；本次直接重读§2、§3.1–3.2相关方法，**部分章节**；未逐页复核全部实验/附录。旧子报告所称全文/ICLR PDF阅读不能由本轮追认。
+- 项目采用/限制：只借鉴并行路径评选、首段执行和重规划；新框架路径层是给定精确模型的采样MPC，不称TD-MPC2；不继承其H、候选数或学习目标，不作为FoReM有效性证据。
+- 使用：[task7.1 RESULTS](tasks/task7/task7.1/RESULTS.md) §1–§7与“新框架下的适用性”。
+
+<a id="src-0342"></a>
+## SRC-0342 — TD-MPC2固定代码：采样、warm start及执行首步
+
+- 支撑主张/类型：官方源码静态事实；候选序列沿预测状态调用策略；仅均值移位，std每次重置；elite加权更新；评估模式仍抽elite、只去掉末步额外噪声；规划Q用随机两项平均。
+- 作者/版本：`nicklashansen/tdmpc2`团队，commit `e9f59321933cbc8e11a002b842adc7d4ffae8ff1`；2026代码快照，不能视为2024论文实验release。
+- URL/精确位置：[固定代码](https://github.com/nicklashansen/tdmpc2/tree/e9f59321933cbc8e11a002b842adc7d4ffae8ff1)，`tdmpc2/tdmpc2.py::act/_estimate_value/_plan`（raw约`:99–209`）；`common/world_model.py::Q`；`tdmpc2/config.yaml` planning段（iterations=6、num_samples=512、elites=64、num_pi_trajs=24、horizon=3）。行号可能与网页折叠空行不同，以固定版本符号定位。
+- 原始结论：对高斯/策略候选重复展开评分、选elite更新分布，最终只返回被抽序列首动作。评分为预测奖励和终端Q；实现有episodic mask。公式`Σγ^k r̂_k+γ^H Q̄_H`为统一下标表达；H为步数，不是候选数或秒。
+- 核查：2026-10-19，Codex；直接读取上述规划函数、Q和配置，**相关函数静态核查**；未运行/编译/安装。早期子报告的commit日期本次未查GitHub提交时间，不据其作技术判断。
+- 采用/限制：路径分支与时间轴分开，不能拿论文默认数值当UR5预算；新框架没有TD学习终端Q的路径评分，不复制此规划目标。GPU吞吐未测。
+- 使用：[task7.1 RESULTS](tasks/task7/task7.1/RESULTS.md) §2、§4、§6。
+
+<a id="src-0343"></a>
+## SRC-0343 — TD-MPC2固定代码：多步模型损失、actor与TD目标
+
+- 支撑主张/类型：官方代码静态事实＋目标一致性推导；模型损失共同训练表示，actor在detached latent上单独更新；target没有SAC的熵项。
+- 作者/版本/URL：Hansen等官方仓库，同SRC-0342固定commit；[tdmpc2.py](https://github.com/nicklashansen/tdmpc2/blob/e9f59321933cbc8e11a002b842adc7d4ffae8ff1/tdmpc2/tdmpc2.py)，[world_model.py](https://github.com/nicklashansen/tdmpc2/blob/e9f59321933cbc8e11a002b842adc7d4ffae8ff1/tdmpc2/common/world_model.py)。
+- 精确位置：`tdmpc2.py::update_pi`、`_td_target` raw`:242–257`、`_update:259–316`；`world_model.py::pi/Q` raw`:144–205`起；`common/scale.py::RunningScale`为归一化对象（本次未逐行复核内部统计公式）。
+- 原始结论：真实replay动作逐步展开，rho^t加权一致性/奖励/value损失；actor目标含归一化Q与scaled entropy；`update_pi(zs.detach())`；TD target为r+γ(1−terminated)min target-Q，没有−αlogπ。由SRC-0348与此比较，熵正则actor不等于完整SAC目标；混搭soft Q与原规划奖励需要重新定义优化合同，是项目推导而非原论文定理。
+- 核查：2026-10-19，Codex；**相关函数静态阅读**，未执行。未全面审核optimizer所有状态或全部数学辅助函数。
+- 采用/限制：用于防止将TD-MPC2整套训练误称SAC；新框架不采用该训练栈或额外规划损失，不新增实验机制。
+- 使用：[task7.1 RESULTS](tasks/task7/task7.1/RESULTS.md) §3、§6。
+
+<a id="src-0344"></a>
+## SRC-0344 — POPLIN：策略提议、动作噪声搜索与蒸馏部署的区分
+
+- 支撑主张/类型：外部原文＋官方说明；POPLIN-A-Init固定策略参考，Replan沿变化的候选状态再调用策略；在线MPC与蒸馏后策略直接执行是不同方式。
+- 作者/标题/版本：Tingwu Wang、Jimmy Ba，Exploring Model-based Planning with Policy Networks，2019 arXiv 1906.08649v1；代码`WilsonWangTHU/POPLIN` commit `edd8dba50f9049c6164eda774602bef0c299cb51`。
+- URL/精确位置：[原文](https://arxiv.org/html/1906.08649v1) §3.2、§4.1式(3)–(5)、§4.2、§4.3–4.4；[固定README](https://github.com/WilsonWangTHU/POPLIN/blob/edd8dba50f9049c6164eda774602bef0c299cb51/README.md) POPLIN-A/P/MPC与Policy Control说明。
+- 原始结论：策略辅助初始化、动作/参数空间搜索、蒸馏后控制分别定义；论文讨论的μ/Σ更新和BC/GAN不是SAC反馈隐层的现成实现。
+- 核查：2026-10-19，Codex；直接阅读v1相关方法章节，**部分章节**；官方代码本轮只抽查README（**未重新审计算法实现**）。旧报告称OpenReview最终版被验证页阻挡，未追认最终会版已读。
+- 采用/限制：仅用来解释“提议与被评分轨迹一致”；参数搜索/蒸馏/BC/GAN不进入task7范围，MuJoCo收益不外推Husky实时性。
+- 使用：[task7.1 RESULTS](tasks/task7/task7.1/RESULTS.md) §5、§7。
+
+<a id="src-0345"></a>
+## SRC-0345 — LOOP：在线规划与离策略学习、actor divergence
+
+- 支撑主张/类型：外部原文＋官方固定源码；H步模型收益接终端价值，在线规划行为与Bellman使用actor不同；ARC针对这种偏离，SAC Q target包含熵项。
+- 作者/标题/版本：Harshit Sikchi、Wenxuan Zhou、David Held，Learning Off-Policy with Online Planning，CoRL 2021 / PMLR 164（2022）；`hari-sikchi/LOOP` commit `4bfc774c038348684b43b2dcf025192175eb7bd0`。
+- URL/位置：[正式论文PDF](https://proceedings.mlr.press/v164/sikchi22a/sikchi22a.pdf) §4、§5.1（正文pp.4–5）、§6.1；[固定代码](https://github.com/hari-sikchi/LOOP/tree/4bfc774c038348684b43b2dcf025192175eb7bd0)，`controllers/arc.py::get_action`，`sac.py::compute_loss_q:217–247`（非A2分支`:237–242`有−alpha×logp）。
+- 原始结论：ARC用actor与移位旧轨迹形成提议并作有限次重要性更新；off-policy允许行为不同，但不能用原actor概率表示规划择优概率。后一句为对概率归属的项目推导，非发散必然性结论。
+- 核查：2026-10-19，Codex；**部分方法章节及上述代码函数**；未复核全部误差界证明/补充实验。初次误写`harshit-sikchi` URL返回404，随后沿作者项目页确认正确`hari-sikchi`，404不作证据。
+- 采用/限制：新框架在选点层直接由离散SAC采样，原LOOP式同层actor/planner偏离问题不直接套用；不因此加入ARC、KL约束或终端soft-Q。
+- 使用：[task7.1 RESULTS](tasks/task7/task7.1/RESULTS.md) §3、§5–§7。
+
+<a id="src-0346"></a>
+## SRC-0346 — SC²-WM论文：反馈细化与模型级自适应
+
+- 支撑主张/类型：外部论文原文；算法1是初步导航动作条件的预测、差异细化、最终动作执行；式11–13为专家动作/潜态KL/未来视觉监督，非SAC训练。
+- 作者/标题/版本：Xuan Yao、Yuze Zhu、Junyu Gao、Zongmeng Wang、Changsheng Xu（CASIA/UCAS等），SC2-WM: A Self-Correcting World Model with Closed-Loop Feedback for Vision-and-Language Navigation in Continuous Environments，2026，arXiv 2608.07548v1。
+- URL/精确位置：[原文](https://arxiv.org/html/2608.07548v1) §3.1式(5)、(9)–(10)/算法1，§3.2式(11)–(13)，§3.3/算法2；附录D.2为与RL范式的讨论位置。
+- 原始结论：将前瞻结果作为内部反馈细化导航表示，并有条件地进行模型适应；所定义的“差异”不是机械臂电机/执行残差。正文transition叙述与发布源码MLP及候选并行实现应分开登记，见SRC-0347。
+- 核查：2026-10-19，Codex；**部分方法章节**（§3的反馈/损失相关段落直接重读）；附录D全部讨论和实验未在本次逐段复核，不称全文验证。
+- 采用/限制：借用候选预测/反馈思想；task7换为扫描与SAC，不视为原文已经验证的机器人算法。所有候选并行这一代码事实由SRC-0347承担，不能只引算法1证明。
+- 使用：[task7.2 RESULTS](tasks/task7/task7.2/RESULTS.md) §1–§2。
+
+<a id="src-0347"></a>
+## SRC-0347 — SC²-WM发布主路径：全部候选、detach、真实执行分支监督
+
+- 支撑主张/类型：官方本地代码静态事实；候选轴不是H步时间轴；WM输出detach进入门控残差；只取实际执行候选监督；零残差不保证两评分头相等。
+- 作者/版本/URL：SC²-WM作者团队，`scwm/` commit `f2f2f5ff2e1f21a08f7d7c51fbbd5c17b0d6778b`；[固定官方仓库](https://github.com/sunrise-yuze/SC2_WM/tree/f2f2f5ff2e1f21a08f7d7c51fbbd5c17b0d6778b)，status为空。
+- 精确位置：`vlnce_baselines/models/etp/vilmodel_cmt.py:599–621、760–763、815–820、918、934–967`；`ss_trainer_ETP.py:553–575、2142–2144、2411–2458、2490–2503、2760–2818`；`imagine_T`初始化/存储与旧forward函数不等于主rollout存在时间展开。
+- 原始结论：world_model两个Linear夹ReLU；全部候选拼输入并预测；H_rebuild.detach后形成`e+sigmoid(Wg[e;h])⊙Wd[h;e]`；gate/delta权重偏置归零；global与enhanced scoring为两独立头。真实动作索引对应预测与下次detached前视特征做余弦loss；不能用未执行候选做真实标签。所读主损失累积未见论文KL项，限于已审计入口，不否定所有旧分支。
+- 核查：2026-10-19，Codex；**本地主前向、监督、动作保存代码静态抽查**；未执行模型/梯度。部分范围沿用旧报告定位；本次再次直接读了反馈层、两头和视觉监督关键行。
+- 采用/限制：task7已选择全候选预测且无初选；f_p只用到达样本是本项目合同，不由代码“保存actual_action”自动保证所有物理执行都到达。零初始化保证特征残差为0，输出等价还要同权重头与预处理。对SRC-0358①“输出等于未加反馈”作此限定。
+- 使用：[task7.2 RESULTS](tasks/task7/task7.2/RESULTS.md) §2；[交流回复](agent_logs/task7/20261019-claude-codex-sync.md#codex回复)。
+
+<a id="src-0348"></a>
+## SRC-0348 — SAC目标、两阶段概率与新离散选点框架的适用条件
+
+- 支撑主张/类型：SAC原文＋本项目概率推导；熵必须属于所定义策略，真实transition动作必须与critic/模型标签对应。
+- 作者/标题/版本：Tuomas Haarnoja等，Soft Actor-Critic Algorithms and Applications，arXiv 1812.05905v2，2019；[原文](https://arxiv.org/html/1812.05905v2) §4.1式(2)–(4)、§4.2式(5)–(10)、§5；熵target代码对照见SRC-0345。
+- 原始结论：soft value包含`E[Q−αlogπ]`，actor最大化价值与策略熵，使用环境replay更新。原文不是FoReM两阶段策略或变长子目标实现的现成证明。
+- 推导/条件：若先采样u~π0再采样a~π1(a|b,c(b,u))，执行边缘概率为`πexec(a|b)=∫π0(u|b)π1(a|b,c(b,u))du`，单样本条件logπ1一般不是边缘logπexec。若当前框架所有候选特征在采样前生成且只对离散索引k采样一次，则`logπ(k|context)`直接来自同一softmax，不再有该两阶段积分；padding有效掩码与“路径不可行但仍允许选择”掩码不能混淆。候选/路径若随机，其实现结果须作为已观察context记录，不能无条件省略。
+- 新框架复核推导：令Wd=0则残差为0，Wg=0使g=0.5（门不是0）；保证输出初始等价还要求Actor/Critic输出头、编码、归一化及掩码相同。只对到达样本监督的误差估计以“到达且被选中”为条件，不能自动视作所有候选的误差。零时长失败会使`γ^(Δt/τ)=1`，但失败计数会改变状态；应记录正确定义的Δt/计数，不擅自增加最小时长。这些为条件分析，不是实测失败或新增机制。
+- 协议文字核对输入：task7.4 RESULTS §14–§15写G2仅输出头、G4另有ψ。若两组输出头相同，则G4可训练集合比G2多ψ，故不能按参数数量称“相同”；G3与G4同ψ结构才承担容量对照。这是集合计数推导，不建议新增组或改变用户分阶段决定。预算按相同决策数并不必然等sim秒/检查点数，已定补充报告这些量可保留。
+- 核查：2026-10-19，Codex；**部分SAC方法章节＋概率/代数核对**，未重新验证全部定理或具体离散SAC算法；离散SAC完整公式仍由task7.10补证，本文不代替它。
+- 采用/限制：用来说明旧§3.2/§5建议已被晚间框架取代；不实施新策略，不把逻辑可组合性称任务收益。
+- 使用：[task7.2 RESULTS](tasks/task7/task7.2/RESULTS.md) §3及“新框架下的适用性”；[交流回复](agent_logs/task7/20261019-claude-codex-sync.md#codex回复)。
+
+<a id="src-0349"></a>
+## SRC-0349 — MBPO转移监督与小步恒等预测的条件推导
+
+- 支撑主张/类型：外部论文/官方代码＋本项目推导；学习状态转移无需非零执行残差，MBPO用真实数据训练模型、分叉短rollout供SAC；不采用其额外模型replay机制。
+- 作者/标题/版本：Michael Janner、Justin Fu、Marvin Zhang、Sergey Levine，When to Trust Your Model: Model-Based Policy Optimization，NeurIPS 2019，arXiv 1906.08253v3；代码`jannerm/mbpo` HEAD `ac694ff9f1ebb789cc5b3f164d9d67f93ed8f129`（本次git ls-remote固定）。
+- URL/位置：[论文](https://arxiv.org/html/1906.08253v3) §5/算法2；[固定constructor](https://github.com/jannerm/mbpo/blob/ac694ff9f1ebb789cc5b3f164d9d67f93ed8f129/mbpo/models/constructor.py) `format_samples_for_training:20–28`（raw）；返回奖励及next_obs−obs。
+- 原始结论：模型和策略更新分别定义，模型样本来自环境replay状态附近的短展开；delta_obs是时间变化，不是执行器相对理想模型的误差。
+- 推导：平滑标量位置`x'=x+vΔt`、恒预测x时，MSE=`E[v²]Δt²`；v单位m/s、Δt为s、误差m²；10 Hz→0.1 s仅为倒数换算。缩步长会缩绝对loss，不证明模型无用；扫描遮挡/IK边界/latent尺度不满足这一直线位置假设。理想执行若定义为同一F_kin，则执行残差恒0，但动作转移一般非0；无法仅从恒0残差识别未出现的物理误差。
+- 核查：2026-10-19，Codex；**部分方法章节与数据目标函数**；未审MBPO理论界全部证明/全部训练实现，未在FoReM测上述现象。
+- 采用/限制：新框架f_p目标是到达扫描而非固定0.1 s位移，旧频率担忧需重新解释，不为此新增多步模型rollout或扩大数据标签。
+- 使用：[task7.2 RESULTS](tasks/task7/task7.2/RESULTS.md) §1、§3.4、§4。
+
+<a id="src-0350"></a>
+## SRC-0350 — DreamerV3的观测潜态预测与想象策略学习
+
+- 支撑主张/类型：外部原文与官方代码；RSSM预测/重建观测、奖励与续存，动态/表示KL分侧stop-gradient；actor/critic从想象回报学习，环境直接采样actor。
+- 作者/标题/版本：Danijar Hafner、Jurgis Pasukonis、Jimmy Ba、Timothy Lillicrap，Mastering diverse control tasks through world models，Nature 2025，DOI `10.1038/s41586-025-08744-2`；`danijar/dreamerv3`本次HEAD `e01491fad6434b2245a3b8ca201dd7faedcc458c`（不是论文实验release）。
+- URL/精确位置：[Nature原文](https://www.nature.com/articles/s41586-025-08744-2) World model learning、Critic learning、Actor learning；[固定代码](https://github.com/danijar/dreamerv3/tree/e01491fad6434b2245a3b8ca201dd7faedcc458c)，`dreamerv3/rssm.py::loss:120–126`、`imagine`，`agent.py::policy:115`起、`loss:156`起、`imag_loss:382–414`（raw行号）。
+- 原始结论：模型学习有独立预测信号；Nature版本对离散/连续actor采用REINFORCE，不能借旧版Dreamer声称全模型动作路径解析反传。在线动作不依赖MPC搜索。
+- 核查：2026-10-19，Codex；**部分方法章节与上述接口/损失代码**；未审全训练栈或全部实验；Nature页面一处重复请求失败，不影响首次成功读取方法/REINFORCE段落，未称全文核验。
+- 采用/限制：仅说明历史信息与可预测潜态可设计、模型目标不同于执行误差；新框架未采用RSSM/想象actor训练/奖励模型或续存模型，不作为SAC闭环已获验证的依据。
+- 使用：[task7.2 RESULTS](tasks/task7/task7.2/RESULTS.md) §1、§3.4、§4–§5。
+
+<a id="src-0351"></a>
+## SRC-0351 — CBL/N²M²/FoReM的BioIK、残差、碰撞与失败状态
+
+- 支撑主张/类型：本地源码静态审计＋BioIK官方说明，不是IK调用实测；允许近似解的布尔成功与上层kin_failure不等价。
+- 作者/版本：N²M² U `6281205846b1bac4525d05ee230a47bddf42023d`；CBL H快照 `1ccedd087ac12dd317e93accc37bb81e05beeb99`；F未跟踪迁移文件，具体根HEAD/哈希见[SRC-0365](#src-0365)、[task7.5 A.1](tasks/task7/task7.5/RESULTS.md#a1-版本与证据约定)。BioIK官方TAMS-Group/Philipp Ruppel说明为2026-10-19读取版本。
+- URL/精确位置：H/F `src/robot_env.cpp:190–239、411–470、479–515、676–708`；F `scripts/modulation/envs/robotenv.py:287–302`（H`:304–319`）；三份`validity_fun.cpp:11–30`；`combined_env.py:328–336、377–384`；F `include/modulation_rl/robot_env.h:203–231`；`forem/src/bio_ik/src/kinematics_plugin.cpp:253、638–653`；`forem/src/husky_ur5/config/kinematics.yaml:11–19`；H `gazebo_world/husky_ur5/robot_config.yaml:27`的solver_timeout=0.01 s只是旧配置，非耗时实测。URL：[BioIK官方README](https://github.com/TAMS-Group/bio_ik#readme) Disclaimer及Incremental IK。
+- 原始结论：先设置下一底盘、再IK；近似解可由回调接受；slack另检并合并失败，碰撞字段可因配置改变失败统计。正则/MinimalDisplacement/AboveVelLimit为软目标；后者对有符号d惩罚，不能视为双向硬限速。checkCollision依场景/ACM而定。官方说明默认bio2_memetic不与Unity BioIK共享代码，并讨论增量跳解。
+- 核查：2026-10-19，Codex；**本地相关代码直接阅读及官方说明相关段落**；没有启动ROS确认实参，也未运行求解。旧task7.3表格把H/F robotenv的行号写到297–303，实际F主失败段为297–302、H为314–319，现按此更正；U为310起。
+- 采用/限制：用于失败分类与模型坐标核对，不冻结新求解器/超时；随机障碍场景能力边界见SRC-0367，不能将checkCollision名称误译成纯自碰撞。
+- 使用：[task7.3 RESULTS](tasks/task7/task7.3/RESULTS.md) §1–§4；[task7.5 RESULTS](tasks/task7/task7.5/RESULTS.md) §A.4–A.5。
+
+<a id="src-0352"></a>
+## SRC-0352 — UR5解析FK/IK分支与种子连续性
+
+- 支撑主张/类型：ROS-Industrial官方源码＋坐标/秩推导；解析多分支可枚举，但分支选择、限位和路径碰撞需另检。
+- 作者/版本：ROS-Industrial `universal_robot` kinetic-devel固定commit `06d8b9e2f5f86aa54f9f2845f11edbc84e2f951e`（本次git ls-remote固定）；`ur_kinematics`。
+- URL/位置：[ur_kin.cpp](https://github.com/ros-industrial/universal_robot/blob/06d8b9e2f5f86aa54f9f2845f11edbc84e2f951e/ur_kinematics/src/ur_kin.cpp) `UR5_PARAMS:26–34`、`forward:47`、`forward_all:71`、`inverse:197–341`（raw，腕奇异q6_des约`:283`）；[ur_moveit_plugin.cpp](https://github.com/ros-industrial/universal_robot/blob/06d8b9e2f5f86aa54f9f2845f11edbc84e2f951e/ur_kinematics/src/ur_moveit_plugin.cpp) raw`:607–641、644–730`限位、距seed加权排序及有效性回调。
+- 原始结论：独立解析函数求解UR链；MoveIt插件负责完整链坐标、限位/种子/回调。解析解数量不是连续冗余自由度；插件能力不全在纯inverse函数中。
+- 推导：`T_AE*=(T_WB T_BA)^(-1) T_WG* T_EG^(-1)`，T_XY将Y变到X，位置m/旋转一致SO(3)约定；固定底盘6D完整位姿满秩UR5的局部零空间维数`6−rank(J)=0`。给定非完整(v,ω)不能瞬间横移。以上为坐标复合/线性代数，不是外部性能结果。
+- 核查：2026-10-19，Codex；**相关解析/插件函数静态抽查**；未运行UR5、未证明通用DH与本机模型完全相符。ROS文档入口失败后改读官方固定raw源码。
+- 采用/限制：task7.3首选研究路径为解析多解＋上一有效q分支连续选择；需安装/工具/型号一致的FK回检及碰撞，不保证总可达、不保证GPU更快，不把它升级为已选实现。
+- 使用：[task7.3 RESULTS](tasks/task7/task7.3/RESULTS.md) §3–§4A。
+
+<a id="src-0353"></a>
+## SRC-0353 — DLS局部稳定性与TRAC-IK限位求解
+
+- 支撑主张/类型：原始数学论文方法章节＋TRACLabs官方说明/库文档；DLS抑制近奇异方向增益，TRAC-IK结合改进KDL与SQP，Distance模式耗满预算。
+- 作者/标题/版本：Samuel R. Buss、Jin-Su Kim，Selectively Damped Least Squares for Inverse Kinematics，作者2004-10-25稿（后发表于JGTools 2005）；Patrick Beeson、Barrett Ames，TRAC-IK: An Open-Source Library for Improved Solving of Generic Inverse Kinematics，Humanoids 2015，DOI `10.1109/HUMANOIDS.2015.7363472`。
+- URL/精确位置：[Buss/Kim作者PDF](https://mathweb.ucsd.edu/~sbuss/ResearchWeb/ikmethods/SdlsPaper.pdf) §2 pp.3–4（DLS/SVD）、§3不可达目标；[TRACLabs官方项目说明](https://traclabs.com/projects/trac-ik/) 算法概述；[TRAC-IK库README固定版本](https://github.com/HIRO-group/trac_ik/blob/2e63d6b2b05095e34b51672f8475a7390f75125c/trac_ik_lib/README.md) raw`:43–55`（该仓为ROS-independent维护分支，非2015论文原release）。
+- 原始结论：`Δq=Jᵀ(JJᵀ+λ²I)^(-1)e`，由最小化`||JΔq−e||²+λ²||Δq||²`得到；λ需平衡稳定/收敛。TRAC-IK两算法并发，Speed取先收敛，Distance在完整timeout内择最小seed SSE；姿态分量容差要单独定义。两者不自动保证连续路径避障。
+- 核查：2026-10-19，Codex；Buss/Kim **部分章节原文**；TRAC-IK **官方说明和接口文档已读，2015论文全文本次未取得**（官方作者论文页请求失败），不追认旧报告“论文§II–III已核验”。未用ResearchGate二手摘要替代原文。Buss未发表survey入口超时后读作者正式文章稿，书目不混写。
+- 项目推导/采用：有界`Δq`、关节限位及位姿加权的局部约束式是工程候选，平移m/旋转rad/Δt秒需缩放；不能保证全局可行或拿延长预算当免费改进。仅供选择解释，不实施TRAC-IK/DLS，不沿用其默认容差。
+- 使用：[task7.3 RESULTS](tasks/task7/task7.3/RESULTS.md) §2–§5。
+
+<a id="src-0354"></a>
+## SRC-0354 — Reachability Behavior Priors的底盘放置与适用限制
+
+- 支撑主张/类型：外部论文原文；底盘位姿与臂启动决策有关，可达先验不等于可操作度最优或整条路径可行。
+- 作者/标题/版本：Snehal Jauhri、Jan Peters、Georgia Chalvatzaki，Robot Learning of Mobile Manipulation with Reachability Behavior Priors，RA-L 2022，DOI `10.1109/LRA.2022.3188109`，arXiv 2203.04051v3（2022-07-06）。
+- URL/精确位置：[原文](https://arxiv.org/html/2203.04051v3)，§III-C IRM，§IV-C、§V任务与TIAGo++，§VI局限（学习最大化IK可达likelihood，未优化manipulability）。
+- 原始结论：先验向混合动作RL提供与6D目标相关的放置/臂激活信息；工作没有解决所有障碍与操纵性问题，其机器人/任务与Husky+UR5同步路线不同。
+- 核查：2026-10-19，Codex；**部分章节**，直接读IRM定义、任务描述及结论限制；未逐项重核全部实验或官方训练代码。
+- 采用/限制：仅支持“先选较有利底盘候选再精确IK”的阅读建议；不新增IRM网络/BHyRL/可操作度奖励，不把其成功率移植为本项目预期收益。
+- 使用：[task7.3 RESULTS](tasks/task7/task7.3/RESULTS.md) §4D、§5。
+
+<a id="src-0355"></a>
+## SRC-0355 — cuRobo批量IK、碰撞表示与计时口径
+
+- 支撑主张/类型：外部论文作者报告＋官方旧版源码；GPU批处理可能适合多候选，但吞吐不能冒充单查询延迟，IK离散碰撞不能保证路径安全。
+- 作者/标题/版本：Balakumar Sundaralingam等（NVIDIA），cuRobo: Parallelized Collision-Free Minimum-Jerk Robot Motion Generation，arXiv 2310.17274v2（2023-11-03）；官方legacy tag v0.7.8，Git对象`d64c4b005459db10c5dd867d8b30a87d5bda9bdb`。
+- URL/精确位置：[论文](https://arxiv.org/html/2310.17274v2) §3–§3.4、§6.2.4/Fig.17、§6.2.6/Fig.20、附录E.3（IK/graph离散检查）；[固定旧版ik_solver.py](https://github.com/NVlabs/curobo/blob/v0.7.8/src/curobo/wrap/reacher/ik_solver.py) `IKResult`、`solve_batch:769`、`solve_batch_env:899`、`_get_success`、seed_config接口（raw行）；[官网版本告示](https://curobo.org/)称V2已发布且API重设，legacy文档标v0.7.6，不将文档与v0.7.8视作同一release。
+- 原始结论：机器人球体表示、自/环境碰撞、批量目标/不同场景/种子与pose残差成功输出。Fig.17批量1000无碰撞IK约27ms、碰撞自由IK约131ms；Fig.20 RTX4090摊销约27μs/130μs每问题，非整批130μs、非本项目单步。附录E.3对IK仅离散查询，轨迹优化另有连续碰撞算法。
+- 核查：2026-10-19，Codex；**部分论文方法/计时章节、旧版相关接口及官网版本告示**；无安装、Blackwell兼容或实测。计时来源未在FoReM复现，不外推硬件/UR5吞吐。
+- 采用/限制：只列GPU候选；坐标变换、球近似、逐路径连续分支及与网络争用的端到端成本待授权测量；未决定采用legacy或V2，也不扩展环境碰撞表示。
+- 使用：[task7.3 RESULTS](tasks/task7/task7.3/RESULTS.md) §4E、§5；[task7.5 RESULTS](tasks/task7/task7.5/RESULTS.md) §A.4。
+
+<a id="src-0356"></a>
+## SRC-0356 — 子目标、固定周期、学习前瞻与IK的组合建议（2026-10-19）
+
+- 支撑主张：本轮建议将子目标上下文、固定周期执行、多步模型前瞻、SC²-WM式内部反馈及SAC/规划器分工分别定义；不能由10 Hz或理想执行直接推导世界模型失效。
+- 类型：用户要求基础上的工程建议、条件推导与待验证假设，不是已批准算法、实验结果或普遍性能结论。
+- 输入依据：用户动机与设计[SRC-0340](#src-0340)；理想执行语义[SRC-0329](#src-0329)、本轮task7.3源码核查；SC²-WM、SAC、TD-MPC2、LOOP、MBPO与DreamerV3的本轮调研来源，见task7.1–7.3 RESULTS及全局对应条目。
+- 公式/单位/条件：执行周期Δt以s计、展开步数H为无量纲正整数、前瞻物理时域T=HΔt以s计；仅当每个动作持续同一Δt时如此，不能把候选数N当作H，也不能把子目标距离直接当时间。用户举例10 Hz对应Δt=0.1 s，是解释用输入，不代表已批准参数或“机器人通用”依据。若只设子目标而仍用H=1，前瞻物理时域仍为Δt。理想环境中x_next=F_kin(x,a)并不意味着x_next=x；执行残差为零和动作导致状态变化为两个不同量。
+- 建议A：保留反馈后的SAC Actor为最终动作分布，模型/序列搜索只提供动作前上下文；须明确定义复合策略及log概率、梯度与Critic条件，不能因仍叫SAC便默认公式不受影响。
+- 建议B：在子目标上下文中，以反馈修正Actor引导候选动作序列；模型预测、价值/可行性评分后由规划器选择行为动作，只执行首步再观察重规划。较贴合本轮滚动序列构想，但最终控制器是规划器，Actor为proposal/学习策略，不再称纯SAC直接输出最终执行动作。SAC可从该行为策略产生的真实环境转移离策略学习；Actor更新中的采样和熵仍应使用其自身定义的分布，不能将被规划筛选的行为分布冒充Actor分布。规划分数与SAC软价值口径还需确定，不能直接拼接原TD-MPC2所有损失。
+- 状态反馈建议：预测整段/远期任务相关变化，可作为反馈上下文；高频一步恒等预测是需要检查的风险，而非已证明失败。世界模型用环境真实执行动作和真实后继观测监督；未执行序列没有本次真实标签。当前隐层修正不是实际物理状态变化，不可用尚未执行的预测覆盖真实本体反馈。
+- IK关系推导：若世界系底盘位姿为T_WB、臂安装变换为T_BA、世界系末端目标为T_WE，则新底盘位姿下IK目标为T_AE=(T_WB T_BA)^(-1)T_WE；IK输出关节q，实际运动学末端由T_WE_real=T_WB T_BA FK(q)计算。输入必须使用同一坐标约定，位置单位m、角度rad；IK残差、碰撞、关节限位、速率/连续性分开检验。终点有解不构成中间路径可行证明。
+- 工程限制：H、Δt、候选数、评分/损失权重、子目标刷新、失败时底盘与机械臂如何更新均未冻结；不以减慢执行频率、放松末端判据或删失败样本制造收益。精确IK/几何可作检查，但其调用量与信息权限须一致，不宣称学习预测或GPU批处理已经更快。
+- 核查日期/人：2026-10-19，Codex /root；本条为显式工程分析，不声称完成物理验证。外部原文的已核查程度按各来源条目，不由本条升级。
+- 使用：[父设计调研记录](agent_logs/task7/20261019-codex-sequence-design.md)；[task7 RESULTS](tasks/task7/RESULTS.md)。
+
+
+<a id="src-0357"></a>
+## SRC-0357 — N2M通过成功rollout学习初始位姿偏好分布
+
+- 支撑主张：N2M（Navigation-to-Manipulation）是导航到操作的初始位姿选择模块，区别于N²M²。采集固定操作策略π的rollout，以成功起始位姿作为正样本；RGB点云经Point-BERT与MLP预测GMM分布，主体损失为成功位姿负对数似然。推理从分布采样并检查底盘占据碰撞，再移动并执行原操作策略；不是直接预测成功率的二分类器，也不是逐步世界模型规划。
+- 类型：外部论文原文核查；“分布密度不等于校准成功率”为由训练目标作出的解释。成功数据分布受采样范围影响，不能据其推导全局最优性或每个姿态的精确成功概率。
+- 作者/标题/版本：Kaixin Chai、Hyunjun Lee、Joseph J. Lim；N2M: Bridging Navigation and Manipulation by Learning Pose Preference from Rollout；ICML 2026，PMLR 306:12363–12382；arXiv:2509.18671v2。
+- URL：https://proceedings.mlr.press/v306/chai26a.html ；https://arxiv.org/html/2509.18671v2 ；PDF https://raw.githubusercontent.com/mlresearch/v306/main/assets/chai26a/chai26a.pdf 。本次下载到/tmp/n2m-chai26a.pdf，提取文本/tmp/n2m-chai26a.txt（临时文件，不作为永久唯一依据）。
+- 精确位置：§3.1系统流程；§3.2公式(1) GMM、(2)负对数似然；§3.3.1成功rollout采集与§3.3.2视点增广；Fig.2双峰例；附录B.3碰撞检查、B.4固定初始臂关节与SE(2)底盘位姿，C.4实机位姿(x,y,θ,h)；D.4操作策略能力等失败限制。
+- 原始结论：偏好由具体策略实际完成任务的表现定义，不仅看几何可达性；增广时渲染同一局部场景的不同视点并将同一成功位姿变换到相应机器人坐标系。附录C.2明确部分补充实机展示用人工规则正样本，不能概括为所有展示都由真实策略成功rollout标注。
+- 核查日期/人：2026-10-19，Codex /root；直接阅读上述PMLR PDF正文与相关附录，另读取arXiv HTML；未复现、未审计官方实现。
+- 本项目采用/限制：只用于向用户讲解姿态评价与数据监督；未授权接入FoReM，不以本文作为Husky+UR5性能证明，不改变task7方案。
+- 使用：[阅读记录](agent_logs/project/20261019-codex-n2m-pose-preference.md)。
+
+
+<a id="src-0358"></a>
+## SRC-0358 — SC²-WM代码补充：反馈层零初始化与detach、占据栅格高度判定、底层执行与策略训练方式
+
+- 支撑主张：①反馈修正对全部候选进行：`H_rebuild`先detach，门控`g=sigmoid(W_g[e;H])`、修正量`δ=W_d[H;e]`，`e'=e+g⊙δ`；`feedback_gate`、`feedback_delta`权重与偏置零初始化，因此接入时输出等于未加反馈。②航路点U-Net的占据输入由深度点云投影得到：只取前方0.5–3 m、去天花板附近点，按高度阈值区分障碍与地面；输入为27类语义＋3类占据、192×192、0.05 m/格。③选中航路点后的移动不学习：先转向目标，再按固定步长前进，碰撞时左右试探（tryout），或瞬移/沿拓扑图最短路径。④策略由模仿学习训练（教师动作`teacher_ghost`），不是SAC。⑤本地`scwm/pretrained/`只有`PLACE_HERE.txt`，`cwp_predictor.pth`等权重不在本机。
+- 类型：官方源码静态核查（只读，未运行）；补充[SRC-0334](#src-0334)、[SRC-0335](#src-0335)未写明的细节。
+- 精确位置：本地`scwm/` commit `f2f2f5ff2e1f21a08f7d7c51fbbd5c17b0d6778b`：`vlnce_baselines/models/etp/vilmodel_cmt.py:599–611、815–820、940–967`；`vlnce_baselines/waypoint_networks/utils.py:377–410`；`vlnce_baselines/ss_trainer_ETP.py:247、264、302、1059、1713、1941–2040`；`vlnce_baselines/common/environments.py:386–447、461–490`；`pretrained/PLACE_HERE.txt`。
+- 原始结论：见支撑主张；④仅据训练器中的教师动作与模仿损失变量判断，未逐行核对全部训练分支。
+- 本项目采用：task7偏置层照①的形式（零初始化门控残差、世界模型输出detach后进入）；不直接使用其航路点权重（输入需语义、场景为室内住宅、不知道末端路线），候选点首版用规则，以后可借用②的“热力图→扇区取峰值→去障碍→合并→取前k”结构自训练；执行器照③不学习。
+- 限制：只核查代码路径；未运行，不代表其数值表现；与论文写法差异见[SRC-0334](#src-0334)。
+- 2026-10-19晚更正（Claude，据Codex复核[SRC-0348](#src-0348)）：①中“接入时输出等于未加反馈”只指这一层：`feedback_delta`为零使δ＝0、e'＝e；`feedback_gate`为零只使门值为0.5。整网输出相同还需下游头与编码/归一化/掩码一致；task7中的条件写在[task7 TASK](tasks/task7/TASK.md) §2.7第5步。原句保留作历史。
+- 核查日期/人：2026-10-19，Claude（claude-opus-5-5）。
+
+- 使用：[task7 TASK](tasks/task7/TASK.md)；[日志](agent_logs/task7/20261019-claude-framework-docs.md)。
+
+
+<a id="src-0359"></a>
+## SRC-0359 — 2026-10-19用户确认的task7框架
+
+- 支撑主张：经2026-10-19下午至晚间与Claude讨论，用户确认：①不在10 Hz做学习决策；决策单位为一个前瞻点（子任务），子任务内目标不动。②前瞻点生成先不加“结果摘要回送生成网络”的子目标环，以后视情况再做。③候选前瞻点为多个；对每个候选点并行优化多条路径，按固定评分取各点最优路径，再在所有候选点之间选最优（选点由SAC学习完成）。④同意Claude建议(b)：全部候选同时做预测与修正，不保留“先初选一个再修正”；(c)：偏置层先用“冻结基线SAC，只训练偏置层与输出头”的方式。⑤准备工作包括SIM、世界模型训练、前瞻点网络改造、VCM确定等，授权Claude写文档。
+- 原始依据（用户原话摘录）：“我们能不能直接用前瞻，不用10HZ那个”；“我先去掉这个子目标环吧，这个可以后面看情况做”；“不应该是，候选很多前瞻点，每个点并行优化几条路径，然后每条点选最优的，再选所有点里最优的吗”；“所以我们要准备，sim，世界模型的训练，前瞻网络的改造，VCM的确定，等等工作，你都开始写文档吧，我同意你的BC，写好文档喊我”。
+- 类型：当前会话用户设计决定；不是外部技术证据，不证明方法有效。
+- 讨论中被放弃的中间方案（供追溯）：SAC直接输出连续有界底盘位移作为前瞻点（Husky差速底盘不能到达任意位姿，且偏离SC²-WM“选候选点”的结构）；上下两层同时学习（层次RL非平稳风险）；在每个Δt做TD-MPC式序列规划（与选点结构不在同一层）。
+- 本项目采用：[task7 TASK](tasks/task7/TASK.md) §2.3、§2.7–§2.9、§3、§4；准备子任务task7.4–7.12。各参数（候选数、路径数、检查点间隔、评分权重、网络宽度等）均未冻结。
+- 核查日期/人：2026-10-19，Claude（claude-opus-5-5），直接读取本会话用户消息。
+- 使用：[task7 TASK](tasks/task7/TASK.md)；[DECISIONS](DECISIONS.md)；[日志](agent_logs/task7/20261019-claude-framework-docs.md)。
+
+
+<a id="src-0360"></a>
+## SRC-0360 — N²M²/CBL/FoReM阶段一的终止、成功与奖励定义（代码）
+
+- 支撑主张：①终止：`done = (本步无IK失败且末端规划完成) 或 IK失败累计≥ik_fail_thresh 或 底盘碰撞累计≥ik_fail_thresh`；IK失败或碰撞一次不结束回合。阈值默认训练20、评估50，按每个0.1 s步计数。②成功：`无IK失败 且 无底盘碰撞 且 末端到达目标`（三者同时满足）；末端到达阈值默认0.025 m与0.05（姿态量的单位/定义待核）。CBL原版与FoReM阶段一迁移环境使用同一判定，阶段一报告的“内部成功”即此值。③奖励：碰撞惩罚（默认10）×底盘碰撞＋IK项（默认'l2'：−0.5[(d/0.1)²+(r/0.05)²]）−动作/加速度惩罚（默认0）；步内末端奖励为0，没有进度奖励；末端按规划器时间前进（速度范围0.001–0.1，单位按代码常量，待核），底盘需跟上。④N²M²只检查底盘碰撞与机械臂自碰撞，不检查机械臂与环境障碍的碰撞。
+- 类型：本地代码静态核查（只读）。
+- 精确位置：上游`mobile-rl/` commit `6281205846b1bac4525d05ee230a47bddf42023d`：`scripts/modulation/envs/combined_env.py:309–354、356–384`；`scripts/modulation/utils.py:103–135、530–531`；`scripts/modulation/envs/tasks.py:146–147`；`scripts/modulation/envs/eeplanner.py:17–22、187–193、246–255`；`scripts/modulation/evaluation.py:49–54、116–117`。CBL快照`husky/src/modulation_rl/scripts/modulation/utils.py:530–531`、`envs/combined_env.py:382–384`（快照版本见[SRC-0338](#src-0338)）；FoReM`forem/src/modulation_rl/scripts/modulation/utils.py:530–531`、`forem/scripts/task3_env.py:175`。④依据`combined_env.py:184–188`只检查局部地图中的底盘碰撞与`robotenv.py`自碰撞字段，未逐行排除其他碰撞检查路径。
+- 本项目采用：task7成功判定沿用“零失败＋到达目标”的严格口径，但失败计数单位改为检查点/决策，并新增机械臂与环境碰撞；终止改为“停在最后可行检查点、记失败、累计F次终止”；奖励结构不同（见[task7.4 RESULTS](tasks/task7/task7.4/RESULTS.md)），不直接沿用其数值。
+- 限制：阶段一经验“约90–92%回合因20次IK失败终止”来自task4.8（本台账既有条目），不代表新环境的失败率。
+- 2026-10-19晚更正（Claude，据Codex复核）：④过宽，收窄为“解析sim中底盘碰撞按局部地图判定；机械臂经MoveIt `checkCollision`检查（`validity_fun.cpp:11–30`），场景含机器人自身与地面平面（U `robot_env.cpp:72–91`），未见随机环境障碍加入该场景，因此缺机械臂对随机障碍的检查”，见[SRC-0367](#src-0367)；task7新增机械臂与环境碰撞的决定不变。②中姿态阈值0.05已核清：旧姿态距离为`1−(q_a·q_b)²`＝sin²(φ/2)，无量纲，见[SRC-0371](#src-0371)。原句保留作历史。
+- 核查日期/人：2026-10-19，Claude（claude-opus-5-5）。
+- 使用：[task7.4 RESULTS](tasks/task7/task7.4/RESULTS.md)；[日志](agent_logs/task7/task7.4/20261019-claude-task-definition.md)。
+
+
+<a id="src-0361"></a>
+## SRC-0361 — 2026-10-19用户对task7任务定义的选择
+
+- 支撑主张：①末端沿路线的推进方式“两条路都做”：进度驱动（末端随所选候选推进到进度s，可暂停等底盘）与时间驱动（末端按规划器时间前进，底盘须跟上，N²M²式）两种任务变体都做。②段中途失败：停在最后可行检查点、记一次失败、回合继续，回合内失败累计F次终止；成功要求失败次数为0。③路径评估显示不可行的候选不屏蔽，由SAC根据候选特征与失败惩罚学习避开。
+- 原始依据：2026-10-19本会话，用户对Claude三项提问的选择：“末端沿路线怎么推进？”=“两条路都做”；“段中途失败怎么处理？”=“停下记失败，累计F次终止（推荐）”；“路径评估显示不可行的候选，要不要从选项里屏蔽掉？”=“不屏蔽（推荐）”。
+- 用户随后的表述：“我们这里同时做同步和不同步的吧”；澄清为“不是两种吗，一种等机械臂，一种不等”。即同步＝时间驱动（互不等待），不同步＝进度驱动（底盘与机械臂可以互相等），与①相同，不是新增维度。
+- 类型：用户设计决定；数值（F、M、上限、权重、阈值）未定。
+- 本项目采用：[task7.4 RESULTS](tasks/task7/task7.4/RESULTS.md)；[task7 TASK](tasks/task7/TASK.md) U24、U26。
+- 核查日期/人：2026-10-19，Claude（claude-opus-5-5）。
+
+
+<a id="src-0362"></a>
+## SRC-0362 — 2026-10-19用户对task7接口问题的选择与设计原则
+
+- 支撑主张：①现在先不设计验证仿真（ManiSkill）的环境，只考虑训练用的sim环境。②只考虑sim时，路径评估检查碰撞用扫描累积的局部地图，不用真值地图（task7.4 I1）。③执行中途停下、没到达候选点的样本不作f_p标签，只用到达的样本监督f_p（I2）。④总原则：设计要符合SC²-WM的基本思想。
+- 原始依据（用户原话/选择）：I1首次回答“现在先不设计后面验证仿真的环境，只考虑sim的环境”；再问“只考虑sim的话，路径评估检查碰撞用哪种信息？”选“扫描累积的局部地图（推荐）”；I2选“只用到达的样本（推荐）”；随后“反正要符合SCWM的基本思想”。
+- 与SC²-WM的对应（Claude说明，依据[SRC-0358](#src-0358)、[SRC-0334](#src-0334)）：SC²-WM智能体只用自身观测投影的局部占据/语义栅格生成候选，不用真值地图；世界模型只对实际执行的候选、用到达后的观测监督。SC²-WM导航总能到达所选航路点（瞬移或tryout），本项目“中途停下”是新增情况，“只用到达样本”为最接近的处理。（2026-10-20收窄，Claude据Codex第二轮#15与[SRC-0391](#src-0391)：SC²-WM的tryout分支尝试次数有限、碰撞时可中止，前进为整数步，不保证精确到达请求点，“总能到达”只适用于瞬移分支；用户“只用到达样本”的决定不变。原句保留作历史。）
+- 类型：用户设计决定与原则；不是外部技术证据。
+- 本项目采用：[task7.4 RESULTS](tasks/task7/task7.4/RESULTS.md) §11；[task7 TASK](tasks/task7/TASK.md)入口与§2.7；ManiSkill相关接口与task7.12暂缓。
+- 核查日期/人：2026-10-19，Claude（claude-opus-5-5），直接读取本会话用户消息。
+
+
+<a id="src-0363"></a>
+## SRC-0363 — 2026-10-19用户对task7.4训练与评估协议的选择
+
+- 支撑主张：①地图：让mapgen生成立方体、椭圆柱体这样的地图（不采用Claude“训练地图在sim内现场生成、未见场景只读使用现有24张语义地图”的推荐）。②预算按决策次数计量。③G5联合训练对照先不做。④做G6：在sim的未见场景上做测试期适应（SC²-WM的模型级自修正）。
+- 原始依据：2026-10-19本会话，用户对四项提问的回答：“地图按推荐做吗？”=“让mapgen生成一些立方体，椭圆柱体这样的地图”；“预算按什么计量？”=“按决策次数（推荐）”；“要不要做G5联合训练对照？”=“先不做”；“要不要做G6？”=“做”。
+- 相关事实：N²M²训练环境本身使用随机矩形与椭圆障碍（[SRC-0328](#src-0328)）；mapgen现有输出只有长方体JSON（[SRC-0331](#src-0331)），椭圆柱体需要扩展输出格式及sim中的射线求交与碰撞检查。
+- 未定：mapgen地图用于训练还是测试、数量、是否仍用现有语义地图作未见场景、未见场景集合的定义；G6触发条件（U6）。
+- 后续：第①项已被[SRC-0364](#src-0364)取代（只生成长方体、不加椭圆柱体、B类不做）。
+- 类型：用户设计决定。
+- 本项目采用：[task7.4 RESULTS](tasks/task7/task7.4/RESULTS.md) §15–§18；[task7 TASK](tasks/task7/TASK.md) §2.5、§4；task7.7。
+- 核查日期/人：2026-10-19，Claude（claude-opus-5-5）。
+
+
+<a id="src-0364"></a>
+## SRC-0364 — 2026-10-19用户对mapgen地图的最终选择（取代SRC-0363第①项）
+
+- 支撑主张：①A类地图先只生成立方体，兼容Gazebo；不加入椭圆柱体。②A类每个难度档（稀疏、标准）验证集50张、测试集100张。③B类语义场景本轮不做。
+- 原始依据：用户先要求“更新mapgen需求文档：加入椭圆柱体。先跟我确认地图是用于训练还是测试、各要多少张，再动文件。”Claude确认时用户回答：A类用途“这里就先生成一些立方体吧，兼容Gazebo”；数量“验证50＋测试100（推荐）”；形状比例“不要圆柱体先”；B类“不做这个”。
+- 相关事实：N²M²迁移代码中障碍以0.5概率取矩形或圆柱/椭圆，注释说明Gazebo没有椭圆模型，Gazebo环境只用矩形（`forem/src/modulation_rl/scripts/modulation/envs/map.py:871–877`）。
+- 未定：A类训练时在线调用同一生成函数还是使用固定文件池（用户未选，需求文档保留两种可能）；B类不做后，G6测试期适应与“未见场景”测试改用什么场景。
+- 类型：用户设计决定（第①项取代[SRC-0363](#src-0363)第①项“生成立方体、椭圆柱体”）。
+- 本项目采用：[mapgen需求文档](../../mapgen/docs/husky_ur5_map_requirements.md)；[task7.4 RESULTS](tasks/task7/task7.4/RESULTS.md) §16；[task7 TASK](tasks/task7/TASK.md) §2.5。
+- 核查日期/人：2026-10-19，Claude（claude-opus-5-5）。
+
+<a id="src-0365"></a>
+## SRC-0365 — task7.5(A)版本归属与差速积分复用审计
+
+- 主张/类型：本地代码静态事实；复用及GPU判断为工程分析，未运行验证。三份`myutils.cpp:405–421`都是先更新朝向、再按新朝向平移，不是常值(v,ω)的精确圆弧积分；Husky调用差速函数，上游对应TIAGo而非UR5。
+- 作者/版本：CBL快照`1ccedd087ac12dd317e93accc37bb81e05beeb99`（原tree路径`src/`，现位于`husky/src/modulation_rl/`）；上游N²M² `6281205846b1bac4525d05ee230a47bddf42023d`（`mobile-rl/`，干净）；FoReM根HEAD `3b519958d57c3141841c517afa4f6c59d23f467a`，但迁移目录未跟踪，不能把HEAD称其代码commit；逐文件SHA256见下方使用文档§A.1。
+- 精确位置：H/F `src/robot_husky.cpp:68–75`、`scripts/modulation/envs/robotenv.py` H`:325`起/F`:308–321`；U `src/robot_tiago.cpp:68–75`；H/F/U `src/myutils.cpp:405–421`（路径前缀见版本）。H快照`git show 1ccedd0:src/myutils.cpp`与现文件SHA256同为`33f48910935a16ff5108760e0648fe961aaa3d95961e0d53f8d98263fd56c5a9`。
+- 原始结论：平移仅取输入x；Python差速动作顺序为`[ω,v]`；无轮胎/驱动动态。推导：task7接口(v,ω)要显式换序；圆弧位置增量为`vΔt sinc(ωΔt/2)[cos(θ+ωΔt/2),sin(θ+ωΔt/2)]`，其中sinc(u)=sin(u)/u，零点取1；x/y单位m、θ单位rad、Δt单位s，前提常值控制。此为数学积分，不是实测。
+- 采用/限制：保留非完整运动学概念，公式改写成批量张量并统一预测/执行；不直接复制ROS tf实现，不声称GPU提速。参考版本和未跟踪源码不能混记。
+- 核查：2026-10-19，Codex；读取源码、Git对象、diff与哈希；未运行项目程序。
+- 使用：[task7.5 RESULTS](tasks/task7/task7.5/RESULTS.md) §A.1–A.3。
+
+<a id="src-0366"></a>
+## SRC-0366 — task7.5(A) FK/IK依赖与失败事务边界
+
+- 主张/类型：本地代码静态事实＋工程复用建议；延续[SRC-0351](#src-0351)–[SRC-0355](#src-0355)，不是新的IK性能审计。
+- 作者/版本：H/U/F定义同[SRC-0365](#src-0365)；F未跟踪文件按[RESULTS](tasks/task7/task7.5/RESULTS.md) §A.1哈希定位。
+- 精确位置：H/F `src/robot_env.cpp:39–91、190–239、389–393、411–470、479–515、676–708`；U同文件`:39–91、181–238、402–461`；F `husky_ur5/config/kinematics.yaml:11–19`、`husky_ur5/urdf/husky_ur5.xacro:6–16、35`起；F `bio_ik/src/kinematics_plugin.cpp:638–653`。H/F robot_env SHA256=`6fab72460d686f12b43797c1e4bc1b61d844a43ef46b5e418f07f6dfa4ce703a`。
+- 原始结论：FK由MoveIt RobotState模型变换取得，非独立UR5张量库；配置BioIK允许近似解，正则/位移等为软目标；只在碰撞标志为真时显式恢复旧臂关节，下一底盘位姿已先设置。因此旧step不满足task7“底盘与臂同时停在最后可行检查点”的事务语义。上层还合并slack失败。
+- 采用/限制：模型/安装/工具坐标作参考；重用解析分支思路须先按同一模型核对FK/IK，所有分支、限位、连续性、残差和碰撞分开判；状态提交须在完整检查后进行。现有ROS/MoveIt/BioIK对象不适合直接作为GPU批量核心；新张量实现的性能、正确性均未验收。
+- 核查：2026-10-19，Codex；局部代码全文/相关函数静态阅读，未查询ROS实参、未执行IK。
+- 使用：[task7.5 RESULTS](tasks/task7/task7.5/RESULTS.md) §A.4。
+
+<a id="src-0367"></a>
+## SRC-0367 — task7.5(A)碰撞调用链：地面检查存在，随机障碍未见同步到臂碰撞场景
+
+- 主张/类型：本地代码静态事实与限定范围的负面发现；修正[SRC-0360](#src-0360)④过宽概括，不声称排除所有外部ROS扩展。
+- 作者/版本：H/U/F同[SRC-0365](#src-0365)。
+- 精确位置：U `src/robot_env.cpp:72–91`创建场景并显式加入地面，`:111–124`状态监视且请求components=2（ROBOT_STATE），`:164–173、441–461`调用碰撞；H/F相应`:72–92、118–125、450–470`；三份`src/validity_fun.cpp:11–30`实际为`checkCollision`，`checkSelfCollision`被注释。U/H/F `scripts/modulation/envs/combined_env.py:180–188、365–384`底盘局部栅格覆盖检查；U `envs/map.py:730–745、792–803、849–877`、`simulator_api.py`的DummySimulatorAPI只负责栅格/模拟器对象；`map.py:421–430`初始底盘到末端连线启发式不能替代全臂检查。
+- 原始结论：解析sim里底盘碰撞为覆盖区域与局部图相交；MoveIt回调有机器人与机器人、已存在的world几何检查能力（受group/ACM约束），并且world中确有地面。在所读sim初始化/地图reset/step链路未见把随机长方体加入该PlanningScene，不能认为已具备全臂对这些障碍的检查；Gazebo分支另用接触回调，不能外推解析sim。
+- 采用/限制：底盘几何、ACM及连杆几何可作参考；task7需分别实现底盘障碍、臂自碰撞、臂环境检查和独立真值判定；规划侧只能访问扫描累积局部地图[SRC-0362](#src-0362)。多高度感知不足时不能从单层扫描恢复真值高度。几何张量改写可讨论GPU批量，但近似形状与离散检查限制待(B)确认，未选定碰撞球或其他新模型。
+- 核查：2026-10-19，Codex；读取以上主路径，检索`CollisionObject/planning_scene/octomap`；无程序运行，无动态场景验证。
+- 使用：[task7.5 RESULTS](tasks/task7/task7.5/RESULTS.md) §A.5；[Codex回复](agent_logs/task7/20261019-claude-codex-sync.md#codex回复)。
+
+<a id="src-0368"></a>
+## SRC-0368 — task7.5(A)末端规划器时间推进与路线几何的复用界限
+
+- 主张/类型：本地代码事实＋面向同步/不同步变体的工程分析，非已实施协议。
+- 作者/版本：H/U/F同[SRC-0365](#src-0365)；H/F `eeplanner.py`相同SHA256见RESULTS；与U的差异为高度偏好设置。
+- 精确位置：U `scripts/modulation/envs/eeplanner.py:1–22、165–176、198–215、224–263、468–505、549–580、617–660`；H/F同函数/同位置，`:545、679`附近`height_preference=True`覆盖了U的eval/False；U/H/F `combined_env.py:365–367`先推进末端规划器，再执行机器人；U `map.py:421–430`是起点启发式。
+- 原始结论：按planner时钟与dt从上一计划位姿继续推进；解析训练用固定时间增量，物理分支用ROS时间，dt还可能截断。PointToPointPlanner用pyastar、地图高度插值和SciPy四元数插值，每次generate_obs_step重算路线；不是预先固定的一条参数化路线，也不是各候选彼此隔离的纯函数。
+- 采用/限制：A*路线和插值思想改写后可复用为任务输入；同步变体要单独冻结路线/时间推进、候选模拟时钟与提交时钟；不同步变体要显式参数s及保持/推进，不按旧wall时间自动走。取消旧学习速度接口不得偷偷改变本任务已定时间/进度合同。固定路线插值可GPU批量，CPU pyastar/ROS/PIL当前实现不能直接批量；无耗时结论。
+- 核查：2026-10-19，Codex，相关类/调用链静态阅读，无规划运行。
+- 使用：[task7.5 RESULTS](tasks/task7/task7.5/RESULTS.md) §A.6。
+
+<a id="src-0369"></a>
+## SRC-0369 — task7.5(A)旧sim局部图来自真值裁剪，未提供目标扫描累计链路
+
+- 主张/类型：静态源码事实及检索范围内的缺口，非全仓任意工具均不存在的证明。
+- 作者/版本：H/U/F同[SRC-0365](#src-0365)。
+- 精确位置：U `scripts/modulation/envs/map.py:60–64、180–218、220–310、469–480`；H对应同位置，F从`:54`新增参数后偏移1行；U/H/F `envs/occupancy_grid_manager.py:9–20、61–74`；C++ `src/mycostmap.cpp:114–160`为ROS costmap膨胀。
+- 原始结论：`world_type=='sim'`无条件走`_get_local_map_gt`；Gazebo/world读ROS costmap，OccupancyGridManager仅接收栅格及增量。所读envs/C++主路径及`LaserScan/raycast/ray_trace/lidar`检索未见360束解析射线→遮挡感知→扫描累积的实现。局部裁剪不等于局部可观测信息。
+- 采用/限制：坐标转换、栅格覆盖等可改写复用；sim真值裁剪作为路径评估输入不可用，违反[SRC-0362](#src-0362)。环境真值生成观测与真值碰撞仍可读JSON；规划只读累计地图/未知掩码。射线求交及累计更新需要新实现（本轮未实施），可讨论按环境×射线×障碍GPU广播/分块，不能预报吞吐。21:07重读发现并发新增[SRC-0373](#src-0373)：全景深度与128×128×2/0.05 m格已定，相关旧一维扫描措辞不当新规格；高度累计/自遮挡/臂包络细节仍待S1–S5，不能补真值。
+- 核查：2026-10-19，Codex，文件/符号静态读取和检索；未执行扫描或costmap。
+- 使用：[task7.5 RESULTS](tasks/task7/task7.5/RESULTS.md) §A.7。
+
+<a id="src-0370"></a>
+## SRC-0370 — task7.5(A)mapgen角点JSON与N²M²中心障碍的适配
+
+- 主张/类型：本地代码事实＋几何坐标推导、工程复用建议。
+- 作者/版本：mapgen独立仓库`765e06448758dfbe34282edcac00f39ffad36aa5`；H/U/F同[SRC-0365](#src-0365)。
+- 精确位置：`mapgen/mapgen/map_builder.py:17–43、46–64、67–97、100–107、110–136、156–169、190–215`（SHA256=`42c66d4b8ffceb973b6ffa419e79862eb2c25f1bb88cd0307ba5014ef8d052ea`）；`parser.py:40–71`。U `scripts/modulation/envs/map.py:682–702、849–877`；H`:837–838`硬编码spacing=3.0/offset_std=0.8，F`:54、871–877`另有force_rectangle参数。新环境不继承这些工程数值。
+- 原始结论：JSON `boxes`每行`[px,py,pz,sx,sy,sz,cosθ,sinθ]`；点从局部0到size范围绕原点旋转，再加position，即position为底面角点，非中心。边界墙进入PCD但不在boxes中，PCD裁剪与原始boxes可不同；出生净空函数使用中心形式且只测角点，不能拿它当机器人通行验收。N²M²障碍位置按中心画矩形/椭圆；CBL把传入spacing和offset_std覆盖；FoReM额外开关不意味着始终仅矩形。
+- 推导：以二维旋转R(θ)，中心`c_xy=p_xy+R(θ)[sx/2,sy/2]`，`c_z=p_z+sz/2`，米/rad；若新几何保留角点协议可不转换。不能照搬旧PIL像素旋转符号而跳过世界坐标核查。
+- 采用/限制：解析JSON字面字段可直接读取，现有三个modulation_rl地图入口未见该JSON读取器；需新适配。墙/边界、裁剪策略由(B)/task7.7统一，不能凭JSON没有墙就取消围墙。数据读取可CPU一次完成、几何张量上GPU；不改mapgen、不生成地图、不增椭圆柱体。
+- 核查：2026-10-19，Codex，相关源码静态阅读；未调用mapgen。
+- 使用：[task7.5 RESULTS](tasks/task7/task7.5/RESULTS.md) §A.8。
+
+<a id="src-0371"></a>
+## SRC-0371 — task7.5(A)任务/奖励/终止入口与姿态距离单位
+
+- 主张/类型：静态代码事实＋工程复用建议；补充[SRC-0360](#src-0360)待核的姿态定义。
+- 作者/版本：H/U/F同[SRC-0365](#src-0365)。
+- 精确位置：U/H/F `scripts/modulation/envs/tasks.py:142–159、218–265`，`simulator_api.py:27–48`；`combined_env.py:309–354、356–395`；`eeplanner.py:187–193、242–255`；`env_utils.py:123–130`；C++ `src/myutils.cpp:44–46`。成功统计另见`utils.py:530–531`与[SRC-0360](#src-0360)。
+- 原始结论：任务wrapper给末端终点/容差；combined_env逐步累计失败并计算IK/底盘/动作惩罚。姿态距离是`1−(q_a·q_b)^2`，归一化四元数下等于`sin²(φ/2)`，无量纲，旧阈值0.05不能写成0.05 rad。这里φ为最短旋转角rad，此等价式为四元数推导，不是新阈值选择。
+- 采用/限制：参考失败字段与审计分项，旧奖励/终止控制流不可直接复用为task7.4；需按新半马尔可夫决策、最后可行检查点、一次失败计数、两变体及terminated/truncated重写。计数/奖励算术适合张量批量，但ROS wrapper并非GPU VectorEnv；不得改动已定任务定义或继承旧容差数值。
+- 核查：2026-10-19，Codex；静态相关函数与公式核查，未执行环境/评估。
+- 使用：[task7.5 RESULTS](tasks/task7/task7.5/RESULTS.md) §A.9；[Codex回复](agent_logs/task7/20261019-claude-codex-sync.md#codex回复)。
+
+
+<a id="src-0372"></a>
+## SRC-0372 — 观测设计的代码依据：SC²-WM全景深度与栅格、Husky离地高度与CBL所装雷达
+
+- 支撑主张：①SC²-WM的仿真观测为12个朝向（30°间隔）的虚拟RGB-D相机，RGB 224×224、深度256×256，视场均为90°（朝向复制见[SRC-0325](#src-0325)）；深度投影成以机器人为中心的占据栅格并按高度阈值区分障碍与地面（[SRC-0358](#src-0358)），先累积全局栅格、再按机器人位姿旋转并裁剪出局部栅格；栅格0.05 m/格、192×192。②Husky URDF碰撞模型：下层车体碰撞盒中心在base_link上方base_z_size/4、高base_z_size/2，即底面位于base_link原点；base_link离地＝轮半径0.1651−轮竖直偏移0.03282≈0.132 m，因此碰撞模型的车体离地约0.132 m。③CBL的Husky+UR5模型在base_link上前后各装一台Velodyne VLP-16（origin (±0.5, 0, 0.2) m），仿真参数设为1 Hz、1个采样点（注释原值10 Hz、200）；VLP-16的描述文件不在本机，线数与垂直视场按厂商规格，待核。
+- 类型：本地代码/配置静态核查与推导；未运行。
+- 精确位置：`scwm/` commit `f2f2f5ff2e1f21a08f7d7c51fbbd5c17b0d6778b`：`run_r2r/r2r_vlnce.yaml:13–21`；`vlnce_baselines/ss_trainer_ETP.py:1713、1930–1935`。`forem/src/husky_description/urdf/husky.urdf.xacro:85、90、94、105–107、111、122`。`husky/src/husky_ur5/urdf/husky_ur5.xacro:18–24`（与`forem/src/husky_ur5/urdf/husky_ur5.xacro`同段内容一致）。
+- 推导（Claude）：全景深度若安装在约0.5 m、垂直视场±45°，最低一行在约0.5 m外触地，最高一行在3 m处约达3.5 m高；水平1°一列时3 m处列间距约0.05 m（[SRC-0330](#src-0330)）。这些是几何推导，安装高度与分辨率为工程选择。
+- 本项目采用：task7.7观测设计（全景深度、局部栅格、底盘碰撞判定），见[task7.7 RESULTS](tasks/task7/task7.7/RESULTS.md)。
+- 核查日期/人：2026-10-19，Claude（claude-opus-5-5）。
+
+
+<a id="src-0373"></a>
+## SRC-0373 — 2026-10-19用户确定的观测与底盘碰撞设计
+
+- 支撑主张：①传感器照SC²-WM用360°全景深度观测（不用RGB）。②局部栅格：以机器人为中心、从本回合累积全局栅格中裁出，0.05 m/格，128×128（6.4 m见方），两个通道（是否观测到；每格障碍最高高度）。③所有障碍都算挡底盘，不允许从障碍上方驶过（U9收敛）。
+- 原始依据：用户先问“传感器的问题，为什么不是像SCWM里面的全景观测，然后局部格栅我不知道选什么，底盘的间隙你有想法吗”；Claude给出建议后用户确认“三项都按建议定：全景深度观测、128×128、0.05 m双通道局部栅格、所有障碍算挡底盘。写进task7.7并登记来源。”
+- 类型：用户设计决定。安装高度（约0.5 m）、全景分辨率、量程、自遮挡掩码细节为工程选择，未定。
+- 本项目采用：[task7.7 RESULTS](tasks/task7/task7.7/RESULTS.md)；[task7 TASK](tasks/task7/TASK.md) §2.4、U9、U10。
+- 核查日期/人：2026-10-19，Claude（claude-opus-5-5）。
+
+
+
+<a id="src-0374"></a>
+## SRC-0374 — SC²-WM的VCM（视觉校准模块）：结构、记忆与训练信号（论文与代码）
+
+- 支撑主张：①论文：v_t=f_enc(o_t)；VCM维护最近L步的情节记忆M_t={(k_i,m_i)}，键由存储特征加相对空间与时间编码现场构造；以v_t为查询做交叉注意力并带可学习时间衰减，c_t=Σsoftmax(A_i)m_i，A_i∝v_tᵀk_i−φ(δ_ti)；自适应门控融合v̂_t=α_t⊙v_t+(1−α_t)⊙c_t；后验状态s_t=f_q(s_{t−1}, a_{t−1}, v̂_t)（式(3)条件写为修正后的s^(Δ)_{t−1}）；动作后用(v̂_t, s_t)更新记忆。总损失L=L_ac（模仿学习）+L_wm（后验与先验KL）+L_rec（解码d(s̃_{t+1})与预训练编码器给出的v_{t+1}的平方误差）。附录：时间偏置B=−|λ|(t−k)，λ初值0.1；7维相对几何编码（相对朝向与俯仰的正余弦、归一化距离）经线性层与LayerNorm；记忆长度L∈{2,4,6,8}消融中L=4最好；作者称VCM是闭环校正的轻量功能模块，在潜空间检索、不构建显式地图。②代码：`VLNMemoryBank(mem_length=4, retrieval_layers=1, feature_dim=512, fusion_type='gate')`（文件内文档写8/2，与实际配置不一致）；记忆存前向视图的196个patch特征及位置、朝向、步号，先进先出；查询为12个方向的类别特征（前向来自CLIP，其余11个来自NeRF预测）加相对位置编码；位置编码与步号嵌入零初始化；门控`scale=sigmoid(Linear([x1;x2]))`，偏置初值2.0（初始约0.88取当前观测）。训练时（第2步起）另有记忆重建损失：增强后的11个非前向方向特征与真实渲染的CLIP特征做MSE——该项不在论文总损失式中。训练阶段可训练参数为vln_bert与vln_memory；测试期适应时只训练global_encoder，VCM冻结。
+- 类型：外部论文原文（本地PDF文本提取）与官方代码静态核查；未运行。
+- 精确位置：论文`scwm/paper/SC2-WM-ICML2026.pdf`（arXiv:2608.07548v1）§3式(1)–(8)、§3.1、§3.2式(11)–(13)、算法1、附录“Temporal Prior/Spatio-temporal Encodings in Memory of VCM”与“Ablation Study of Visual Memory Design”（表7）。代码`scwm/` commit `f2f2f5ff2e1f21a08f7d7c51fbbd5c17b0d6778b`：`utils_p/vln_memory.py:24–160、163–230、297–420`；`vlnce_baselines/models/Policy_ViewSelection_ETP.py:155–161、296–420`；`vlnce_baselines/ss_trainer_ETP.py:985–1000、1040–1071`。
+- 本项目采用：task7.8 VCM方案以此为模板，见[task7.8 RESULTS](tasks/task7/task7.8/RESULTS.md)。
+- 限制：PDF文本提取的公式排版可能有误，关键式已与上下文对照；L=4的结论来自VLN-CE任务，不能直接证明适用于本项目。
+- 核查日期/人：2026-10-19，Claude（claude-opus-5-5）。
+
+
+
+<a id="src-0375"></a>
+## SRC-0375 — 2026-10-19用户确定的VCM方案
+
+- 支撑主张：①VCM结构照SC²-WM：注意力记忆（最近4次决策）＋门控融合＋GRU状态递推。②VCM首版只用SAC的Critic损失训练。③末端未来路线以“栅格通道＋向量”两种形式输入。
+- 原始依据：用户对三项提问的选择：“照SC²-WM：注意力记忆＋门控＋GRU（推荐）”“只用 Critic 损失（推荐首版）”“栅格通道＋向量（推荐）”。
+- 类型：用户设计决定；SC²-WM原设计见[SRC-0374](#src-0374)。“Critic损失训练编码器、Actor梯度截断”为常见做法，出处待补证据。
+- 本项目采用：[task7.8 RESULTS](tasks/task7/task7.8/RESULTS.md)；[task7 TASK](tasks/task7/TASK.md) U1、U2、U4、U27。
+- 核查日期/人：2026-10-19，Claude（claude-opus-5-5）。
+
+
+<a id="src-0376"></a>
+## SRC-0376 — task7.5(B)用到的地图墙体、自碰撞允许对与UR5关节速度限位（本地代码/配置）
+
+- 支撑主张：①mapgen地图坐标以原点为中心，`MAP_SIZE_X/Y=10.0`、`MAP_SIZE_Z=1.6`、`RESOLUTION=0.05`；边界墙只写进PCD，不写进JSON boxes：`BOUNDARY_WALL_HEIGHT=1.0`、`BOUNDARY_WALL_THICKNESS=0.1`，墙点位于x、y＝±5 m的单层面上（厚度常量在墙生成函数中未使用）。②`husky_ur5/config/ur5.srdf`定义manipulator链`ur5_base_link→ur5_tool0`、whole_body与gripper组；共119条`disable_collisions`（Adjacent 18、Never 99、Default 2），含车体与车轮对`ground_plane`等。“Never”是MoveIt Setup Assistant按采样得出的，不是几何证明。forem与husky两份SRDF逐字节相同。③`husky_ur5/config/joint_limits.yaml`中6个UR5关节速度上限均为π rad/s，未给位置限位；位置限位来自xacro引用的`ur_description` `ur5_macro.xacro`，该包不在`forem/src`中，本次未核到其文件。
+- 类型：本地代码/配置静态核查（只读，未运行）。
+- 精确位置：mapgen `765e06448758dfbe34282edcac00f39ffad36aa5`：`mapgen/map_builder.py:8–14、46–64`（SHA256前缀`42c66d4b8ffceb97`）；`forem/src/husky_ur5/config/ur5.srdf:13–23、43–46、75–194`（未跟踪，SHA256前缀`a7d2c8f431af28ea`，与`husky/src/husky_ur5/config/ur5.srdf`相同）；`forem/src/husky_ur5/config/joint_limits.yaml:1–31`（SHA256前缀`eca6ac96fbf309c4`）；`forem/src/husky_ur5/urdf/husky_ur5.xacro:6–8、12–16、35–39`。
+- 本项目采用：[task7.5 RESULTS](tasks/task7/task7.5/RESULTS.md) (B) B.2、B.4、B.5：墙作为读取器补充的长方体；自碰撞允许对须复核后才能沿用；关节速度上限只用于关节跳变指标（task7.4 §3），不作为IK失败条件。
+- 限制：未运行xacro展开，未核UR5位置限位与夹爪TCP定义；墙体厚度与放置方向为待定（B1）。
+- 核查日期/人：2026-10-19，Claude（claude-opus-5-5）。
+
+
+
+<a id="src-0377"></a>
+## SRC-0377 — CBL末端坐标约定与用户对task7.5(B) B2、B3的决定
+
+- 支撑主张：①CBL中任务目标为夹爪尖端位姿；代码沿目标x方向退回`tip_to_gripper_offset`＝0.15 m换算为`gripper_base_link`目标，再对`gripper_base_link`求IK；`ee_link`以零偏移固定在`ur5_wrist_3_link`上，Robotiq 85夹爪挂在`ee_link`下并绕y轴转−π/2；MoveIt运动链末端为`ur5_tool0`。②用户决定B2：任务路线与成功判定用夹爪尖端（TCP），IK通过固定变换在法兰（tool0）求解。③用户决定B3：IK用UR5解析多解，按上一有效关节解选最近分支；在task7.6中核对解析FK与URDF FK一致并计时后最终确认，阻尼最小二乘仅作备选。
+- 类型：本地配置/代码静态核查＋用户设计决定。0.15 m为CBL工程配置值，Robotiq 85真实TCP距离未核对（待补证据）。
+- 精确位置：`forem/src/modulation_rl/gazebo_world/husky_ur5/robot_config.yaml:5–14`；`forem/src/modulation_rl/src/myutils.cpp:191–209`；`forem/src/husky_ur5/urdf/husky_ur5.xacro:34–45`；`forem/src/husky_ur5/config/ur5.srdf:14`。用户原话：B2选“任务用TCP，IK在法兰求（推荐）”；B3选“UR5解析多解（推荐）”。
+- 本项目采用：[task7.5 RESULTS](tasks/task7/task7.5/RESULTS.md) B.4、B.15。与阶段一不同：CBL的BioIK允许近似解（[SRC-0366](#src-0366)），task7以FK回代残差不超过E7判定成功。
+- 核查日期/人：2026-10-19，Claude（claude-opus-5-5）。
+
+
+
+<a id="src-0378"></a>
+## SRC-0378 — 2026-10-19用户对task7.5(B) B11的决定：失败只按真值判定
+
+- 支撑主张：局部栅格只影响路径评分（候选特征f_k与路径选择）；执行器只有在IK失败或真值碰撞时才停在最后可行检查点并记一次失败；不另设安全层（取代父TASK §2.9“扫描发现障碍进入安全距离即停止”）。
+- 原始依据：用户先问“这里我们CBL的项目是不是无所谓失败，只要求成功路径的IK失败是0”；Claude核实CBL成功＝零IK失败、零底盘碰撞、到达目标，失败只计数并扣奖励、累计20次终止，CBL sim中底盘碰撞按真值地图重叠计数而不阻挡（[SRC-0360](#src-0360)、task7.5 (A)）；随后用户决定“B11定为只按真值：局部栅格只影响路径评分，只有IK失败或真值碰撞才停下记失败，不另设安全层。写进文档。”
+- Claude说明的理由：理想SIM深度无误差时，对已看见的障碍两种规则停在同一检查点；区别只在局部栅格误判（未知格、离散化）时，“只按真值”不记未发生的失败，与CBL只记真实发生事件的口径一致。以后在物理仿真中“真值”对应接触检测。
+- 类型：用户设计决定。
+- 本项目采用：[task7.5 RESULTS](tasks/task7/task7.5/RESULTS.md) B.10、B.15；[task7 TASK](tasks/task7/TASK.md) §2.9；[task7.4 RESULTS](tasks/task7/task7.4/RESULTS.md) §4。
+- 2026-10-20收窄（Claude，据Codex第二轮#16）：“理想深度时两种规则停在同一检查点”只在没有栅格离散化、遮挡与表示误差时成立；实际局部栅格存在这些误差，因此只能说二者在已正确观测的障碍上通常一致。原句保留作历史，决定本身不变。
+- 核查日期/人：2026-10-19，Claude（claude-opus-5-5）。
+
+
+<a id="src-0379"></a>
+## SRC-0379 — task5 CBL两条链路的验证状态核对（2026-10-19）
+
+- 支撑主张：task5.2 CBL原版RLlib的sim最终评估已交付并经task5.3 R13复核；task5.5自写SAC三种子均训练至5M、有最终策略文件，但其RESULTS仍明确最终sim评估尚未执行。
+- 类型/机构：FoReM项目原始产物与任务记录核对；不是新实验。
+- 版本/精确位置：run-id `t5.2-eval-r2`，`forem/results/task5/t5.2-eval-r2/final_eval_summary.json`的tasks、eight_runnable_task_mean及limits；[task5.3 RESULTS](tasks/task5/task5.3/RESULTS.md) R13；run-id `t5.5-sim-cbl5m-s{0,1,2}`，各`train_summary.json`的steps=5000000与`ckpt/policy_step05000000.pt`存在性；[task5.5 RESULTS](tasks/task5/task5.5/RESULTS.md)“最终评估”节。
+- 原始结论：原版RLlib simpleobstacle为39/50＝0.78；8个可运行任务平均0.2475，bookstorepnp不可运行，不计为0。自写SAC已有训练产物；不能把训练中D15读数当作最终评估。
+- 本项目采用：回答用户的task5状态问题，记录在[核查日志](agent_logs/task5/20261019-codex-cbl-status.md)。
+- 适用限制：未重跑评估，未重新审核所有历史回合；完成日期和R13状态沿用任务记录。旧JSON仍保留交付时review状态，最终复核以task5.3记录为准。
+- 核查日期/人：2026-10-19，Codex；实际模型/强度无法独立核实。
+
+
+<a id="src-0380"></a>
+## SRC-0380 — task5.5最终sim评估用户授权、协议沿用与启动（2026-10-19）
+
+- 支撑主张：用户明确要求“你启动一下验证”，承接task5.5三条5M策略最终sim评估；本次沿用task6.1固定场景2001–2050、每策略50回合、确定性动作、max_steps=2000、max_close_steps=500，不含Gazebo。以上数值是沿用项目既定评估协议，不是外部通用参数。
+- 类型/作者/版本：用户授权＋FoReM原始运行证据；2026-10-19，Codex。三训练run-id `t5.5-sim-cbl5m-s{0,1,2}`；评估run-id `t5.5-final-sim-s{0,1,2}-r1`。
+- 精确位置：`forem/logs/task5/t5.5-final-eval-launch-20261019/manifest.json`（完整命令、策略/评估脚本/启动器SHA256），各`*-launch.json`（三次docker后台启动返回0）；`forem/logs/task6/<评估run-id>/start.out`（inst63/64/65 ready=true，startup_s=3.1），同目录`eval.out`；输出为`forem/results/task6/<评估run-id>/eval.json`。
+- 原始依据：三条训练manifest的全部sources逐项核对当前文件一致；评估脚本当前ba140ec7…与task6.1原9989213…不同，差异已在[SRC-0253](#src-0253)登记，本次重读原备份与diff：Gazebo可选覆盖、配置和长回合记录，sim输入与核心循环不变。实例端口11463–11465/11563–11565启动前均空闲；forem-dev原仅init/sleep，GPU0–3空闲。
+- 本项目采用：[task5.5 RESULTS](tasks/task5/task5.5/RESULTS.md)启动记录与[独立日志](agent_logs/task5/task5.5/20261019-codex-final-sim-eval.md)。
+- 启动后补核：启动证据目录`startup-verification.json`、`gpu.txt`、`processes.txt`确认三条均有逐回合输出，宿主评估PID844488/844496/844498已分配GPU显存各708 MiB；未发现Traceback。
+- 限制：后台启动返回0及实例ready不等于评估通过；最终指标以每条eval.json及eval rc为准。沿用启动器会在eval.out记录eval/stop rc，不能仅凭包装进程退出码判断评估成功。
+- 核查日期/人：2026-10-19，Codex；实际模型/强度无法独立核实。
+
+
+
+<a id="src-0381"></a>
+## SRC-0381 — N²M²/CBL末端任务采样参数与2026-10-19用户对task7.5(B)其余待定项的决定
+
+- 支撑主张：①N²M²/CBL迁移代码中，末端终点由`sample_circle_goal`在起点周围按距离范围与高度范围采样，并限制在地图尺寸减2.5 m的范围内；基类任务距离`(1, 3)`、高度取受限工作空间（0.4–1.1 m），`SimpleObstacleTask`默认距离`(0.5, 8)`；`robot_config.yaml`中末端高度`z_min/z_max`为0.7/1.15 m，末端规划膨胀半径0.40 m；默认地图11×11 m（[SRC-0328](#src-0328)）。②用户“都按你推荐的走”，采纳以下推荐：地图保持10×10 m；起点在全图空闲区随机采样（生成任务时可用真值检查净空，不改mapgen）；终点距起点0.5–8 m、高度0.7–1.15 m，姿态暂定“夹爪水平、朝向沿路线末段方向”（N²M²`use_fwd_orientation`含义待核）；生成时检查终点不在障碍内且至少存在一个无碰撞且IK有解的底盘位姿，否则重采样；路线在真值地图上A*规划（膨胀0.40 m），高度线性插值、姿态球面插值，改写为纯函数（B12）。B7：不同步变体的路径族同时包含“s随底盘匀速联动推进到s_k”和“底盘先到位、再推进s”，由路径评估选优；s推进速率设上限（与E8一并定）。B6：LocalCollision中未知格按空闲判定，另在f_k中加入“路径经过未知格的比例”“到最近未知格的距离”两项风险特征。B1：墙按mapgen需求§3.3写入JSON（厚0.15 m、高1.6 m），放在[−5, 5]范围以内。B5：不直接沿用SRDF中采样得出的“Never”对，只保留相邻连杆与几何上恒接触的允许对，其余按几何判定。B4：关节位置限位查到来源后登记。B10：单次决策超时取“该路径规划时长×系数”，到达容差与E1一并定。B8、B9、B13、B14交task7.6计时后定。
+- 原始依据：用户先问“现在的地图你认为合适的大小是什么”，Claude建议10×10 m＋随机起点＋终点0.5–8 m（理由：与N²M² 11×11 m同量级、与6.4 m局部栅格和约3 m有效感知匹配、计算便宜；起点固定在中心时终点最远约4.5 m，每回合仅3–6次决策）；用户回答“好的，都按你推荐的走”。
+- 类型：本地代码静态核查（①）＋用户设计决定（②）；各系数、上限与阈值未定。
+- 精确位置：`forem/src/modulation_rl/scripts/modulation/envs/tasks.py:299–301、315–317、338–339`；`forem/src/modulation_rl/gazebo_world/husky_ur5/robot_config.yaml:19–22、32`。
+- 本项目采用：[task7.5 RESULTS](tasks/task7/task7.5/RESULTS.md) B.15；[task7 TASK](tasks/task7/TASK.md) §2.5；[task7.4 RESULTS](tasks/task7/task7.4/RESULTS.md) §1、§10。
+- 2026-10-20更正（Claude，据Codex第二轮#13、#14与[SRC-0387](#src-0387)）：①把不同任务类的采样范围混在了一起。实际为：基类RndStartRndGoalsTask默认距离(1, 5)；SplineTask显式(1, 3)、受限高度，且只有它传入“地图尺寸减2.5 m”；SimpleObstacleTask默认(0.5, 8)、高度z_min/z_max、传完整地图尺寸；三者都围绕底盘起始位姿采样gripper/wrist目标后再换算到尖端，`sample_circle_goal`内部另减0.5 m边距并clip。②中“use_fwd_orientation含义待核”已核清：N²M²终点RPY逐轴随机，该开关只把中途yaw对齐路径、末尾恢复随机终点，不规定水平终点；本项目“终点夹爪水平、沿路线末段方向”是用户采纳的本项目工程设计，不是沿用N²M²。原始依据中“起点固定在中心时每回合仅3–6次决策”是Claude估计，无统计证据。用户已选的0.5–8 m、0.7–1.15 m不变；距离锚点与“水平”所指TCP轴已于2026-10-20由用户确定，见[SRC-0393](#src-0393)。原句保留作历史。
+- 核查日期/人：2026-10-19，Claude（claude-opus-5-5）。
+
+
+<a id="src-0382"></a>
+## SRC-0382 — 离散动作SAC：原始损失与task7适用边界
+
+- 支撑主张/类型：外部论文原文；候选上的softmax、双Q、精确动作求和的离散SAC损失有原始出处。
+- 作者/版本/URL：Petros Christodoulou，*Soft Actor-Critic for Discrete Action Settings*，2019，arXiv:1910.07207v2；[原PDF](https://arxiv.org/pdf/1910.07207v2)。
+- 精确位置与核查程度：§2式(4)、(9)，§3式(10)–(12)、算法1，PDF页2–4；本次已读相关原文与公式，不是摘要转述。
+- 原始结论（改写符号）：V(x)=Σ_a π(a|x)[min_i Q_i(x,a)−α logπ(a|x)]；Critic最小化E[½(Q_i−y)²]，y=r+γ V_target(x')；Actor最小化E_x Σ_a π(a|x)[α logπ(a|x)−min_i Q_i(x,a)]；温度目标E_x Σ_a π(a|x){−α[logπ(a|x)+H_target]}。目标y不回传梯度；原文采用两个Q及软更新目标网络。
+- 本项目采用/限制：[task7 TASK](tasks/task7/TASK.md) §2.7/U28与task7.10可据此补公式。将x理解为VCM状态和当前候选集。只在padding以外候选上归一化/求和是本项目掩码合同；将γ换成γ^(Δt/τ)、只用terminated切断自举是本项目半马尔可夫/截断合同，均不是该论文已验证的结果。宏奖励沿task7.4既定式，不借补引用改变奖励。目标熵随有效候选数的规则、更新率和数值仍待定，不照搬Atari值。
+- 核查日期/人：2026-10-19，Codex；实际模型/强度未知。
+
+
+<a id="src-0383"></a>
+## SRC-0383 — SAC-AE与DrQ：截断Actor到共享视觉编码器的梯度
+
+- 支撑主张/类型：外部论文原文＋作者官方代码；从图像学习SAC时共享卷积层可由Critic训练，并阻断Actor更新该共享表征；理由与适用层级必须注明。
+- 作者/版本/URL：Denis Yarats等，*Improving Sample Efficiency in Model-Free Reinforcement Learning from Images*（SAC-AE），arXiv:1910.01741，[原PDF](https://arxiv.org/pdf/1910.01741)，§4.4–4.5（PDF页5–6）、附录B.2（页12）；Ilya Kostrikov、Denis Yarats、Rob Fergus，*Image Augmentation Is All You Need: Regularizing Deep Reinforcement Learning from Pixels*（DrQ），arXiv:2004.13649v4，[原PDF](https://arxiv.org/pdf/2004.13649v4)，附录B.2（PDF页15）。
+- 精确代码：DrQ作者仓库[drq.py](https://github.com/denisyarats/drq/blob/6d00d0d2e06269ce61de5d1a12d3c74454d44149/drq.py#L262)，commit 6d00d0d2e06269ce61de5d1a12d3c74454d44149，262–280行update_actor_and_alpha，Actor及Critic前向均传detach_encoder=True；文件SHA256 49df2f89b4a73a67e89b00f5f217efd14f049d6cae40d62d267f7433bba9a1f0。
+- 原始结论：SAC-AE §4.4认为共享编码器被Actor更新时也会改变Actor目标中的Q，产生不稳定性；其消融支持截断Actor梯度。SAC-AE最终编码器还接收重建损失，不能称为“仅Critic训练”。DrQ附录B.2明确共享卷积层只由Critic optimizer更新、Actor梯度在该处停止。
+- 本项目采用/限制：[task7.8 RESULTS](tasks/task7/task7.8/RESULTS.md) B第4条与[SRC-0375](#src-0375)：首版整个VCM只用Critic损失，是借鉴该梯度隔离思路的工程选择。论文针对共享卷积层、连续控制，未证明本项目注意力/GRU或离散SAC最优；不据此加重建目标，不把Actor全部参数都冻结。
+- 核查程度/日期/人：2026-10-19，Codex；已读上述相关原文与固定版本代码，未运行。
+
+
+<a id="src-0384"></a>
+## SRC-0384 — 循环经验回放的序列与burn-in：Google官方实现核查
+
+- 支撑主张/类型：Google Research官方代码静态核查；连续序列前缀用于预热递归状态，训练损失在后缀计算，并可截断跨预热段的反传。
+- 原始论文线索：Steven Kapturowski、Georg Ostrovski、John Quan、Rémi Munos、Will Dabney，*Recurrent Experience Replay in Distributed Reinforcement Learning*，ICLR 2019；[作者出版页](https://willdabney.com/publication/r2d2/)、[论文入口](https://openreview.net/forum?id=r1lyTjAqYX)。本次OpenReview PDF返回验证页/HTTP403，**未读到该论文原文，不将论文的实验结论写成已核验**。
+- 已核原始代码/版本：Google Research SEED RL，[agents/r2d2/learner.py](https://github.com/google-research/seed_rl/blob/af9f769f4c01c602828f1fa806848031dcb52807/agents/r2d2/learner.py)，commit af9f769f4c01c602828f1fa806848031dcb52807；SHA256 9703db15baa6a1abbe3f5c80473f1466c75104b229b632604d59978b58068d91。精确符号：burn_in标志71–76行，compute_loss的burn_in分支、utils.split_structure与tf.nest.map_structure(tf.stop_gradient, training_state)；另核Google DeepMind Acme acme/agents/jax/r2d2/learning.py的102–118行在线/目标状态分别预热后再切去前缀（读取master文件SHA256 3cb24c7588ffe0d345b9ca06f55e01dcf544ca77c98e1c343ab1f52ae3caad99，不冒称固定commit）。
+- 原始结论：SEED RL对同一条展开序列先运行前缀以更新存储的RNN状态，停止该状态梯度，再对后缀求loss；这直接支撑技术做法，不依赖二手博客。
+- 本项目采用/限制：[task7.8 RESULTS](tasks/task7/task7.8/RESULTS.md) B第5条与task7.4 I3借用连续片段＋预热。VCM的注意力记忆及GRU均需按同一历史恢复；预热长度、初始隐状态来源及回合边界仍属工程选择，不照搬代码默认40，不声称预热精确恢复任意长历史，也不引入优先回放或R2D2其他机制。
+- 核查日期/人：2026-10-19，Codex；官方代码已读，论文原文未取得；未运行。
+
+
+<a id="src-0385"></a>
+## SRC-0385 — 实际UR5参数与软件位置限位：容器ur_description 1.5.0
+
+- 支撑主张/类型：本地安装包与xacro静态核查＋厂商官方DH表对照；区分默认模型、硬件规格与运动规划软件限制。
+- 作者/版本/路径：ROS-Industrial ur_description 1.5.0，forem-dev内apt包ros-noetic-ur-description=1.5.0-1focal.20250520.012707；容器2456c37db9c9f1f73eb8e651bc83068118441369ddc34a738ff38b0232793314，镜像sha256:e674db49b8156fded725ba4de8c2faf81aa491a367a1e151eddae169a1dfc430。读取/哈希证据见[本轮日志](agent_logs/task7/20261019-codex-review-evidence.md)。全程宿主docker cp文件流，不执行容器内命令。
+- 精确位置：forem/src/husky_ur5/urdf/husky_ur5.xacro:6–16只传prefix/硬件接口，不覆盖运动学或位置限位。其引用/opt/ros/noetic/share/ur_description/urdf/inc/ur5_macro.xacro:24–28默认读config/ur5/default_kinematics.yaml和joint_limits.yaml；ur_macro.xacro:281–323、364–391定义基座固定旋转、关节轴/限位与工具框架。历史路径解析证据另见task0/task0.2 RESULTS、task0/task0.3 RESULTS；本次未执行rospack或xacro展开，未读取活动ROS参数服务器。
+- 文件身份：ur5_macro.xacro SHA256 750bd1936ad7fbe29eb57bce23fd47d43ff464a4fa5c1a17ca6887993ca4e0a6；ur_macro.xacro 03808348aabda3e8cf78863800665a63671ef91da2b5b6d22ddf5bf530376e23；default_kinematics.yaml 5682ff6543f819dbdfca67577c783e5673f7dc74406defb3ce919d4950015d73；joint_limits.yaml 76d43c7a908a10a364af60bc69017686914cf0d7afdd6952f0d9c73a6db55c7d。
+- 原始结论：关节顺序shoulder_pan、shoulder_lift、elbow、wrist_1/2/3，软件位置范围分别[-2π,2π]、[-2π,2π]、[-π,π]、[-2π,2π]、[-2π,2π]、[-2π,2π] rad；六轴速度均π rad/s。限位YAML注明肘轴为避免MoveIt/OMPL规划问题被人为减半，不能称厂商六轴硬限位均如此；宏safety_limits默认false，0.15安全margin并未启用。
+- 厂商原始对照：[Universal Robots官方DH表](https://www.universal-robots.com/articles/ur/application-installation/dh-parameters-for-calculations-of-kinematics-and-dynamics)，UR5小节六行（网页无固定版本，2026-10-19读取）：a=[0,−0.425,−0.39225,0,0,0] m，d=[0.089159,0,0,0.10915,0.09465,0.0823] m，alpha=[π/2,0,0,π/2,−π/2,0] rad。容器默认YAML的几何尺寸逐项相符（经典UR5，非UR5e），hash为calib_209549117540498681；未使用实体机械臂标定。
+- 本项目采用/限制：task7.5 B3/B4以实际默认模型为解析IK前提。ROS ur5_base_link到内部base_link_inertia有绕z的π旋转；tool0/flange固定旋转及Husky安装(0.13,0,0.25)m必须合成。尺寸一致不等于任意DH实现的坐标/关节符号已一致，FK等价仍待task7.6获授权后验证。forem/src/husky_ur5/config/ur5/*.yaml虽存在但本宏未引用，不能代替实际apt参数；本次不修改模型或限位。
+- 核查日期/人：2026-10-19，Codex；参数来源/版本与六轴软件范围已核，实体硬限位手册原文未另行核验，CBL旧镜像的独立包版本未知。
+
+
+<a id="src-0386"></a>
+## SRC-0386 — Robotiq 85：0.15 m是CBL虚拟TCP配置，非已核物理尖端长度
+
+- 支撑主张/类型：本地原始模型/代码静态核查＋Robotiq官方规格；核查结论包含“无法由现有定义唯一确定物理TCP”，不是测量结果。
+- 作者/版本/位置：本地Stanley Innovation / Patrick Hussey robotiq_85_description 0.0.1（package.xml），未跟踪快照；urdf/robotiq_85_gripper.urdf.xacro SHA256 893e32fd580ebb699719195a92831f3dcc6e82b06d3bd80be0f5076f645da15d。9–13行安装base_link；43–57行驱动关节；184–199、258–273行手指mimic链；没有定义独立TCP link。forem/src/modulation_rl/gazebo_world/husky_ur5/robot_config.yaml:5–14及src/myutils.cpp:190–209将虚拟尖端定义在gripper_base_link局部+x的0.15 m处、相同姿态。H/F模型与工具安装来源另见[SRC-0377](#src-0377)。
+- 官方原文：Robotiq，*2F-85 & 2F-140 Instruction Manual*，20210623，[PDF](https://assets.robotiq.com/website-assets/support_documents/document/2F-85_2F-140_UR_PDF_20210623.pdf) §5.2.3，PDF页127；[TCP and Center of Mass of Robotiq Products V1.1](https://blog.robotiq.com/hubfs/support-files/TCP_20and_20Center_20of_20Mass_20of_20Robotiq_20Products_20V1.1_20210623.pdf)，20210623，页1单2F-85行及表下注：TCP=(0,0,174) mm，未装腕相机时含coupling。手册已在宿主内存读取原PDF并提取，非搜索摘要。
+- 原始结论/限制：174 mm对应厂商表的安装配置，不能直接替换本地gripper_base_link系的150 mm，也不能把最大外形高度162.8 mm当TCP。手指尖端位置随开合角变化，本地无抓取中心/指腹接触点的唯一TCP定义；**0.15 m与真实物理夹爪尖端重合仍未证实**。
+- 静态几何推导（不是仿真/测量）：由上述mimic链，手指尖端link原点的轴向坐标为x_tiplink(θ)=0.06142+0.04303959807 cosθ+0.03759940821 sinθ m；tip link合成旋转不随θ变，其碰撞STL顶点最大x=0.0444999560713768 m。网格路径meshes/collision/robotiq_85_finger_tip_link.stl，2436个三角面，SHA256 5663b94049ead2f0d8a7e6a36a327e0e67ccf03d1423d52110db5b9ce3627eec。故该网格尖端的轴向最远面x_max=x_tiplink+0.0444999560713768：θ=0时0.1489595541 m；robot_config.yaml:36配置θ=0.000517224494 rad时0.1489789957 m；驱动上限θ=0.804 rad时0.1628589259 m。输入为xacro的米/rad数值、STL原始顶点（与URDF无scale使用一致），条件为仅该手指网格及mimic链的静态变换。150 mm与配置近张开状态的网格前缘相差约1.02 mm，可视为近似几何参考；这不是指腹抓取中心/精确物理TCP证明，也不证明CBL作者选值动机。
+- 本项目采用：task7.5 B2可把150 mm明确称“沿用CBL的固定虚拟TCP”，其相对gripper_base_link的完整变换为平移(0.15,0,0)m、旋转I；若要求物理接触TCP，须先明确开合姿态和接触点，保留待核，不自行选新值。tool0→TCP还需合成husky_ur5.xacro:35–45的安装旋转及ur_description的tool0固定链，不能只减一个标量。
+- 核查日期/人：2026-10-19，Codex；本地虚拟定义和官方安装TCP已核，物理尖端等价未解决；未运行模型、未实测。
+
+
+<a id="src-0387"></a>
+## SRC-0387 — N²M²/CBL终点采样与use_fwd_orientation的实际含义
+
+- 支撑主张/类型：本地/上游原始代码静态核查；终点姿态随机采样，与中间路线前向yaw调整是两回事。更正[SRC-0381](#src-0381)①的过宽概括，不改其用户决定②。
+- 作者/版本：N²M²上游mobile-rl commit 6281205846b1bac4525d05ee230a47bddf42023d；CBL H与FoReM F身份沿[SRC-0365](#src-0365)。F tasks.py SHA256 8c7350cb670f099a9a9d0151bddc66d6a1d68236b3ce45b34c3de644c4cc27fd；simulator_api.py 1a0b54b385b0e2ef8e20de95f0ec71c8b62fa9aea3cf4471074f758948237be9；eeplanner.py bb62d3c2fe4f641ac1665229eef30b14cf168827d7bd874c2ba246f9649926fd。
+- 精确位置：F tasks.py:241–268的RndStartRndGoalsTask默认距离(1,5)；297–318的SplineTask显式(1,3)、受限高度且仅该调用传地图尺寸减2.5；338–368的SimpleObstacleTask默认距离(0.5,8)、高度z_min/z_max，采样gripper/wrist后转换为tip；simulator_api.py:27–48逐轴RPY独立U(0,2π)、半宽为map_width/2−0.5并直接clip x/y。U同名函数/关键行对照一致。
+- 原始结论：eeplanner.py:639–651先在起点与随机终点姿态间Slerp；use_fwd_orientation调用684–705的_generate_fwd_orientations，只把中途yaw换成路径方向并限每点yaw变化π/16，roll/pitch仍来自插值；路径≤12点时完全沿用Slerp；最后一行path_meters[-1]=gripper_goal_wrist恢复精确随机终点。故它不要求终点水平或沿路线末段方向，也不是均匀SO(3)姿态采样。
+- 本项目采用/限制：task7.5 B12若保留“终点夹爪水平、沿路线末段方向”，须记作本项目工程设计（用户采纳推荐记录见SRC-0381），不可声称沿用N²M²的该开关。源代码围绕base_tf平移采样后clip，clip后距离不再保证仍在原采样区间，且wrist→tip偏置可改变TCP距离/高度；新规格需明确起点指底盘还是末端、范围约束作用于哪一帧，不能从旧采样函数推定。
+- 核查日期/人：2026-10-19，Codex；已读调用链，无任务采样运行。
+
+
+<a id="src-0388"></a>
+## SRC-0388 — 末端规划器速度单位与Python/C++的dt使用
+
+- 支撑主张/类型：H/U/F原始源码静态量纲核查与推导；MIN_PLANNER_VELOCITY=0.001、MAX_PLANNER_VELOCITY=0.1为平移速度m/s，不能当每决策位移或固定匀速。
+- 作者/版本/位置：H/U/F同[SRC-0365](#src-0365)；F scripts/modulation/envs/eeplanner.py:17–22常量（角速度另为0.30 rad/s、训练步0.1 s）、96–104、224–263、288–300、377–407、549–575；src/myutils.cpp:156–185的normScaleVel/normScaleVelPython，src/pybindings.cpp:97、103；src/gaussian_mixture_model.cpp:163–188、324–344。F eeplanner/myutils哈希见task7.5(A)；GMM SHA256 a42c8ef39c67f406e88785161f4540a6b3eef5c72a6be558fa4484662d376575，pybindings 7ab81f0f32641581847168b7d96d9504223d8b09b0642d8e1949c16d3c6c8b5f。
+- 原始结论：Python get_min_max_vel先乘dt，调用normscale_vel后得到m单位的单步位置增量，直接加到上一计划位置；PointToPointPlanner多子目标时令min=max，末段可降速。GMM分支传m/s给C++，在那里乘dt_real后再限增量，且min=0而非0.001；不可两处再乘一次dt。normScaleVel遇零向量返回零，因此0.001不是始终严格保证的最低运动速度；learned_vel_norm≥0可覆盖上下限。
+- 推导：固定0.1 s时，默认速度范围对应0.0001–0.01 m的步增量；角度上限0.30×0.1=0.03 rad。原理想sim固定步与物理分支ROS dt/0.5 s截断须分开，不能把此换算套到task7变长决策。
+- 本项目采用/限制：[task7.4 RESULTS](tasks/task7/task7.4/RESULTS.md) E8可补m/s及路径类别区别。task7 E8是待选的路线弧长推进速率，不等同于旧规划器常量范围即已选定匀速；B7上限及所有数值仍待定，不运行新计时或改速度。
+- 核查日期/人：2026-10-19，Codex；静态调用/单位核查，未运行。
+
+
+<a id="src-0389"></a>
+## SRC-0389 — VLN-3DFF原文：网格航路点标签与训练
+
+- 支撑主张/类型：外部论文原文；补核[SRC-0335](#src-0335)的VLN-3DFF部分，不能以网页摘要作为全文核验。
+- 作者/版本/URL：Zihan Wang、Xiangyang Li、Jiahao Yang、Yeqi Liu、Shuqiang Jiang，*Sim-to-Real Transfer via 3D Feature Fields for Vision-and-Language Navigation*；CoRL 2024会议，正式PMLR 270:2982–2995（2025）；[出版页](https://proceedings.mlr.press/v270/wang25i.html)、[正式PDF](https://raw.githubusercontent.com/mlresearch/v270/main/assets/wang25i/wang25i.pdf)（SHA256 4ebf896903c7fad55e5408cc98ca5e7f0c175ec9fc8554676d1ffc63adf5d8f3）。另对照arXiv:2406.09798原PDF相关章节。
+- 精确位置/核查程度：正式PDF页4–5 §3.2式(1)–(3)、页6 §4.1 Training Details，已读取原文相关页。
+- 原始结论：深度累积512×512、5 cm全局图，再取192×192局部图；语义27类、占据3类，经补全模型后与16维位置嵌入输入航路点U-Net。标签继承CWP修正后的连通图附近节点，在每点画σ=5格二维高斯并取平均；热力图用MSE，语义/占据补全用各自像素交叉熵。预测器训练20K个Habitat随机15步回合、2×RTX3090；输出按12个30°扇区取峰值、去占据区域、取Top-K。
+- 本项目采用/限制：task7.9改造方案可借标签热力图与后处理思路；现项目无R2R连通图和27类语义，因此“理想SIM自动生成能到/不撞/够得着标签”为另行工程设计，未被这篇原文验证，尚未实施。原GPU/回合数不是本项目预算或工期证据。
+- 核查日期/人：2026-10-19，Codex；原文相关章节已核，未训练。
+
+
+<a id="src-0390"></a>
+## SRC-0390 — CWP原文：修正连通图、候选标签与训练细节
+
+- 支撑主张/类型：外部论文原文，补核[SRC-0335](#src-0335)的CWP部分；原始标签依赖已有MP3D图，并非完全从任意新场景无标注生成。
+- 作者/版本/URL：Yicong Hong、Zun Wang、Qi Wu、Stephen Gould，*Bridging the Gap Between Learning in Discrete and Continuous Environments for Vision-and-Language Navigation*，CVPR 2022；[arXiv:2203.02764v1原PDF](https://arxiv.org/pdf/2203.02764v1)，2022-03-05；SHA256 40577f1c2079f2d6369b610ca0553bd51564fc2bbbf090a32e2c09f8b61ef639；[作者官方仓库](https://github.com/YicongHong/Discrete-Continuous-VLN)用于确认出版身份。
+- 精确位置/核查程度：PDF页5–6 §4.1–4.3，页12附录A.1已读；网页工具因15.8 MB大小失败，宿主urllib取得原PDF，pdftotext返回0，不是摘要抽取。
+- 原始结论：MP3D节点投影到Habitat后，经邻域采样、移点、绕行加节点、合并及拟合轨迹端点，形成连续可通行图；由节点邻接关系在半径3 m的120角度×12距离格上做高斯热力图标签（3°/格、0.25 m/格）。训练只用61张图、9556节点；RGB/深度ResNet编码器冻结，Transformer与分类头训练，热力图MSE；AdamW、lr=10^-6、batch64、单RTX3090，NMS最多5点。
+- 本项目采用/限制：task7.9可据此说明“继承人工/数据集连通图再几何修正”与我们可能的SIM自动标注不同；不把其候选点可通行标签当UR5整臂可达/连续IK标签。只写以后改造方案，不增加网络训练授权、候选数量或实验组。
+- 核查日期/人：2026-10-19，Codex；已核原文指定部分，非整篇实验复现；高斯核具体尺度不移植为本项目参数。
+
+
+<a id="src-0391"></a>
+## SRC-0391 — task7第二轮设计核查：静态证据与工程推导
+
+- 支撑主张/类型：项目文档/本地代码静态核查＋工程推导，不是新实测、功能或用户新决定。
+- 版本/精确位置：[本轮独立日志](agent_logs/task7/20261019-codex-review-evidence.md)记录读取快照哈希；[交流文档第二轮节](agent_logs/task7/20261019-claude-codex-sync.md#codex第二轮复核2026-10-19)逐项列task7 TASK、task7.4/7.5/7.7/7.8 RESULTS与DECISIONS位置。H/U/F/M源码身份沿[SRC-0365](#src-0365)–[SRC-0371](#src-0371)。
+- 原始结论：设计对照的共同环境/候选/执行器/精确信息/奖励已明确，未发现写入的组间特权信息差异；但目标坐标锚定、TCP→tool0合成、VCM回放所需位姿、失败/到达结束优先级、原地路径时长等仍有合同缺口，不能称可直接实现或已验证公平性。新旧语义并存的具体问题以交流文档为准。
+- 附核代码：scwm commit f2f2f5ff2e1f21a08f7d7c51fbbd5c17b0d6778b的vlnce_baselines/common/environments.py:386–446在tryout分支失败时可结束尝试，且前进步数为floor(dis/uni_f)，不保证精确到达请求点；故[SRC-0362](#src-0362)“总能到达（瞬移或tryout）”不可推广全部分支。mapgen墙函数及输出协议仍按SRC-0370/0376，不把需求当已实现。
+- 推导条件：移动基座固定目标须在每次重规划前由同一个世界锚点换到新底盘系；VCM相对几何编码须有每决策位姿/相对变换，只有局部q和路线裁剪无法普遍恢复底盘历史。s若定义为平移弧长，零平移的纯转姿段不能靠s除长度插值，必须先明确已有路线的退化处理。上述是接口可判定性分析，不选择新参数或改奖励。
+- 采用/限制：仅供Claude修订既定文档与补齐原接口，未新增实验组/功能；未重新取到此前Claude完整聊天原消息，用户设计决定的原话仅可追溯其既有SRC条目，本次不冒称重新核验原始聊天。SAC/GRU/IK/碰撞/吞吐均未运行。
+- 核查日期/人：2026-10-19，Codex；实际模型/强度未知；推荐GPT6.1sol/Sonnet5.5 medium，因跨文档与原文核查。
+
+
+<a id="src-0392"></a>
+## SRC-0392 — 2026-10-20用户对task7合同缺口7–11的决定（原地候选、结束优先级、不可行候选、G3、计数入观测）
+
+- 支撑主张（用户决定，均为Claude推荐项）：
+  - ⑦**原地候选与到达**：统一“到达”＝路径计划终点走完，即底盘到达候选位姿，且不同步变体s＝s_k、同步变体计划时长走完。同步变体的原地候选：底盘不动，持续到末端走到“从当前底盘位姿IK可达的最远进度”（与父TASK §2.8规则4同一计算）为止；该进度不比当前s远时Δs＝0，照常生成、可选。**决策超时**＝决策开始时所选最优路径的计划仿真时长×系数（系数待定），整次决策固定，不随重规划重算，不用墙钟；超时只结束本次决策，不计失败。
+  - ⑧**结束条件**：到达路线终点即terminated（有历史失败则记“到达但非严格成功”，不给R_succ）。同一检查点处理顺序：①IK失败或真值碰撞→不提交、停在上一检查点、失败数＋1，达F→terminated（失败）；②否则提交，s到达路线终点且残差在E1内→terminated（到达；零失败才算成功）；③否则到达c*或决策超时→本次决策结束；④决策结束后更新卡住计数，达M→terminated（卡住）；⑤最后检查D_max/T_max→truncated。终止优先于截断；T_max只在决策边界检查；全部触发原因记入info。
+  - ⑨**全部路径不可行的候选**：p_k*按分层排序选——可行路径永远优先；不可行路径之间首个失败检查点越靠后越好，再比U25评分。f_k所有字段按“执行到首个预测失败点之前”的前段计算：Δs、用时、最大残差、最小间隙取前段值；可行＝0；首个失败位置＝j/C；可行条数＝0；失败类型取首个失败检查点上的类型，同一检查点多类时按IK＞自碰撞＞机械臂碰撞＞底盘碰撞；第一个检查点即失败时Δs＝0、用时＝0、残差＝0、间隙取起点值；不出现空值或NaN。G1在没有可行候选时用同一分层排序在全部候选中选（首个失败越靠后、Δs越大者优先），并统计“无可行候选”比例。
+  - ⑩**G3形式**：随机初始化后冻结的f_p（与G4同结构、同输入、不训练）输出替代h_k；task7.10须写明把随机特征归一化到与训练后f_p输出同尺度。
+  - ⑪**计数入观测**：归一化累计失败数n_f/F与卡住计数m/M两个标量进入VCM向量输入，所有组相同；不加剩余时间（超时为截断，按下一状态自举）。
+- 原始依据：2026-10-20本会话，Claude逐项给出选项与推荐后，用户回复“7–11都按你的推荐定，写进文档并登记来源。”核查人直接读取本会话用户消息。
+- 代码参照（⑧）：上游N²M² `mobile-rl/` commit `6281205846b1bac4525d05ee230a47bddf42023d`，`scripts/modulation/envs/combined_env.py:382–384`：`done = ((not kin_failure) and ee_done) or nr_kin_failures≥thresh or nr_base_collisions≥thresh`，即本步无IK失败且末端规划完成即结束，与历史失败无关；成功另要求零失败（[SRC-0360](#src-0360)②）。2026-10-20 Claude只读核对。
+- 推导与工程理由（非外部证据）：⑦②会使反复绕路时永不超时，③使结果依赖机器速度；⑨方案C（只执行可行前段、不记失败）与[SRC-0361](#src-0361)③“不屏蔽、靠失败惩罚学会避开”冲突；⑩G4中f_p的输入(s_t, e_k)本已为SAC所见，f_p额外带来的只是从到达观测学到的知识，随机冻结f_p保留结构与依赖、去掉这部分知识；“零输入”缺s_t依赖，“同状态打乱”在K＝1时不变（Codex第二轮#17，[SRC-0391](#src-0391)）；⑪终止与成功条件依赖累计计数，经验池按片段采样、前缀预热（task7.4 I3）时窗口外失败无法由记忆恢复，Critic状态不满足马尔可夫性。
+- 待补证据：⑪“终止条件依赖的计数/时间应可观测，截断则自举”的一般论证线索为Pardo等，Time Limits in Reinforcement Learning（ICML 2018）；本次未读原文，不作已核验依据。
+- 类型：用户设计决定＋代码参照＋推导；数值（κ、F、M、E1等）未定。
+- 本项目采用：[task7.4 RESULTS](tasks/task7/task7.4/RESULTS.md)“2026-10-20 合同缺口决定”节及§1、§4、§5、§10、§12、§15；[task7.5 RESULTS](tasks/task7/task7.5/RESULTS.md) B.9–B.11、B.15；[task7.8 RESULTS](tasks/task7/task7.8/RESULTS.md)；[task7 TASK](tasks/task7/TASK.md) §2.8、§4。
+- 核查日期/人：2026-10-20，Claude（claude-opus-5-5）。
+
+
+<a id="src-0393"></a>
+## SRC-0393 — 2026-10-20用户对终点距离锚点、终点姿态与未知格风险特征的决定
+
+- 支撑主张（用户决定，均为Claude推荐项）：
+  - ①**终点距离锚点**：终点距离0.5–8 m指底盘起始位置到TCP终点的水平距离；终点高度另按0.7–1.15 m约束。
+  - ②**终点姿态**：TCP接近轴（gripper_base_link的x轴，[SRC-0386](#src-0386)）水平，指向路线最后一段的水平方向；手指沿水平方向开合。
+  - ③**未知格风险特征**：“经过未知格比例”＝最优路径扫过的区域（底盘轮廓与机械臂连杆在地面上的投影）中未知格所占的格数比例（无量纲，不随检查点间隔变化）；“到最近未知格距离”＝扫过区域到最近未知格的最小距离（m），路径上没有未知格时取局部栅格半宽3.2 m为上限；局部栅格范围以外的格一律按未知处理。
+- 原始依据：2026-10-20本会话，Claude逐项给出选项与推荐后，用户回复“①②③都按你的推荐定，写进文档并登记来源。”核查人直接读取本会话用户消息。
+- 依据与理由（非外部证据）：①与N²M²围绕底盘起始位姿采样一致（[SRC-0387](#src-0387)），末端起点离底盘不超过约0.8 m，与按末端起点量相差不大；②为本项目工程设计，不是沿用N²M²（N²M²终点姿态随机，[SRC-0387](#src-0387)）；③格数比例与检查点间隔无关；计入机械臂投影是为反映“机械臂伸入未观测高处”的风险；3.2 m＝128格×0.05 m÷2（[SRC-0373](#src-0373)）。
+- 类型：用户设计决定。处理Codex第二轮复核#12–#14（[SRC-0391](#src-0391)）。
+- 本项目采用：[task7.5 RESULTS](tasks/task7/task7.5/RESULTS.md) B.7、B.9、B.15（B6、B12）；[task7.4 RESULTS](tasks/task7/task7.4/RESULTS.md) §1、§10第5行；[task7 TASK](tasks/task7/TASK.md) §2.5。
+- 核查日期/人：2026-10-20，Claude（claude-opus-5-5）。
+
+
+<a id="src-0394"></a>
+## SRC-0394 — task5.5 最终sim评估结果与F0口径核对（只读入账，2026-10-20）
+
+- 支撑主张/类型：项目既有实测的独立复算＋源码静态核查＋描述性推导；未新运行评估/训练。FoReM task5.5，作者/机构：项目Codex核对，2026-10-20；原评估2026-10-19，forem-dev既有环境。
+- 原始证据：run-id `t5.5-final-sim-s{0,1,2}-r1`；逐回合 `episodes`、`spec`、`effective_config`及汇总字段。对照 `t6.1-eval-sim-s{0,1,2}`；完整文件路径与SHA256如下（本次直接读取原件）：
+
+| eval.json路径 | SHA256 |
+|---|---|
+| `forem/results/task6/t5.5-final-sim-s0-r1/eval.json` | `fb91477f8b913fd5082661c808beaef15ff9c1a56cdd75140590d3260464dc8c` |
+| `forem/results/task6/t5.5-final-sim-s1-r1/eval.json` | `f5b9bdb901cc6cccf6ca301d010cf271816856a844f8df864abf2ed6997d6cbe` |
+| `forem/results/task6/t5.5-final-sim-s2-r1/eval.json` | `8bdcd6afa4b34005d9cc3edb6586bea8395bb4ff5bf734aec2b7877e9650f90c` |
+| `forem/results/task6/t6.1-eval-sim-s0/eval.json` | `bdfe84116693d2f06af86b6adb4b27509e7a18ff10bb9e172b0e5b5b32731cdc` |
+| `forem/results/task6/t6.1-eval-sim-s1/eval.json` | `65a0deae93a5f23d678877d2ab3c0ca6dfcbe5fb647ed94fdb7b57a0862a6aeb` |
+| `forem/results/task6/t6.1-eval-sim-s2/eval.json` | `abb2649a31e64110dd99681f51d89869dd6235539a5770fdbbc61674eb80c0aa` |
+
+- 启动/退出证据：`forem/logs/task5/t5.5-final-eval-launch-20261019/{manifest.json,*-launch.json,startup-verification.json}`；`forem/logs/task6/t5.5-final-sim-sK-r1/{eval.out,start.out,inst63/64/65/launch.exit.json,inst63/64/65/launch.cleanup.json}`（实例号依次63/64/65，不是每run含全部实例）。三条eval/stop rc均0，residue=[]；最后实例退出2026-10-19 22:52:12 +08:00；本次ps未见本任务评估/实例残留，旧评估宿主PID844488/844496/844498均不在。全部证据文件哈希与核对命令见[独立日志](agent_logs/task5/task5.5/20261020-codex-final-sim-results.md)。
+- 脚本版本：本次 `forem/scripts/eval_task6_final.py` SHA256 `ba140ec7ed31e34fb5b9fa694699b1c13073b8dd0900fb116a815635608ecccb`；F0 `9989213b59a14f3bb22c1083d54d57cb26746618492a34ddbbaf3fdba91db312`，由 `forem/results/task6/t6.1-summary/manifest.json:eval_script` 与 `forem/results/task6/t6.3-baseline/original/eval_task6_final.py`的实算哈希互证；直接diff仅Gazebo可选覆盖与配置/长回合记录，sim入参与核心循环不变（历史修改见[SRC-0253](#src-0253)）。启动器 `forem/logs/task6/t6.1-eval-launch/eval_one.sh` 哈希 `fb61eaffdd7ff3a283b79c48aedd1618758e85ea5482871b9064c53a9a19cc1e`，与本次启动manifest相同。
+- 精确位置/口径：原/新评估脚本 `main`，`forem/scripts/scwm_train.py:run_eval`（141–158，eval=True），`scwm_env.py:ScwmEnv.__init__`（34–55），`task3_env.py:load_env_config`（66–71），`config/task3/task_contract.yaml:env_config`（time_step 0.02 s、ik_fail_thresh 20、execute_style direct）。F0与5M训练manifest sources逐项相同且匹配当前文件；F0 eval.json无effective_config，参数可由当时脚本/启动参数与相同哈希合同还原，F0运行时生效快照无法核实。无源码Git提交可唯一代表未跟踪脚本，本条以内容SHA256为版本。
+- 原始结论：三条固定种子2001–2050各50回合齐全、无重复，completed/capped/errored均50/0/0；5M内部成功32/33/30、碰撞episode 0/1/1、含IK失败episode 18/17/19、平均步数247.10/238.16/227.00；F0为21/22/22，平均成功率0.4333，5M为0.6333。三组对应评估的spec在障碍名称/几何/尺寸/位姿、goal_tip/goal_wrist、规划臂关节、base_tf与map_size_m均50/50逐字段相等（记录精度为6位小数），无不一致种子。配对“都成功/仅5M/仅F0/都失败”为19/13/2/16、20/13/2/15、18/12/4/16。
+- 推导：成功率=内部成功数/50；均值=(s0+s1+s2)/150；平均步数=无error回合steps之和/50。Wilson沿F0 `forem/scripts/summarize_task6_1.py:wilson`（17–22），n=50、p=k/n、z=1.96、d=1+z²/n、中心=(p+z²/2n)/d、半宽=z√(p(1−p)/n+z²/4n²)/d，无量纲；表只对单run给区间，不作显著性检验。
+- 训练配方核查：三组 `run_manifest.json` 对应比对仅身份/时间、预算及配置哈希不同，config仅total_env_steps 1M→5M，sources完全相同。lr_horizon_updates均5000001，`forem/src/modulation_rl/scripts/sac.py:43` 与 `scwm_sac.py:update_parameters` 指数更新衰减不变；5M走近完整日程（4999743次更新），F0只走前约1/5（999743次更新），不是只改变评估时checkpoint标签。
+- 异口径参照：`forem/results/task5/t5.2-train-s40/train_eval_series.csv` 的 `evaluation/custom_metrics/success_mean`，525k–975k为0.82/0.76/0.82/0.78/0.74/0.76/0.76（每次50回合），故仅称训练中平台约0.78；RLlib实现、约一半椭圆柱场景、评估集与口径均不同，且仅种子40，禁止与本次/F0直接相减。
+- 采用/限制：[task5.5 RESULTS](tasks/task5/task5.5/RESULTS.md#最终评估)保存协议、结果和交接，台账仅登记依据；task5.5置review待Claude/用户复核。仅sim内部成功，物理成功N/A；D15种子3001–3050不能替代最终2001–2050；F0历史sim/Gazebo分叉2006/2012/2021不影响本次sim对sim的逐种子相等，根因仍未查。Gazebo零样本评估需另行授权。
+- 核查日期/人：2026-10-20，Codex；实际模型/强度未知；推荐GPT6.1sol与Sonnet5.5 / medium（需核对跨版本评估口径）。
+- 独立复核（2026-10-20，Claude，claude-opus-5-5，推理强度未知）：自行sha256sum六份eval.json、六个策略文件、新旧评估脚本与启动器，15项与上列一致；自写标准库脚本从episodes重算全部计数、均值、平均步数、Wilson区间与配对四格表，结果与上文一致并与汇总字段断言相符；另核`internal_success`与“ee_done且IK失败、底盘碰撞均为0”在300回合中逐条等价；场景比较用完整spec字典与`episode_hash`，三组均50/50相等；自行diff新旧脚本与逐键比较三对run_manifest，结论同上。复核通过，task5.5标done。方法与证据见[task5.5 RESULTS 复核节](tasks/task5/task5.5/RESULTS.md#claude独立复核2026-10-20)与[复核日志](agent_logs/task5/task5.5/20261020-claude-final-sim-review.md)。
+
+<a id="src-0395"></a>
+## SRC-0395 — SC²-WM航路点热力图的后处理代码细节（扇区取峰值、删占据、合并、取前k）
+
+- 支撑主张：SC²-WM在单目分支中把航路点U-Net输出的热力图按以下步骤转成候选：①每个样本热力图减去其最小值；②12个扇区，扇区`direction_idx`以`direction_idx·30°`为中心、±15°，扇区0跨越0°；每扇区取热力图最大值的格；③用预测占据图在该格的argmax判为占据时把该峰值置0（删点）；④`merge_scale=8`：把格坐标按16格分箱（0.05 m/格时0.8 m），用x、y各两种偏移共4种分箱，同箱内只保留值较大者；⑤`topk(k=8)`后去掉值为0者；⑥只保留到机器人距离在0.1–5 m之间的点；⑦角度按π/60（3°）、距离按0.25 m离散后交给后续模块。
+- 类型：官方源码静态核查（只读，未运行）；补充[SRC-0334](#src-0334)、[SRC-0358](#src-0358)②中“热力图→扇区取峰值→去障碍→合并→取前k”的具体参数。
+- 精确位置：本地`scwm/` commit `f2f2f5ff2e1f21a08f7d7c51fbbd5c17b0d6778b`，`vlnce_baselines/ss_trainer_ETP.py:1944`（减最小值）、`:1957–1977`（12扇区取峰值）、`:1979–2003`（合并与删占据）、`:2010`（top-8）、`:2023`（0.1–5 m）、`:2030–2031`（离散化）。栅格0.05 m/格见[SRC-0358](#src-0358)②与[SRC-0389](#src-0389)。
+- 本项目采用：[task7.9 RESULTS](tasks/task7/task7.9/RESULTS.md) A.2扇区方向与(B)改造方案的后处理结构；分箱尺寸、k、距离窗口不照搬，改造时另定。
+- 限制：只核查代码路径与常量，未运行；不代表这些常量对本项目合适。
+- 核查日期/人：2026-10-20，Claude（claude-opus-5-5，推理强度未知）。
+
+<a id="src-0396"></a>
+## SRC-0396 — N²M²/CBL配置`arm_range: 0.8`的实际用途：末端路线规划的膨胀半径，不是IK可达判据
+
+- 支撑主张：Husky+UR5配置中的`arm_range: 0.8`在CBL与上游N²M²代码中只出现在末端规划器构造权重图的一处：先在空图上画出底盘A*路径，再以`arm_range`为半径膨胀，作为“末端离底盘的最大允许距离（约臂长）”的路线偏好；没有用它判定IK是否可解。
+- 类型：本地代码静态核查（只读）。
+- 精确位置：CBL快照`husky/src/modulation_rl/gazebo_world/husky_ur5/robot_config.yaml:25`；`husky/src/modulation_rl/scripts/modulation/envs/eeplanner.py:536–539`（含注释）；上游`mobile-rl/` commit `6281205846b1bac4525d05ee230a47bddf42023d`同文件`:539`同一用法；FoReM迁移副本`forem/src/modulation_rl/scripts/modulation/envs/eeplanner.py:539`。检索范围：上述目录下`*.py *.yaml *.cpp *.h`中的`arm_range`。
+- 本项目采用：[task7.9 RESULTS](tasks/task7/task7.9/RESULTS.md) A.3以IK判定可达，父TASK §2.8“约0.8 m”只作说明，不作硬阈值。
+- 限制：未检索参考仓库以外的位置；只说明该参数在这些代码中的用途，不说明UR5实际可达半径（UR5官方臂展未在本项目核对，见[SRC-0330](#src-0330)）。
+- 核查日期/人：2026-10-20，Claude（claude-opus-5-5，推理强度未知）。
+
+<a id="src-0397"></a>
+## SRC-0397 — task7.9规则版候选生成规格的推导与工程选择（草案，待用户确认R1–R8）
+
+- 支撑主张与类型：
+  - 推导①（d上限）：局部栅格128×128、0.05 m/格，以机器人为中心，半宽3.2 m（[task7.7 RESULTS](tasks/task7/task7.7/RESULTS.md)）；走廊长d＋0.6 m须在栅格内，故d ≤ 2.6 m。
+  - 推导②（走廊尺寸）：宽0.67 m为底盘宽（[SRC-0330](#src-0330)）；0.6 m余量与原地转向外接圆半径√(0.495²+0.335²)≈0.60 m一致（同来源推导）。余量0.6 m本身来自父TASK §2.8用户确认的规则（[SRC-0337](#src-0337)、[SRC-0359](#src-0359)）。
+  - 推导③（计算量）：d＝1.0 m时走廊约(1.6/0.05)×(0.67/0.05)≈32×14≈450格。s_k搜索的IK调用受可达球限制：设可达半径约1 m（UR5官方臂展约0.85 m为未核常识，见[SRC-0330](#src-0330)，另加余量），直线路线落入球内的弦长≤约2 m，以0.05 m采样≤约40个样本；13个候选≤约520次，比父TASK §5举例的13×32×10≈4000次路径评估约多一成。只是量级估计，待task7.6实测。
+  - 推导④（s_k取第一段连续可达）：路线回折时后面的路线段可能重新落入可达范围；取任意可达的最远点会让末端跳过中间不可达的路线段，取第一段连续可达的末端则不会。
+  - 工程选择（建议，未经用户确认）：d＝1.0 m（R1，父TASK示例值）；走廊从原点出发、谓词同LocalCollision底盘判定（R2）；Δs_r＝0.05 m（R3，与栅格分辨率一致）；固定槽位（R5）；扇区0对准正前方、逆时针（R6，同[SRC-0395](#src-0395)）；改造方案标签建议L1（R7）。
+  - 待验证假设：直线走廊粗筛在“标准”密度地图上不会频繁只剩原地候选；R_pre由URDF连杆长度上界计算后不误删IK可解样本。两者都要在实现后用诊断量和单元测试检验。
+- 本项目采用：[task7.9 RESULTS](tasks/task7/task7.9/RESULTS.md) (A)–(D)。
+- 限制：均未实现、未运行；数值待用户确认，确认后由父任务回写父TASK §2.8、U17、U30。
+- 核查日期/人：2026-10-20，Claude（claude-opus-5-5，推理强度未知）。
+
+
+<a id="src-0398"></a>
+## SRC-0398 — 2026-10-20用户授权task7.6计时基准运行并派发Codex
+
+- 支撑主张（用户授权）：task7.6“IK与路径评估计时基准”由Codex执行，允许在forem-dev容器内运行有界微基准（不训练、不评估、不启停或重建容器）；派发方式为Claude写提示词后以`codex exec`后台启动。
+- 原始依据：2026-10-20本会话，Claude列出三项可派发任务并说明“task7.6需要在容器里跑有界微基准，选中即视为授权运行”；用户只选“task7.6计时基准”，派发方式选“我用codex exec后台启动”，随后此前用户消息为“写提示词然后派发”。task7.9草案复核与task5.5 Gazebo零样本评估未被选中，不在授权内。核查人直接读取本会话用户回答。
+- 工程选择（Claude，非用户指定）：单次基准命令墙钟≤10分钟、累计容器计算≤60分钟、至多1块空闲GPU；超出须停止报告。理由：TASK只写“有界微基准”，未给预算；该上限仅用于防止失控，不是性能门槛，可由用户调整。
+- 类型：用户授权＋工程选择。
+- 本项目采用：[task7.6 TASK](tasks/task7/task7.6/TASK.md)授权行；派发提示与启动记录见[派发日志](agent_logs/task7/task7.6/20261020-claude-codex-dispatch.md)。
+- 限制：授权仅覆盖task7.6的计时与数值一致性基准；B8、B13、B14及解析/DLS的最终选择仍由用户决定。
+- 核查日期/人：2026-10-20，Claude（claude-opus-5-5）。
+
+
+<a id="src-0399"></a>
+## SRC-0399 — task7.6 IK与路径计时项目实测、精度差异及参数化成本
+
+- 支撑主张：实际展开URDF与经典DH FK的随机一致性；解析/DLS/BioIK在相同目标、限位、FK残差下的接受数；CPU1/2线程、GPU float64/32计时；分支差异、奇异失败、连续路径跳变；顺序检查点的掩码/活跃压缩原型开销；圆弧/坐标变换最小原型与参数化成本。不是完整环境、训练、评估或任务成功率。
+- 类型：**项目实测**＋明确标记的**推导/工程扫描选择**。作者 Codex，2026-10-20，TASK7.6-BENCH-20261020；实际具体模型/强度无法核实，均未知。建议GPT6.1sol / Sonnet5.5 medium，不代表实际配置。
+- 精确位置：`forem/scripts/bench_task7_ik.py`的Model/fk/analytic/checked/solve/paths；`bench_task7_supplement.py`、`bench_task7_bioik.py`、`bench_task7_verify.py`、`bench_task7_report.py`；代码仅基准使用。解析方程改写自[SRC-0352](#src-0352)固定官方源码（原件存r1/ur_kin_reference.cpp，SHA256 8c93d4d97856f89c2685a7b6e2bcdcb8b5d4174e0d055c6f0a2a9f157cf513ad）。模型来自[SRC-0385](#src-0385)、TCP定义[SRC-0386](#src-0386)，本次实际xacro展开URDF SHA256 f9e23d78f06ab1d6ad13688b48ce3177d725cc6439e930d00c785a258c7d2062。
+- 证据路径：run-id `t7.6-bench-20261020-r1`至`-r9`，位于`forem/results/task7/`和`forem/logs/task7/`；r1输入/数值原始npz与consistency.json；r2–r5原始计时数组、timing.csv/json、metadata/command/exit；r6无效TF服务尝试，已清理，不用于性能结论；r7精度分支/连续性/坐标链/首次与预热/其他开销；r8 BioIK原始服务返回与独立回检；r9/verification.json重算125项、cost_scan.csv/json的480行推导。所有可读代码/产物哈希集中于`forem/results/task7/t7.6-bench-20261020-r9/manifest.json`，SHA256 **5854343154d6d919bb6d882d73f9e9cfcf8dd397190c0407df775f51977e9162**；2个root拥有的rospack运行缓存无法宿主读取，明确排除，未用于论据。
+- 原始结论：10000随机q，FK最大位置2.112e-10 m、姿态6.151e-10 rad；统一1e-5 m/rad时相同1200目标接受数解析913、DLS737、BioIK564（BioIK布尔成功913，其中349未过残差）。float32/GPU分支并不完全一致，已知奇异输入有解析假阴性，24×64连续路径最大关节增量范数2.470 rad；因此不能宣称IK全域完备或连续性已解决。完整数字与条件见[task7.6 RESULTS](tasks/task7/task7.6/RESULTS.md)，不在台账复制另一套协议。
+- 工程选择与推导：E7扫描(1e-7,1e-5,1e-3)m/rad；DLS仅测试λ=0.01、64次、每次关节步范数≤0.2rad、sin姿态误差且最终用SO(3)弧度回检，没有调优或宣称DLS最佳。批量1/13/104/416/1664、N=1/8/32/128、L=0.5/1/2/2.6/8m、累计转角0/π/2/π/2π、底盘点位移h=0.05/0.025m为探索扫描，非冻结参数。底盘检查点`C=ceil(L/h)+ceil(0.60|θ|/h)`，IK与已测其他开销按`C·[t_IK(B)+t_arc_transform(B)]`估算；尚缺碰撞、渲染、候选生成、重规划与训练更新，机械臂位移不由该底盘公式保证。训练预算B1/B3待定，只给参数公式。
+- 采用/适用限制：仅供task7.6 review及用户选择B8/B13/B14/求解器。计时是当前PyTorch eager基准原型；GPU CUDA event包含流中空档，不等于GPU繁忙占用；BioIK为服务参考且非CBL全套Goal配置，非GPU批量候选。未冻结E7、未修改父TASK或task7.4/7.5/7.9。没有训练工期或完整路径吞吐保证。
+- 核查日期/人：2026-10-20，Codex直接运行并重算；状态review，待Claude/用户复核。授权见[SRC-0398](#src-0398)及用户本次消息。

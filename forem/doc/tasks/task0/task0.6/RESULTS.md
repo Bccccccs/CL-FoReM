@@ -1,10 +1,12 @@
 # task0.6 独立审核 — 结果
 
+> **当前状态（2026-10-19核对）：done（审核交付）。** 本文件下方的状态行和“尚未执行/进行中”等表述是当时的记录，以本行为准。
+
 状态：done（审核交付完成；task0 仍为 review，需要修正后再验收）。负责人 Codex /root；2026-09-30 +08:00。用户授权审核，无生产实现修改、无 task1 启动、无提交/push。
 
 ## 已完成与证据
 
-- 独立静态审核见 [代码审核日志](../../../agent_logs/20260930-codex-task0-code-review.md)；父Agent核验源码及CSV，不将子Agent自报完成视作环境通过。
+- 独立静态审核见 [代码审核日志](../../../agent_logs/task0/task0.6/20260930-codex-task0-code-review.md)；父Agent核验源码及CSV，不将子Agent自报完成视作环境通过。
 - 容器 forem-dev 只挂载 forem 与只读入口；镜像 sha256:e674db49b8156fded725ba4de8c2faf81aa491a367a1e151eddae169a1dfc430；包解析 /root/mm_husky_ws/src/forem_sim，ROS_PACKAGE_PATH/CMAKE_PREFIX_PATH 仅新工作区及 /opt/ros/noetic。
 - `sg docker -c "bash forem/docker/run.sh exec bash -c 'catkin build forem_sim -j2 -p1'"` 退出0，1包成功，无警告；日志 `forem/logs/task0/task0.6-build.log`。本次增量构建；Claude已有的干净重建日志也已读取。
 - 两次新 fresh launch：`sg docker -c 'bash forem/scripts/run_task0_smoke.sh task0.6-r1 --duration 8 --move 0.3 0.2 -0.3 0.2 0.3 0.4 --move-time 3'`，随后同参数 `task0.6-r2`；均退出0。六关节运动、125Hz joint/controller反馈、时钟递增、底座最大变化2.3486e-6、停止后残留0。分别保留 results/task0/task0.6-r1、r2 与对应 logs；独立原始数据核验见 `results/task0/task0.6-review/retest-audit.json`。

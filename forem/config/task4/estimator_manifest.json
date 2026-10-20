@@ -1,0 +1,74 @@
+{
+  "schema": 1,
+  "selection": "open_vins",
+  "selection_reason": "official_Noetic_build_test_plus_user_EKF_preference_and_verified_raw_IMU_interface;_not_an_accuracy_ranking",
+  "repositories": {
+    "open_vins": {
+      "url": "https://github.com/rpng/open_vins",
+      "commit": "69488123ed9362dd44b6f28e7f4680abbff1442b",
+      "license": "GPL-3.0",
+      "status": "selected_for_4.3_build",
+      "read_files_sha256": {
+        "ReadMe.md": "2553e1d5d570a391a1f8376ae4037760d84d45668d781ccf6683ccfc2a54a044",
+        "LICENSE": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+        "ov_msckf/CMakeLists.txt": "7c93751315e4e7aa9fe170a6df8f878cd4797a66c15a92a71385ea8cf398b316",
+        "ov_msckf/cmake/ROS1.cmake": "7d35077fb75a3583bc2e8ca21a1f3f22d83e7e42f3d8752f7380ce565b0c7dff",
+        "ov_msckf/src/ros/ROS1Visualizer.cpp": "7061cd84d132c2256ae911e1ab3cb7af77216ff0e606b4ac982437d9d8a63427",
+        "ov_msckf/src/ros/ROS1Visualizer.h": "36501cfc3a3896c5b0edb8b320057f68e772747aad226a360a80562e4921c546",
+        "ov_msckf/src/core/VioManagerHelper.cpp": "c095a93de47de41e4dc22026dd110fb629272770339b232e030e0d7ebfe11355",
+        "ov_init/src/static/StaticInitializer.cpp": "9c0113c7acab30b5d98efc0368217031af64ad3b23d64bac924ad373f2f83511",
+        "ov_msckf/src/state/Propagator.cpp": "3ab1402699142475fa588bdb2a1c4c55ee7f66a1b86b8ee703c66bce76d46210",
+        "ov_msckf/src/update/UpdaterMSCKF.cpp": "b0c2c51bb7e5a0593702cba93c006304fd9408be0c5b1bbfd79499248a6327b5",
+        "config/euroc_mav/estimator_config.yaml": "b706f0082106e49e20c3292147d238b7e225b0df414106b9d4ac009bbb123f3b",
+        "config/euroc_mav/kalibr_imu_chain.yaml": "408ea8b60b5f9e7c8251e6d302f04c0675bfefdd31229bb1afd139bc8f4a0287",
+        "config/euroc_mav/kalibr_imucam_chain.yaml": "b9e11b7bcda102f7c8c384c97318d67f3916b58942f9073722f83c22bd7073f7"
+      }
+    },
+    "VINS-Fusion": {
+      "url": "https://github.com/HKUST-Aerial-Robotics/VINS-Fusion",
+      "commit": "be55a937a57436548ddfb1bd324bc1e9a9e828e0",
+      "license": "GPL-3.0",
+      "status": "read_only_not_selected_not_built",
+      "read_files_sha256": {
+        "README.md": "452b634ec9c94fef4bf77c26408d4591d8859a8b9dd0c3a148f28fbbb1d5c25d",
+        "LICENCE": "589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2",
+        "vins_estimator/CMakeLists.txt": "21f41890726f996d6918aa3fa054e2f1366440eb8e7696c3e6fd1e7bc2e5ea82",
+        "vins_estimator/src/rosNodeTest.cpp": "f0231fe2987ebad4d8bce92a5551b65ae347f8a398b176752627bef5f8e45f0d",
+        "vins_estimator/src/estimator/estimator.cpp": "3dfa1169c46f451096ebb8cd75c819ce77ceea3e45a147eabbc63675d212ce6d",
+        "vins_estimator/src/utility/visualization.cpp": "a1da39a9c7aba660d4aa7d5d10728e8c08d2699e50670b415e44ce052dd8039e",
+        "config/euroc/euroc_stereo_imu_config.yaml": "e1b0f27840ba960f95bc570dca6722d65b77492d2976782f606e6ea5507e61fe"
+      }
+    }
+  },
+  "gazebo_plugins": {
+    "commit": "cd9cc952402375be5f274f39b29399c4087aa839",
+    "url": "https://github.com/ros-simulation/gazebo_ros_pkgs",
+    "branch": "noetic-devel"
+  },
+  "actual_dependency_probe": {
+    "log": "logs/task4/t4.1-protocol-20261007-r1/dependencies.log",
+    "Ubuntu": "20.04.6",
+    "ROS": "noetic",
+    "CMake": "3.16.3",
+    "OpenCV": "4.2.0",
+    "Eigen": "3.3.7",
+    "Boost": "1.71",
+    "Ceres": "missing",
+    "cmake_configure_exit": 1,
+    "configure_log": "logs/task4/t4.1-protocol-20261007-r1/cmake-probe.log",
+    "built": false,
+    "run": false
+  },
+  "sources": [
+    "SRC-0067",
+    "SRC-0068",
+    "SRC-0069"
+  ],
+  "limits": [
+    "Noetic_statement_is_official_not_current_build_success",
+    "OpenVINS_core_is_not_loop_closure",
+    "VINS_Fusion_Noetic_not_proven_here",
+    "CPU_VIO_no_GPU_port",
+    "read_only_references_not_installed"
+  ]
+}

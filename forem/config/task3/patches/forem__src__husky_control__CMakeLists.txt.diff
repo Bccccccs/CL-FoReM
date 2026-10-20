@@ -1,0 +1,12 @@
+--- a/husky/src/husky/husky_control/CMakeLists.txt
++++ b/forem/src/husky_control/CMakeLists.txt
+@@ -5,8 +5,6 @@
+ 
+ catkin_package()
+ 
+-roslaunch_add_file_check(launch)
+-
+-install(DIRECTORY config launch
++install(DIRECTORY config
+   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+ )

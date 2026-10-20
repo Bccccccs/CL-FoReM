@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<!--
+  FoReM task3 world for the Husky+UR5 SimpleObstacle task: ground plane + sun only. The task spawns its
+  own obstacles. Physics values are those of the reference world
+  husky/src/modulation_rl/gazebo_world/worlds/modulation_tasks.world (ODE, erp 0.2, step 0.0005 s, 2000 Hz,
+  solver iters 50 / sor 1.0) and the FoReM-accepted solver choice of forem_sim/worlds/ur5_empty.world
+  (solver type "world", task0.7). Task3.2 re-checks that choice under wheel/ground contact; see
+  doc/tasks/task3/task3.2/RESULTS.md for the evidence and the final choice.
+  The reference launch default world is modulation_tasks.world (walls for the door/pick tasks);
+  the reference handle_launchfiles.get_world_file() maps simpleobstacle to Gazebo's empty world.
+-->
+<sdf version="1.6">
+  <world name="default">
+    <gravity>0 0 -9.8</gravity>
+    <physics type="ode">
+      <ode>
+        <solver>
+          <type>world</type>
+          <iters>50</iters>
+          <sor>1.0</sor>
+        </solver>
+        <constraints>
+          <cfm>0.0</cfm>
+          <erp>0.2</erp>
+          <contact_max_correcting_vel>100.0</contact_max_correcting_vel>
+          <contact_surface_layer>0.0</contact_surface_layer>
+        </constraints>
+      </ode>
+      <real_time_update_rate>2000</real_time_update_rate>
+      <max_step_size>0.0005</max_step_size>
+    </physics>
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+  </world>
+</sdf>

@@ -1,0 +1,2254 @@
+{
+ "schema": 1,
+ "generated_by": "forem/scripts/task3_import_sources.py manifest",
+ "reference_root": "husky/src (read-only)",
+ "packages": [
+  {
+   "source": "husky/src/modulation_rl",
+   "destination": "forem/src/modulation_rl",
+   "core_role": "env/task/pybind core + plain SAC + gazebo_world configs",
+   "license": "GPLv3 (package.xml/LICENSE, N2M2)",
+   "reference_git": "none (snapshot in root history, see AGENTS.md 1ccedd0)",
+   "n_files": 127
+  },
+  {
+   "source": "husky/src/husky_ur5",
+   "destination": "forem/src/husky_ur5",
+   "core_role": "UR5+gripper mount URDF, srdf, kinematics, controllers, moveit launch",
+   "license": "BSD (Clearpath launch headers) / see package",
+   "reference_git": "none (snapshot in root history)",
+   "n_files": 46
+  },
+  {
+   "source": "husky/src/husky/husky_description",
+   "destination": "forem/src/husky_description",
+   "core_role": "Husky chassis URDF/meshes",
+   "license": "BSD (Clearpath)",
+   "reference_git": "husky/.git 97c77ae79fbf812f261914e4ae5a23b7802b1355",
+   "n_files": 35
+  },
+  {
+   "source": "husky/src/husky/husky_control",
+   "destination": "forem/src/husky_control",
+   "core_role": "diff-drive controller config",
+   "license": "BSD (Clearpath)",
+   "reference_git": "husky/.git 97c77ae79fbf812f261914e4ae5a23b7802b1355",
+   "n_files": 5
+  },
+  {
+   "source": "husky/src/bio_ik",
+   "destination": "forem/src/bio_ik",
+   "core_role": "BioIK kinematics plugin (iksolver=bioik)",
+   "license": "BSD (see LICENCE.txt)",
+   "reference_git": "bio_ik/.git 1de267840678fc3237ee90c8788e835e1966fbf4",
+   "n_files": 23
+  },
+  {
+   "source": "husky/src/robotiq_85_gripper/robotiq_85_description",
+   "destination": "forem/src/robotiq_85_description",
+   "core_role": "gripper URDF/meshes",
+   "license": "see package/LICENSE",
+   "reference_git": "none (root snapshot)",
+   "n_files": 20
+  },
+  {
+   "source": "husky/src/robotiq_85_gripper/robotiq_85_moveit_config",
+   "destination": "forem/src/robotiq_85_moveit_config",
+   "core_role": "gripper joint limits for gripper_planning ns",
+   "license": "see package",
+   "reference_git": "none (root snapshot)",
+   "n_files": 3
+  },
+  {
+   "source": "husky/src/roboticsgroup_upatras_gazebo_plugins",
+   "destination": "forem/src/roboticsgroup_upatras_gazebo_plugins",
+   "core_role": "gazebo mimic-joint plugin for gripper",
+   "license": "BSD (package)",
+   "reference_git": "roboticsgroup_upatras_gazebo_plugins/.git 15187abc17f22dbd3fa720d70ad50de74a668b7c",
+   "n_files": 7
+  }
+ ],
+ "excluded": {
+  "husky/{husky_base,husky_bringup,husky_desktop,husky_gazebo,husky_msgs,husky_navigation,husky_robot,husky_simulator,husky_viz}": "real-robot/navigation/teleop/viz packages; not reachable from the simulated model/controller chain",
+  "pcl_configure (gdt_tf)": "replaced by forem_husky pose_bridge (task3.2); gdt_tf re-stamped /ground_truth/state with ros::Time::now()",
+  "cloud_merger, tf_lookup, ocs2_msgs, tmc_control_msgs, realsense*, gripper_breakdown_solution, roboticsgroup_gazebo(missing)": "HSR/PR2/articulated-baseline/camera/point-cloud extras; not on the Husky SimpleObstacle chain (tmc_control_msgs only for robot_hsr.cpp)",
+  "modulation_rl/src/robot_{pr2,tiago,hsr}.cpp": "other robots; stripped from CMake/pybind (patches)",
+  "modulation_rl/scripts/{main.py,eval.py,main_ray.py,evaluation_*.py,modulation/evaluation.py,modulation/myray,modulation/models/ray_mapencoder.py,modulation/baselines}": "original training/eval/baseline entries: audited only (task3.1 RESULTS), not imported; main.py has the prior/modified-update and hardcoded /home/cbl checkpoint",
+  "modulation_rl/scripts/modulation（修改后）, scripts/modulation/envs/改过的地图场景, modulation_rl(复件)": "shadow/modified variants of the modulation package: never imported (non-identifier directory names / not on path); excluded to prevent shadowing",
+  "husky_ur5/{world,models,lib,123.rviz,src/*.py,src/PCL.cpp}": "other worlds/models/rviz/helper scripts",
+  "modulation_rl/gazebo_world/worlds/modulation_tasks.world": "walls for door/pick tasks; Task3 uses forem_husky/worlds/husky_empty.world (same physics values; the reference get_world_file() maps simpleobstacle to Gazebo's empty world)",
+  "gazebo_world/common/plugins/libgazebo_ros_moveit_planning_scene.so": "prebuilt binary of unknown ABI; removed from the URDF (patch) -- /planning_scene not used by RobotEnv (startSceneMonitor commented out)"
+ },
+ "files": [
+  {
+   "source": "husky/src/modulation_rl/CMakeLists.txt",
+   "destination": "forem/src/modulation_rl/CMakeLists.txt",
+   "source_sha256": "4019e9a31f197df5a293f9a160b345346d85c54fdfe0300e62e4f504a55c5616",
+   "package": "modulation_rl",
+   "destination_sha256": "aa7fe7d620d572100ee685a42aebaaef96821c7853347b0ead625a71939bd184",
+   "status": "patched",
+   "patch_reason": "Husky-only closure: drop robot_pr2/robot_tiago/robot_hsr sources and the tmc_control_msgs catkin dependency (only robot_hsr.cpp used it). Husky RobotEnv/RobotHusky targets and flags (including the reference CMAKE_BUILD_TYPE Debug) unchanged.",
+   "semantic_impact": "none",
+   "patch_file": "forem/config/task3/patches/forem__src__modulation_rl__CMakeLists.txt.diff"
+  },
+  {
+   "source": "husky/src/modulation_rl/LICENSE",
+   "destination": "forem/src/modulation_rl/LICENSE",
+   "source_sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+   "package": "modulation_rl",
+   "destination_sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/gazebo_world/common/costmap/costmap_common_global.yaml",
+   "destination": "forem/src/modulation_rl/gazebo_world/common/costmap/costmap_common_global.yaml",
+   "source_sha256": "f4dac4d69b686b7b7610205e931bbd68d9f3c94f51baf5f5ebd12d2ad4ae6384",
+   "package": "modulation_rl",
+   "destination_sha256": "f4dac4d69b686b7b7610205e931bbd68d9f3c94f51baf5f5ebd12d2ad4ae6384",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/gazebo_world/common/costmap/costmap_common_local.yaml",
+   "destination": "forem/src/modulation_rl/gazebo_world/common/costmap/costmap_common_local.yaml",
+   "source_sha256": "ba61402565171d2c57a9ed4a89f253a611678fff03d78a1f634c452c2201cd35",
+   "package": "modulation_rl",
+   "destination_sha256": "ba61402565171d2c57a9ed4a89f253a611678fff03d78a1f634c452c2201cd35",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/gazebo_world/common/plugins/modulation_bumper.gazebo.xacro",
+   "destination": "forem/src/modulation_rl/gazebo_world/common/plugins/modulation_bumper.gazebo.xacro",
+   "source_sha256": "ee6e89524e16034f6b69c66b6d44ce87235d639812cdcc6c75080d4eaf9735a5",
+   "package": "modulation_rl",
+   "destination_sha256": "20e7cc6ade8f2df43d91351c8a217b06058132d9ecef1a4d42f4f68a69fcf08d",
+   "status": "patched",
+   "patch_reason": "the bumper macro no longer applies <turnGravityOff>true</turnGravityOff> by default: it gets a parameter gravity_off (default false) and emits the tag only when gravity_off is true. In the reference every bumper link (chassis, wheels, arm, gripper) had gravity off, which leaves the Gazebo base undrivable (wheels hover/spin: 0.0075 m/s for a 0.2 m/s command, t3.2-motion-r1). Contact sensors, selfCollide=false and topics unchanged.",
+   "semantic_impact": "declared",
+   "patch_file": "forem/config/task3/patches/forem__src__modulation_rl__gazebo_world__common__plugins__modulation_bumper.gazebo.xacro.diff"
+  },
+  {
+   "source": "husky/src/modulation_rl/gazebo_world/husky_ur5/costmap/costmap_common.yaml",
+   "destination": "forem/src/modulation_rl/gazebo_world/husky_ur5/costmap/costmap_common.yaml",
+   "source_sha256": "d1b0f76c6e9191dcf0a4a7a051ab04bd827075ee4a281814c8836c2e804ae915",
+   "package": "modulation_rl",
+   "destination_sha256": "d1b0f76c6e9191dcf0a4a7a051ab04bd827075ee4a281814c8836c2e804ae915",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/gazebo_world/husky_ur5/costmap/costmap_global.yaml",
+   "destination": "forem/src/modulation_rl/gazebo_world/husky_ur5/costmap/costmap_global.yaml",
+   "source_sha256": "6ac2f51f2c0e42e644ce5aafa855fe890a128f48937b24d0e4f9fb982fe6a1fe",
+   "package": "modulation_rl",
+   "destination_sha256": "6ac2f51f2c0e42e644ce5aafa855fe890a128f48937b24d0e4f9fb982fe6a1fe",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/gazebo_world/husky_ur5/costmap/costmap_local.yaml",
+   "destination": "forem/src/modulation_rl/gazebo_world/husky_ur5/costmap/costmap_local.yaml",
+   "source_sha256": "388ce037a7835aab96885a954e8f7230ec917ecb58458b287f0ed59b6e6a470d",
+   "package": "modulation_rl",
+   "destination_sha256": "388ce037a7835aab96885a954e8f7230ec917ecb58458b287f0ed59b6e6a470d",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/gazebo_world/husky_ur5/costmap/husky_costmap_2d.launch",
+   "destination": "forem/src/modulation_rl/gazebo_world/husky_ur5/costmap/husky_costmap_2d.launch",
+   "source_sha256": "b465bed810a29862f3a37e51e0e714901d71f37de2204aa78ba27b5e6061fdd2",
+   "package": "modulation_rl",
+   "destination_sha256": "b465bed810a29862f3a37e51e0e714901d71f37de2204aa78ba27b5e6061fdd2",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/gazebo_world/husky_ur5/robot_config.yaml",
+   "destination": "forem/src/modulation_rl/gazebo_world/husky_ur5/robot_config.yaml",
+   "source_sha256": "bc133f7d22b4c72cb46d6a8df8e9bf5a885ecc5be3e97730bfc9ae9125a5dd88",
+   "package": "modulation_rl",
+   "destination_sha256": "bc133f7d22b4c72cb46d6a8df8e9bf5a885ecc5be3e97730bfc9ae9125a5dd88",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/include/modulation_rl/gaussian_mixture_model.h",
+   "destination": "forem/src/modulation_rl/include/modulation_rl/gaussian_mixture_model.h",
+   "source_sha256": "91de698f3b121256a43beb9fd3bffa2aee103882d92068114d572bbce82e5ac9",
+   "package": "modulation_rl",
+   "destination_sha256": "91de698f3b121256a43beb9fd3bffa2aee103882d92068114d572bbce82e5ac9",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/include/modulation_rl/my_interactive_marker.h",
+   "destination": "forem/src/modulation_rl/include/modulation_rl/my_interactive_marker.h",
+   "source_sha256": "2e196a7961164824b9451f57e7a0c7b0c4e6b27dd7155eac6d8cf16cc414c3e5",
+   "package": "modulation_rl",
+   "destination_sha256": "2e196a7961164824b9451f57e7a0c7b0c4e6b27dd7155eac6d8cf16cc414c3e5",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/include/modulation_rl/my_static_layer.h",
+   "destination": "forem/src/modulation_rl/include/modulation_rl/my_static_layer.h",
+   "source_sha256": "7e98d6250dea5bc9a8602cee76b6e63003965ff674b036ab80e32c021930b130",
+   "package": "modulation_rl",
+   "destination_sha256": "7e98d6250dea5bc9a8602cee76b6e63003965ff674b036ab80e32c021930b130",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/include/modulation_rl/mycostmap.h",
+   "destination": "forem/src/modulation_rl/include/modulation_rl/mycostmap.h",
+   "source_sha256": "75eeabd7893966f683f22992dc8d0ef7caa79e7cb3c0275c20bd9094a00da5f1",
+   "package": "modulation_rl",
+   "destination_sha256": "75eeabd7893966f683f22992dc8d0ef7caa79e7cb3c0275c20bd9094a00da5f1",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/include/modulation_rl/myutils.h",
+   "destination": "forem/src/modulation_rl/include/modulation_rl/myutils.h",
+   "source_sha256": "ee36095b47502b92e8c29ea87f5924cd225534b86f3f564e968f9cc0a71cdc54",
+   "package": "modulation_rl",
+   "destination_sha256": "ee36095b47502b92e8c29ea87f5924cd225534b86f3f564e968f9cc0a71cdc54",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/include/modulation_rl/robot_env.h",
+   "destination": "forem/src/modulation_rl/include/modulation_rl/robot_env.h",
+   "source_sha256": "4b3b20b01189d506d5f192eb222a13e2eefe521d185a7a572d42713638213108",
+   "package": "modulation_rl",
+   "destination_sha256": "4b3b20b01189d506d5f192eb222a13e2eefe521d185a7a572d42713638213108",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/include/modulation_rl/robot_husky.h",
+   "destination": "forem/src/modulation_rl/include/modulation_rl/robot_husky.h",
+   "source_sha256": "1db2c180fc2d9481dc0844f4e09be44cc576a90c422f81adbb7131b689c8b280",
+   "package": "modulation_rl",
+   "destination_sha256": "1db2c180fc2d9481dc0844f4e09be44cc576a90c422f81adbb7131b689c8b280",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/include/modulation_rl/validity_fun.h",
+   "destination": "forem/src/modulation_rl/include/modulation_rl/validity_fun.h",
+   "source_sha256": "1fe65d04abd290ab1653aeff5286db77319a922dcd7135ace651dd208732a87b",
+   "package": "modulation_rl",
+   "destination_sha256": "1fe65d04abd290ab1653aeff5286db77319a922dcd7135ace651dd208732a87b",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/include/modulation_rl/worlds.h",
+   "destination": "forem/src/modulation_rl/include/modulation_rl/worlds.h",
+   "source_sha256": "a8f704b5a100a3e052a6725a6fb661fd0db6a0f099751498cd247d4cd76ca477",
+   "package": "modulation_rl",
+   "destination_sha256": "a8f704b5a100a3e052a6725a6fb661fd0db6a0f099751498cd247d4cd76ca477",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/package.xml",
+   "destination": "forem/src/modulation_rl/package.xml",
+   "source_sha256": "c301e68a99d653e0e5a9db60b1d0fdb5d5364d948059b2e3441cff7820e9091f",
+   "package": "modulation_rl",
+   "destination_sha256": "dc7bdd11fc53dcf291049baec529426268859fe1a2db1a081151aa181980f02a",
+   "status": "patched",
+   "patch_reason": "remove exec_depend on hsrb_description, hsrb_moveit_config and range_sensor_layer (HSR/range-sensor-only; range_sensor_layer has no Noetic binary and no launch/yaml references it).",
+   "semantic_impact": "none",
+   "patch_file": "forem/config/task3/patches/forem__src__modulation_rl__package.xml.diff"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/configs/best_defaults_ray.yaml",
+   "destination": "forem/src/modulation_rl/scripts/configs/best_defaults_ray.yaml",
+   "source_sha256": "b2bc982246e9ec4784958f35f06235b70f11ce2b863a591f30293cbbe38c2996",
+   "package": "modulation_rl",
+   "destination_sha256": "b2bc982246e9ec4784958f35f06235b70f11ce2b863a591f30293cbbe38c2996",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/model.py",
+   "destination": "forem/src/modulation_rl/scripts/model.py",
+   "source_sha256": "3e561632951cb94ae1e9e7cf800ef6d4056ed0da13bed23f29a036cf4cb2d99e",
+   "package": "modulation_rl",
+   "destination_sha256": "3e561632951cb94ae1e9e7cf800ef6d4056ed0da13bed23f29a036cf4cb2d99e",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/modulation/__init__.py",
+   "destination": "forem/src/modulation_rl/scripts/modulation/__init__.py",
+   "source_sha256": "d43ff9bb06586590338ef520472fe090b8bcf25b265eacdd39c86a7983e66039",
+   "package": "modulation_rl",
+   "destination_sha256": "d43ff9bb06586590338ef520472fe090b8bcf25b265eacdd39c86a7983e66039",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/modulation/dotdict.py",
+   "destination": "forem/src/modulation_rl/scripts/modulation/dotdict.py",
+   "source_sha256": "4aaa0a468e8a64550a80f321e20f4f1904aa2b6d8e91c69aa22ad7b08ce4f969",
+   "package": "modulation_rl",
+   "destination_sha256": "4aaa0a468e8a64550a80f321e20f4f1904aa2b6d8e91c69aa22ad7b08ce4f969",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/modulation/envs/__init__.py",
+   "destination": "forem/src/modulation_rl/scripts/modulation/envs/__init__.py",
+   "source_sha256": "9ad97f425854185785706b1d498a240762065bd731a161b921bb65e9b602f0e7",
+   "package": "modulation_rl",
+   "destination_sha256": "9ad97f425854185785706b1d498a240762065bd731a161b921bb65e9b602f0e7",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/modulation/envs/combined_env.py",
+   "destination": "forem/src/modulation_rl/scripts/modulation/envs/combined_env.py",
+   "source_sha256": "672ab9f538d00a23747bb49875b218809ddce2eef20abc39283f959a48f33a06",
+   "package": "modulation_rl",
+   "destination_sha256": "672ab9f538d00a23747bb49875b218809ddce2eef20abc39283f959a48f33a06",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/modulation/envs/eeplanner.py",
+   "destination": "forem/src/modulation_rl/scripts/modulation/envs/eeplanner.py",
+   "source_sha256": "bb62d3c2fe4f641ac1665229eef30b14cf168827d7bd874c2ba246f9649926fd",
+   "package": "modulation_rl",
+   "destination_sha256": "bb62d3c2fe4f641ac1665229eef30b14cf168827d7bd874c2ba246f9649926fd",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/modulation/envs/env_utils.py",
+   "destination": "forem/src/modulation_rl/scripts/modulation/envs/env_utils.py",
+   "source_sha256": "dbf26394a250b1cf709df3d8dae99ae0b4505d9219492af1da0f550c4cf322d0",
+   "package": "modulation_rl",
+   "destination_sha256": "dbf26394a250b1cf709df3d8dae99ae0b4505d9219492af1da0f550c4cf322d0",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/modulation/envs/map.py",
+   "destination": "forem/src/modulation_rl/scripts/modulation/envs/map.py",
+   "source_sha256": "2b012d752dd9771010a92764f0790d0ce8f22571b448bc968b72e87507116f2d",
+   "package": "modulation_rl",
+   "destination_sha256": "2b012d752dd9771010a92764f0790d0ce8f22571b448bc968b72e87507116f2d",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/modulation/envs/occupancy_grid_manager.py",
+   "destination": "forem/src/modulation_rl/scripts/modulation/envs/occupancy_grid_manager.py",
+   "source_sha256": "21ae76fd00b66b242800c9c98ef09d22ae136b27d7b8f62bdf1486fb2e2d1369",
+   "package": "modulation_rl",
+   "destination_sha256": "21ae76fd00b66b242800c9c98ef09d22ae136b27d7b8f62bdf1486fb2e2d1369",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/modulation/envs/robotenv.py",
+   "destination": "forem/src/modulation_rl/scripts/modulation/envs/robotenv.py",
+   "source_sha256": "5875466a68b05da7ce8e4c0447fdd410c65242f1624579df2a7abf8a2b21ea84",
+   "package": "modulation_rl",
+   "destination_sha256": "e0c172d12913a1b0d373b97f6c71dc8b786e6e5cd8ede19c5e90593995b69352",
+   "status": "patched",
+   "patch_reason": "import only RobotHusky and keep only the husky_ur5 branch (drive diff, ik group, robot_fn) plus the no-limit-joint default; other robots now fall through to the existing `Unknown env` ValueError. The husky_ur5 code path is unchanged (see diff: only deletions of other-robot branches and the pr2-specific no_lim_joints).",
+   "semantic_impact": "none",
+   "patch_file": "forem/config/task3/patches/forem__src__modulation_rl__scripts__modulation__envs__robotenv.py.diff"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/modulation/envs/simulator_api.py",
+   "destination": "forem/src/modulation_rl/scripts/modulation/envs/simulator_api.py",
+   "source_sha256": "1a0b54b385b0e2ef8e20de95f0ec71c8b62fa9aea3cf4471074f758948237be9",
+   "package": "modulation_rl",
+   "destination_sha256": "1a0b54b385b0e2ef8e20de95f0ec71c8b62fa9aea3cf4471074f758948237be9",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/modulation/envs/tasks.py",
+   "destination": "forem/src/modulation_rl/scripts/modulation/envs/tasks.py",
+   "source_sha256": "8c7350cb670f099a9a9d0151bddc66d6a1d68236b3ce45b34c3de644c4cc27fd",
+   "package": "modulation_rl",
+   "destination_sha256": "8c7350cb670f099a9a9d0151bddc66d6a1d68236b3ce45b34c3de644c4cc27fd",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/modulation/envs/tasks_chained.py",
+   "destination": "forem/src/modulation_rl/scripts/modulation/envs/tasks_chained.py",
+   "source_sha256": "19c00a624c11e62614854a9a431c6e7f1a774d39377caeedd8bab9113ff0c7c6",
+   "package": "modulation_rl",
+   "destination_sha256": "19c00a624c11e62614854a9a431c6e7f1a774d39377caeedd8bab9113ff0c7c6",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/modulation/envs/tasks_realworld.py",
+   "destination": "forem/src/modulation_rl/scripts/modulation/envs/tasks_realworld.py",
+   "source_sha256": "8a47a5a0931a2f2fa182053631c22786d276331c0819d894e3767aa1adbe4c70",
+   "package": "modulation_rl",
+   "destination_sha256": "8a47a5a0931a2f2fa182053631c22786d276331c0819d894e3767aa1adbe4c70",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/modulation/models/__init__.py",
+   "destination": "forem/src/modulation_rl/scripts/modulation/models/__init__.py",
+   "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "package": "modulation_rl",
+   "destination_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/modulation/models/mapencoder.py",
+   "destination": "forem/src/modulation_rl/scripts/modulation/models/mapencoder.py",
+   "source_sha256": "f52e54bc3d335ccc6bb3a3a867fe7ea7557be806c45565ed32b49fca9108de95",
+   "package": "modulation_rl",
+   "destination_sha256": "f52e54bc3d335ccc6bb3a3a867fe7ea7557be806c45565ed32b49fca9108de95",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/modulation/utils.py",
+   "destination": "forem/src/modulation_rl/scripts/modulation/utils.py",
+   "source_sha256": "a2d851e7bafdae94167a7668d4f28a93db753abca35c6b2669a63d3c0d2f26c2",
+   "package": "modulation_rl",
+   "destination_sha256": "a2d851e7bafdae94167a7668d4f28a93db753abca35c6b2669a63d3c0d2f26c2",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/replay_memory.py",
+   "destination": "forem/src/modulation_rl/scripts/replay_memory.py",
+   "source_sha256": "9d992cf17c84f33a9a2879b41a4ed1d4eb750a23b683564d8b4d793059355488",
+   "package": "modulation_rl",
+   "destination_sha256": "9d992cf17c84f33a9a2879b41a4ed1d4eb750a23b683564d8b4d793059355488",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/sac.py",
+   "destination": "forem/src/modulation_rl/scripts/sac.py",
+   "source_sha256": "e4e900e034939fd51622337414cbc4b66383096322da18e305f9d6627f59f7c5",
+   "package": "modulation_rl",
+   "destination_sha256": "d58e26b79de0c61ee4ffa4ad6d3dcc7d432fa245c6bfcc6dee0e3f0c679463ae",
+   "status": "patched",
+   "patch_reason": "SAC.__init__: the compute device is read from args[\"device\"] (default remains the reference torch.device(\"cuda\")) because forem-dev has no visible GPU. The update functions (update_parameters, update_parameters_modified), networks, schedulers, alpha cap and checkpoint functions are unchanged byte for byte.",
+   "semantic_impact": "none",
+   "patch_file": "forem/config/task3/patches/forem__src__modulation_rl__scripts__sac.py.diff"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/__init__.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/__init__.py",
+   "source_sha256": "ac2780a82a564dc2cad93176ecc3df070247121fad54db09317d7f4514639d4a",
+   "package": "modulation_rl",
+   "destination_sha256": "ac2780a82a564dc2cad93176ecc3df070247121fad54db09317d7f4514639d4a",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/a2c/__init__.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/a2c/__init__.py",
+   "source_sha256": "e70b93aee7ad8bcc1df7036c85451b66ade092e24ba3153e22dd5ff2055fad38",
+   "package": "modulation_rl",
+   "destination_sha256": "e70b93aee7ad8bcc1df7036c85451b66ade092e24ba3153e22dd5ff2055fad38",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/a2c/a2c.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/a2c/a2c.py",
+   "source_sha256": "fca8a7131800b9164e4c4975ca37e3eaf8e8f8600919bfc29c7614ffc2f4317e",
+   "package": "modulation_rl",
+   "destination_sha256": "fca8a7131800b9164e4c4975ca37e3eaf8e8f8600919bfc29c7614ffc2f4317e",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/a2c/policies.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/a2c/policies.py",
+   "source_sha256": "ad8cd1b486fb1b9b7d4e962d8ed7ade01c58229e60c61f7c6fc0fbce55a41864",
+   "package": "modulation_rl",
+   "destination_sha256": "ad8cd1b486fb1b9b7d4e962d8ed7ade01c58229e60c61f7c6fc0fbce55a41864",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/__init__.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/__init__.py",
+   "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "package": "modulation_rl",
+   "destination_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/atari_wrappers.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/atari_wrappers.py",
+   "source_sha256": "e0230550faa1ba6ba74509ce179c1c89e6e2e3423714d0d74d8d887c2b13b278",
+   "package": "modulation_rl",
+   "destination_sha256": "e0230550faa1ba6ba74509ce179c1c89e6e2e3423714d0d74d8d887c2b13b278",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/base_class.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/base_class.py",
+   "source_sha256": "15ae7913613c447baad71f2f88b7c28619a370a7156a095912a7271c498efe30",
+   "package": "modulation_rl",
+   "destination_sha256": "15ae7913613c447baad71f2f88b7c28619a370a7156a095912a7271c498efe30",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/buffers.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/buffers.py",
+   "source_sha256": "57a23ecb407ca25d8ed1b5508c37af3d58d3b4c9b163073e41ae6b021fa2d629",
+   "package": "modulation_rl",
+   "destination_sha256": "57a23ecb407ca25d8ed1b5508c37af3d58d3b4c9b163073e41ae6b021fa2d629",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/callbacks.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/callbacks.py",
+   "source_sha256": "d7de5e8018b4d188634fe017159f6eac1d88241792cfd3cdff1fedc05fbdc3cb",
+   "package": "modulation_rl",
+   "destination_sha256": "d7de5e8018b4d188634fe017159f6eac1d88241792cfd3cdff1fedc05fbdc3cb",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/distributions.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/distributions.py",
+   "source_sha256": "0b8293ed65ae27009b0048e786b056f2c89b24e36d2a19977e5606c5245537ea",
+   "package": "modulation_rl",
+   "destination_sha256": "0b8293ed65ae27009b0048e786b056f2c89b24e36d2a19977e5606c5245537ea",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/env_checker.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/env_checker.py",
+   "source_sha256": "afaee604cc6e7991439dbf4d0ce4ad54553570691d911286627a7af925484c1b",
+   "package": "modulation_rl",
+   "destination_sha256": "afaee604cc6e7991439dbf4d0ce4ad54553570691d911286627a7af925484c1b",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/env_util.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/env_util.py",
+   "source_sha256": "7baa34418f88518a680ae0e56956f60df697a3a115ed1def9b424c1d14a0b7ca",
+   "package": "modulation_rl",
+   "destination_sha256": "7baa34418f88518a680ae0e56956f60df697a3a115ed1def9b424c1d14a0b7ca",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/envs/__init__.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/envs/__init__.py",
+   "source_sha256": "2a167d3e4775a647367e385a25ebee4603b59b7f4a88170915a071f0e4076580",
+   "package": "modulation_rl",
+   "destination_sha256": "2a167d3e4775a647367e385a25ebee4603b59b7f4a88170915a071f0e4076580",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/envs/bit_flipping_env.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/envs/bit_flipping_env.py",
+   "source_sha256": "fa43aa3146b2ef40fe7cb9160e6c01cbf8d28bb29c9292d5eeeecfef7efd2946",
+   "package": "modulation_rl",
+   "destination_sha256": "fa43aa3146b2ef40fe7cb9160e6c01cbf8d28bb29c9292d5eeeecfef7efd2946",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/envs/identity_env.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/envs/identity_env.py",
+   "source_sha256": "48a0ac3d33f92b28fb996e654ef62af25bf2d6a9b17127702a8d7417aa95ebad",
+   "package": "modulation_rl",
+   "destination_sha256": "48a0ac3d33f92b28fb996e654ef62af25bf2d6a9b17127702a8d7417aa95ebad",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/envs/multi_input_envs.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/envs/multi_input_envs.py",
+   "source_sha256": "660f8386cf3810754eacfb597631d14630d9982af8936a9830266ace17dcf026",
+   "package": "modulation_rl",
+   "destination_sha256": "660f8386cf3810754eacfb597631d14630d9982af8936a9830266ace17dcf026",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/evaluation.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/evaluation.py",
+   "source_sha256": "0ce0f70af62c4f603edd05addd5f51255aef774ebda506c8ed7c4e398fa47245",
+   "package": "modulation_rl",
+   "destination_sha256": "0ce0f70af62c4f603edd05addd5f51255aef774ebda506c8ed7c4e398fa47245",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/logger.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/logger.py",
+   "source_sha256": "ce25cbd1d18622e42fb7d55f635897134ba3a09e91525a210b5a2fd21484e166",
+   "package": "modulation_rl",
+   "destination_sha256": "ce25cbd1d18622e42fb7d55f635897134ba3a09e91525a210b5a2fd21484e166",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/monitor.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/monitor.py",
+   "source_sha256": "1e81f189e9566ca7963affd8904259ac27b977a26d2a99adb849efa2eba9302d",
+   "package": "modulation_rl",
+   "destination_sha256": "1e81f189e9566ca7963affd8904259ac27b977a26d2a99adb849efa2eba9302d",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/noise.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/noise.py",
+   "source_sha256": "6b8cb80a1055e9941094d83a9aa51058f7d111090c2520b4b49912fe58c1b991",
+   "package": "modulation_rl",
+   "destination_sha256": "6b8cb80a1055e9941094d83a9aa51058f7d111090c2520b4b49912fe58c1b991",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/off_policy_algorithm.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/off_policy_algorithm.py",
+   "source_sha256": "4017b471b4724f03ff3425ef3943c4a722c94a7699045041e4a3ee99c7d45d12",
+   "package": "modulation_rl",
+   "destination_sha256": "4017b471b4724f03ff3425ef3943c4a722c94a7699045041e4a3ee99c7d45d12",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/on_policy_algorithm.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/on_policy_algorithm.py",
+   "source_sha256": "6334103e944f7e2fd7c65f3a7d8a88e69cfa2284fb946554988def2ca59efeff",
+   "package": "modulation_rl",
+   "destination_sha256": "6334103e944f7e2fd7c65f3a7d8a88e69cfa2284fb946554988def2ca59efeff",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/policies.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/policies.py",
+   "source_sha256": "9e68d50d557c21998884f8bb25ad5d0d8b1c5da0f268c0f232462a1b5f13c68c",
+   "package": "modulation_rl",
+   "destination_sha256": "9e68d50d557c21998884f8bb25ad5d0d8b1c5da0f268c0f232462a1b5f13c68c",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/preprocessing.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/preprocessing.py",
+   "source_sha256": "cae4f1b247211bdd22227a491bb0afb9896530983f4fec90bbddc7c6d8b68a27",
+   "package": "modulation_rl",
+   "destination_sha256": "cae4f1b247211bdd22227a491bb0afb9896530983f4fec90bbddc7c6d8b68a27",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/results_plotter.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/results_plotter.py",
+   "source_sha256": "f38ea31d44963846055e284e51b174b970919dfe23d1fb26da35a41131d911e6",
+   "package": "modulation_rl",
+   "destination_sha256": "f38ea31d44963846055e284e51b174b970919dfe23d1fb26da35a41131d911e6",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/running_mean_std.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/running_mean_std.py",
+   "source_sha256": "a84222fa73257ec91667e12fb4a3df7d6c2cd69711044cd423f3a24a9bf39afc",
+   "package": "modulation_rl",
+   "destination_sha256": "a84222fa73257ec91667e12fb4a3df7d6c2cd69711044cd423f3a24a9bf39afc",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/save_util.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/save_util.py",
+   "source_sha256": "f8f893820732be61c8f5ede164a5bfc867873ec11e1d1acb65be3368e68f39ef",
+   "package": "modulation_rl",
+   "destination_sha256": "f8f893820732be61c8f5ede164a5bfc867873ec11e1d1acb65be3368e68f39ef",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/sb2_compat/__init__.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/sb2_compat/__init__.py",
+   "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "package": "modulation_rl",
+   "destination_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/sb2_compat/rmsprop_tf_like.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/sb2_compat/rmsprop_tf_like.py",
+   "source_sha256": "31c043a87f2620991735f7750df4be7cf3961551faec04728a3e14a97baabba9",
+   "package": "modulation_rl",
+   "destination_sha256": "31c043a87f2620991735f7750df4be7cf3961551faec04728a3e14a97baabba9",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/torch_layers.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/torch_layers.py",
+   "source_sha256": "288f7a53ba5c310d716f9241ec6d3a2d205886563d257f1a1e522ed6481f276f",
+   "package": "modulation_rl",
+   "destination_sha256": "288f7a53ba5c310d716f9241ec6d3a2d205886563d257f1a1e522ed6481f276f",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/type_aliases.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/type_aliases.py",
+   "source_sha256": "df9393087a9bba35e2b3c4b5747bfa5a037f5df2004b09f535c453d92395dd82",
+   "package": "modulation_rl",
+   "destination_sha256": "df9393087a9bba35e2b3c4b5747bfa5a037f5df2004b09f535c453d92395dd82",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/utils.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/utils.py",
+   "source_sha256": "7e77716336062fd3db6f20b6ac376afc22ce6126d6143e01088798ebf5d1d5b7",
+   "package": "modulation_rl",
+   "destination_sha256": "7e77716336062fd3db6f20b6ac376afc22ce6126d6143e01088798ebf5d1d5b7",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/vec_env/__init__.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/vec_env/__init__.py",
+   "source_sha256": "827ab1b381e3daba0f2f9924daa8ba40974faf622659e2c2f3d12cd9d351e675",
+   "package": "modulation_rl",
+   "destination_sha256": "827ab1b381e3daba0f2f9924daa8ba40974faf622659e2c2f3d12cd9d351e675",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/vec_env/base_vec_env.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/vec_env/base_vec_env.py",
+   "source_sha256": "13f6641145f822f8244e5458d10c1e5caa6aae89284c5ca477a5d738e185154c",
+   "package": "modulation_rl",
+   "destination_sha256": "13f6641145f822f8244e5458d10c1e5caa6aae89284c5ca477a5d738e185154c",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/vec_env/dummy_vec_env.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/vec_env/dummy_vec_env.py",
+   "source_sha256": "33cc2ef3f14026543961a29349f3ce8bc9127d13ae7e47574dd2956312299402",
+   "package": "modulation_rl",
+   "destination_sha256": "33cc2ef3f14026543961a29349f3ce8bc9127d13ae7e47574dd2956312299402",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/vec_env/stacked_observations.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/vec_env/stacked_observations.py",
+   "source_sha256": "90c0415bbdd764318ccd9973d225f9db0fdab588c296b869883cb7edeaad8181",
+   "package": "modulation_rl",
+   "destination_sha256": "90c0415bbdd764318ccd9973d225f9db0fdab588c296b869883cb7edeaad8181",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/vec_env/subproc_vec_env.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/vec_env/subproc_vec_env.py",
+   "source_sha256": "6fb732e744c013b06fd4a4a12736b59454af7e275167b19aeb76b94664e9b621",
+   "package": "modulation_rl",
+   "destination_sha256": "6fb732e744c013b06fd4a4a12736b59454af7e275167b19aeb76b94664e9b621",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/vec_env/util.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/vec_env/util.py",
+   "source_sha256": "df1046cc74c98b4aed05050cea9098c280ce67051cf8787d101d201079480da5",
+   "package": "modulation_rl",
+   "destination_sha256": "df1046cc74c98b4aed05050cea9098c280ce67051cf8787d101d201079480da5",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/vec_env/vec_check_nan.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/vec_env/vec_check_nan.py",
+   "source_sha256": "2ff30c3eda86a471073f502c3b52391b79ed7c1c5f87e1f7edf094113718515a",
+   "package": "modulation_rl",
+   "destination_sha256": "2ff30c3eda86a471073f502c3b52391b79ed7c1c5f87e1f7edf094113718515a",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/vec_env/vec_extract_dict_obs.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/vec_env/vec_extract_dict_obs.py",
+   "source_sha256": "b683f34f81f29b914ecf88a09e35e319ab2e1a3ef62f5c489bb7ac20b20bffc8",
+   "package": "modulation_rl",
+   "destination_sha256": "b683f34f81f29b914ecf88a09e35e319ab2e1a3ef62f5c489bb7ac20b20bffc8",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/vec_env/vec_frame_stack.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/vec_env/vec_frame_stack.py",
+   "source_sha256": "3404eed20955f56b8de1f7b54537dfed9d6e838a90fe2439ccaeac15db407b61",
+   "package": "modulation_rl",
+   "destination_sha256": "3404eed20955f56b8de1f7b54537dfed9d6e838a90fe2439ccaeac15db407b61",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/vec_env/vec_monitor.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/vec_env/vec_monitor.py",
+   "source_sha256": "99e5820f601d95c2cca95cc867dbdf5cb167af17992c29d0dea87d701ad7b787",
+   "package": "modulation_rl",
+   "destination_sha256": "99e5820f601d95c2cca95cc867dbdf5cb167af17992c29d0dea87d701ad7b787",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/vec_env/vec_normalize.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/vec_env/vec_normalize.py",
+   "source_sha256": "22b98715d4e5de29d053a1ae838aa08aa441b45e13e4bc2f520d733812b67555",
+   "package": "modulation_rl",
+   "destination_sha256": "22b98715d4e5de29d053a1ae838aa08aa441b45e13e4bc2f520d733812b67555",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/vec_env/vec_transpose.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/vec_env/vec_transpose.py",
+   "source_sha256": "f99b796e1e4ab8b958e4275bdc53f0acb90443c42b8b4789411510c6f649fdb4",
+   "package": "modulation_rl",
+   "destination_sha256": "f99b796e1e4ab8b958e4275bdc53f0acb90443c42b8b4789411510c6f649fdb4",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/common/vec_env/vec_video_recorder.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/common/vec_env/vec_video_recorder.py",
+   "source_sha256": "485965844e55f507bdbb7acff6919649f02217c46699031bc13052ce655bd2cf",
+   "package": "modulation_rl",
+   "destination_sha256": "485965844e55f507bdbb7acff6919649f02217c46699031bc13052ce655bd2cf",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/ddpg/__init__.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/ddpg/__init__.py",
+   "source_sha256": "b7566d3ba6328607ea9853fc97f03ba44c1a1cae8b1ffc2f5aa8d1b6cc48f44a",
+   "package": "modulation_rl",
+   "destination_sha256": "b7566d3ba6328607ea9853fc97f03ba44c1a1cae8b1ffc2f5aa8d1b6cc48f44a",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/ddpg/ddpg.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/ddpg/ddpg.py",
+   "source_sha256": "d1d920b8d79b2013ec145f8d27f7f0c71a081fbafc4bbc1b2a8c8729991dbb91",
+   "package": "modulation_rl",
+   "destination_sha256": "d1d920b8d79b2013ec145f8d27f7f0c71a081fbafc4bbc1b2a8c8729991dbb91",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/ddpg/policies.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/ddpg/policies.py",
+   "source_sha256": "4645b42a6194a324b5e2f947a447dae5e98f5426bf30d06ae7143e257db360e5",
+   "package": "modulation_rl",
+   "destination_sha256": "4645b42a6194a324b5e2f947a447dae5e98f5426bf30d06ae7143e257db360e5",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/dqn/__init__.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/dqn/__init__.py",
+   "source_sha256": "a0134d10a8cf088fe2216554980edc2aaa771f18f27d91c4c0167affaaf7b6f7",
+   "package": "modulation_rl",
+   "destination_sha256": "a0134d10a8cf088fe2216554980edc2aaa771f18f27d91c4c0167affaaf7b6f7",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/dqn/dqn.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/dqn/dqn.py",
+   "source_sha256": "d233d1a8a5f2d4ab0d831a70d0ba958ec2f6909d0ccccb6b68eba0fba56804d8",
+   "package": "modulation_rl",
+   "destination_sha256": "d233d1a8a5f2d4ab0d831a70d0ba958ec2f6909d0ccccb6b68eba0fba56804d8",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/dqn/policies.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/dqn/policies.py",
+   "source_sha256": "dfa34c76a10f0f182eca1bd2bf326bf6962c5af91424b77418aa45ea9f819e7f",
+   "package": "modulation_rl",
+   "destination_sha256": "dfa34c76a10f0f182eca1bd2bf326bf6962c5af91424b77418aa45ea9f819e7f",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/dqn_ME/__init__.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/dqn_ME/__init__.py",
+   "source_sha256": "69c161f99c2c4aaee1f402aac16bcf74d61936a53b47a7c5af4c3f21301a3547",
+   "package": "modulation_rl",
+   "destination_sha256": "69c161f99c2c4aaee1f402aac16bcf74d61936a53b47a7c5af4c3f21301a3547",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/dqn_ME/dqn_ME.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/dqn_ME/dqn_ME.py",
+   "source_sha256": "289887d94bc67fdce8e8dea88789cb426756e6437afa6af94e115d48e4a7abb5",
+   "package": "modulation_rl",
+   "destination_sha256": "289887d94bc67fdce8e8dea88789cb426756e6437afa6af94e115d48e4a7abb5",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/dqn_ME/policies_ME.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/dqn_ME/policies_ME.py",
+   "source_sha256": "a438bf51a2fe57e917387df11ebc0f534bc9ca69042b59bea9ba44cffe01b308",
+   "package": "modulation_rl",
+   "destination_sha256": "a438bf51a2fe57e917387df11ebc0f534bc9ca69042b59bea9ba44cffe01b308",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/dqn_soft_residual/__init__.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/dqn_soft_residual/__init__.py",
+   "source_sha256": "9032050f4b4c5f42b4f990c5d359de22244ea4158811cbddbffa6bb989190eb6",
+   "package": "modulation_rl",
+   "destination_sha256": "9032050f4b4c5f42b4f990c5d359de22244ea4158811cbddbffa6bb989190eb6",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/dqn_soft_residual/dqn_soft_residual.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/dqn_soft_residual/dqn_soft_residual.py",
+   "source_sha256": "954c44b54232f62e6bfbd799d1d2c70e625bc5ae2a19418c64afff0eb6a515b4",
+   "package": "modulation_rl",
+   "destination_sha256": "954c44b54232f62e6bfbd799d1d2c70e625bc5ae2a19418c64afff0eb6a515b4",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/dqn_soft_residual/policies.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/dqn_soft_residual/policies.py",
+   "source_sha256": "19e60d969132145980c0c296278933ef8a7d8e3959f6d0af1fc8cecbca95c15c",
+   "package": "modulation_rl",
+   "destination_sha256": "19e60d969132145980c0c296278933ef8a7d8e3959f6d0af1fc8cecbca95c15c",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/her/__init__.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/her/__init__.py",
+   "source_sha256": "22d38de4cbc7c52b8b518b51efe6e16e8a5a02ec0cfc617d2cc373aa58c4d218",
+   "package": "modulation_rl",
+   "destination_sha256": "22d38de4cbc7c52b8b518b51efe6e16e8a5a02ec0cfc617d2cc373aa58c4d218",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/her/goal_selection_strategy.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/her/goal_selection_strategy.py",
+   "source_sha256": "c747b071a5d85410c5cc508ffe4f0eb43d6d009afa2ce60e22015a8c7542baab",
+   "package": "modulation_rl",
+   "destination_sha256": "c747b071a5d85410c5cc508ffe4f0eb43d6d009afa2ce60e22015a8c7542baab",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/her/her_replay_buffer.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/her/her_replay_buffer.py",
+   "source_sha256": "fef944fa8424d6b728ef342469234496c4e5f35c8504d028033f4c40f90109b7",
+   "package": "modulation_rl",
+   "destination_sha256": "fef944fa8424d6b728ef342469234496c4e5f35c8504d028033f4c40f90109b7",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/ppo/__init__.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/ppo/__init__.py",
+   "source_sha256": "31e329f63793914d6b69c77846849368ffe14c23b7bcfd3db0b516b9d2eb70cf",
+   "package": "modulation_rl",
+   "destination_sha256": "31e329f63793914d6b69c77846849368ffe14c23b7bcfd3db0b516b9d2eb70cf",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/ppo/policies.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/ppo/policies.py",
+   "source_sha256": "1dbfff512b3d669c16d933dce377286f2ec7559efcd5f5ddaeab46493f092abf",
+   "package": "modulation_rl",
+   "destination_sha256": "1dbfff512b3d669c16d933dce377286f2ec7559efcd5f5ddaeab46493f092abf",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/ppo/ppo.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/ppo/ppo.py",
+   "source_sha256": "8419ad00935af4ef60024c417dd804e39d13c6d458f63925ea62065326c8156f",
+   "package": "modulation_rl",
+   "destination_sha256": "8419ad00935af4ef60024c417dd804e39d13c6d458f63925ea62065326c8156f",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/py.typed",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/py.typed",
+   "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "package": "modulation_rl",
+   "destination_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/sac/__init__.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/sac/__init__.py",
+   "source_sha256": "e91e504d01bfd42d87a701d0469b44d0d46c9dadd975f5a0801866107dc0aa0b",
+   "package": "modulation_rl",
+   "destination_sha256": "e91e504d01bfd42d87a701d0469b44d0d46c9dadd975f5a0801866107dc0aa0b",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/sac/policies.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/sac/policies.py",
+   "source_sha256": "77b7319f547eb1eb7aac46e3b25bee71efedac5cf1d2d587cc5e6c0757bfcef7",
+   "package": "modulation_rl",
+   "destination_sha256": "77b7319f547eb1eb7aac46e3b25bee71efedac5cf1d2d587cc5e6c0757bfcef7",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/sac/sac.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/sac/sac.py",
+   "source_sha256": "9b97b3a9bdc35ab274c60a410f1d7530578c81c9f5b1311d67748b8b8ced8b07",
+   "package": "modulation_rl",
+   "destination_sha256": "9b97b3a9bdc35ab274c60a410f1d7530578c81c9f5b1311d67748b8b8ced8b07",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/sac_residual/__init__.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/sac_residual/__init__.py",
+   "source_sha256": "338ce632d82c21f972595f872cb9d4d98245996bd0315c2811a3bd2898cea474",
+   "package": "modulation_rl",
+   "destination_sha256": "338ce632d82c21f972595f872cb9d4d98245996bd0315c2811a3bd2898cea474",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/sac_residual/policies.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/sac_residual/policies.py",
+   "source_sha256": "13c4e17b8857d0fc3a4fcdf0057dd4eff019e947e207f01097bf9266f415218e",
+   "package": "modulation_rl",
+   "destination_sha256": "13c4e17b8857d0fc3a4fcdf0057dd4eff019e947e207f01097bf9266f415218e",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/sac_residual/sac_residual.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/sac_residual/sac_residual.py",
+   "source_sha256": "f656531a3d80a054f56dbabe26ad03c2d93da6c7e1d70dae65245c07d730bdd9",
+   "package": "modulation_rl",
+   "destination_sha256": "f656531a3d80a054f56dbabe26ad03c2d93da6c7e1d70dae65245c07d730bdd9",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/td3/__init__.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/td3/__init__.py",
+   "source_sha256": "ea54924a341acc8268cbaaf41769bdf600e1df263e2e45a5fa9d8709f66249a1",
+   "package": "modulation_rl",
+   "destination_sha256": "ea54924a341acc8268cbaaf41769bdf600e1df263e2e45a5fa9d8709f66249a1",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/td3/policies.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/td3/policies.py",
+   "source_sha256": "8b03752dcd9dde6640d4b69b6e21a0aa9eadcbe40c33c9b7108d41eb15ca55fb",
+   "package": "modulation_rl",
+   "destination_sha256": "8b03752dcd9dde6640d4b69b6e21a0aa9eadcbe40c33c9b7108d41eb15ca55fb",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/td3/td3.py",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/td3/td3.py",
+   "source_sha256": "8577842217b127694006c1a06193875391c75983b49c70b261750dc844ac14c6",
+   "package": "modulation_rl",
+   "destination_sha256": "8577842217b127694006c1a06193875391c75983b49c70b261750dc844ac14c6",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/stable_baselines3/version.txt",
+   "destination": "forem/src/modulation_rl/scripts/stable_baselines3/version.txt",
+   "source_sha256": "bd3d0b72519e1a5fbd92c8679ebfd5bede91ab9177201586db33778cfa3bbd8a",
+   "package": "modulation_rl",
+   "destination_sha256": "bd3d0b72519e1a5fbd92c8679ebfd5bede91ab9177201586db33778cfa3bbd8a",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/scripts/utils.py",
+   "destination": "forem/src/modulation_rl/scripts/utils.py",
+   "source_sha256": "725d2a4e566a2a48a6b240aa5a73708ea8ba42fabf7ab27c1878d44f61af1a6b",
+   "package": "modulation_rl",
+   "destination_sha256": "725d2a4e566a2a48a6b240aa5a73708ea8ba42fabf7ab27c1878d44f61af1a6b",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/src/gaussian_mixture_model.cpp",
+   "destination": "forem/src/modulation_rl/src/gaussian_mixture_model.cpp",
+   "source_sha256": "a42c8ef39c67f406e88785161f4540a6b3eef5c72a6be558fa4484662d376575",
+   "package": "modulation_rl",
+   "destination_sha256": "a42c8ef39c67f406e88785161f4540a6b3eef5c72a6be558fa4484662d376575",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/src/interactive_marker_node.cpp",
+   "destination": "forem/src/modulation_rl/src/interactive_marker_node.cpp",
+   "source_sha256": "dbfe53dc17c2d7967f90380a5df136357960b011d0cd7ad026b84ed3ada79cfc",
+   "package": "modulation_rl",
+   "destination_sha256": "dbfe53dc17c2d7967f90380a5df136357960b011d0cd7ad026b84ed3ada79cfc",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/src/my_interactive_marker.cpp",
+   "destination": "forem/src/modulation_rl/src/my_interactive_marker.cpp",
+   "source_sha256": "761804a68ac57c0dd58fc14d04f190595536dc72f1b48785c7868aa6a06f3096",
+   "package": "modulation_rl",
+   "destination_sha256": "761804a68ac57c0dd58fc14d04f190595536dc72f1b48785c7868aa6a06f3096",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/src/my_static_layer.cpp",
+   "destination": "forem/src/modulation_rl/src/my_static_layer.cpp",
+   "source_sha256": "cb180defa92c43b43c79fe842754e60fe4bdd46496e14ca9ca11f2951e13c42b",
+   "package": "modulation_rl",
+   "destination_sha256": "cb180defa92c43b43c79fe842754e60fe4bdd46496e14ca9ca11f2951e13c42b",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/src/mycostmap.cpp",
+   "destination": "forem/src/modulation_rl/src/mycostmap.cpp",
+   "source_sha256": "5d39a7bcc56cca1d393824b5d8d5bba0b5334047459f66e2ce8c02144f4c4f4a",
+   "package": "modulation_rl",
+   "destination_sha256": "5d39a7bcc56cca1d393824b5d8d5bba0b5334047459f66e2ce8c02144f4c4f4a",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/src/myutils.cpp",
+   "destination": "forem/src/modulation_rl/src/myutils.cpp",
+   "source_sha256": "33f48910935a16ff5108760e0648fe961aaa3d95961e0d53f8d98263fd56c5a9",
+   "package": "modulation_rl",
+   "destination_sha256": "33f48910935a16ff5108760e0648fe961aaa3d95961e0d53f8d98263fd56c5a9",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/src/pybindings.cpp",
+   "destination": "forem/src/modulation_rl/src/pybindings.cpp",
+   "source_sha256": "7ab81f0f32641581847168b7d96d9504223d8b09b0642d8e1949c16d3c6c8b5f",
+   "package": "modulation_rl",
+   "destination_sha256": "7ab81f0f32641581847168b7d96d9504223d8b09b0642d8e1949c16d3c6c8b5f",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/src/pybindings_robots.cpp",
+   "destination": "forem/src/modulation_rl/src/pybindings_robots.cpp",
+   "source_sha256": "a0c4f13836efc69e296b8cc9c74f5e7ebda5231bb5e5d44a6642e9777c98b3e6",
+   "package": "modulation_rl",
+   "destination_sha256": "34c34626f1c2d908a91dbe763ec7e0cddab9bfe948109d0da42cf10ff88360e6",
+   "status": "patched",
+   "patch_reason": "bind RobotEnv + RobotHusky only (PR2/Tiago/HSR classes are not compiled). The RobotEnv and RobotHusky bindings are byte-identical in the diff.",
+   "semantic_impact": "none",
+   "patch_file": "forem/config/task3/patches/forem__src__modulation_rl__src__pybindings_robots.cpp.diff"
+  },
+  {
+   "source": "husky/src/modulation_rl/src/robot_env.cpp",
+   "destination": "forem/src/modulation_rl/src/robot_env.cpp",
+   "source_sha256": "6fab72460d686f12b43797c1e4bc1b61d844a43ef46b5e418f07f6dfa4ce703a",
+   "package": "modulation_rl",
+   "destination_sha256": "6fab72460d686f12b43797c1e4bc1b61d844a43ef46b5e418f07f6dfa4ce703a",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/src/robot_husky.cpp",
+   "destination": "forem/src/modulation_rl/src/robot_husky.cpp",
+   "source_sha256": "1f3f000c5c8ea6f4275c32748d636487c4e22b6dee369eb155701c2e053d36bb",
+   "package": "modulation_rl",
+   "destination_sha256": "1f3f000c5c8ea6f4275c32748d636487c4e22b6dee369eb155701c2e053d36bb",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/src/validity_fun.cpp",
+   "destination": "forem/src/modulation_rl/src/validity_fun.cpp",
+   "source_sha256": "313fe515b261368f38bfd00a99de65774cd43442a7a4b335bdbf0926b35e82e3",
+   "package": "modulation_rl",
+   "destination_sha256": "313fe515b261368f38bfd00a99de65774cd43442a7a4b335bdbf0926b35e82e3",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/modulation_rl/src/worlds.cpp",
+   "destination": "forem/src/modulation_rl/src/worlds.cpp",
+   "source_sha256": "e8d03015853d5d477a1fbe6e83df62e664867473685b7efed1f977725206bd7f",
+   "package": "modulation_rl",
+   "destination_sha256": "e8d03015853d5d477a1fbe6e83df62e664867473685b7efed1f977725206bd7f",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/CMakeLists.txt",
+   "destination": "forem/src/husky_ur5/CMakeLists.txt",
+   "source_sha256": "2349b68578baafa42ee96d62c9a458772af91f4822eba7d6aa3463107de96cca",
+   "package": "husky_ur5",
+   "destination_sha256": "2349b68578baafa42ee96d62c9a458772af91f4822eba7d6aa3463107de96cca",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/config/chomp_planning.yaml",
+   "destination": "forem/src/husky_ur5/config/chomp_planning.yaml",
+   "source_sha256": "e9640b7c87ff4f1ba4a70e893c00aa6286db2b2b76149b3b16b924e8352cde33",
+   "package": "husky_ur5",
+   "destination_sha256": "e9640b7c87ff4f1ba4a70e893c00aa6286db2b2b76149b3b16b924e8352cde33",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/config/fake_controllers.yaml",
+   "destination": "forem/src/husky_ur5/config/fake_controllers.yaml",
+   "source_sha256": "6331f26d7ee3117b5e6e2669aba9bc5b7a17a11677e13ae81e8035add463bb06",
+   "package": "husky_ur5",
+   "destination_sha256": "6331f26d7ee3117b5e6e2669aba9bc5b7a17a11677e13ae81e8035add463bb06",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/config/joint_limits.yaml",
+   "destination": "forem/src/husky_ur5/config/joint_limits.yaml",
+   "source_sha256": "eca6ac96fbf309c451209580e5d264389b9a8358e3a76f7ac01a3b3ea98b4697",
+   "package": "husky_ur5",
+   "destination_sha256": "eca6ac96fbf309c451209580e5d264389b9a8358e3a76f7ac01a3b3ea98b4697",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/config/kinematics.yaml",
+   "destination": "forem/src/husky_ur5/config/kinematics.yaml",
+   "source_sha256": "50cff35a7aac4f2fee08e5054692e37c713d651fd15c46ed52e7aa502a14981b",
+   "package": "husky_ur5",
+   "destination_sha256": "50cff35a7aac4f2fee08e5054692e37c713d651fd15c46ed52e7aa502a14981b",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/config/ompl_planning.yaml",
+   "destination": "forem/src/husky_ur5/config/ompl_planning.yaml",
+   "source_sha256": "6b0568f4f50300d6663cf620570a2d421cfcc6461662180a4574676e02c28f1c",
+   "package": "husky_ur5",
+   "destination_sha256": "6b0568f4f50300d6663cf620570a2d421cfcc6461662180a4574676e02c28f1c",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/config/ros_controllers.yaml",
+   "destination": "forem/src/husky_ur5/config/ros_controllers.yaml",
+   "source_sha256": "fa170cbc502b4d0cdc43302f77b408a8a05113e94f156890f8b71eae65e551bd",
+   "package": "husky_ur5",
+   "destination_sha256": "fa170cbc502b4d0cdc43302f77b408a8a05113e94f156890f8b71eae65e551bd",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/config/ur5/default_kinematics.yaml",
+   "destination": "forem/src/husky_ur5/config/ur5/default_kinematics.yaml",
+   "source_sha256": "457599887837e90b72eae9c0a3bf4b503a4e26132ecac4c17f96e48a62eeb156",
+   "package": "husky_ur5",
+   "destination_sha256": "457599887837e90b72eae9c0a3bf4b503a4e26132ecac4c17f96e48a62eeb156",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/config/ur5/joint_limits.yaml",
+   "destination": "forem/src/husky_ur5/config/ur5/joint_limits.yaml",
+   "source_sha256": "95f407d38e5826c3f1b86c5fb4612c8c1383df5760a18137038c15c069994a50",
+   "package": "husky_ur5",
+   "destination_sha256": "95f407d38e5826c3f1b86c5fb4612c8c1383df5760a18137038c15c069994a50",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/config/ur5/physical_parameters.yaml",
+   "destination": "forem/src/husky_ur5/config/ur5/physical_parameters.yaml",
+   "source_sha256": "40eaca16a696b9acba168804e3002edeb6544d59f924b7f07ae6ee29edc797b8",
+   "package": "husky_ur5",
+   "destination_sha256": "40eaca16a696b9acba168804e3002edeb6544d59f924b7f07ae6ee29edc797b8",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/config/ur5/visual_parameters.yaml",
+   "destination": "forem/src/husky_ur5/config/ur5/visual_parameters.yaml",
+   "source_sha256": "f77ccbda08c08444e04b79809023d91d4765bdcdc99c8ff95f015f7ae3612fd6",
+   "package": "husky_ur5",
+   "destination_sha256": "f77ccbda08c08444e04b79809023d91d4765bdcdc99c8ff95f015f7ae3612fd6",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/config/ur5.srdf",
+   "destination": "forem/src/husky_ur5/config/ur5.srdf",
+   "source_sha256": "a7d2c8f431af28ea09cd680ae1d87ada56bc54c0d041dcfa82ad0cefd4f25fa6",
+   "package": "husky_ur5",
+   "destination_sha256": "a7d2c8f431af28ea09cd680ae1d87ada56bc54c0d041dcfa82ad0cefd4f25fa6",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/config/ur5_controllers.yaml",
+   "destination": "forem/src/husky_ur5/config/ur5_controllers.yaml",
+   "source_sha256": "d9821dd6839275ee1c3e1df35139c0426335a4ece40d8a01963605f5f4e654ca",
+   "package": "husky_ur5",
+   "destination_sha256": "d9821dd6839275ee1c3e1df35139c0426335a4ece40d8a01963605f5f4e654ca",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/config/ur5_husky.yaml",
+   "destination": "forem/src/husky_ur5/config/ur5_husky.yaml",
+   "source_sha256": "69c3b32220aa01f0ae30ca5e74376f46d8ffe60f7421c3447cd7b31fc2ea8860",
+   "package": "husky_ur5",
+   "destination_sha256": "69c3b32220aa01f0ae30ca5e74376f46d8ffe60f7421c3447cd7b31fc2ea8860",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/launch/chomp_planning_pipeline.launch.xml",
+   "destination": "forem/src/husky_ur5/launch/chomp_planning_pipeline.launch.xml",
+   "source_sha256": "dd75f755d3a3874ae703161a2c887442b009c9cd099fb7cf001430c2c8a015ed",
+   "package": "husky_ur5",
+   "destination_sha256": "dd75f755d3a3874ae703161a2c887442b009c9cd099fb7cf001430c2c8a015ed",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/launch/description.launch",
+   "destination": "forem/src/husky_ur5/launch/description.launch",
+   "source_sha256": "89badc8069eda0e808709301ee83c59353ea11d53c2eef82f35ac0ac576d7306",
+   "package": "husky_ur5",
+   "destination_sha256": "89badc8069eda0e808709301ee83c59353ea11d53c2eef82f35ac0ac576d7306",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/launch/inc/load_ur.launch.xml",
+   "destination": "forem/src/husky_ur5/launch/inc/load_ur.launch.xml",
+   "source_sha256": "633897d38375b1144c83b45eb882342beb96e6f7995dea71ccbfdb5cf915460f",
+   "package": "husky_ur5",
+   "destination_sha256": "633897d38375b1144c83b45eb882342beb96e6f7995dea71ccbfdb5cf915460f",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/launch/inc/load_ur5.launch.xml",
+   "destination": "forem/src/husky_ur5/launch/inc/load_ur5.launch.xml",
+   "source_sha256": "b0e51cd53bdb5b8ae75d802275c6866de5d84b5e1613b72cfe83542147a2b3c1",
+   "package": "husky_ur5",
+   "destination_sha256": "b0e51cd53bdb5b8ae75d802275c6866de5d84b5e1613b72cfe83542147a2b3c1",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/launch/inc/ur_control.launch.xml",
+   "destination": "forem/src/husky_ur5/launch/inc/ur_control.launch.xml",
+   "source_sha256": "1542ab76a301985356754e75cbc094837c7acff5d06b3bceae854c850b8a237d",
+   "package": "husky_ur5",
+   "destination_sha256": "1542ab76a301985356754e75cbc094837c7acff5d06b3bceae854c850b8a237d",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/launch/move_group.launch",
+   "destination": "forem/src/husky_ur5/launch/move_group.launch",
+   "source_sha256": "d62e353e0b615157cc0b49a59176cf97105cdd8770f4719af0fde04a0d71a3b2",
+   "package": "husky_ur5",
+   "destination_sha256": "d62e353e0b615157cc0b49a59176cf97105cdd8770f4719af0fde04a0d71a3b2",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/launch/n2m2_move_group.launch",
+   "destination": "forem/src/husky_ur5/launch/n2m2_move_group.launch",
+   "source_sha256": "8032c3cde1130b0914d00f1e1b91f30ad5abd2a0e4a0da111dbc059a2abb8185",
+   "package": "husky_ur5",
+   "destination_sha256": "8032c3cde1130b0914d00f1e1b91f30ad5abd2a0e4a0da111dbc059a2abb8185",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/launch/n2m2_moveit_planning_execution.launch",
+   "destination": "forem/src/husky_ur5/launch/n2m2_moveit_planning_execution.launch",
+   "source_sha256": "47b82125a479320e98c85abf4ef24032a8a48dd33adead614a6cd8af5c8e20b5",
+   "package": "husky_ur5",
+   "destination_sha256": "47b82125a479320e98c85abf4ef24032a8a48dd33adead614a6cd8af5c8e20b5",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/launch/ompl_planning_pipeline.launch.xml",
+   "destination": "forem/src/husky_ur5/launch/ompl_planning_pipeline.launch.xml",
+   "source_sha256": "54d61090f7dd3e8c2795ce368a4f1c57d2396ee1c2ffd024bddc95f3266e1bf7",
+   "package": "husky_ur5",
+   "destination_sha256": "54d61090f7dd3e8c2795ce368a4f1c57d2396ee1c2ffd024bddc95f3266e1bf7",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/launch/planning_context.launch",
+   "destination": "forem/src/husky_ur5/launch/planning_context.launch",
+   "source_sha256": "b30b237f0fd8173170ddd1e04ae0a7db6fd8a5eaee22509d8df896bf349c9337",
+   "package": "husky_ur5",
+   "destination_sha256": "b30b237f0fd8173170ddd1e04ae0a7db6fd8a5eaee22509d8df896bf349c9337",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/launch/planning_pipeline.launch.xml",
+   "destination": "forem/src/husky_ur5/launch/planning_pipeline.launch.xml",
+   "source_sha256": "f6c7920fd76ebeed00c821c5cd5e03912dd117a5db78b3d8f592f82daaca3e9b",
+   "package": "husky_ur5",
+   "destination_sha256": "f6c7920fd76ebeed00c821c5cd5e03912dd117a5db78b3d8f592f82daaca3e9b",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/launch/trajectory_execution.launch.xml",
+   "destination": "forem/src/husky_ur5/launch/trajectory_execution.launch.xml",
+   "source_sha256": "a9640ab200eb36a4cc1c57967cdc7388e3a4fbc8a4620eec92ccf9eab835f8e8",
+   "package": "husky_ur5",
+   "destination_sha256": "a9640ab200eb36a4cc1c57967cdc7388e3a4fbc8a4620eec92ccf9eab835f8e8",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/launch/ur5_moveit_controller_manager.launch.xml",
+   "destination": "forem/src/husky_ur5/launch/ur5_moveit_controller_manager.launch.xml",
+   "source_sha256": "f890761240306530a9ec5c19005dab376d08bf6aefbdb0cef546ed06066daeff",
+   "package": "husky_ur5",
+   "destination_sha256": "f890761240306530a9ec5c19005dab376d08bf6aefbdb0cef546ed06066daeff",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/meshes/collision/robotiq_85_base_link.stl",
+   "destination": "forem/src/husky_ur5/meshes/collision/robotiq_85_base_link.stl",
+   "source_sha256": "50ef681abf67a1ba26742a5ecf4f0bd2ee7461ce1b3aeda96af7227a767f15cc",
+   "package": "husky_ur5",
+   "destination_sha256": "50ef681abf67a1ba26742a5ecf4f0bd2ee7461ce1b3aeda96af7227a767f15cc",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/meshes/collision/robotiq_85_finger_link.stl",
+   "destination": "forem/src/husky_ur5/meshes/collision/robotiq_85_finger_link.stl",
+   "source_sha256": "039775f2845e76c2d2071f17456e254dab8670b379fa6e5b8944c3dc975dd3a1",
+   "package": "husky_ur5",
+   "destination_sha256": "039775f2845e76c2d2071f17456e254dab8670b379fa6e5b8944c3dc975dd3a1",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/meshes/collision/robotiq_85_finger_tip_link.stl",
+   "destination": "forem/src/husky_ur5/meshes/collision/robotiq_85_finger_tip_link.stl",
+   "source_sha256": "5663b94049ead2f0d8a7e6a36a327e0e67ccf03d1423d52110db5b9ce3627eec",
+   "package": "husky_ur5",
+   "destination_sha256": "5663b94049ead2f0d8a7e6a36a327e0e67ccf03d1423d52110db5b9ce3627eec",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/meshes/collision/robotiq_85_inner_knuckle_link.stl",
+   "destination": "forem/src/husky_ur5/meshes/collision/robotiq_85_inner_knuckle_link.stl",
+   "source_sha256": "072d6a173cbd8385b7a90bd2d46c87c906b93bddc5e2b49747be184bb93ef658",
+   "package": "husky_ur5",
+   "destination_sha256": "072d6a173cbd8385b7a90bd2d46c87c906b93bddc5e2b49747be184bb93ef658",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/meshes/collision/robotiq_85_knuckle_link.stl",
+   "destination": "forem/src/husky_ur5/meshes/collision/robotiq_85_knuckle_link.stl",
+   "source_sha256": "3e451aed9d7228ab26399c3d972f522f709b4d91607d5fd52e747c3c4942d177",
+   "package": "husky_ur5",
+   "destination_sha256": "3e451aed9d7228ab26399c3d972f522f709b4d91607d5fd52e747c3c4942d177",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/meshes/robotiq_85_coupler.stl",
+   "destination": "forem/src/husky_ur5/meshes/robotiq_85_coupler.stl",
+   "source_sha256": "5efab24f71fd9cd446244c362911991ac1724d8e30df2511295b5d49faa98fcb",
+   "package": "husky_ur5",
+   "destination_sha256": "5efab24f71fd9cd446244c362911991ac1724d8e30df2511295b5d49faa98fcb",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/meshes/visual/robotiq_85_base_link.dae",
+   "destination": "forem/src/husky_ur5/meshes/visual/robotiq_85_base_link.dae",
+   "source_sha256": "144ba52efe986a40c5cbc88d4d382eceffbd979ac277affb79898094ecf4e080",
+   "package": "husky_ur5",
+   "destination_sha256": "144ba52efe986a40c5cbc88d4d382eceffbd979ac277affb79898094ecf4e080",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/meshes/visual/robotiq_85_finger_link.dae",
+   "destination": "forem/src/husky_ur5/meshes/visual/robotiq_85_finger_link.dae",
+   "source_sha256": "c77d54fe880b5a6af0319a3c7a59ffd8c33010ca0550306d884a264bfc7b86ed",
+   "package": "husky_ur5",
+   "destination_sha256": "c77d54fe880b5a6af0319a3c7a59ffd8c33010ca0550306d884a264bfc7b86ed",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/meshes/visual/robotiq_85_finger_tip_link.dae",
+   "destination": "forem/src/husky_ur5/meshes/visual/robotiq_85_finger_tip_link.dae",
+   "source_sha256": "413859476e9582a8322af25c880672e257d4d8e7d4ea6b23d2e4bdccff5c0570",
+   "package": "husky_ur5",
+   "destination_sha256": "413859476e9582a8322af25c880672e257d4d8e7d4ea6b23d2e4bdccff5c0570",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/meshes/visual/robotiq_85_inner_knuckle_link.dae",
+   "destination": "forem/src/husky_ur5/meshes/visual/robotiq_85_inner_knuckle_link.dae",
+   "source_sha256": "186c73c03cb9f0e8dba78dc9378bfd27500a12cccbbff2c034c90672cfea91ec",
+   "package": "husky_ur5",
+   "destination_sha256": "186c73c03cb9f0e8dba78dc9378bfd27500a12cccbbff2c034c90672cfea91ec",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/meshes/visual/robotiq_85_knuckle_link.dae",
+   "destination": "forem/src/husky_ur5/meshes/visual/robotiq_85_knuckle_link.dae",
+   "source_sha256": "ae149f478f106c97f17fab2be6165551e36d0ac1c61ed89544c711be0a9b5451",
+   "package": "husky_ur5",
+   "destination_sha256": "ae149f478f106c97f17fab2be6165551e36d0ac1c61ed89544c711be0a9b5451",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/package.xml",
+   "destination": "forem/src/husky_ur5/package.xml",
+   "source_sha256": "d44ad991cfe11d9a701ec2235adaa8884dd3acc5a0b134cbafbe4c07cb97d619",
+   "package": "husky_ur5",
+   "destination_sha256": "d44ad991cfe11d9a701ec2235adaa8884dd3acc5a0b134cbafbe4c07cb97d619",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/urdf/example.urdf.xacro",
+   "destination": "forem/src/husky_ur5/urdf/example.urdf.xacro",
+   "source_sha256": "8cdd0acd6ff7ec2fb678e78b28ed2d4634cad2804f4c591490327a8b2b670b3d",
+   "package": "husky_ur5",
+   "destination_sha256": "8cdd0acd6ff7ec2fb678e78b28ed2d4634cad2804f4c591490327a8b2b670b3d",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/urdf/husky_ur5.xacro",
+   "destination": "forem/src/husky_ur5/urdf/husky_ur5.xacro",
+   "source_sha256": "db1429ae2a4cad1fb1d50f871ecebedf103eb870e04768cab91b01aad6c647c8",
+   "package": "husky_ur5",
+   "destination_sha256": "c433e3e4c19c81cb6d8efbf6703b6ae1112628a9cbdfde91b90cf88e285d8e44",
+   "status": "patched",
+   "patch_reason": "(1) remove the libgazebo_ros_moveit_planning_scene.so plugin block (prebuilt binary of unknown ABI, not in the source closure; RobotEnv does not use /planning_scene and reads joint_states). (2) pass gravity_off=\"true\" to the 15 bumper macro calls of the UR5 arm links and gripper links so the ARM KEEPS the reference's gravity-free dynamics, while chassis/wheel/mount links get gravity (needed to drive). Measured: with gravity on for the arm too, the reference effort PID (p=100,d=0.1 on wrist_3, trajectory tolerance 0.1 rad) is violently unstable after random-policy episodes and arm resets abort ('wrist_3 path error', 'Could not set start pose after 50 trials'): t3.5-int-r2, t3.5-resets-r1, t3.5-resets-quick1; with the arm gravity-free: 12/12 episodes reset without failure (t3.5-resets-r2).",
+   "semantic_impact": "declared",
+   "patch_file": "forem/config/task3/patches/forem__src__husky_ur5__urdf__husky_ur5.xacro.diff"
+  },
+  {
+   "source": "husky/src/husky_ur5/urdf/husky_ur5_laser.xacro",
+   "destination": "forem/src/husky_ur5/urdf/husky_ur5_laser.xacro",
+   "source_sha256": "fe8af80e49d35dfbe04316373559f40f1ff0e26abf9bbe0fa478006aa46970a7",
+   "package": "husky_ur5",
+   "destination_sha256": "fe8af80e49d35dfbe04316373559f40f1ff0e26abf9bbe0fa478006aa46970a7",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/urdf/laser.urdf.xacro",
+   "destination": "forem/src/husky_ur5/urdf/laser.urdf.xacro",
+   "source_sha256": "5bfc8f48f5ad306988e1bc432ad5a0ce4338b61f34004dacc99d404deda77d8c",
+   "package": "husky_ur5",
+   "destination_sha256": "5bfc8f48f5ad306988e1bc432ad5a0ce4338b61f34004dacc99d404deda77d8c",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/urdf/robotiq_85_gripper.transmission.xacro",
+   "destination": "forem/src/husky_ur5/urdf/robotiq_85_gripper.transmission.xacro",
+   "source_sha256": "e0989ca64e3a40634aa6d77f2d7d04c7ae42b9d4649cfcb598cea90e557fc090",
+   "package": "husky_ur5",
+   "destination_sha256": "e0989ca64e3a40634aa6d77f2d7d04c7ae42b9d4649cfcb598cea90e557fc090",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/urdf/robotiq_85_gripper.urdf.xacro",
+   "destination": "forem/src/husky_ur5/urdf/robotiq_85_gripper.urdf.xacro",
+   "source_sha256": "75c4b730340be015da7e55059d2c5f00f4558e38a94f6de3b9db68f9600956db",
+   "package": "husky_ur5",
+   "destination_sha256": "75c4b730340be015da7e55059d2c5f00f4558e38a94f6de3b9db68f9600956db",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky_ur5/urdf/robotiq_85_gripper.xacro",
+   "destination": "forem/src/husky_ur5/urdf/robotiq_85_gripper.xacro",
+   "source_sha256": "226cb4e33bfe6ea7e90ef768bc54dec2e898a9da0c8dd78b5e14c7eea33e090f",
+   "package": "husky_ur5",
+   "destination_sha256": "226cb4e33bfe6ea7e90ef768bc54dec2e898a9da0c8dd78b5e14c7eea33e090f",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/CMakeLists.txt",
+   "destination": "forem/src/husky_description/CMakeLists.txt",
+   "source_sha256": "66c4ecffa04e6472783deea5467cc00031fdf9e32442b27e156abce7605641a1",
+   "package": "husky_description",
+   "destination_sha256": "66c4ecffa04e6472783deea5467cc00031fdf9e32442b27e156abce7605641a1",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/launch/description.launch",
+   "destination": "forem/src/husky_description/launch/description.launch",
+   "source_sha256": "89badc8069eda0e808709301ee83c59353ea11d53c2eef82f35ac0ac576d7306",
+   "package": "husky_description",
+   "destination_sha256": "89badc8069eda0e808709301ee83c59353ea11d53c2eef82f35ac0ac576d7306",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/meshes/accessories/300_mm_sensor_arch.dae",
+   "destination": "forem/src/husky_description/meshes/accessories/300_mm_sensor_arch.dae",
+   "source_sha256": "a263d2362ccca87a4469d721dd202d72016bb57b060aac88e03072891725d6bf",
+   "package": "husky_description",
+   "destination_sha256": "a263d2362ccca87a4469d721dd202d72016bb57b060aac88e03072891725d6bf",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/meshes/accessories/300_mm_sensor_arch.stl",
+   "destination": "forem/src/husky_description/meshes/accessories/300_mm_sensor_arch.stl",
+   "source_sha256": "a95f751d2f8261f3244fd53a2cda794e33f9e425129affe95ca835e34efa6221",
+   "package": "husky_description",
+   "destination_sha256": "a95f751d2f8261f3244fd53a2cda794e33f9e425129affe95ca835e34efa6221",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/meshes/accessories/510_mm_sensor_arch.dae",
+   "destination": "forem/src/husky_description/meshes/accessories/510_mm_sensor_arch.dae",
+   "source_sha256": "d1cd715d8d90eef458878c661d301dea1847a8a95ed7193b6e6998f83313ad34",
+   "package": "husky_description",
+   "destination_sha256": "d1cd715d8d90eef458878c661d301dea1847a8a95ed7193b6e6998f83313ad34",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/meshes/accessories/510_mm_sensor_arch.stl",
+   "destination": "forem/src/husky_description/meshes/accessories/510_mm_sensor_arch.stl",
+   "source_sha256": "c3b5eb7e87783289bcaea4bf627f1aeee38c135ea1b130d64bdfe69b9a5cc53e",
+   "package": "husky_description",
+   "destination_sha256": "c3b5eb7e87783289bcaea4bf627f1aeee38c135ea1b130d64bdfe69b9a5cc53e",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/meshes/accessories/hokuyo_ust10.stl",
+   "destination": "forem/src/husky_description/meshes/accessories/hokuyo_ust10.stl",
+   "source_sha256": "f6a442fc679a2f228893df6e8fcdc24c53ad9a670515b6be9292ac8ee5961793",
+   "package": "husky_description",
+   "destination_sha256": "f6a442fc679a2f228893df6e8fcdc24c53ad9a670515b6be9292ac8ee5961793",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/meshes/accessories/lidar_mount.stl",
+   "destination": "forem/src/husky_description/meshes/accessories/lidar_mount.stl",
+   "source_sha256": "2adb38323508694bf5ca4a0b2fa68a15016ab6489a41cfc3075c9dd63910105e",
+   "package": "husky_description",
+   "destination_sha256": "2adb38323508694bf5ca4a0b2fa68a15016ab6489a41cfc3075c9dd63910105e",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/meshes/accessories/lms1xx_mount.dae",
+   "destination": "forem/src/husky_description/meshes/accessories/lms1xx_mount.dae",
+   "source_sha256": "c2d371dbbe464f713c2fdc2e5fdd1e820d98c2a791590d73d11f08e65d01c898",
+   "package": "husky_description",
+   "destination_sha256": "c2d371dbbe464f713c2fdc2e5fdd1e820d98c2a791590d73d11f08e65d01c898",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/meshes/accessories/lms1xx_mount.stl",
+   "destination": "forem/src/husky_description/meshes/accessories/lms1xx_mount.stl",
+   "source_sha256": "80ab9165d98c9b95d2fab37044e5b8a25026d6304162389389a7d08923a6a391",
+   "package": "husky_description",
+   "destination_sha256": "80ab9165d98c9b95d2fab37044e5b8a25026d6304162389389a7d08923a6a391",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/meshes/accessories/wibotic_bumper.stl",
+   "destination": "forem/src/husky_description/meshes/accessories/wibotic_bumper.stl",
+   "source_sha256": "4fdad7b1f4e3681733ba2c102132ab2988f3ad7de6e9f46ba13dd64c91030993",
+   "package": "husky_description",
+   "destination_sha256": "4fdad7b1f4e3681733ba2c102132ab2988f3ad7de6e9f46ba13dd64c91030993",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/meshes/base_link.dae",
+   "destination": "forem/src/husky_description/meshes/base_link.dae",
+   "source_sha256": "d3df19830e28787a750026e94865895a25b45a3a2ca8d46503b887404944a39e",
+   "package": "husky_description",
+   "destination_sha256": "d3df19830e28787a750026e94865895a25b45a3a2ca8d46503b887404944a39e",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/meshes/base_link.stl",
+   "destination": "forem/src/husky_description/meshes/base_link.stl",
+   "source_sha256": "52107dc0be1fc5a9b16549d1ea03e71a4732cd80dc261a8403f9d671173bd97a",
+   "package": "husky_description",
+   "destination_sha256": "52107dc0be1fc5a9b16549d1ea03e71a4732cd80dc261a8403f9d671173bd97a",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/meshes/bumper.dae",
+   "destination": "forem/src/husky_description/meshes/bumper.dae",
+   "source_sha256": "4966ce071cb2a6904138a707c86ebfef168d043edbef92f34e6b4233702d57bb",
+   "package": "husky_description",
+   "destination_sha256": "4966ce071cb2a6904138a707c86ebfef168d043edbef92f34e6b4233702d57bb",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/meshes/bumper_extension.dae",
+   "destination": "forem/src/husky_description/meshes/bumper_extension.dae",
+   "source_sha256": "81521edde2f70b8ecbeddb0ce48f4a56f5cdb0443a5f91cbd2e9d01b5b37813d",
+   "package": "husky_description",
+   "destination_sha256": "81521edde2f70b8ecbeddb0ce48f4a56f5cdb0443a5f91cbd2e9d01b5b37813d",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/meshes/large_top_plate.dae",
+   "destination": "forem/src/husky_description/meshes/large_top_plate.dae",
+   "source_sha256": "d237e49e403876df77d1c4b5afd09ba3c974337380af6063a2550e94982b2393",
+   "package": "husky_description",
+   "destination_sha256": "d237e49e403876df77d1c4b5afd09ba3c974337380af6063a2550e94982b2393",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/meshes/large_top_plate_collision.stl",
+   "destination": "forem/src/husky_description/meshes/large_top_plate_collision.stl",
+   "source_sha256": "51fecd2fa8fc39acb226b558cb697cd275bc02d8059e75a62a6a8e8f49124412",
+   "package": "husky_description",
+   "destination_sha256": "51fecd2fa8fc39acb226b558cb697cd275bc02d8059e75a62a6a8e8f49124412",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/meshes/top_chassis.dae",
+   "destination": "forem/src/husky_description/meshes/top_chassis.dae",
+   "source_sha256": "3364b518568a65497e11f9adc9d0b9e65bf2dd6870625a7bf978e1f9994f5aa4",
+   "package": "husky_description",
+   "destination_sha256": "3364b518568a65497e11f9adc9d0b9e65bf2dd6870625a7bf978e1f9994f5aa4",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/meshes/top_chassis.stl",
+   "destination": "forem/src/husky_description/meshes/top_chassis.stl",
+   "source_sha256": "b19fc4c116647c179714a9e50d0aa275feb833eeb84de83571a64f5e0ca15ae2",
+   "package": "husky_description",
+   "destination_sha256": "b19fc4c116647c179714a9e50d0aa275feb833eeb84de83571a64f5e0ca15ae2",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/meshes/top_plate.dae",
+   "destination": "forem/src/husky_description/meshes/top_plate.dae",
+   "source_sha256": "40fd41264d9e305b4c866b01215356877e05b381fa9fef1dac775ed2f4f9dc27",
+   "package": "husky_description",
+   "destination_sha256": "40fd41264d9e305b4c866b01215356877e05b381fa9fef1dac775ed2f4f9dc27",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/meshes/top_plate.stl",
+   "destination": "forem/src/husky_description/meshes/top_plate.stl",
+   "source_sha256": "6c7eff8fc0f9dfe96d836a5d00b89ea2c754985440e3a3db7a010c5807b8491f",
+   "package": "husky_description",
+   "destination_sha256": "6c7eff8fc0f9dfe96d836a5d00b89ea2c754985440e3a3db7a010c5807b8491f",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/meshes/user_rail.dae",
+   "destination": "forem/src/husky_description/meshes/user_rail.dae",
+   "source_sha256": "b19c5455e983a8b6663abb6f2dc088947af432a46338d203ef171c318ff8d4ee",
+   "package": "husky_description",
+   "destination_sha256": "b19c5455e983a8b6663abb6f2dc088947af432a46338d203ef171c318ff8d4ee",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/meshes/user_rail.stl",
+   "destination": "forem/src/husky_description/meshes/user_rail.stl",
+   "source_sha256": "9289df409dec6a91e0bf6be606b30b83c50864975361f57f629f8166fa913289",
+   "package": "husky_description",
+   "destination_sha256": "9289df409dec6a91e0bf6be606b30b83c50864975361f57f629f8166fa913289",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/meshes/wheel.dae",
+   "destination": "forem/src/husky_description/meshes/wheel.dae",
+   "source_sha256": "0e38706f933ccb0a2fc198ed5203fb089a671a483217790d1cb8583ed9c3dbad",
+   "package": "husky_description",
+   "destination_sha256": "0e38706f933ccb0a2fc198ed5203fb089a671a483217790d1cb8583ed9c3dbad",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/meshes/wheel.stl",
+   "destination": "forem/src/husky_description/meshes/wheel.stl",
+   "source_sha256": "c6cdb0f65efac76467db6e27371420ed1275cb2c93ed7a41ed8b41b98a7da671",
+   "package": "husky_description",
+   "destination_sha256": "c6cdb0f65efac76467db6e27371420ed1275cb2c93ed7a41ed8b41b98a7da671",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/package.xml",
+   "destination": "forem/src/husky_description/package.xml",
+   "source_sha256": "0eb36c38545762994e9eb2272aa23bf2343634347ed5c65144b6ce74e7b41d08",
+   "package": "husky_description",
+   "destination_sha256": "0eb36c38545762994e9eb2272aa23bf2343634347ed5c65144b6ce74e7b41d08",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/urdf/accessories/hokuyo_ust10.urdf.xacro",
+   "destination": "forem/src/husky_description/urdf/accessories/hokuyo_ust10.urdf.xacro",
+   "source_sha256": "c01e0d6bebac374008199a5fc9b010cf42b87e7be8255eed6e3fbf2d701d0d5f",
+   "package": "husky_description",
+   "destination_sha256": "c01e0d6bebac374008199a5fc9b010cf42b87e7be8255eed6e3fbf2d701d0d5f",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/urdf/accessories/intel_realsense.urdf.xacro",
+   "destination": "forem/src/husky_description/urdf/accessories/intel_realsense.urdf.xacro",
+   "source_sha256": "ba5715eec6b24256b0f006bd16e851eb253d4fcdccb8343f62e8196192b89801",
+   "package": "husky_description",
+   "destination_sha256": "ba5715eec6b24256b0f006bd16e851eb253d4fcdccb8343f62e8196192b89801",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/urdf/accessories/sensor_arch.urdf.xacro",
+   "destination": "forem/src/husky_description/urdf/accessories/sensor_arch.urdf.xacro",
+   "source_sha256": "6f21139a353d5d802072d5afe7eb34e0a62408652775ba1f784f2a88c8beb16c",
+   "package": "husky_description",
+   "destination_sha256": "6f21139a353d5d802072d5afe7eb34e0a62408652775ba1f784f2a88c8beb16c",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/urdf/accessories/sick_lms1xx_mount.urdf.xacro",
+   "destination": "forem/src/husky_description/urdf/accessories/sick_lms1xx_mount.urdf.xacro",
+   "source_sha256": "6d8c868c3e0d2bcc1c8829dbff95be89cba42164dbce1928bdca48c2a970a730",
+   "package": "husky_description",
+   "destination_sha256": "6d8c868c3e0d2bcc1c8829dbff95be89cba42164dbce1928bdca48c2a970a730",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/urdf/accessories/vlp16_mount.urdf.xacro",
+   "destination": "forem/src/husky_description/urdf/accessories/vlp16_mount.urdf.xacro",
+   "source_sha256": "68ab13ddda645cd9e904e4f3418f7b7f96c375d68a3235e937d08edd2a6fdfa1",
+   "package": "husky_description",
+   "destination_sha256": "68ab13ddda645cd9e904e4f3418f7b7f96c375d68a3235e937d08edd2a6fdfa1",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/urdf/decorations.urdf.xacro",
+   "destination": "forem/src/husky_description/urdf/decorations.urdf.xacro",
+   "source_sha256": "85b8055ea2edcbde53f954d5daeb679eb2def6699c88417214ee4fd6db7e132c",
+   "package": "husky_description",
+   "destination_sha256": "85b8055ea2edcbde53f954d5daeb679eb2def6699c88417214ee4fd6db7e132c",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/urdf/empty.urdf",
+   "destination": "forem/src/husky_description/urdf/empty.urdf",
+   "source_sha256": "78983de792cef9129258a2c3cb46219ab31e19130b944e0e121b4fe75d10f738",
+   "package": "husky_description",
+   "destination_sha256": "78983de792cef9129258a2c3cb46219ab31e19130b944e0e121b4fe75d10f738",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/urdf/husky.urdf.xacro",
+   "destination": "forem/src/husky_description/urdf/husky.urdf.xacro",
+   "source_sha256": "e1707b964216a108a076d875024b4d08766518ac02d1382817015d2a779f250e",
+   "package": "husky_description",
+   "destination_sha256": "e1707b964216a108a076d875024b4d08766518ac02d1382817015d2a779f250e",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_description/urdf/wheel.urdf.xacro",
+   "destination": "forem/src/husky_description/urdf/wheel.urdf.xacro",
+   "source_sha256": "b22de2f6986fc1b7f1fc07a7c3a6e3620cb7f58fceaf07beb604260552b57b23",
+   "package": "husky_description",
+   "destination_sha256": "b22de2f6986fc1b7f1fc07a7c3a6e3620cb7f58fceaf07beb604260552b57b23",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_control/CMakeLists.txt",
+   "destination": "forem/src/husky_control/CMakeLists.txt",
+   "source_sha256": "97b82fd3dc3ef27d7427b1032d44cd087d8c5fce2aa241c1d25f53997ccb79a2",
+   "package": "husky_control",
+   "destination_sha256": "799d0e25118170f776fb064add5697b54b28dde1127bfa95d86c0a8ce95727ea",
+   "status": "patched",
+   "patch_reason": "the launch/ directory is not imported (replaced by forem_husky/launch/husky_core.launch); drop roslaunch_add_file_check(launch) and the launch install.",
+   "semantic_impact": "none",
+   "patch_file": "forem/config/task3/patches/forem__src__husky_control__CMakeLists.txt.diff"
+  },
+  {
+   "source": "husky/src/husky/husky_control/config/control.yaml",
+   "destination": "forem/src/husky_control/config/control.yaml",
+   "source_sha256": "34939ab4259c5d3bec60080e29679c550ffc587f7e90d409be4fe889e13dc642",
+   "package": "husky_control",
+   "destination_sha256": "34939ab4259c5d3bec60080e29679c550ffc587f7e90d409be4fe889e13dc642",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_control/config/empty.yaml",
+   "destination": "forem/src/husky_control/config/empty.yaml",
+   "source_sha256": "f9f89a49fe8a213f2947ebac80e33f54cdefd5b35b7f5d0397c493602df48c63",
+   "package": "husky_control",
+   "destination_sha256": "f9f89a49fe8a213f2947ebac80e33f54cdefd5b35b7f5d0397c493602df48c63",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_control/config/twist_mux.yaml",
+   "destination": "forem/src/husky_control/config/twist_mux.yaml",
+   "source_sha256": "ed5288594065bc92165e15c3bdd3453f8795e8e844b27db7696228017802b2ef",
+   "package": "husky_control",
+   "destination_sha256": "ed5288594065bc92165e15c3bdd3453f8795e8e844b27db7696228017802b2ef",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/husky/husky_control/package.xml",
+   "destination": "forem/src/husky_control/package.xml",
+   "source_sha256": "ec12742647941984eb9f05d2c94b219aead5a47ce046257d1417c4e6a2f9091b",
+   "package": "husky_control",
+   "destination_sha256": "ec12742647941984eb9f05d2c94b219aead5a47ce046257d1417c4e6a2f9091b",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/bio_ik/CMakeLists.txt",
+   "destination": "forem/src/bio_ik/CMakeLists.txt",
+   "source_sha256": "18a4bdfd729540b856208f8586f0b3fa378a00ba3204944e0cdfc7929decebe9",
+   "package": "bio_ik",
+   "destination_sha256": "18a4bdfd729540b856208f8586f0b3fa378a00ba3204944e0cdfc7929decebe9",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/bio_ik/LICENCE.txt",
+   "destination": "forem/src/bio_ik/LICENCE.txt",
+   "source_sha256": "241f4235dffd3527dc5f99114f786db1cd7469ba2be0add1cbcc7f8796338f39",
+   "package": "bio_ik",
+   "destination_sha256": "241f4235dffd3527dc5f99114f786db1cd7469ba2be0add1cbcc7f8796338f39",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/bio_ik/bio_ik_kinematics_description.xml",
+   "destination": "forem/src/bio_ik/bio_ik_kinematics_description.xml",
+   "source_sha256": "474d9b260d065da4d5349c9e74c5c5d1f5be8c5afcf0a5fb833712bad4d94394",
+   "package": "bio_ik",
+   "destination_sha256": "474d9b260d065da4d5349c9e74c5c5d1f5be8c5afcf0a5fb833712bad4d94394",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/bio_ik/include/bio_ik/bio_ik.h",
+   "destination": "forem/src/bio_ik/include/bio_ik/bio_ik.h",
+   "source_sha256": "cc7ef79f57801a1882ed0d02674b065bb5c7248198310536141d24891386ffa1",
+   "package": "bio_ik",
+   "destination_sha256": "cc7ef79f57801a1882ed0d02674b065bb5c7248198310536141d24891386ffa1",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/bio_ik/include/bio_ik/frame.h",
+   "destination": "forem/src/bio_ik/include/bio_ik/frame.h",
+   "source_sha256": "fd6ad947020ab1a5c99626241a1ec7ce6e46eb3048461cc2efbccc662ef1c1b1",
+   "package": "bio_ik",
+   "destination_sha256": "fd6ad947020ab1a5c99626241a1ec7ce6e46eb3048461cc2efbccc662ef1c1b1",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/bio_ik/include/bio_ik/goal.h",
+   "destination": "forem/src/bio_ik/include/bio_ik/goal.h",
+   "source_sha256": "fe17f83953efa45657cc767ee6e1aff0f0a08a7821f3df5ee8f40aa0735aa7af",
+   "package": "bio_ik",
+   "destination_sha256": "fe17f83953efa45657cc767ee6e1aff0f0a08a7821f3df5ee8f40aa0735aa7af",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/bio_ik/include/bio_ik/goal_types.h",
+   "destination": "forem/src/bio_ik/include/bio_ik/goal_types.h",
+   "source_sha256": "6e897a63fbbf3ebfab5a19796e2b9f8fa9acd9a024412084f0f09c270fc99d95",
+   "package": "bio_ik",
+   "destination_sha256": "6e897a63fbbf3ebfab5a19796e2b9f8fa9acd9a024412084f0f09c270fc99d95",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/bio_ik/include/bio_ik/robot_info.h",
+   "destination": "forem/src/bio_ik/include/bio_ik/robot_info.h",
+   "source_sha256": "cb117db955f992520090974e89d0d5244534959102d589a078b04b6371b11c7a",
+   "package": "bio_ik",
+   "destination_sha256": "cb117db955f992520090974e89d0d5244534959102d589a078b04b6371b11c7a",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/bio_ik/package.xml",
+   "destination": "forem/src/bio_ik/package.xml",
+   "source_sha256": "b9a6cde5062d38505afa692e5cb1aba209ad20e73b8fc5c1340786b725b9537b",
+   "package": "bio_ik",
+   "destination_sha256": "b9a6cde5062d38505afa692e5cb1aba209ad20e73b8fc5c1340786b725b9537b",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/bio_ik/src/forward_kinematics.h",
+   "destination": "forem/src/bio_ik/src/forward_kinematics.h",
+   "source_sha256": "cd61fa2882e26d0fa7d916b3556bdc0bb2f10665e1c15a9da1e4559a97976ce0",
+   "package": "bio_ik",
+   "destination_sha256": "cd61fa2882e26d0fa7d916b3556bdc0bb2f10665e1c15a9da1e4559a97976ce0",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/bio_ik/src/goal_types.cpp",
+   "destination": "forem/src/bio_ik/src/goal_types.cpp",
+   "source_sha256": "895e693231bc15cad4410f20da8b4370d4edc0543cebbf6a78fa353f88e8c055",
+   "package": "bio_ik",
+   "destination_sha256": "895e693231bc15cad4410f20da8b4370d4edc0543cebbf6a78fa353f88e8c055",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/bio_ik/src/ik_base.h",
+   "destination": "forem/src/bio_ik/src/ik_base.h",
+   "source_sha256": "c1b86d37b8ac4d71440bb3e64532ddeada6d38c94242b184f5d32a8e98c28765",
+   "package": "bio_ik",
+   "destination_sha256": "c1b86d37b8ac4d71440bb3e64532ddeada6d38c94242b184f5d32a8e98c28765",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/bio_ik/src/ik_cppoptlib.cpp",
+   "destination": "forem/src/bio_ik/src/ik_cppoptlib.cpp",
+   "source_sha256": "f34f8565787b68af4bc8c09b166c24baac013f09f4d251eeb37519a75c44926d",
+   "package": "bio_ik",
+   "destination_sha256": "f34f8565787b68af4bc8c09b166c24baac013f09f4d251eeb37519a75c44926d",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/bio_ik/src/ik_evolution_1.cpp",
+   "destination": "forem/src/bio_ik/src/ik_evolution_1.cpp",
+   "source_sha256": "fca2f69af6a61656d05eeb2b50f02d65475bfd5307f180038d8af60e79caa9c0",
+   "package": "bio_ik",
+   "destination_sha256": "fca2f69af6a61656d05eeb2b50f02d65475bfd5307f180038d8af60e79caa9c0",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/bio_ik/src/ik_evolution_2.cpp",
+   "destination": "forem/src/bio_ik/src/ik_evolution_2.cpp",
+   "source_sha256": "364396159c35ba29a10ab14b08fd23370a333f932a70cf3a9e968a400abf083c",
+   "package": "bio_ik",
+   "destination_sha256": "364396159c35ba29a10ab14b08fd23370a333f932a70cf3a9e968a400abf083c",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/bio_ik/src/ik_gradient.cpp",
+   "destination": "forem/src/bio_ik/src/ik_gradient.cpp",
+   "source_sha256": "9bcd8346ed15e93726e58938407ff5f4773ed8542727d71f76e96071a8bb5dca",
+   "package": "bio_ik",
+   "destination_sha256": "9bcd8346ed15e93726e58938407ff5f4773ed8542727d71f76e96071a8bb5dca",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/bio_ik/src/ik_neural.cpp",
+   "destination": "forem/src/bio_ik/src/ik_neural.cpp",
+   "source_sha256": "7b30a4622f54cf884b22072b674d872121bb10b630b4f3b55d68a7fd359493e4",
+   "package": "bio_ik",
+   "destination_sha256": "7b30a4622f54cf884b22072b674d872121bb10b630b4f3b55d68a7fd359493e4",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/bio_ik/src/ik_parallel.h",
+   "destination": "forem/src/bio_ik/src/ik_parallel.h",
+   "source_sha256": "c9ebbafef5ae9e1339b2cee545eea0ea576e15700972029593ddb65ecc2adacf",
+   "package": "bio_ik",
+   "destination_sha256": "c9ebbafef5ae9e1339b2cee545eea0ea576e15700972029593ddb65ecc2adacf",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/bio_ik/src/ik_test.cpp",
+   "destination": "forem/src/bio_ik/src/ik_test.cpp",
+   "source_sha256": "557ceac270098a250cfa47f416b527285e09f0efc72a79146fb6f4aae6309fed",
+   "package": "bio_ik",
+   "destination_sha256": "557ceac270098a250cfa47f416b527285e09f0efc72a79146fb6f4aae6309fed",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/bio_ik/src/kinematics_plugin.cpp",
+   "destination": "forem/src/bio_ik/src/kinematics_plugin.cpp",
+   "source_sha256": "3accd5377db68116f25c654658c96357f8660d6da917fac117e4212fa21e058d",
+   "package": "bio_ik",
+   "destination_sha256": "3accd5377db68116f25c654658c96357f8660d6da917fac117e4212fa21e058d",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/bio_ik/src/problem.cpp",
+   "destination": "forem/src/bio_ik/src/problem.cpp",
+   "source_sha256": "0a267e534651297ce25cc342c9f2ee83227d104e7a315c3f3e53c581a323c821",
+   "package": "bio_ik",
+   "destination_sha256": "0a267e534651297ce25cc342c9f2ee83227d104e7a315c3f3e53c581a323c821",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/bio_ik/src/problem.h",
+   "destination": "forem/src/bio_ik/src/problem.h",
+   "source_sha256": "4d2bf31375dbe884feb0e3956cc17546be169316772845e98e9281f27d46bf8b",
+   "package": "bio_ik",
+   "destination_sha256": "4d2bf31375dbe884feb0e3956cc17546be169316772845e98e9281f27d46bf8b",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/bio_ik/src/utils.h",
+   "destination": "forem/src/bio_ik/src/utils.h",
+   "source_sha256": "124ec9611bce136150f36d2f06fbebd5165b2760d67831c884202508ba22ee67",
+   "package": "bio_ik",
+   "destination_sha256": "124ec9611bce136150f36d2f06fbebd5165b2760d67831c884202508ba22ee67",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/robotiq_85_gripper/robotiq_85_description/CMakeLists.txt",
+   "destination": "forem/src/robotiq_85_description/CMakeLists.txt",
+   "source_sha256": "73538257a81916329537db45c8f9ae557b5780f45fd1be96921349b5b385061c",
+   "package": "robotiq_85_description",
+   "destination_sha256": "b25e970f983f70b12ba1f571e0fa1db7298c0a11a923d7e3f214072b2fb25de7",
+   "status": "patched",
+   "patch_reason": "the launch/ directory is not imported; drop roslaunch_add_file_check(launch) and the launch install.",
+   "semantic_impact": "none",
+   "patch_file": "forem/config/task3/patches/forem__src__robotiq_85_description__CMakeLists.txt.diff"
+  },
+  {
+   "source": "husky/src/robotiq_85_gripper/robotiq_85_description/meshes/collision/kinova_robotiq_coupler.stl",
+   "destination": "forem/src/robotiq_85_description/meshes/collision/kinova_robotiq_coupler.stl",
+   "source_sha256": "beaf657803a4d28340dfa594b4b26a37b76ee096a9c6e299dde144bc363519fe",
+   "package": "robotiq_85_description",
+   "destination_sha256": "beaf657803a4d28340dfa594b4b26a37b76ee096a9c6e299dde144bc363519fe",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/robotiq_85_gripper/robotiq_85_description/meshes/collision/robotiq_85_base_link.stl",
+   "destination": "forem/src/robotiq_85_description/meshes/collision/robotiq_85_base_link.stl",
+   "source_sha256": "50ef681abf67a1ba26742a5ecf4f0bd2ee7461ce1b3aeda96af7227a767f15cc",
+   "package": "robotiq_85_description",
+   "destination_sha256": "50ef681abf67a1ba26742a5ecf4f0bd2ee7461ce1b3aeda96af7227a767f15cc",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/robotiq_85_gripper/robotiq_85_description/meshes/collision/robotiq_85_finger_link.stl",
+   "destination": "forem/src/robotiq_85_description/meshes/collision/robotiq_85_finger_link.stl",
+   "source_sha256": "039775f2845e76c2d2071f17456e254dab8670b379fa6e5b8944c3dc975dd3a1",
+   "package": "robotiq_85_description",
+   "destination_sha256": "039775f2845e76c2d2071f17456e254dab8670b379fa6e5b8944c3dc975dd3a1",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/robotiq_85_gripper/robotiq_85_description/meshes/collision/robotiq_85_finger_tip_link.stl",
+   "destination": "forem/src/robotiq_85_description/meshes/collision/robotiq_85_finger_tip_link.stl",
+   "source_sha256": "5663b94049ead2f0d8a7e6a36a327e0e67ccf03d1423d52110db5b9ce3627eec",
+   "package": "robotiq_85_description",
+   "destination_sha256": "5663b94049ead2f0d8a7e6a36a327e0e67ccf03d1423d52110db5b9ce3627eec",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/robotiq_85_gripper/robotiq_85_description/meshes/collision/robotiq_85_inner_knuckle_link.stl",
+   "destination": "forem/src/robotiq_85_description/meshes/collision/robotiq_85_inner_knuckle_link.stl",
+   "source_sha256": "072d6a173cbd8385b7a90bd2d46c87c906b93bddc5e2b49747be184bb93ef658",
+   "package": "robotiq_85_description",
+   "destination_sha256": "072d6a173cbd8385b7a90bd2d46c87c906b93bddc5e2b49747be184bb93ef658",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/robotiq_85_gripper/robotiq_85_description/meshes/collision/robotiq_85_knuckle_link.stl",
+   "destination": "forem/src/robotiq_85_description/meshes/collision/robotiq_85_knuckle_link.stl",
+   "source_sha256": "3e451aed9d7228ab26399c3d972f522f709b4d91607d5fd52e747c3c4942d177",
+   "package": "robotiq_85_description",
+   "destination_sha256": "3e451aed9d7228ab26399c3d972f522f709b4d91607d5fd52e747c3c4942d177",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/robotiq_85_gripper/robotiq_85_description/meshes/visual/kinova_robotiq_coupler.dae",
+   "destination": "forem/src/robotiq_85_description/meshes/visual/kinova_robotiq_coupler.dae",
+   "source_sha256": "1ea635873b5a330804d5850f68c14d7f1b69e4e64b4b48a9a50065eb89ffe21f",
+   "package": "robotiq_85_description",
+   "destination_sha256": "1ea635873b5a330804d5850f68c14d7f1b69e4e64b4b48a9a50065eb89ffe21f",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/robotiq_85_gripper/robotiq_85_description/meshes/visual/robotiq_85_base_link.dae",
+   "destination": "forem/src/robotiq_85_description/meshes/visual/robotiq_85_base_link.dae",
+   "source_sha256": "144ba52efe986a40c5cbc88d4d382eceffbd979ac277affb79898094ecf4e080",
+   "package": "robotiq_85_description",
+   "destination_sha256": "144ba52efe986a40c5cbc88d4d382eceffbd979ac277affb79898094ecf4e080",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/robotiq_85_gripper/robotiq_85_description/meshes/visual/robotiq_85_finger_link.dae",
+   "destination": "forem/src/robotiq_85_description/meshes/visual/robotiq_85_finger_link.dae",
+   "source_sha256": "c77d54fe880b5a6af0319a3c7a59ffd8c33010ca0550306d884a264bfc7b86ed",
+   "package": "robotiq_85_description",
+   "destination_sha256": "c77d54fe880b5a6af0319a3c7a59ffd8c33010ca0550306d884a264bfc7b86ed",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/robotiq_85_gripper/robotiq_85_description/meshes/visual/robotiq_85_finger_tip_link.dae",
+   "destination": "forem/src/robotiq_85_description/meshes/visual/robotiq_85_finger_tip_link.dae",
+   "source_sha256": "413859476e9582a8322af25c880672e257d4d8e7d4ea6b23d2e4bdccff5c0570",
+   "package": "robotiq_85_description",
+   "destination_sha256": "413859476e9582a8322af25c880672e257d4d8e7d4ea6b23d2e4bdccff5c0570",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/robotiq_85_gripper/robotiq_85_description/meshes/visual/robotiq_85_inner_knuckle_link.dae",
+   "destination": "forem/src/robotiq_85_description/meshes/visual/robotiq_85_inner_knuckle_link.dae",
+   "source_sha256": "186c73c03cb9f0e8dba78dc9378bfd27500a12cccbbff2c034c90672cfea91ec",
+   "package": "robotiq_85_description",
+   "destination_sha256": "186c73c03cb9f0e8dba78dc9378bfd27500a12cccbbff2c034c90672cfea91ec",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/robotiq_85_gripper/robotiq_85_description/meshes/visual/robotiq_85_knuckle_link.dae",
+   "destination": "forem/src/robotiq_85_description/meshes/visual/robotiq_85_knuckle_link.dae",
+   "source_sha256": "ae149f478f106c97f17fab2be6165551e36d0ac1c61ed89544c711be0a9b5451",
+   "package": "robotiq_85_description",
+   "destination_sha256": "ae149f478f106c97f17fab2be6165551e36d0ac1c61ed89544c711be0a9b5451",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/robotiq_85_gripper/robotiq_85_description/package.xml",
+   "destination": "forem/src/robotiq_85_description/package.xml",
+   "source_sha256": "1979c8e319c905c3f7e67887ac1c3974a5640159d2ee3de616825cb471d17c34",
+   "package": "robotiq_85_description",
+   "destination_sha256": "1979c8e319c905c3f7e67887ac1c3974a5640159d2ee3de616825cb471d17c34",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/robotiq_85_gripper/robotiq_85_description/urdf/kinova_robotiq_85_gripper.xacro",
+   "destination": "forem/src/robotiq_85_description/urdf/kinova_robotiq_85_gripper.xacro",
+   "source_sha256": "0ae9e8cbf0c15d1a05e50a7c63ae5c5ec5e35f75c93ea91337a27c89cf130e08",
+   "package": "robotiq_85_description",
+   "destination_sha256": "0ae9e8cbf0c15d1a05e50a7c63ae5c5ec5e35f75c93ea91337a27c89cf130e08",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/robotiq_85_gripper/robotiq_85_description/urdf/robotiq_85_gripper.transmission.xacro",
+   "destination": "forem/src/robotiq_85_description/urdf/robotiq_85_gripper.transmission.xacro",
+   "source_sha256": "f24b7b46737ff3bb8f684cd212220a2c758b740b6204118809720402e5fa393f",
+   "package": "robotiq_85_description",
+   "destination_sha256": "05ac443d5305fdd0612c6558a0d310cd4f06dff68286d240a6f7adb1a2355514",
+   "status": "patched",
+   "patch_reason": "mimic-joint plugin file name libroboticsgroup_gazebo_mimic_joint_plugin.so -> libroboticsgroup_upatras_gazebo_mimic_joint_plugin.so: the imported package roboticsgroup_upatras_gazebo_plugins builds the latter (same <joint>/<mimicJoint>/<multiplier>/<offset> parameters); the former library is not in the source snapshot.",
+   "semantic_impact": "none",
+   "patch_file": "forem/config/task3/patches/forem__src__robotiq_85_description__urdf__robotiq_85_gripper.transmission.xacro.diff"
+  },
+  {
+   "source": "husky/src/robotiq_85_gripper/robotiq_85_description/urdf/robotiq_85_gripper.urdf.xacro",
+   "destination": "forem/src/robotiq_85_description/urdf/robotiq_85_gripper.urdf.xacro",
+   "source_sha256": "336e689f3169f642735efb17b6996d64187c091ff16c07c3022cc8c3e5317b19",
+   "package": "robotiq_85_description",
+   "destination_sha256": "893e32fd580ebb699719195a92831f3dcc6e82b06d3bd80be0f5076f645da15d",
+   "status": "patched",
+   "patch_reason": "remove the gazebo_grasp_fix plugin block: libgazebo_grasp_fix.so is not in the source snapshot (plugin load would fail) and only serves attach/grasp tasks, which are out of the Task3 scope.",
+   "semantic_impact": "none",
+   "patch_file": "forem/config/task3/patches/forem__src__robotiq_85_description__urdf__robotiq_85_gripper.urdf.xacro.diff"
+  },
+  {
+   "source": "husky/src/robotiq_85_gripper/robotiq_85_description/urdf/robotiq_85_gripper.xacro",
+   "destination": "forem/src/robotiq_85_description/urdf/robotiq_85_gripper.xacro",
+   "source_sha256": "67d56c1f453d3b9f5ed03ccbf6496227208692fd9e08dafd2a0edf4f60b4518f",
+   "package": "robotiq_85_description",
+   "destination_sha256": "67d56c1f453d3b9f5ed03ccbf6496227208692fd9e08dafd2a0edf4f60b4518f",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/robotiq_85_gripper/robotiq_85_description/urdf/robotiq_85_gripper_sim_base.urdf.xacro",
+   "destination": "forem/src/robotiq_85_description/urdf/robotiq_85_gripper_sim_base.urdf.xacro",
+   "source_sha256": "94efdbc31b2739d2f9fb06d78d801bd685a578bd66370d765dbda874fec5dd26",
+   "package": "robotiq_85_description",
+   "destination_sha256": "94efdbc31b2739d2f9fb06d78d801bd685a578bd66370d765dbda874fec5dd26",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/robotiq_85_gripper/robotiq_85_description/urdf/robotiq_85_kinova_coupler.urdf.xacro",
+   "destination": "forem/src/robotiq_85_description/urdf/robotiq_85_kinova_coupler.urdf.xacro",
+   "source_sha256": "6616a986b24c981bbc4035a0ec4702547fb2baafe81a839f489bfd3fe7b777fe",
+   "package": "robotiq_85_description",
+   "destination_sha256": "6616a986b24c981bbc4035a0ec4702547fb2baafe81a839f489bfd3fe7b777fe",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/robotiq_85_gripper/robotiq_85_moveit_config/CMakeLists.txt",
+   "destination": "forem/src/robotiq_85_moveit_config/CMakeLists.txt",
+   "source_sha256": "71f7d764515eda7472f4c64a07b4ac351db10d2375ddc39ef11f0b9f0d3df9a9",
+   "package": "robotiq_85_moveit_config",
+   "destination_sha256": "861f44e243835f0877faea2e74ab074ecd5da84746dea3f2ab3424a390d03538",
+   "status": "patched",
+   "patch_reason": "only config/joint_limits.yaml is imported (used by the gripper_planning namespace); drop the launch install.",
+   "semantic_impact": "none",
+   "patch_file": "forem/config/task3/patches/forem__src__robotiq_85_moveit_config__CMakeLists.txt.diff"
+  },
+  {
+   "source": "husky/src/robotiq_85_gripper/robotiq_85_moveit_config/config/joint_limits.yaml",
+   "destination": "forem/src/robotiq_85_moveit_config/config/joint_limits.yaml",
+   "source_sha256": "d8c4f6455aaf1860099af838d9ff4bdc40cbfec9b4cd67127a0da99121c432ac",
+   "package": "robotiq_85_moveit_config",
+   "destination_sha256": "d8c4f6455aaf1860099af838d9ff4bdc40cbfec9b4cd67127a0da99121c432ac",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/robotiq_85_gripper/robotiq_85_moveit_config/package.xml",
+   "destination": "forem/src/robotiq_85_moveit_config/package.xml",
+   "source_sha256": "2edd604169739d1e8a28ec7a8ab2d7daf6bb9a5a9452c753d75ac9b689ef6771",
+   "package": "robotiq_85_moveit_config",
+   "destination_sha256": "2edd604169739d1e8a28ec7a8ab2d7daf6bb9a5a9452c753d75ac9b689ef6771",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/roboticsgroup_upatras_gazebo_plugins/CMakeLists.txt",
+   "destination": "forem/src/roboticsgroup_upatras_gazebo_plugins/CMakeLists.txt",
+   "source_sha256": "823c4375f7fdfc3eb9da42e298025bda70a8b9af2ed88a9bdfb09e6b97009117",
+   "package": "roboticsgroup_upatras_gazebo_plugins",
+   "destination_sha256": "823c4375f7fdfc3eb9da42e298025bda70a8b9af2ed88a9bdfb09e6b97009117",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/roboticsgroup_upatras_gazebo_plugins/LICENSE",
+   "destination": "forem/src/roboticsgroup_upatras_gazebo_plugins/LICENSE",
+   "source_sha256": "c4c6e20038cc348455c45f190b70bad8728acd4d9dbd3533f05d7aeceb586f90",
+   "package": "roboticsgroup_upatras_gazebo_plugins",
+   "destination_sha256": "c4c6e20038cc348455c45f190b70bad8728acd4d9dbd3533f05d7aeceb586f90",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/roboticsgroup_upatras_gazebo_plugins/include/roboticsgroup_upatras_gazebo_plugins/disable_link_plugin.h",
+   "destination": "forem/src/roboticsgroup_upatras_gazebo_plugins/include/roboticsgroup_upatras_gazebo_plugins/disable_link_plugin.h",
+   "source_sha256": "7b914ed31857055db27ebb0bfc347a1c603811ca9106439a58f5b24fcb899931",
+   "package": "roboticsgroup_upatras_gazebo_plugins",
+   "destination_sha256": "7b914ed31857055db27ebb0bfc347a1c603811ca9106439a58f5b24fcb899931",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/roboticsgroup_upatras_gazebo_plugins/include/roboticsgroup_upatras_gazebo_plugins/mimic_joint_plugin.h",
+   "destination": "forem/src/roboticsgroup_upatras_gazebo_plugins/include/roboticsgroup_upatras_gazebo_plugins/mimic_joint_plugin.h",
+   "source_sha256": "58ed7b87a6fd5e9ff4a9061f0978729a4967c315e007f6afe881bf7d161214d8",
+   "package": "roboticsgroup_upatras_gazebo_plugins",
+   "destination_sha256": "58ed7b87a6fd5e9ff4a9061f0978729a4967c315e007f6afe881bf7d161214d8",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/roboticsgroup_upatras_gazebo_plugins/package.xml",
+   "destination": "forem/src/roboticsgroup_upatras_gazebo_plugins/package.xml",
+   "source_sha256": "c3a8f0b0063821612bcab13618001775494b11d7b3c1bb23ee069db567f1062b",
+   "package": "roboticsgroup_upatras_gazebo_plugins",
+   "destination_sha256": "c3a8f0b0063821612bcab13618001775494b11d7b3c1bb23ee069db567f1062b",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/roboticsgroup_upatras_gazebo_plugins/src/disable_link_plugin.cpp",
+   "destination": "forem/src/roboticsgroup_upatras_gazebo_plugins/src/disable_link_plugin.cpp",
+   "source_sha256": "c725b8dce3cecea9061ee46cdc1c319e1ed8a3d8df046584bcfac907a468c06e",
+   "package": "roboticsgroup_upatras_gazebo_plugins",
+   "destination_sha256": "c725b8dce3cecea9061ee46cdc1c319e1ed8a3d8df046584bcfac907a468c06e",
+   "status": "verbatim"
+  },
+  {
+   "source": "husky/src/roboticsgroup_upatras_gazebo_plugins/src/mimic_joint_plugin.cpp",
+   "destination": "forem/src/roboticsgroup_upatras_gazebo_plugins/src/mimic_joint_plugin.cpp",
+   "source_sha256": "1277a9acd5dd2f3146bb10ba2acd2fe708951b4b93d8e54782404369a2087137",
+   "package": "roboticsgroup_upatras_gazebo_plugins",
+   "destination_sha256": "1277a9acd5dd2f3146bb10ba2acd2fe708951b4b93d8e54782404369a2087137",
+   "status": "verbatim"
+  }
+ ],
+ "counts": {
+  "verbatim": 254,
+  "patched": 12,
+  "missing_in_destination": 0
+ },
+ "patched_without_reason": []
+}

@@ -52,12 +52,23 @@ check_cmd=(python3 scripts/check_feedback.py --run-id "$run" "${check_args[@]}")
 cleanup() {
   local rc=0
   stamp "cleanup: stopping own processes"
-  for n in bag launch; do
+  for n in check bag launch; do
     if [[ -e "$log/$n.json" ]]; then
       in_ct python3 scripts/task0_proc.py stop --dir "$rel_log" --name "$n" ${test_fault:+--test-fault "$test_fault"} >>"$tl" 2>&1 || rc=15
     fi
   done
   cleanup_rc=$rc
+  if [[ -e "$log/check.json" && -z $check_rc ]]; then
+    # interrupted while collecting: take whatever exit status the supervisor recorded; never leave it looking successful
+    check_rc=$(in_ct python3 scripts/task0_proc.py exitcode --dir "$rel_log" --name check 2>/dev/null | python3 -c 'import json,sys
+try:
+    v = json.load(sys.stdin).get("exit_code")
+except Exception:
+    v = None
+print(99 if v in (None, 0) else v)')
+    check_rc=${check_rc:-99}
+    stamp "collector exit status after interrupt: $check_rc"
+  fi
   stamp "cleanup rc=$rc"
 }
 finish() {
@@ -125,21 +136,33 @@ if [[ $use_bag -eq 1 ]]; then
 fi
 
 stamp "check start: ${check_cmd[*]}"
-in_ct "${check_cmd[@]}" 2>&1 | tee "$log/check_feedback.out"
-check_rc=${PIPESTATUS[0]}
+# the collector runs under the same supervision as launch/bag so an interrupt can stop it (task0.12)
+in_ct python3 scripts/task0_proc.py start --dir "$rel_log" --name check --allow-foreign -- "${check_cmd[@]}" >"$log/start_check.out" 2>&1 \
+  || { stamp "collector start failed"; final_rc=13; exit 13; }
+waited=0
+while in_ct python3 scripts/task0_proc.py status --dir "$rel_log" --name check --tree; do
+  sleep 0.5; waited=$((waited + 1))
+  if (( waited > 3000 )); then stamp "collector timeout (1500 s)"; break; fi
+done
+check_rc=$(in_ct python3 scripts/task0_proc.py exitcode --dir "$rel_log" --name check 2>/dev/null | python3 -c 'import json,sys
+try:
+    v = json.load(sys.stdin).get("exit_code")
+except Exception:
+    v = None
+print(97 if v is None else v)')
+check_rc=${check_rc:-97}
+cp "$log/check.log" "$log/check_feedback.out" 2>/dev/null; cat "$log/check_feedback.out" 2>/dev/null
 stamp "check exit=$check_rc"
 
 if [[ $use_bag -eq 1 ]]; then
   in_ct python3 scripts/task0_proc.py stop --dir "$rel_log" --name bag >>"$tl" 2>&1; bag_rc=$?
   in_ct python3 scripts/bag_to_csv.py --bag "$rel_res/hf.bag" --out "$rel_res" >>"$tl" 2>&1 || { stamp "bag_to_csv failed"; hf_rc=98; }
   if [[ -n $hf_mode && -z $hf_rc ]]; then
-    # criteria declared in task0.7 RESULTS before the final runs: all windows vel_hf<=1e-4 rad/s, pos_hf<=1e-7 rad;
-    # hold windows additionally alternation<=0.2, vel_rms<=1e-4 rad/s, pos_p2p<=1e-6 rad
-    crit=(--vel-hf-max 1e-4 --pos-hf-max 1e-7)
-    [[ $hf_mode == hold ]] && crit+=(--alt-frac-max 0.2 --vel-rms-max 1e-4 --pos-p2p-max 1e-6)
-    python3 "$root/scripts/analyze_task0_feedback.py" --joint-states "$res/hf_joint_states.csv" --out "$res/hf_analysis.json" "${crit[@]}" >"$log/hf_analysis.out" 2>&1
+    # windows come from summary.json (requested recording window, move time/duration), never the whole bag;
+    # criteria are those declared in task0.7 RESULTS (evaluate_hf_windows.py holds them)
+    python3 "$root/scripts/evaluate_hf_windows.py" --run-dir "$res" --mode "$hf_mode" >"$log/hf_analysis.out" 2>&1
     hf_rc=$?
-    stamp "hf analysis ($hf_mode) exit=$hf_rc"
+    stamp "hf window analysis ($hf_mode) exit=$hf_rc"
   fi
   [[ -n $hf_rc && $hf_rc -ne 0 ]] && final_rc=1
 fi

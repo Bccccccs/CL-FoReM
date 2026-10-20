@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>forem_husky</name>
+  <version>0.0.1</version>
+  <description>FoReM Husky+UR5 (task3) assembly: launch, world, and the single pose/TF bridge. Model, controllers, IK and task code come from the imported husky_*, modulation_rl and bio_ik packages.</description>
+  <maintainer email="1415979119bc@gmail.com">FoReM</maintainer>
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <exec_depend>forem_sim</exec_depend>
+  <exec_depend>husky_description</exec_depend>
+  <exec_depend>husky_control</exec_depend>
+  <exec_depend>husky_ur5</exec_depend>
+  <exec_depend>modulation_rl</exec_depend>
+  <exec_depend>gazebo_ros</exec_depend>
+  <exec_depend>gazebo_ros_control</exec_depend>
+  <exec_depend>controller_manager</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>twist_mux</exec_depend>
+  <exec_depend>tf2_ros</exec_depend>
+  <exec_depend>costmap_2d</exec_depend>
+  <exec_depend>rospy</exec_depend>
+</package>

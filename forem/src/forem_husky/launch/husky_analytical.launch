@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!-- task6.1: reference analytical launch, GUI removed; no physics/controllers. -->
+<launch>
+  <group>
+    <param name="robot_description" command="$(find xacro)/xacro '$(find husky_ur5)/urdf/husky_ur5.xacro'" />
+  </group>
+  <param name="robot_description_semantic" textfile="$(find husky_ur5)/config/ur5.srdf" />
+  <group ns="robot_description_planning">
+    <rosparam command="load" file="$(find husky_ur5)/config/joint_limits.yaml" />
+  </group>
+  <group ns="robot_description_kinematics">
+    <rosparam command="load" file="$(find husky_ur5)/config/kinematics.yaml" />
+    <param name="manipulator/kinematics_solver" value="bio_ik/BioIKKinematicsPlugin" />
+    <param name="manipulator_and_torso/kinematics_solver" value="bio_ik/BioIKKinematicsPlugin" />
+  </group>
+  <node name="move_group" launch-prefix="" pkg="moveit_ros_move_group" type="move_group" respawn="false" output="screen">
+    <env name="DISPLAY" value="$(optenv DISPLAY :0)" />
+    <param name="allow_trajectory_execution" value="false" />
+    <param name="max_safe_path_cost" value="1" />
+    <param name="jiggle_fraction" value="0.05" />
+    <param name="capabilities" value="move_group/MoveGroupExecuteService                                       move_group/MoveGroupKinematicsService                                       move_group/MoveGroupMoveAction                                       move_group/MoveGroupPlanService                                       move_group/MoveGroupQueryPlannersService                                       move_group/MoveGroupStateValidationService                                       move_group/MoveGroupGetPlanningSceneService                                       move_group/ApplyPlanningSceneService                                       " />
+    <param name="planning_scene_monitor/publish_planning_scene" value="true" />
+    <param name="planning_scene_monitor/publish_geometry_updates" value="false" />
+    <param name="planning_scene_monitor/publish_state_updates" value="false" />
+    <param name="planning_scene_monitor/publish_transforms_updates" value="false" />
+  </node>
+</launch>

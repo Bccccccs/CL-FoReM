@@ -1,0 +1,25 @@
+T_base_imu:
+- - 1.0
+  - 0.0
+  - 0.0
+  - 0.35
+- - 0.0
+  - 1.0
+  - 0.0
+  - 0.0
+- - 0.0
+  - 0.0
+  - 1.0
+  - 0.58228
+- - 0.0
+  - 0.0
+  - 0.0
+  - 1.0
+covariance: ROS pose covariance orientation error is local IMU; rotate to global then
+  SE3 lever arm transport; alignment uncertainty unknown not included
+orientation: ROS1Visualizer.cpp explicit JPL GtoI -> Hamilton ItoG same xyzw
+schema: 1
+source: actual raw-r4 robot.urdf/calibration_geometry.json SRC0073
+sources:
+- SRC-0073
+- SRC-0075

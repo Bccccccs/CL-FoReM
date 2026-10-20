@@ -1,0 +1,62 @@
+# Task1 frozen experiment definition (fixed-base UR5, normal tracking baseline).
+# Input of scripts/task1_freeze.py, run_task1_baseline.sh and analyze_task1.py.
+# Changing anything here after task1.1 is frozen requires a written reason in doc/tasks/task1 and a new freeze-id.
+# No error injection: no added delay, filtering, noise or controller perturbation.
+schema: task1-baseline/1
+
+robot:
+  model_name: forem_ur5
+  joints: [ur5_shoulder_pan_joint, ur5_shoulder_lift_joint, ur5_elbow_joint,
+           ur5_wrist_1_joint, ur5_wrist_2_joint, ur5_wrist_3_joint]
+  q_init: [0.0, -1.5708, 0.0, -1.5708, 0.0, 0.0]   # launch default; real q_start is measured per run
+  frames: {base: ur5_base_link, tip: ur5_wrist_3_link, gazebo_base: "forem_ur5::ur5_base_link", gazebo_tip: "forem_ur5::ur5_wrist_3_link"}
+  controller: /eff_joint_traj_controller
+  command_topic: /eff_joint_traj_controller/command
+  state_topic: /eff_joint_traj_controller/state
+  joint_states_topic: /joint_states
+
+timing:
+  joint_rate_hz: 125.0          # configured publish rate of joint_states and controller state
+  nominal_period_s: 0.008
+  physics_step_s: 0.0005        # from the world file; controller update rate is evidenced separately
+  pre_hold_s: 5.0
+  settle_s: 5.0
+  hold_s: 60.0
+  hf_rate_hz: 2000.0
+  hf_controller_config: config/diagnostics/task0.7/ur5_controllers_hf2000.yaml
+
+trajectory:
+  kind: two_point                # q_start @0 and q_target @T, both with zero velocity, no acceleration
+  expected_interpolation: cubic_hermite_zero_end_velocity   # s(u)=3u^2-2u^3 ; verified against the controller reference in task1.2
+  max_speed_fraction_of_velocity_limit: 0.2
+
+cases:
+  H:   {dq: null,                              T: null, window: hold}
+  P+:  {dq: [0.2, 0, 0, 0, 0, 0],              T: 3.0,  window: move}
+  P-:  {dq: [-0.2, 0, 0, 0, 0, 0],             T: 3.0,  window: move}
+  L+:  {dq: [0, 0.2, 0, 0, 0, 0],              T: 3.0,  window: move}
+  L-:  {dq: [0, -0.2, 0, 0, 0, 0],             T: 3.0,  window: move}
+  M3:  {dq: [0.3, 0.2, -0.3, 0.2, 0.3, 0.4],   T: 3.0,  window: move}
+  M6:  {dq: [0.3, 0.2, -0.3, 0.2, 0.3, 0.4],   T: 6.0,  window: move}
+  MR3: {dq: [-0.3, -0.2, 0.3, -0.2, -0.3, -0.4], T: 3.0, window: move}
+
+matrix:
+  rounds: 3
+  order: [H, P+, P-, L+, L-, M3, M6, MR3]   # each round executes all eight cases in this order, fresh launch per run
+  hf_diagnostic: [H, M3]                     # one run each, hf controller config, reported separately
+
+quality:
+  dedup_rate_max: 0.01
+  window_coverage_min: 0.99
+  max_gap_periods: 3
+  js_pair_rate_min: 0.95
+  js_pair_dt_max_s: 0.004
+  js_pos_tol_rad: 1.0e-5          # plus v_bound*|dt| (v_bound = URDF velocity limit)
+  truth_pairs_min: 100
+  truth_dt_max_s: 0.004
+  truth_pos_tol_m: 1.0e-4         # plus v_ee_bound*|dt|
+  truth_ang_tol_rad: 1.0e-3       # plus omega_bound*|dt|
+  base_drift_max: 1.0e-6          # m / rad between start and end of the run
+  t_ref_threshold_rad: 1.0e-6
+  lag_search_s: 0.1
+  grid_s: 0.008

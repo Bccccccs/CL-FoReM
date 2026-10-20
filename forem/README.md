@@ -1,19 +1,17 @@
 # FoReM
 
-我们的开发、构建和实验目录。共同约定见 [根AGENTS.md](../AGENTS.md)，研究与交接入口见 [doc/README.md](doc/README.md)。
+我们的开发、构建和实验目录。共同约定见[根AGENTS.md](../AGENTS.md)，研究与交接入口见[doc/README.md](doc/README.md)，运行环境见[ENV.md](ENV.md)。
 
-|目录|放什么|
-|---|---|
-|`src/`|算法、仿真和ROS包的实现|
-|`config/`|环境、控制器与实验配置|
-|`scripts/`|启动、采集、训练、评测等入口脚本|
-|`docker/`|容器镜像与基础环境入口|
-|`doc/`|总体计划、进度、决策、各问题计划与报告、Agent交接|
-|`data/`|原始数据集和外部资源，不入Git|
-|`results/`|实验产物、模型、处理后的数据和图表，不入Git|
-|`logs/`|运行日志，不入Git|
-|`build/`、`devel/`|编译产物，不入Git|
+项目分两阶段：阶段一“CBL复现”（task0、task3–task6，已有实现、训练与评估结果）；阶段二“世界模型闭环”（task7，目前只有设计文档，尚未实施）。
 
-目录已有用途说明，但尚无算法实现、实际实验数据或新编译产物。不要把临时脚本、配置、报告和模型散放在项目根目录。
+|目录|放什么|现状|
+|---|---|---|
+|`src/`|仿真、ROS包与算法实现|含task0固定底座UR5包、task3迁移的Husky+UR5核心（`modulation_rl`等）|
+|`config/`|环境、控制器与实验配置|按任务分目录，部分属于已删除任务，见[config/README](config/README.md)|
+|`scripts/`|启动、采集、训练、评测入口|含阶段一各任务入口；task1/task2/旧task4视觉惯性入口仍在但已停用|
+|`docker/`|容器镜像与入口|`run.sh`创建`forem-dev`|
+|`doc/`|计划、进度、决策、来源、任务三文档、Agent记录|见doc/README|
+|`data/`、`results/`、`logs/`|数据、产物、日志|不入Git|
+|`build/`、`devel/`|编译产物|不入Git|
 
-Husky原版和三个官方仓库只供参考。源码继承、依赖适配、编译和仿真实验均尚未执行；环境现状见 [ENV.md](ENV.md)。
+不要把临时脚本、配置、报告和模型散放在项目根目录。`husky/`、`mobile-rl/`、`scwm/`等参考仓库只读。

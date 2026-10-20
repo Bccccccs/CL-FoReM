@@ -1,0 +1,35 @@
+# task3 plain SAC configuration, schema 1. SAC.update_parameters (ordinary SAC update) -- NOT update_parameters_modified.
+schema: 1
+algorithm:
+  update_function: update_parameters          # prior/modified update is NOT used (see task3.1 RESULTS)
+  prior_agent: none
+  checkpoint_required: false
+  policy: GaussianPolicy                      # SB3 SquashedDiagGaussianDistribution, use_sde False (SAC.use_sde = False)
+  twin_q: true
+  device: auto                                # entry defaults to CUDA when available; --device cpu/cuda[:index] explicitly overrides
+network:
+  fcnet_hiddens: [512, 512, 256]              # argparse default --fcnet_hiddens; SAC reads post_fcnet_hiddens
+  map_encoder: LocalDoubleMapCNN
+hyper:
+  gamma: 0.99
+  tau: 0.001
+  initial_alpha: 1.0
+  batch_size: 256                             # ray_config["train_batch_size"] = batch_size default
+  target_update_interval: 1
+  lr_start: 1.0e-4                            # SAC class constant (== best_defaults)
+  lr_end: 1.0e-6
+  lr_schedule: "exp decay lr_end/lr_start ** (step/num_steps), LambdaLR"
+  grad_clip: 10
+  alpha_cap: {max_alpha: 0.35, min_alpha: 0.05, rule: "alpha = exp(log_alpha)*0.35; once alpha<=0.05 it is frozen at 0.05 and tuning stops"}
+  alpha_lr: "lr_start*0.01"
+  target_entropy: "-prod(action_shape)"
+  updates_per_step: 1
+replay:
+  capacity: 100000                            # main.py `buffer_size`
+  stored_fields: [map_state, rob_state, action, reward, next_map_state, next_rob_state, mask]
+  mask: "float(not done) for every done (reference); truncation is NOT bootstrapped"
+smoke_budget:                                 # task3 only validates the interface; not convergence
+  random_warmup_steps: 64
+  batch_size: 16                              # smaller than 256 so the smoke can update after 64 transitions
+  updates: 2
+  num_steps_lr_horizon: 5000001               # main.py num_steps (only the LR-decay horizon)

@@ -1,0 +1,26 @@
+--- a/husky/src/modulation_rl/src/pybindings_robots.cpp
++++ b/forem/src/modulation_rl/src/pybindings_robots.cpp
+@@ -1,6 +1,3 @@
+-#include <modulation_rl/robot_hsr.h>
+-#include <modulation_rl/robot_pr2.h>
+-#include <modulation_rl/robot_tiago.h>
+ #include <modulation_rl/robot_husky.h>
+ #include <pybind11/pybind11.h>
+ #include <pybind11/stl.h>
+@@ -41,16 +38,7 @@
+         .def("publish_trajectory", &RobotEnv::publishTrajectory, "publishTrajectory.")
+         .def("tip_to_gripper_tf", &RobotEnv::tipToGripperTf, "tipToGripperTf.")
+         .def("gripper_to_tip_tf", &RobotEnv::gripperToTipTf, "gripperToTipTf.");
+-    py::class_<RobotPR2>(m, "RobotPR2", robotenv /* <- specify Python parent type */)
+-        .def(py::init<uint32_t, std::string, bool, std::string, RoboConf, double, double, double, std::string>());
+-
+-    py::class_<RobotTiago>(m, "RobotTiago", robotenv)
+-        .def(py::init<uint32_t, std::string, bool, std::string, RoboConf, double, double, double, std::string>());
+-
+     py::class_<RobotHusky>(m, "RobotHusky", robotenv)
+-        .def(py::init<uint32_t, std::string, bool, std::string, RoboConf, double, double, double, std::string>());
+-        
+-    py::class_<RobotHSR>(m, "RobotHSR", robotenv)
+         .def(py::init<uint32_t, std::string, bool, std::string, RoboConf, double, double, double, std::string>());
+ 
+ #ifdef VERSION_INFO

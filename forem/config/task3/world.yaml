@@ -1,0 +1,25 @@
+# task3 world / physics configuration (descriptive; the world file is forem/src/forem_husky/worlds/husky_empty.world)
+schema: 1
+world_file: src/forem_husky/worlds/husky_empty.world
+physics: {engine: ode, solver: world, max_step_size: 0.0005, real_time_update_rate: 2000, erp: 0.2, cfm: 0.0, gravity: [0, 0, -9.8]}
+solver_choice: >-
+  `world` (direct) solver, the FoReM task0.7 choice. The reference world used `quick` (iters 50, sor 1.0). Task3.2 ran the same
+  motion check with both; both pass; see doc/tasks/task3/task3.2/RESULTS.md (real-time factor 0.77 vs 0.92).
+gravity: >-
+  The reference modulation_bumper.gazebo.xacro set <turnGravityOff>true</turnGravityOff> on EVERY robot link carrying a bumper (chassis, wheels,
+  all arm and gripper links). With that tag the wheels hover/spin and the base cannot drive in Gazebo (t3.2-motion-r1, grav-off-diag1). FoReM
+  gives the macro a parameter gravity_off (default false) and passes true ONLY for the 15 UR5-arm/gripper link calls in husky_ur5.xacro:
+  chassis/wheels have gravity (the base drives), the arm keeps the reference gravity-free dynamics. Reason for keeping the arm gravity-free:
+  with gravity on everywhere the reference arm PID (e.g. wrist_3 p=100,d=0.1, path tolerance 0.1 rad) became violently unstable after
+  random-policy episodes and arm resets failed (t3.5-int-r2, t3.5-resets-r1, t3.5-resets-quick1); arm gravity-free: 12/12 episodes without a
+  reset failure (t3.5-resets-r2). Both are patches recorded in patch_reasons.json (semantic_impact=declared).
+spawn: {x: 0.0, y: 0.0, z: 0.05, yaw: 0.0, model: husky_ur5}
+controllers:
+  base: {name: husky_velocity_controller, type: diff_drive_controller/DiffDriveController, file: husky_control/config/control.yaml, cmd_topic: /husky_velocity_controller/cmd_vel, mux: "twist_mux /cmd_vel (priority 1, timeout 0.5 s) -> cmd_vel_out", cmd_vel_timeout: 0.25}
+  arm: {name: eff_joint_traj_controller, type: effort_controllers/JointTrajectoryController, file: husky_ur5/config/ur5_controllers.yaml, action: /eff_joint_traj_controller/follow_joint_trajectory}
+  gripper: {name: gripper_controller, type: position_controllers/JointTrajectoryController}
+  joint_state: [husky_joint_publisher, joint_state_controller]
+sensors:
+  front_laser: {xacro_arg: "laser_ust10_front_enabled:=1", topic: /front/scan, rate_hz: 50, samples: 720, fov_rad: 4.712, why: "local costmap observation reads front/scan"}
+  imu: {topic: /imu/data, note: "present in the model (hector IMU); unused by Task3, available to Task4"}
+  p3d_ground_truth: {topic: /ground_truth/state, rate_hz: 50, urdf_gaussian_noise_requested: 0.01, frame: world, note: "this p3d sample is the pose_source=gazebo_reference. The URDF requests gaussianNoise 0.01, but the p3d-minus-Gazebo-truth difference measured in task3.2 is ~1e-10 m at rest (see RESULTS), i.e. no effective position noise in gazebo_ros_p3d 2.9.3"}

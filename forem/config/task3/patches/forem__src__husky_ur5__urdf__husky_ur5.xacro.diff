@@ -1,0 +1,53 @@
+--- a/husky/src/husky_ur5/urdf/husky_ur5.xacro
++++ b/forem/src/husky_ur5/urdf/husky_ur5.xacro
+@@ -57,15 +57,6 @@
+         </plugin>
+     </gazebo>
+ 
+-    <gazebo>
+-      <plugin filename="libgazebo_ros_moveit_planning_scene.so" name="gazebo_ros_moveit_planning_scene">
+-        <topicName>/planning_scene</topicName>
+-        <sceneName>mytask</sceneName>
+-        <robotName>husky_ur5</robotName>
+-        <updatePeriod>0.5</updatePeriod>
+-        <publishFrameId>odom</publishFrameId>
+-      </plugin>
+-    </gazebo>
+     <!-- <gazebo>
+         <plugin name="cup_glass_hex_gt_pose" filename="libgazebo_ros_p3d.so">
+             <alwaysOn>true</alwaysOn>
+@@ -92,19 +83,19 @@
+   <xacro:modulation_bumper reference="rear_bumper_link" sensor_name="rear_bumper_link" collision_name="rear_bumper_link_collision" />
+ <!--   <xacro:modulation_bumper reference="velodyne2_base_link" sensor_name="velodyne2_base_link" collision_name="velodyne2_base_link_collision" />
+   <xacro:modulation_bumper reference="velodyne1_base_link" sensor_name="velodyne1_base_link" collision_name="velodyne1_base_link_collision" /> -->
+-  <xacro:modulation_bumper reference="ur5_shoulder_link" sensor_name="ur5_shoulder_link" collision_name="ur5_shoulder_link_collision" />
+-  <xacro:modulation_bumper reference="ur5_upper_arm_link" sensor_name="ur5_upper_arm_link" collision_name="ur5_upper_arm_link_collision" />
+-  <xacro:modulation_bumper reference="ur5_forearm_link" sensor_name="ur5_forearm_link" collision_name="ur5_forearm_link_collision" />
+-  <xacro:modulation_bumper reference="ur5_wrist_1_link" sensor_name="ur5_wrist_1_link" collision_name="ur5_wrist_1_link_collision" />
+-  <xacro:modulation_bumper reference="ur5_wrist_2_link" sensor_name="ur5_wrist_2_link" collision_name="ur5_wrist_2_link_collision" />
+-  <xacro:modulation_bumper reference="ur5_wrist_3_link" sensor_name="ur5_wrist_3_link" collision_name="ur5_wrist_3_link_collision" />
+-  <xacro:modulation_bumper reference="gripper_base_link" sensor_name="gripper_base_link" collision_name="gripper_base_link_collision" />
+-  <xacro:modulation_bumper reference="gripper_finger2_inner_knuckle_link" sensor_name="gripper_finger2_inner_knuckle_link" collision_name="gripper_finger2_inner_knuckle_link_collision" />
+-  <xacro:modulation_bumper reference="gripper_finger1_inner_knuckle_link" sensor_name="gripper_finger1_inner_knuckle_link" collision_name="gripper_finger1_inner_knuckle_link_collision" />
+-  <xacro:modulation_bumper reference="gripper_finger1_knuckle_link" sensor_name="gripper_finger1_knuckle_link" collision_name="gripper_finger1_knuckle_link_collision" />
+-  <xacro:modulation_bumper reference="gripper_finger2_knuckle_link" sensor_name="gripper_finger2_knuckle_link" collision_name="gripper_finger2_knuckle_link_collision" />
+-  <xacro:modulation_bumper reference="gripper_finger2_finger_tip_link" sensor_name="gripper_finger2_finger_tip_link" collision_name="gripper_finger2_finger_tip_link_collision" />
+-  <xacro:modulation_bumper reference="gripper_finger1_finger_tip_link" sensor_name="gripper_finger1_finger_tip_link" collision_name="gripper_finger1_finger_tip_link_collision" />
+-  <xacro:modulation_bumper reference="gripper_finger1_finger_link" sensor_name="gripper_finger1_finger_link" collision_name="gripper_finger1_finger_link_collision" />
+-  <xacro:modulation_bumper reference="gripper_finger2_finger_link" sensor_name="gripper_finger2_finger_link" collision_name="gripper_finger2_finger_link_collision" />
++  <xacro:modulation_bumper reference="ur5_shoulder_link" sensor_name="ur5_shoulder_link" collision_name="ur5_shoulder_link_collision"  gravity_off="true" />
++  <xacro:modulation_bumper reference="ur5_upper_arm_link" sensor_name="ur5_upper_arm_link" collision_name="ur5_upper_arm_link_collision"  gravity_off="true" />
++  <xacro:modulation_bumper reference="ur5_forearm_link" sensor_name="ur5_forearm_link" collision_name="ur5_forearm_link_collision"  gravity_off="true" />
++  <xacro:modulation_bumper reference="ur5_wrist_1_link" sensor_name="ur5_wrist_1_link" collision_name="ur5_wrist_1_link_collision"  gravity_off="true" />
++  <xacro:modulation_bumper reference="ur5_wrist_2_link" sensor_name="ur5_wrist_2_link" collision_name="ur5_wrist_2_link_collision"  gravity_off="true" />
++  <xacro:modulation_bumper reference="ur5_wrist_3_link" sensor_name="ur5_wrist_3_link" collision_name="ur5_wrist_3_link_collision"  gravity_off="true" />
++  <xacro:modulation_bumper reference="gripper_base_link" sensor_name="gripper_base_link" collision_name="gripper_base_link_collision"  gravity_off="true" />
++  <xacro:modulation_bumper reference="gripper_finger2_inner_knuckle_link" sensor_name="gripper_finger2_inner_knuckle_link" collision_name="gripper_finger2_inner_knuckle_link_collision"  gravity_off="true" />
++  <xacro:modulation_bumper reference="gripper_finger1_inner_knuckle_link" sensor_name="gripper_finger1_inner_knuckle_link" collision_name="gripper_finger1_inner_knuckle_link_collision"  gravity_off="true" />
++  <xacro:modulation_bumper reference="gripper_finger1_knuckle_link" sensor_name="gripper_finger1_knuckle_link" collision_name="gripper_finger1_knuckle_link_collision"  gravity_off="true" />
++  <xacro:modulation_bumper reference="gripper_finger2_knuckle_link" sensor_name="gripper_finger2_knuckle_link" collision_name="gripper_finger2_knuckle_link_collision"  gravity_off="true" />
++  <xacro:modulation_bumper reference="gripper_finger2_finger_tip_link" sensor_name="gripper_finger2_finger_tip_link" collision_name="gripper_finger2_finger_tip_link_collision"  gravity_off="true" />
++  <xacro:modulation_bumper reference="gripper_finger1_finger_tip_link" sensor_name="gripper_finger1_finger_tip_link" collision_name="gripper_finger1_finger_tip_link_collision"  gravity_off="true" />
++  <xacro:modulation_bumper reference="gripper_finger1_finger_link" sensor_name="gripper_finger1_finger_link" collision_name="gripper_finger1_finger_link_collision"  gravity_off="true" />
++  <xacro:modulation_bumper reference="gripper_finger2_finger_link" sensor_name="gripper_finger2_finger_link" collision_name="gripper_finger2_finger_link_collision"  gravity_off="true" />
+ </robot>

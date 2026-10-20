@@ -131,6 +131,15 @@ def main():
     record("C7 cleanup failure changes exit code to 15", r.returncode == 15 and m["cleanup_exit"] == 15 and residue() == [],
            {"exit": r.returncode, "manifest_cleanup_exit": m["cleanup_exit"], "real_residue_after": residue()})
 
+    # C8 (task0.10) --hf-mode with a 125 Hz bag has no consecutive-step samples: must FAIL as insufficient evidence, never pass
+    rid = "%s-hf-insufficient" % tag
+    r = sg("%s --bag --hf-mode hold %s --duration 4 --settle 1" % (SMOKE, rid))
+    m = json.load(open(os.path.join(ROOT, "results", "task0", rid, "manifest.json")))
+    hfj = json.load(open(os.path.join(ROOT, "results", "task0", rid, "hf_analysis_windows.json")))
+    record("C8 hf-mode with insufficient high-rate evidence exits 1 (not pass)", r.returncode == 1 and m["hf_analysis_exit"] == 1
+           and hfj["pass"] is False and residue() == [],
+           {"exit": r.returncode, "hf_analysis_exit": m["hf_analysis_exit"], "verdicts": sorted(set(hfj["windows"]["requested_window"]["verdict"].values()))})
+
     ok = all(c["pass"] for c in cases)
     outdir = os.path.join(ROOT, "results", "task0", tag + "-report")
     os.makedirs(outdir, exist_ok=False)

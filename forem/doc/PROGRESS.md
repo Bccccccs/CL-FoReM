@@ -1,43 +1,77 @@
 # 当前进度
 
-|任务|Agent|状态|范围|开始时间|记录|
-|---|---|---|---|---|---|
-|ROOT-RESET|Codex /root|paused|恢复原始Husky源码、整理目录、克隆参考项目、核验仿真建议|2026-09-30 09:09 +08:00|[记录](agent_logs/20260930-original-reset.md)|
-|FOREM-AGENTS|Codex /root|done|根AGENTS共同约定（Codex/Claude），仅文档|2026-09-30T09:35:52.388344+08:00|[记录](agent_logs/20260930-forem-agents.md)|
-|FOREM-DOC|Codex /root|done|建立forem/doc入口并提出按研究问题组织的结构，仅文档|2026-09-30T09:44:30.639270+08:00|[记录](agent_logs/20260930-forem-doc.md)|
-|FOREM-LAYOUT|Codex /root|done|落实FoReM目录与文档结构，统一协作记录入口|2026-09-30T09:47:54.714128+08:00|[记录](agent_logs/20260930-forem-layout.md)|
-|FOREM-ENV-CHOICE|Codex /root|done|核对现有环境，确定控制误差仿真技术栈|2026-09-30T09:52:14.984153+08:00|[记录](agent_logs/20260930-env-choice.md)|
-|GIT-CLEAN|Claude|done|按用户要求，把当前工作树作为唯一状态一次性提交，使 `git status` 干净；不推送、不删分支|2026-09-30 09:56 +08:00|[记录](agent_logs/20260930-claude-git-clean.md)|
-|ENV-HANDOFF-DOC|Codex /root|done|编写Claude执行的环境配置与验收计划，仅文档|2026-09-30T09:56:36.515845+08:00|[记录](agent_logs/20260930-codex-env-handoff.md)|
-|DOC-THREE-PARTS|Codex /root|done|每个研究任务统一任务/流程/结果三文档，迁移现有两项|2026-09-30T10:02:54.489087+08:00|[记录](agent_logs/20260930-codex-three-documents.md)|
-|DOC-TASK-NUMBERS|Codex /root|done|任务独立目录与递归编号，支持顺序或子Agent执行|2026-09-30T10:11:00.499218+08:00|[记录](agent_logs/20260930-codex-task-numbers.md)|
-|TASK0-FIX-HANDOFF|Codex /root|done|编写task0.7修正及重新验收计划，仅文档|2026-09-30T10:54:13.549267+08:00|[记录](agent_logs/20260930-codex-task0-remediation-handoff.md)|
-|TASK0-REVIEW (task0.6)|Codex /root|done|审核交付；构建及两次复测通过连通性，但持续高频振荡与验收漏项需修正；task0仍review|2026-09-30T10:44:12.018767+08:00|[记录](agent_logs/20260930-codex-task0-review.md)|
-|ENV-SETUP (task0)|Claude|review|按tasks/task0执行：task0.1→0.5全部完成并有实测证据（forem-dev、forem_sim构建、两次独立启动通过）；待核验，含一项已记录的读数异常；不委派子Agent|2026-09-30 10:22 +08:00|[记录](agent_logs/20260930-claude-env-setup.md)|
+唯一活动进度表。状态：`active`执行中、`review`待核验、`blocked`明确依赖、`paused`用户要求暂停、`done`交付并验证完成、`closed`按用户指令结束、`draft`方向草案。
 
-用户选择原版本 `1ccedd0`。旧路线已取消；实际验证见任务记录。最后更新：2026-09-30T09:27:17.468838+08:00。
+2026-10-16整理：旧进度表（925行，含task1/2、视觉惯性、旧Task4路线的全部历史）已替换为本精简版，原文见备份（[SRC-0321](SOURCES.md#src-0321)）；各任务的完整历史仍在其三文档与agent_logs中。
 
-当前状态（2026-09-30 10:37，Claude更新）：task0 环境配置已执行完毕并进入 review——`forem-dev` 已创建，`forem_sim` 构建成功，两次独立启动（t0.5-r1/r2）及 60 s 保持（t0.5-x1）通过基本检查；证据见 [task0 RESULTS](tasks/task0/RESULTS.md) 与 [ENV](../ENV.md)。已记录一项未解释的读数异常（effort/velocity 单样本符号翻转）。task1（正常跟踪测量）尚未开始，也未接入任何延迟/扰动/IK/SAC/WM。原版源码核验见agent_logs/20260930-reset-verification.json。
+## 运行中
 
-最新审核（Codex，2026-09-30）：task0暂不标done。task0.6-r1/r2确认连通性；高频诊断证实约1kHz真实关节状态振荡，非单纯读数偏置。需定位基线振荡、补齐自动验收/进程清理并纠正误差符号，再复核。详见[task0.6 RESULTS](tasks/task0/task0.6/RESULTS.md)。task1尚未实施。
+当前无本表登记的运行任务；task7.6基准已退出并清理，状态review（[SRC-0399](SOURCES.md#src-0399)）；task5.5训练与最终sim评估均已结束（[SRC-0394](SOURCES.md#src-0394)）。
 
-后续计划：task0.7修正与重新验收三文档已交付，拟Claude执行、尚未接手；执行时登记TASK0-REMEDIATION active。Codex本轮仅写交接，没有实施修正；task0保持review。
+- task7.6 IK与路径评估计时基准：**review**（TASK7.6-BENCH-20261020；Codex；开始2026-10-20T14:26:29.317991+08:00；交付2026-10-20T14:46:35.571249+08:00）。数值/CPU/GPU/顺序路径/BioIK参考及成本扫描已交付；已知奇异假阴性、分支/精度差与连续性跳变保留，B8/B13/B14/E7及求解器待用户决定；无环境实施、训练/评估或残留进程。[结果](tasks/task7/task7.6/RESULTS.md) / [日志](agent_logs/task7/task7.6/20261020-codex-ik-bench.md) / [SRC-0399](SOURCES.md#src-0399)。
 
-|TASK0-REMEDIATION (task0.7)|Claude|review|task0.7全部执行并自测：solver quick→world消除1kHz交替（单因素+恢复复现+阴性对照）、验收重写（20项测试）、入口清理/互斥/run-id保护（8项回归PASS）、误差符号与因果更正、修正后两次启动+60s保持+高频复测通过；待Codex复核，task0仍review；不启动task1|2026-09-30 11:08 +08:00|[记录](agent_logs/20260930-claude-task0-remediation.md)|
-|CONTAINER-CLEANUP (task0.8)|Codex /root|done|清理确认无用的旧容器，保留forem-dev；运行中的旧任务等待用途确认|2026-09-30T11:01:27.677603+08:00|[记录](agent_logs/20260930-codex-container-cleanup.md)|
+## 阶段一：CBL复现
 
-当前容器：仅forem-dev运行。用户确认废弃的3个旧容器已删，镜像/宿主数据保留；清理完成不能代替task0.7修正验收。
+|任务|状态|待办|
+|---|---|---|
+|[task0](tasks/task0/RESULTS.md) 环境|done|—|
+|[task3](tasks/task3/RESULTS.md) 核心迁移|done|—|
+|[task4](tasks/task4/RESULTS.md) Gazebo普通SAC与首次WM|closed|—|
+|[task5](tasks/task5/RESULTS.md) sim对照训练|5.0–5.3 done；[5.4](tasks/task5/task5.4/RESULTS.md) paused；[5.5](tasks/task5/task5.5/RESULTS.md) done|5.5最终sim评估内部成功32/33/30（各50，均值0.63；同批场景F0 1M为0.43），10-20 Claude复核通过（[SRC-0394](SOURCES.md#src-0394)）；Gazebo零样本评估需另行授权|
+|[task6](tasks/task6/RESULTS.md) Gazebo失败诊断|6.1、6.3 done；[6.2](tasks/task6/task6.2/RESULTS.md) paused；[6.4](tasks/task6/task6.4/RESULTS.md)阶段一done、阶段二暂缓；[6.5](tasks/task6/task6.5/RESULTS.md)阶段一review|6.5阶段一待Claude复核；6.4/6.5阶段二待定|
 
-最新（Claude，2026-09-30 11:53）：task0.7 已执行并置 review，证据与问题—修正—证据对应表见 [task0.7 RESULTS](tasks/task0/task0.7/RESULTS.md)；实测入口见 [ENV](../ENV.md)。task0 父节点仍 review，等 Codex 复核；task1 尚未开始。
+## 阶段二：世界模型闭环
 
+|任务|状态|待办|
+|---|---|---|
+|[task7](tasks/task7/TASK.md)|draft（框架已定，准备/设计子任务已建立；实施未授权）|10-19用户确认框架：规则候选点→每点多路径精确评估→离散SAC选点（零初始化门控偏置层接入f_p）→非学习执行器；准备子任务task7.4–7.12已建三文档（进度见task7 PROCEDURE）；task7.9草案v1已写，R1–R8待用户确认|
 
-## 2026-10-14 项目级世界模型 + RL 文献调研
+## 项目级记录（近期）
 
-|任务ID|类型|负责人|状态|范围|开始|记录|
-|---|---|---|---|---|---|---|
-|PROJECT-WM-RL-LITERATURE-20261014|项目级文献调研|Codex /root|review|用户指定文献原文阅读、笔记、SOURCES追加；仅三文档，不修改任务协议/实现、不仿真/训练/委派|2026-10-14T11:04:22+08:00|[阅读笔记与交接](agent_logs/project/20261014-codex-wm-rl-literature.md)|
+|任务ID|负责人|状态|记录|
+|---|---|---|---|
+|PROJECT-GIT-PUSH-20261020|Codex|active（2026-10-20T15:11:17+08:00开始；按用户要求提交并推送当前文件；只做Git同步及必要记录）|[记录](agent_logs/project/20261020-codex-git-push.md)|
+|TASK7.6-BENCH-20261020|Codex|review（2026-10-20T14:46:35.571249+08:00交付；r1–r9有界基准、原件125项重算、清理/预算核查；非环境实施，待Claude/用户复核）|[日志](agent_logs/task7/task7.6/20261020-codex-ik-bench.md) · [结果](tasks/task7/task7.6/RESULTS.md) · [SRC-0399](SOURCES.md#src-0399)|
+|TASK7-SECOND-REVIEW-A-20261019|Codex|done（2026-10-19T23:40:47+08:00开始；2026-10-19T23:54:56+08:00交付17项第二轮建议；仅只读核查与文档）|[记录](agent_logs/task7/20261019-codex-review-evidence.md)|
+|TASK7-EVIDENCE-B-20261019|Codex|done（2026-10-20 Claude已采纳并写入task7文档，见[日志](agent_logs/task7/20261020-claude-second-review-fixes.md)；原记录：2026-10-19T23:40:47+08:00开始；2026-10-19T23:54:56+08:00八项核查/替换建议与SRC-0382–0390已交付；物理TCP等价未证实、R2D2原文未取得，官方代码已核）|[记录](agent_logs/task7/20261019-codex-review-evidence.md)|
+|TASK7.6-DISPATCH-20261020|Claude（claude-opus-5-5）|review（2026-10-20 14:00起；task7.6派发提示已写、SRC-0398已登记；codex exec由用户启动（PID 1480576），Codex执行中；Claude不执行基准）|[派发日志](agent_logs/task7/task7.6/20261020-claude-codex-dispatch.md)|
+|TASK7.9-RULE-SPEC-20261020|Claude（claude-opus-5-5）|review（2026-10-20T12:15–12:20+08:00；task7.9规则版规格(A)、改造方案(B)、子目标环暂缓条件(C)草案v1已写入三文档，来源SRC-0395–0397；R1–R8待用户确认；只写文档）|[日志](agent_logs/task7/task7.9/20261020-claude-rule-spec.md)|
+|TASK5.5-FINAL-SIM-REVIEW-20261020|Claude（claude-opus-5-5）|done（2026-10-20T12:02–12:06+08:00；原件哈希、逐回合重算与F0同口径对照全部通过，task5.5标done，PLAN过时行已更正；只读结果、只写文档）|[日志](agent_logs/task5/task5.5/20261020-claude-final-sim-review.md)|
+|TASK5.5-FINAL-SIM-RESULTS-20261020|Codex|done（2026-10-20T11:48:37+08:00开始；2026-10-20T11:55:08+08:00核对入账完成；task5.5为review待Claude/用户复核；仅文档，[SRC-0394](SOURCES.md#src-0394)）|[记录](agent_logs/task5/task5.5/20261020-codex-final-sim-results.md)|
+|TASK5.5-FINAL-SIM-EVAL-20261019|Codex|done（10-19 22:52评估及实例清理结束；10-20本次结果入账，task5.5为review；[SRC-0394](SOURCES.md#src-0394)）|[记录](agent_logs/task5/task5.5/20261019-codex-final-sim-eval.md)|
+|TASK5-CBL-STATUS-20261019|Codex|done（2026-10-19 22:40 +0800开始；已核对：5.2原版RLlib已评估，5.5自写SAC最终sim评估未执行；未启动实验）|[记录](agent_logs/task5/20261019-codex-cbl-status.md)|
+|TASK7-STATUS-CHECK-20261019|Codex|done（2026-10-19 22:40–22:41 +0800；现状核查与汇总；未实施，未运行实验）|[记录](agent_logs/task7/20261019-codex-status-check.md)|
+|TASK6.2-SAMPLER-STOP-20261020|Claude（claude-opus-5-5）|done（2026-10-20 13:19–13:22；按用户指示核实t6.2-stress-r2遗留CPU采样器无人使用后只停该进程（宿主PID 2994901），输出文件保留，容器未动）|[日志](agent_logs/task6/task6.2/20261020-claude-stop-stress-r2-sampler.md)|
+|TASK5.5-DISPATCH-PROMPT-20261020|Claude（claude-opus-5-5）|done（2026-10-20；写好给Codex的派发提示：task5.5最终sim评估结果入账、PROGRESS更新、与F0同口径对照；Claude未派发，待用户转交）|[派发提示](agent_logs/task5/task5.5/20261020-claude-codex-dispatch-prompt.md)|
+|TASK7-SECOND-REVIEW-FIXES-20261020|Claude（claude-opus-5-5）|done（2026-10-20 11:17–11:21改文档，11:32写入用户对距离锚点、终点姿态、风险特征定义的决定SRC-0393；只写文档）|[日志](agent_logs/task7/20261020-claude-second-review-fixes.md)|
+|TASK7.4-CONTRACT-GAPS-20261020|Claude（claude-opus-5-5）|done（2026-10-20 11:10–11:12；用户决定合同缺口7–11按Claude推荐，写入task7.4/7.5/7.8/父TASK/DECISIONS并登记来源；只写文档）|[日志](agent_logs/task7/task7.4/20261020-claude-contract-gaps.md)|
+|TASK7-CODEX-REPLY-ENVSPEC-20261019|Claude（claude-opus-5-5）|review（2026-10-19 21:40–21:51；Codex 7条意见的措辞修订完成；task7.5(B)规格草案v1已写，B1–B14待用户确认；只写文档）|[日志](agent_logs/task7/20261019-claude-codex-reply-and-env-spec.md)|
+|TASK7-CODEX-SUPERVISION-20261019|Claude（claude-opus-5-5）|done（2026-10-19 21:21–21:30只读核查task7.5(A)与7.1–7.3收尾；2026-10-20复查：task5.5最终sim评估10-19 22:52已结束rc=0、内部成功32/33/30（/50），但结果未入账、PROGRESS未更新；Codex第二轮17项待Claude处理；10-20 13:20复查：Codex task5.5入账11:55完成、数字与哈希经抽查一致，已由Claude复核标done）|[记录](agent_logs/task7/20261019-claude-codex-supervision.md)|
+|TASK7.5-A-REUSE-AUDIT-20261019|Codex|done（2026-10-19 20:55–21:15 +0800；a–g静态复用审计、SRC-0365–0371、文档核对完成；(B)未写，未运行程序）|[记录](agent_logs/task7/task7.5/20261019-codex-reuse-audit.md)|
+|TASK7.1-7.3-CLOSEOUT-20261019|Codex|done（2026-10-19 20:55–21:15 +0800；SRC-0341–0355补登、父抽查、日志与新框架适用性收尾；仅文档验收）|[记录](agent_logs/task7/20261019-codex-research-closeout.md)|
+|PROJECT-MAPGEN-AGENTS-20261016|Codex|done（新增mapgen/AGENTS.md；静态文档检查通过，入口因宿主缺numpy未运行成功）|[记录](agent_logs/project/20261016-codex-mapgen-agents.md)|
+|PROJECT-WM-RL-LITERATURE-20261014|Codex|review|[文献笔记](agent_logs/project/20261014-codex-wm-rl-literature.md)|
+|PROJECT-SC2WM-SENSORS-20261016|Codex|done（2026-10-16 15:15 +08:00开始；平台与传感器只读核查）|[记录](agent_logs/project/20261016-codex-scwm-sensors.md)|
+|PROJECT-SC2WM-READING-20261016|Codex|done|[阅读笔记](agent_logs/project/20261016-codex-sc2wm-reading.md)|
+|CBL-ARCHIVE-AUDIT-20261016|Claude|done（只读核查与复核）|[核查](agent_logs/project/20261016-claude-cbl-archive-audit.md) · [复核](agent_logs/project/20261016-claude-cbl-archive-recheck.md)|
+|DOC-CLEANUP-20261016|Claude（claude-opus-5-5）|done|[日志](agent_logs/project/20261016-claude-doc-cleanup.md)|
+|MAPGEN-REQ-20261016|Claude（claude-opus-5-5）|done（需求文档交付；地图未生成）|[需求文档](../../mapgen/docs/husky_ur5_map_requirements.md) · [task7 RESULTS](tasks/task7/RESULTS.md)|
+|DOC-FIX-20261019|Claude（claude-opus-5-5）|done|[日志](agent_logs/project/20261019-claude-doc-fix.md)|
+|TASK7-CLAUDE-CODEX-SYNC-20261019|Claude（claude-opus-5-5）|done（Codex已于21:15回复7条意见与Q4；另一Claude会话21:40–21:51已按意见修订措辞）|[记录](agent_logs/task7/20261019-claude-codex-sync.md)|
+|TASK7-FRAMEWORK-DOCS-20261019|Claude（claude-opus-5-5）|done（2026-10-19 19:03–19:35；框架写入与task7.4–7.12三文档，未派发未运行）|[日志](agent_logs/task7/20261019-claude-framework-docs.md)|
+|TASK7.4-TASKDEF-20261019|Claude（claude-opus-5-5）|review（2026-10-19 19:45开始；任务定义、接口表与经验池字段草案v1已写；数值E1–E9与接口问题I1–I5待定）|[日志](agent_logs/task7/task7.4/20261019-claude-task-definition.md) · [task7.4](tasks/task7/task7.4/TASK.md)|
+|TASK7.7-MAPGEN-REQ-20261019|Claude（claude-opus-5-5）|done（2026-10-19；mapgen需求改为只生成长方体、每档验证50/测试100、B类不做；未生成地图）|[日志](agent_logs/task7/task7.7/20261019-claude-mapgen-req-update.md) · [需求文档](../../mapgen/docs/husky_ur5_map_requirements.md)|
+|TASK7.7-OBS-20261019|Claude（claude-opus-5-5）|done（2026-10-19；全景深度、128×128×2局部栅格、所有障碍挡底盘已定；S1–S5待定）|[日志](agent_logs/task7/task7.7/20261019-claude-scan-design.md) · [task7.7 RESULTS](tasks/task7/task7.7/RESULTS.md)|
+|TASK7.8-VCM-20261019|Claude（claude-opus-5-5）|done（2026-10-19；VCM方案V1–V3已定，V4网络尺寸、V5是否单独检验待定）|[日志](agent_logs/task7/task7.8/20261019-claude-vcm-design.md) · [task7.8 RESULTS](tasks/task7/task7.8/RESULTS.md)|
+|TASK7.5-B-ITEMS-20261019|Claude（claude-opus-5-5）|done（2026-10-19 22:35起；B2、B3（SRC-0377）、B11（SRC-0378）、B1/B4–B10/B12–B14与地图大小（SRC-0381）已定；B8/B9/B13/B14与各数值交task7.6）|[日志](agent_logs/task7/task7.5/20261019-claude-b-items.md)|
 
+|TASK7-DESIGN-REVIEW-20261019|Codex|done（2026-10-19 09:54 +0800开始；整体实验设计文档审查完成，未实施）|[记录](agent_logs/task7/20261019-codex-design-review.md)|
 
-## 2026-10-14T11:28:19+08:00 世界模型 + RL 文献调研交付review
+|TASK7-SEQUENCE-RESEARCH-20261019|Codex（父；上午3个调研子Agent，本次未再委派）|done（2026-10-19 10:04开始，21:15收尾；task7.1–7.3来源登记/父抽查/新框架适用性完成；仅调研文档）|[记录](agent_logs/task7/20261019-codex-sequence-design.md)；本次[收尾](agent_logs/task7/20261019-codex-research-closeout.md)|
+|TASK7-CLAUDE-DISCUSSION-20261019|Claude（claude-opus-5-5）|done（仅讨论与只读核查；未重复派子Agent）|[记录](agent_logs/task7/20261019-claude-design-discussion.md)|
 
-PROJECT-WM-RL-LITERATURE-20261014：用户清单35项已形成九字段笔记、方法对比表、Task4待授权建议与4项候选补读。34篇原文PDF+Genie 3官方博客；优先9篇分全文/部分精读，逐篇深度见[阅读笔记](agent_logs/project/20261014-codex-wm-rl-literature.md#交接review)。新增来源SRC-0274–0308（35条）；旧编号重复仅报告不修。World4RL表III BC汇总冲突、WMPO正式稿403/arXiv替代与跨平台限制已披露；未复现、待独立复核或用户确认，不标done。仅本日志/PROGRESS/SOURCES，未改Task协议/源码/配置，未仿真、训练、安装或委派。
+|PROJECT-N2M-READING-20261019|Codex|done（2026-10-19 16:47 +0800开始；原文核查与来源登记完成，未实施）|[记录](agent_logs/project/20261019-codex-n2m-pose-preference.md)|
+
+## 容器
+
+`forem-dev`（task5.5训练已结束，10-19无训练进程）；task5/6另有上游与Husky原版容器，使用前先核实状态，不停止未经核实的进程。

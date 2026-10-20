@@ -1,0 +1,22 @@
+%YAML:1.0
+# SRC-0103 whole-stereo left90; IMU unchanged; actual validation pending.
+cam0:
+  T_imu_cam: [[1.0, 0.0, 0.0, -0.06], [0.0, 0.0, 1.0, 0.0], [0.0, -1.0, 0.0, 0.0], [0.0, 0.0, 0.0, 1.0]]
+  cam_overlaps: [1]
+  camera_model: pinhole
+  distortion_coeffs: [0.0, 0.0, 0.0, 0.0]
+  distortion_model: radtan
+  intrinsics: [319.9988245765257, 319.9988245765257, 320.5, 240.5]
+  resolution: [640, 480]
+  rostopic: /task4/stereo/left/image_raw
+  timeshift_cam_imu: 0.0
+cam1:
+  T_imu_cam: [[1.0, 0.0, 0.0, 0.06], [0.0, 0.0, 1.0, 0.0], [0.0, -1.0, 0.0, 0.0], [0.0, 0.0, 0.0, 1.0]]
+  cam_overlaps: [0]
+  camera_model: pinhole
+  distortion_coeffs: [0.0, 0.0, 0.0, 0.0]
+  distortion_model: radtan
+  intrinsics: [319.9988245765257, 319.9988245765257, 320.5, 240.5]
+  resolution: [640, 480]
+  rostopic: /task4/stereo/right/image_raw
+  timeshift_cam_imu: 0.0

@@ -1,0 +1,12 @@
+--- a/husky/src/modulation_rl/scripts/sac.py
++++ b/forem/src/modulation_rl/scripts/sac.py
+@@ -31,7 +31,8 @@
+         self.target_update_interval = target_update_interval
+         self.automatic_entropy_tuning = True
+ 
+-        self.device = torch.device("cuda")
++        # FoReM: the device can be chosen through args["device"] ("cpu" in forem-dev, which has no GPU); default stays the reference "cuda"
++        self.device = torch.device(args.get("device", "cuda")) if hasattr(args, "get") else torch.device("cuda")
+ 
+         self.critic = QNetwork(map_space, robot_state_space,  action_space, args["model"]["custom_model_config"]["post_fcnet_hiddens"]).to(device=self.device)
+         self.critic_optim = Adam(self.critic.parameters(), lr=self.lr_start)

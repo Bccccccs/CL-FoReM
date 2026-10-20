@@ -8,7 +8,7 @@
 
 遵循根AGENTS：一任务一目录，每层恰有TASK/PROCEDURE/RESULTS；子节点在父目录内递归编号。继续拆分前建立三文档，在本流程登记编号、顺序、依赖、负责人、输入输出和验收链接；父RESULTS核验并汇总子RESULTS。不复用task0.1–0.6编号，不覆盖历史运行。
 
-本节点不预设子节点。阶段依赖按下面顺序推进；诊断失败先记录，不能以新脚本pass=true代替修正证据。源码/配置在forem/src、config、scripts；运行证据在forem/logs/task0/task0.7-<run-id>和forem/results/task0/task0.7-<run-id>，独立日志建议doc/agent_logs/20260930-claude-task0-remediation.md。
+本节点不预设子节点。阶段依赖按下面顺序推进；诊断失败先记录，不能以新脚本pass=true代替修正证据。源码/配置在forem/src、config、scripts；运行证据在forem/logs/task0/task0.7-<run-id>和forem/results/task0/task0.7-<run-id>，独立日志建议forem/doc/agent_logs/task0/task0.7/20260930-claude-task0-remediation.md。
 
 ## 阶段一：接手与安全运行前置
 

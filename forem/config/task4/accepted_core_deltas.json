@@ -1,0 +1,8 @@
+{
+  "src/forem_husky/CMakeLists.txt": {
+    "old_sha256": "adf2257088f37fbc43cbb708b2336876b749ffc8771e16f61cc6d3ea828efd32",
+    "new_sha256": "2a4edeeee614616ba8c8edd13b695c69e6dc4ca54d33d957e6c0bb8774e0ef18",
+    "reason": "Install existing Task4 raw adapter for authorized sensors; task/robot/control unchanged",
+    "source": "SRC-0071"
+  }
+}

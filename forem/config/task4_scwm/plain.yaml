@@ -1,0 +1,23 @@
+# task4.8 plain-SAC baseline protocol (schema 1). Sources of every value are listed in doc/tasks/task4/task4.7/RESULTS.md and task4.8/RESULTS.md.
+# Reference defaults (husky main.py / config/task3/sac.yaml) are kept; only run-management values are new engineering choices.
+schema: 1
+method: plain
+budget:
+  total_env_steps: 1000000        # user-accepted scale, per method per seed (4.7 budget table; coverage interpretation pending user confirmation)
+  random_warmup_steps: 1000       # reference main.py random_exp_num; counted inside total_env_steps
+  updates_per_step: 1             # reference
+  batch_size: 256                 # sac.yaml
+  replay_capacity: 100000         # reference buffer_size
+  lr_horizon_updates: 5000001     # reference num_steps (LR decay horizon only)
+instances:
+  train_seed_range: [1000, 1073741824]   # reference draws a fresh random scene each episode; disjoint from validation/test seeds
+  validation_seeds: [101, 102, 103, 104, 105]
+  test_seeds: [106, 107, 108, 109, 110]  # NOTE: evaluation set size is an open budget item (4.7 section 7(c))
+validation:
+  every_env_steps: 100000
+  max_steps_per_episode: 2000            # safety cap; the env truncates by itself (500 close steps / 20 failures)
+checkpoint:
+  every_env_steps: 20000
+  keep_last: 2
+logging:
+  progress_every_env_steps: 1000

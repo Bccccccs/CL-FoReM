@@ -1,0 +1,2 @@
+<launch><arg name="config_path" default="/root/mm_husky_ws/config/task4/estimator.yaml"/>
+<node name="ov_msckf" pkg="ov_msckf" type="run_subscribe_msckf" output="screen" required="true"><param name="config_path" value="$(arg config_path)"/><param name="publish_global_to_imu_tf" value="false"/><param name="publish_calibration_tf" value="false"/></node></launch>

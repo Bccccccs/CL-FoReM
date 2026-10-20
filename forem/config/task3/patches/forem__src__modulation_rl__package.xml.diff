@@ -1,0 +1,12 @@
+--- a/husky/src/modulation_rl/package.xml
++++ b/forem/src/modulation_rl/package.xml
+@@ -52,9 +52,6 @@
+   <depend>moveit_core</depend>
+   <depend>interactive_markers</depend>
+ 
+-  <exec_depend>hsrb_description</exec_depend>
+-  <exec_depend>hsrb_moveit_config</exec_depend>
+-  <exec_depend>range_sensor_layer</exec_depend>
+ 
+   <!-- The export tag contains other, unspecified, tags -->
+   <export>

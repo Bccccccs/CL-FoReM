@@ -1,0 +1,8 @@
+--- a/husky/src/robotiq_85_gripper/robotiq_85_moveit_config/CMakeLists.txt
++++ b/forem/src/robotiq_85_moveit_config/CMakeLists.txt
+@@ -5,5 +5,4 @@
+ 
+ catkin_package()
+ 
+-install(DIRECTORY launch DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+ install(DIRECTORY config DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})

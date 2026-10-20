@@ -1,0 +1,117 @@
+# Task2 / exp2.1 fixed whole-trajectory transmission delay (fixed-base UR5). Protocol source: doc/experiment/备选/exp2/exp2.1/PROCEDURE.md.
+# Input of scripts/freeze_task2.py, run_task2_delay.sh, task2_delay_node.py, collect_task2.py, analyze_task2.py, aggregate_task2.py.
+# robot / timing / trajectory / cases(H,M3,M6,MR3) / quality are COPIED unchanged from the frozen Task1 config
+# (config/experiments/task1/baseline.yaml, freeze t1.1-freeze1); freeze_task2.py checks the copy field by field.
+# The only experimental variable is the command path: B bypass (proxy not started), Z queue tau=0, D80 / D160 queue tau=80/160 ms.
+# Changing anything here after a freeze requires a written reason in doc/tasks/task2 and a NEW freeze-id.
+schema: task2-fixed-delay/1
+protocol: exp2.1-v1
+task1_baseline: {yaml: config/experiments/task1/baseline.yaml, freeze_id: t1.1-freeze1}
+
+robot:
+  model_name: forem_ur5
+  joints: [ur5_shoulder_pan_joint, ur5_shoulder_lift_joint, ur5_elbow_joint,
+           ur5_wrist_1_joint, ur5_wrist_2_joint, ur5_wrist_3_joint]
+  q_init: [0.0, -1.5708, 0.0, -1.5708, 0.0, 0.0]
+  frames: {base: ur5_base_link, tip: ur5_wrist_3_link, gazebo_base: "forem_ur5::ur5_base_link", gazebo_tip: "forem_ur5::ur5_wrist_3_link"}
+  controller: /eff_joint_traj_controller
+  command_topic: /eff_joint_traj_controller/command
+  state_topic: /eff_joint_traj_controller/state
+  joint_states_topic: /joint_states
+
+timing:
+  joint_rate_hz: 125.0
+  nominal_period_s: 0.008
+  physics_step_s: 0.0005
+  pre_hold_s: 5.0
+  settle_s: 5.0
+  hold_s: 60.0
+  hf_rate_hz: 2000.0
+  hf_controller_config: config/diagnostics/task0.7/ur5_controllers_hf2000.yaml
+
+trajectory:
+  kind: two_point
+  expected_interpolation: cubic_hermite_zero_end_velocity
+  max_speed_fraction_of_velocity_limit: 0.2
+
+cases:
+  H:   {dq: null,                              T: null, window: hold}
+  M3:  {dq: [0.3, 0.2, -0.3, 0.2, 0.3, 0.4],   T: 3.0,  window: move}
+  M6:  {dq: [0.3, 0.2, -0.3, 0.2, 0.3, 0.4],   T: 6.0,  window: move}
+  MR3: {dq: [-0.3, -0.2, 0.3, -0.2, -0.3, -0.4], T: 3.0, window: move}
+
+quality:
+  dedup_rate_max: 0.01
+  window_coverage_min: 0.99
+  max_gap_periods: 3
+  js_pair_rate_min: 0.95
+  js_pair_dt_max_s: 0.004
+  js_pos_tol_rad: 1.0e-5
+  truth_pairs_min: 100
+  truth_dt_max_s: 0.004
+  truth_pos_tol_m: 1.0e-4
+  truth_ang_tol_rad: 1.0e-3
+  base_drift_max: 1.0e-6
+  t_ref_threshold_rad: 1.0e-6
+  lag_search_s: 0.1
+  grid_s: 0.008
+
+# ---- exp2.1 additions (not part of Task1) -------------------------------------------------------------------------
+delay:
+  topics:
+    command_in: /task2/command_in           # upstream: sender -> proxy (queue modes only)
+    command_out: /eff_joint_traj_controller/command   # downstream: only the proxy (queue) or the sender (bypass) publishes here
+    events: /task2/delay_events             # std_msgs/String, one JSON object per message (schema task2-delay-event/1)
+    reset_service: /task2/reset_delay       # std_srvs/Trigger, engineering tests only
+    link_states_250: /task2/link_states_250
+  conditions:                               # condition id -> command path
+    B:    {mode: bypass, tau_ms: 0}
+    Z:    {mode: queue,  tau_ms: 0}
+    D80:  {mode: queue,  tau_ms: 80}
+    D160: {mode: queue,  tau_ms: 160}
+  allowed_tau_ms: [0, 80, 160]
+  queue_capacity: 64
+  time_quantisation: simulation integer nanoseconds (rospy Time / /clock message)
+  delivery: "queue entries leave when /clock now >= t_in + tau; FIFO by (t_due, seq); never driven by the host wall clock"
+  supported_message:
+    header_stamp: [0, 0]                    # header.stamp must be zero: controller starts the trajectory on receipt
+    frame_id: ""
+    n_points: 2
+    first_point_time_from_start_ns: 0
+    velocities: all_zero
+    accelerations: empty
+    effort: empty
+    limits: URDF position limits and max_speed_fraction_of_velocity_limit (cubic peak speed 1.5*|dq|/T)
+  eps_max_ms: 8.0                           # planned engineering tolerance on the callback lateness, not a measured result
+  publisher_expected_connections: 2         # controller + rosbag, for every topic the sender/proxy publishes to
+
+runtime:
+  startup_timeout_s: 120
+  run_timeout_wall_s: 300
+  tail_margin_s: 1.0                        # extra recording after the settle window so window edges have support
+
+matrix:
+  rounds: 3
+  case_order: [H, M3, M6, MR3]
+  condition_order_by_round: {1: [B, Z, D80, D160], 2: [D80, D160, B, Z], 3: [D160, B, Z, D80]}
+  hf_diagnostic: [[M3, B], [M3, D160]]      # one run each, 2000 Hz feedback config only, reported separately
+  max_infrastructure_retries: 1
+
+# Pre-registered gates (exp2.1 section 5). Not measured results; they were written before any Task2 run.
+gates:
+  equivalence_bz:                            # B vs Z, curves aligned on t_ref, per joint, pairwise same case/round
+    q_actual_curve_rmse_rad_max: 1.0e-5
+    q_actual_curve_peak_rad_max: 1.0e-4
+    e_servo_curve_rmse_rad_max: 1.0e-5
+    e_servo_curve_peak_rad_max: 1.0e-4
+    fk_pos_err_curve_rmse_m_max: 2.0e-5
+    fk_pos_err_curve_peak_m_max: 1.0e-4
+    t_ref_minus_send_median_diff_s_max: 0.016
+  nonzero_servo:                             # D80/D160 vs same-round B, aligned on t_ref
+    e_servo_rmse_increase_rad_max: 1.0e-4
+    e_servo_peak_increase_rad_max: 5.0e-4
+  repeatability:
+    t_ref_offset_range_s_max: 0.016
+    e_total_rmse_range_rel: 0.10
+    e_total_rmse_range_abs_rad: 1.0e-4
+  lag_correlation: {search_s: 0.4, grid_s: 0.008}

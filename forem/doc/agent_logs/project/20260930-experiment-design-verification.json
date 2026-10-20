@@ -1,0 +1,40 @@
+{
+  "checked_at": "2026-09-30T09:11:28.844461+00:00",
+  "scope": "Documentation only, not runtime or method validation",
+  "nodes": [
+    "exp0",
+    "exp1",
+    "exp2",
+    "exp3",
+    "exp4",
+    "exp5",
+    "exp6"
+  ],
+  "major_document_count": 21,
+  "local_links_checked": 62,
+  "errors": [],
+  "sha256": {
+    "forem/doc/experiment/README.md": "8b6e4b9d9b4ad7a2b0328eb079fbbf2923f31dbc54338a401a18e88f4e087664",
+    "forem/doc/experiment/备选/exp0/PROCEDURE.md": "16e2b64835d826a04cc43bf01d02d7f500ef40225467eb5db95be9461ca3b38f",
+    "forem/doc/experiment/备选/exp0/RESULTS.md": "e077b505351d708edf0b4e416936858f21bf82f8a43990ec1d0d1ea119a7492e",
+    "forem/doc/experiment/备选/exp0/TASK.md": "81bb30d7686ee5a7aca64c37a2f422a15541c98ab7c58a2e8affd30901988dde",
+    "forem/doc/experiment/备选/exp1/PROCEDURE.md": "5387ba05256114400d9b1a664ff438107b8684aaa5d4515883e50a4e07208a13",
+    "forem/doc/experiment/备选/exp1/RESULTS.md": "77844c4fc271170c34148359c20211908f6c24328b8e5139d2be9b4e3b311e11",
+    "forem/doc/experiment/备选/exp1/TASK.md": "bc3fdf90249412fe65b82e760a2d1425a94c89e1e0d48596e4fac647c2b358e7",
+    "forem/doc/experiment/备选/exp2/PROCEDURE.md": "57f682e08ed886b37ff3e8d00a5ed350dfdcf2a14e96c21ccc845dce610f07ba",
+    "forem/doc/experiment/备选/exp2/RESULTS.md": "611f2a1de7fc0c0dcbde2dfb9542266e7d1a2ac9b9c604efd8291e5a494ede42",
+    "forem/doc/experiment/备选/exp2/TASK.md": "498e0d04c6ccabad63c0f1775b1673d6445e6bc7d10dc66913a6af9223fdb852",
+    "forem/doc/experiment/备选/exp3/PROCEDURE.md": "a95829eb6027c7a826add9567141eeb07d0a4c7a60c2a40ad0c02444d324a267",
+    "forem/doc/experiment/备选/exp3/RESULTS.md": "ef12311b7650102ee9dd19e60db83c2e461e2bf1770049200d5942ae0cb45b15",
+    "forem/doc/experiment/备选/exp3/TASK.md": "cbcb6d26a88956843a9cba4b5b9ff39ff4d9c6818115dc2a1cfcb3e158e3a9d8",
+    "forem/doc/experiment/备选/exp4/PROCEDURE.md": "b177ae5fa397c6e8842638cbfda07ef1d0c2307f175bb7084173989a3085cf2c",
+    "forem/doc/experiment/备选/exp4/RESULTS.md": "f69ab7b5c5949ff29411cd5644bb6a94b4d34c3c7f2574a593f15d0dff37294c",
+    "forem/doc/experiment/备选/exp4/TASK.md": "a811f6ed7e364801c69726b2a93e6c64b9bac64a8b416a0032abaabdd1d1c65f",
+    "forem/doc/experiment/备选/exp5/PROCEDURE.md": "e2e4e1cbe6466f0ffa41f0efdf1003c0e156ed27a19c5ff63c5bd7e0a3afb4a9",
+    "forem/doc/experiment/备选/exp5/RESULTS.md": "b80c96fac335df15d5e575455c724dcb80c25836e96926feca3049d034d8efb3",
+    "forem/doc/experiment/备选/exp5/TASK.md": "b647b7b0262e9046fd1ce953eb08489bc0cdd0061b59af22c5105e44ce28624b",
+    "forem/doc/experiment/备选/exp6/PROCEDURE.md": "8230ab75345841f97978444c47b185eeeff8da1dc477cb5716a97a4a1b99b2ca",
+    "forem/doc/experiment/备选/exp6/RESULTS.md": "a7b6a496dabacebdf2ebc1767ca175507ecd33c07a6eba1af7b45a0f5b8bcd9f",
+    "forem/doc/experiment/备选/exp6/TASK.md": "49898820fe23c67496a8d08bc5d4979bcdaaf4b5ad02e4e77b9b5e5a2c4de0dd"
+  }
+}

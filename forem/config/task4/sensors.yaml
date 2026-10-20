@@ -1,0 +1,205 @@
+schema: 1
+status: single_side_rig_adapted_actual_raw_and_initialization_pending
+clock: simulation_time
+use_sim_time: true
+stereo:
+  plugin: libgazebo_ros_multicamera.so
+  sensor_type: multicamera
+  physical_two_viewpoints: true
+  baseline_m: 0.12
+  frame_parent: base_link
+  plugin_header_frame_limitation: upstream_multicamera_one_frameName_for_both_views
+  frame_normalization_rule: associate_view_by_verified_topic_and_SDF_pose_then_assign_respective_optical_frame_no_image_restamping
+  left_camera_body_xyz_m:
+  - 0.29
+  - 0.0
+  - 0.45
+  right_camera_body_xyz_m:
+  - 0.41
+  - 0.0
+  - 0.45
+  body_rpy_rad:
+  - 0.0
+  - 0.0
+  - 1.5707963267948966
+  optical_axes_in_body:
+    x: right_plus_x
+    y: down_minus_z
+    z: forward_plus_y
+  R_body_optical:
+  - - 1
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 1
+  - - 0
+    - -1
+    - 0
+  optical_rpy_rad:
+  - -1.5707963267948966
+  - 0.0
+  - 0.0
+  width_px: 640
+  height_px: 480
+  horizontal_fov_rad: 1.5707963267948966
+  nominal_rate_hz: 20.0
+  format: R8G8B8
+  estimate_input_encoding: mono8_from_actual_RGB_only
+  distortion_model: radtan
+  distortion_coefficients:
+  - 0.0
+  - 0.0
+  - 0.0
+  - 0.0
+  intrinsic_formula: fx=fy=width/(2*tan(hfov/2));_cx=(width+1)/2;_cy=(height+1)/2
+  nominal_intrinsics:
+  - 320.0
+  - 320.0
+  - 320.5
+  - 240.5
+  intrinsics_authority: actual_CameraInfo_must_match_realized_rendering_not_nominal_assumption
+  right_projection_rule: P03=-fx*baseline;_hackBaseline_not_substitute_for_physical_pose
+  clip_near_m: 0.05
+  clip_far_m: 30.0
+  gaussian_noise_stddev: 0.0
+  left:
+    topic: /task4/stereo/left/image_raw
+    info_topic: /task4/stereo/left/camera_info
+    frame: task4_left_optical
+  right:
+    topic: /task4/stereo/right/image_raw
+    info_topic: /task4/stereo/right/camera_info
+    frame: task4_right_optical
+  synchronization: identical_exposure_sim_stamps_required
+  maximum_pair_skew_s: 0.0
+  pair_queue_cap: 10
+imu:
+  plugin: libgazebo_ros_imu_sensor.so
+  topic: /task4/imu/data_raw
+  type: sensor_msgs/Imu
+  frame: task4_imu_link
+  parent: base_link
+  xyz_m:
+  - 0.35
+  - 0.0
+  - 0.45
+  rpy_rad:
+  - 0.0
+  - 0.0
+  - 0.0
+  axes:
+  - forward_x
+  - left_y
+  - up_z
+  nominal_rate_hz: 200.0
+  angular_velocity_unit: rad_per_s
+  acceleration_unit: m_per_s2
+  acceleration_contract: specific_force_stationary_up_axis_plus_9_8_verify_plugin_sign
+  absolute_orientation_usage: forbidden_even_if_plugin_populates_it
+  input_adapter_orientation_covariance_0: -1
+  sensor_gaussian_noise: 0.0
+  estimator_covariance_model:
+    basis: official_EuRoC_template_prior_not_measured_sim_sensor_noise
+    accelerometer_noise_density: 0.002
+    accelerometer_random_walk: 0.003
+    gyroscope_noise_density: 0.00016968
+    gyroscope_random_walk: 1.9393e-05
+    density_units:
+    - m_per_s2_per_sqrt_Hz
+    - m_per_s3_per_sqrt_Hz
+    - rad_per_s_per_sqrt_Hz
+    - rad_per_s2_per_sqrt_Hz
+  time_offset_s: 0.0
+calibration:
+  T_base_imu_authority: resolved_fixed_URDF_chain_base_footprint_to_base_link_to_imu
+  inherited_T_footprint_base_link_xyz_m:
+  - 0.0
+  - 0.0
+  - 0.1323
+  T_imu_left_camera_optical:
+  - - 1
+    - 0
+    - 0
+    - -0.06
+  - - 0
+    - 0
+    - 1
+    - 0
+  - - 0
+    - -1
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 1
+  T_imu_right_camera_optical:
+  - - 1
+    - 0
+    - 0
+    - 0.06
+  - - 0
+    - 0
+    - 1
+    - 0
+  - - 0
+    - -1
+    - 0
+    - 0
+  - - 0
+    - 0
+    - 0
+    - 1
+  online_calibration: false
+  imu_camera_stamp_offset_s: 0.0
+  validation_required:
+  - resolved_SDF_viewpoint_separation
+  - URDF_extrinsics_axes
+  - CameraInfo_K_D_R_P
+  - actual_frame_names
+  - pair_stamps
+  - measured_rate_and_dropouts
+  - static_IMU_specific_force
+  - render_nonidentical_views_and_features
+risks:
+- sparse_ground_plane_and_existing_obstacles_may_not_initialize_visual_tracking
+- mount_visibility_occlusion_by_existing_arm_must_be_checked
+- headless_Gazebo_cameras_need_actual_render_test_Xvfb_does_not_prove_GPU_rendering
+- ideal_zero_noise_simulation_does_not_validate_real_sensor_accuracy
+- no_new_scenery_or_texture_task_added_to_rescue_failure
+sources:
+- SRC-0067
+- SRC-0069
+- SRC-0103
+realized_history:
+  run_id: t4.2-raw-r4
+  sources:
+  - SRC-0071
+  - SRC-0073
+  evidence: results/task4/t4.2-raw-r4/sensor_summary.json
+  geometry_evidence: results/task4/t4.2-raw-r4/calibration_geometry.json
+  measured_intrinsics:
+  - 319.9988245765257
+  - 319.9988245765257
+  - 320.5
+  - 240.5
+  serialized_hfov_rad: 1.5708
+  resolved_T_footprint_base_link_xyz_m:
+  - 0.0
+  - 0.0
+  - 0.13228
+  baseline_m: 0.12
+  plugin_camera_throttle_hz: 0
+  plugin_imu_throttle_ceiling_hz: 2000
+  physical_imu_sample_hz: 200
+  note: positive IMU throttle rejects repeated LastUpdateTime; not physical2000Hz.
+    original sensor200Hz remains. Packet future/no-clock lifecycle remains4.3. nominal
+    values above retained as4.1 history.
+  historical_rig_note: Original forward rig t4.2-raw-r4; does not validate current
+    left90 extrinsics.
+current_rig_design:
+  source: SRC-0103
+  candidate: single_whole_stereo_left90_IMU_unchanged
+  actual_validation: pending t4.2.2-side-reg-r1
+  no_scene_or_physics_change: true

@@ -1,25 +1,37 @@
 # FoReM 文档入口
 
-共同约定：[根AGENTS.md](../../AGENTS.md)。Claude已完成初次环境搭建；Codex独立审核后仍为review，下一步见task0.7修正计划。
+共同约定：[根AGENTS.md](../../AGENTS.md)。当前状态见[PROGRESS](PROGRESS.md)，总体计划见[PLAN](PLAN.md)。
 
-## 总览与协作
+2026-10-16按用户指令整理：现有任务归为阶段一“CBL复现”，task7起为阶段二“世界模型闭环”；无用文档已删除，原文备份见[SRC-0321](SOURCES.md#src-0321)。
 
-- [总体计划](PLAN.md)
-- [唯一活动进度表](PROGRESS.md)
-- [决策记录](DECISIONS.md)
-- [Agent日志模板](agent_logs/TEMPLATE.md)
+## 目录
 
-## 任务节点
+```text
+forem/doc/
+  README.md      本入口
+  PLAN.md        两阶段总体计划与阶段一结论
+  PROGRESS.md    唯一活动进度表
+  DECISIONS.md   决策记录
+  SOURCES.md     论据来源台账
+  tasks/         一任务一目录，每层 TASK / PROCEDURE / RESULTS 三文档
+  agent_logs/    Agent过程记录，按 project/ 与 taskN/taskN.M/ 镜像任务编号；TEMPLATE.md为模板
+```
 
-|节点|任务：目标与路线|流程：详细控制与执行|结果：实测与结论|
-|---|---|---|---|
-|task0环境配置|[TASK](tasks/task0/TASK.md)|[PROCEDURE](tasks/task0/PROCEDURE.md)|[RESULTS](tasks/task0/RESULTS.md)|
-|task1正常跟踪|[TASK](tasks/task1/TASK.md)|[PROCEDURE](tasks/task1/PROCEDURE.md)|[RESULTS](tasks/task1/RESULTS.md)|
+`agent_logs/`是各次会话的**历史过程记录**，记载当时的判断与计划，可能已被后续决定取代（例如2026-10-07至10-09关于视觉惯性定位和旧Task4路线的日志）。它们不是指令；当前事实以任务三文档、PROGRESS、PLAN和DECISIONS文末条目为准。
 
-整个项目统一采用一任务一目录、递归编号和三文档；所有进一步拆出的子任务也一样。父流程串联子节点顺序、依赖和验收，父结果汇总子结果。环境初次搭建为task0.1–task0.5，task0.6为独立审核、task0.7为修正与重新验收，每个子节点都有独立三文档，入口见父流程。
+## 任务
 
-计划与实测分开，未执行结果明确标注；同节点多次运行按run-id追加RESULTS。运行原始数据和日志不放doc，Agent过程日志单独在agent_logs。根doc仅保留兼容链接，不维护第二份活动状态。
+|阶段|任务|内容|状态|三文档|
+|---|---|---|---|---|
+|一 CBL复现|task0|forem-dev容器与ROS/Gazebo环境（基础设施）|done|[TASK](tasks/task0/TASK.md) · [PROCEDURE](tasks/task0/PROCEDURE.md) · [RESULTS](tasks/task0/RESULTS.md)|
+|一|task3|CBL（Husky+UR5）核心迁移到FoReM|done|[TASK](tasks/task3/TASK.md) · [PROCEDURE](tasks/task3/PROCEDURE.md) · [RESULTS](tasks/task3/RESULTS.md)|
+|一|task4|Gazebo普通SAC基线与首次WM尝试|closed|[TASK](tasks/task4/TASK.md) · [PROCEDURE](tasks/task4/PROCEDURE.md) · [RESULTS](tasks/task4/RESULTS.md)|
+|一|task5|上游N²M²与CBL原版的sim对照训练；5.5 cbl自写SAC sim 5M|5.0–5.3 done；5.4 paused；5.5 done|[TASK](tasks/task5/TASK.md) · [PROCEDURE](tasks/task5/PROCEDURE.md) · [RESULTS](tasks/task5/RESULTS.md)|
+|一|task6|Task4.8 Gazebo失败原因诊断|6.1/6.3 done；6.2 paused；6.4阶段一done；6.5阶段一review|[TASK](tasks/task6/TASK.md) · [PROCEDURE](tasks/task6/PROCEDURE.md) · [RESULTS](tasks/task6/RESULTS.md)|
+|二 世界模型闭环|task7|SC²-WM式预测—修正闭环接入SAC；自写环境训练，ManiSkill验证|draft（未授权实施）|[TASK](tasks/task7/TASK.md) · [PROCEDURE](tasks/task7/PROCEDURE.md) · [RESULTS](tasks/task7/RESULTS.md)|
 
-编号与委派要求见根AGENTS；主任务目录为tasks/task0、tasks/task1。task1当前仅有计划草案，不在本轮环境实施范围。
+task1、task2编号已删除，不复用。子任务入口见各任务PROCEDURE。
 
-当前执行交接：[task0.7 TASK](tasks/task0/task0.7/TASK.md)、[PROCEDURE](tasks/task0/task0.7/PROCEDURE.md)、[RESULTS](tasks/task0/task0.7/RESULTS.md)。修正尚未执行；task1仍是计划草案。
+## 放置规则
+
+任务计划/流程/结果只写在对应`tasks/`节点三文档；Agent过程记录放`agent_logs/<project | taskN | taskN/taskN.M>/`，文件名`YYYYMMDD-agent-topic.md`；代码、配置、日志、产物分别放`forem/src`、`config`、`logs`、`results`。

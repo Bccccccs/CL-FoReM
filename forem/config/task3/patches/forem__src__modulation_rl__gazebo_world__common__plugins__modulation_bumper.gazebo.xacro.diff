@@ -1,0 +1,14 @@
+--- a/husky/src/modulation_rl/gazebo_world/common/plugins/modulation_bumper.gazebo.xacro
++++ b/forem/src/modulation_rl/gazebo_world/common/plugins/modulation_bumper.gazebo.xacro
+@@ -2,9 +2,9 @@
+ 
+ <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+ 
+-    <xacro:macro name="modulation_bumper" params="reference sensor_name collision_name">
++    <xacro:macro name="modulation_bumper" params="reference sensor_name collision_name gravity_off:=false">
+         <gazebo reference="${reference}">
+-            <turnGravityOff>true</turnGravityOff>
++            <xacro:if value="${gravity_off}"><turnGravityOff>true</turnGravityOff></xacro:if>
+             <selfCollide>false</selfCollide>
+             <sensor type="contact" name="${sensor_name}_contact_sensor">
+                 <update_rate>50.0</update_rate>

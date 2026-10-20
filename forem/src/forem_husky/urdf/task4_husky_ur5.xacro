@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<robot name="husky_ur5" xmlns:xacro="http://wiki.ros.org/xacro">
+  <xacro:include filename="$(find husky_ur5)/urdf/husky_ur5.xacro"/>
+  <xacro:include filename="$(find forem_husky)/urdf/visual_inertial_sensors.urdf.xacro"/>
+  <xacro:task4_raw_sensors parent="base_link"/>
+</robot>

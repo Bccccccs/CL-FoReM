@@ -1,0 +1,235 @@
+schema: 1
+status: protocol_selected_build_and_runtime_pending
+robot: husky_ur5
+task: simpleobstacle
+pose_source: openvins_stereo_imu
+accepted_core:
+  freeze: results/task4/t4.1-protocol-20261007-r1/task3_accepted_freeze.json
+  acceptance: results/task4/t4.1-protocol-20261007-r1/task3_acceptance.json
+  freeze_id: t3.6-core-freeze4
+  file_count: 330
+  core_receipt: results/task3/t3.5-fix1-receipt/core_receipt.json
+  preserve:
+  - robot
+  - controllers
+  - physics
+  - task_distribution
+  - action
+  - observation_dimensions
+  - reward
+  - termination
+  - ordinary_SAC_update
+  planned_deltas:
+  - raw_sensor_attachment
+  - pose_source
+  - source_identity
+  - reset_initialization_lifecycle
+estimator:
+  name: open_vins
+  method: EKF_MSCKF
+  commit: 69488123ed9362dd44b6f28e7f4680abbff1442b
+  device: cpu
+  reference_callback: results/task4/t4.1-protocol-20261007-r1/references/open_vins/ov_msckf/src/ros/ROS1Visualizer.cpp
+  entry: ov_msckf/run_subscribe_msckf
+  core_loop_closure: false
+  enable_external_posegraph: false
+  parameters:
+    use_stereo: true
+    max_cameras: 2
+    use_fej: true
+    integration: rk4
+    use_klt: true
+    histogram_method: NONE
+    num_pts: 200
+    track_frequency: 21.0
+    downsample_cameras: false
+    use_aruco: false
+    max_clones: 11
+    max_slam: 50
+    max_slam_in_update: 25
+    max_msckf_in_update: 40
+    calib_cam_extrinsics: false
+    calib_cam_intrinsics: false
+    calib_cam_timeoffset: false
+    calib_imu_intrinsics: false
+    calib_imu_g_sensitivity: false
+    gravity_mag: 9.8
+    try_zupt: true
+    zupt_only_at_beginning: true
+    zupt_chi2_multipler: 0
+    zupt_max_velocity: 0.1
+    zupt_noise_multiplier: 10
+    zupt_max_disparity: 0.5
+    init_window_time: 2.0
+    init_imu_thresh: 1.5
+    init_max_disparity: 10.0
+    init_max_features: 200
+    init_dyn_use: false
+    init_dyn_bias_g:
+    - 0.0
+    - 0.0
+    - 0.0
+    init_dyn_bias_a:
+    - 0.0
+    - 0.0
+    - 0.0
+  parameter_basis: SRC-0067_EuRoC_template_and_SRC-0069_engineering_overrides; SRC0075_actual49ms_exposure_frontendcap21_not_sensor_rate_change; SRC0085_original_raw_global_equalization_erases_corners_NONE_single_supported_parameter; SRC0095_original102_gridquota_supported_init50_to200
+permissions:
+  estimator_inputs:
+  - left_image_raw
+  - right_image_raw
+  - imu_acceleration_and_angular_velocity
+  - frozen_calibration
+  imu_fields:
+  - header.stamp
+  - linear_acceleration
+  - angular_velocity
+  forbidden:
+  - IMU_absolute_orientation
+  - p3d_odometry
+  - T265_odometry
+  - wheel_odometry_fusion
+  - GPS_fusion
+  - laser_localization
+  - truth_pose_correction
+  policy_base_dependencies:
+    robot_observation: estimate_TF
+    map_crop: estimate_TF
+    goal_relative_to_base: estimate_TF
+    wrist_to_goal: estimate_TF
+    IK_planning_base: estimate_TF
+  public_world_inputs:
+  - same_Task3_map_geometry
+  - same_Task3_global_goal
+  - same_Task3_laser_costmap_obstacle_channel
+  - joint_feedback
+  - collision_contacts
+  public_map_limitation: known_geometry_is_not_pure_visual_end_to_end
+  truth_reader: separate_evaluation_process_only
+  truth_topics:
+  - /gazebo/model_states
+  - /ground_truth/state
+frames:
+  notation: T_A_B_maps_coordinates_in_B_to_A
+  estimator_parent: global
+  estimator_child: imu
+  imu_frame: task4_imu_link
+  output_topic: /forem/pose/estimated
+  output_type: nav_msgs/Odometry
+  output_parent: odom
+  output_child: base_footprint
+  map_equals_odom: true
+  world_equals_map: true
+  transform_formula: T_map_base(t)=T_map_global*T_global_imu(t)*inverse(T_base_imu)
+  alignment_formula: T_map_global=T_map_base_commanded_initial*T_base_imu*inverse(T_global_imu_initial)
+  output_stamp: original_estimator_simulation_stamp
+  quaternion_rule: official_odometry_convention_verify_with_rotation_test_no_blind_internal_JPL_copy
+  covariance_rule: rotate_and_transport_pose_covariance_with_SE3_jacobian_including_lever_arm
+  dynamic_publishers:
+  - pose_bridge
+  estimator_tf:
+    publish_global_to_imu_tf: false
+    publish_calibration_tf: false
+  fixed_sensor_tf_publisher: robot_state_publisher
+initialization:
+  anchor_source: public_commanded_episode_initial_pose
+  anchor_readback_from_simulator: false
+  anchor_frequency: once_per_explicit_episode_reset
+  policy_actions_during_bootstrap: false
+  state_machine:
+  - STOPPED
+  - BOOTSTRAP_PUBLIC_POSE
+  - RESET_AND_DISCARD_OLD_SENSOR_QUEUES
+  - COLLECT_STATIC_RAW
+  - ALIGN_ONCE
+  - ESTIMATE_ONLY_READY
+  - INVALID_STOP
+  bootstrap_authority: pose_bridge_same_single_publisher_labeled_bootstrap_not_estimate
+  bootstrap_pose: externally_declared_spawn_or_drawn_start_pose_only
+  constructor_requirement: BaseWorld_awaitTfs_requires_future_0_5s_query_do_not_publish_future_sensor_stamps
+  constructor_adaptation: Task4_lifecycle_uses_latest_public_bootstrap_TF_then_waits_for_live_estimate_before_policy
+  reset_sequence: Stop cmd_vel and wait arm hold; mark policy invalid; old estimator
+    must stop before reset. Public launch spawn pose supplies constructor bootstrap.
+    Preserve SimpleObstacleTask reset draw/map/goal; x30 teleport is public reset
+    command only, never initialize VIO there. Finish commanded new start and arm reset,
+    discard queues/create fresh estimator, hold stationary for raw initialization.
+    During reset/bootstrap no action/observation may enter SAC/replay. After successful
+    raw init, align once with commanded start pose, revoke bootstrap, release only
+    fresh estimated TF and return obs.
+  initializer: official_static_initializer_with_beginning_ZUPT_no_jerk_requirement
+  stationary_collection_s: 2.0
+  initialization_timeout_wall_s: 120
+  failure: stop_and_invalidate_no_truth_fallback
+  loss: stop_cmd_vel_hold_arm_invalidate_episode_require_explicit_fresh_reinit
+  clock_rollback: stop_run_restart_simulation_and_estimator_no_supported_reset_simulation_recovery
+  packet_rules: original_stamp_strict_monotonic_in_epoch_reject_late_future_nonfinite_no_host_restamping
+  freshness:
+    maximum_estimate_age_sim_s: 0.1
+    future_tolerance_sim_s: 0.0005
+    basis: engineering_gate_2_camera_periods_and_1_Gazebo_step_not_measured_accuracy
+identity:
+  checkpoint_namespace: task4_openvins_stereo_imu
+  reject_Task3_or_truth_checkpoints: true
+  fresh_replay_optimizer_training: true
+  required_actual_content_groups:
+  - inherited_Task3_core
+  - Task4_runtime_and_identity
+  - Task4_config_and_launch
+  - pinned_estimator_source_and_config
+  - built_estimator_binary
+  shape_compatibility_is_insufficient: true
+  old_manifest_or_freeze_alone_is_insufficient: true
+  freeze_by: task4.4_after_actual_pilot
+budget:
+  resource_policy: GPU_first_SAC_CPU_official_VIO_no_CUDA_port
+  pilot:
+    training_seeds:
+    - 0
+    runs: 1
+    environment_steps_cap: 76
+    gradient_updates_cap: 60
+    random_warmup_steps: 64
+    batch_size: 16
+    wall_time_cap_s: 900
+    tuning_attempts_cap: 1
+    device: cuda
+    evaluation_episodes: 1
+    evaluation_steps_per_episode_cap: 60
+    checkpoint_count_cap: 1
+    disk_cap_gib: 10
+    basis: existing_Task3_smoke_scope_64_plus_12_steps_and_1_update_per_step_engineering_storage_limit
+  formal:
+    enabled: false
+    freeze_id: null
+    training_seeds: null
+    steps_per_seed: null
+    gradient_updates_per_seed: null
+    wall_time_cap_s: null
+    tuning_attempts_cap: null
+    disk_cap_gib: null
+    checkpoint_schedule: null
+    evaluation_seeds_and_episodes: null
+    rule: task4.4_measured_pilot_cost_and_quality_then_freeze_all_fields_before_task4.5
+quality:
+  metrics:
+  - matched_stamp_position_RMSE_m
+  - yaw_RMSE_rad
+  - drift_m
+  - estimate_age_sim_s
+  - init_success_and_time
+  - dropout_duration_sim_s
+  - validity_fraction
+  - independent_actual_task_success
+  numerical_accuracy_thresholds: null
+  threshold_rule: select_from_task4.3_and_task4.4_actual_baseline_before_formal_training_not_nav_platform_numbers
+  semantic_separation: original_task_success_uses_estimated_base_and_planned_arm_independent_actual_success_is_evaluation_only
+sources:
+- SRC-0067
+- SRC-0068
+- SRC-0069
+- SRC-0084
+- SRC-0085
+- SRC-0095
+
+# Existing Task4 sensor installation adaptation only; source SRC-0103.
+sensor_mount_revision: single_whole_stereo_left90_IMU_unchanged_SRC0103

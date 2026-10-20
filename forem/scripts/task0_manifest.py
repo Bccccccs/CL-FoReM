@@ -4,7 +4,7 @@
 Records identity of everything that could change behaviour: hashes of *all* executable
 sources/configs of the forem workspace (not just a dirty-file count), image, container,
 mounts, exact commands and the outcome of launch / check / cleanup.
-Usage: task0_manifest.py ROOT RUN_ID STATE_JSON   (STATE_JSON is written by run_task0_smoke.sh)
+Usage: task0_manifest.py ROOT RUN_ID STATE_JSON [TASK_DIR]   (STATE_JSON is written by the run script; TASK_DIR defaults to task0, task1 uses "task1")
 """
 import datetime
 import hashlib
@@ -48,6 +48,7 @@ def hash_sources(root):
 
 def main():
     root, run, state_path = sys.argv[1:4]
+    task_dir = sys.argv[4] if len(sys.argv) > 4 else "task0"
     state = json.load(open(state_path))
     container = state.get("container", "forem-dev")
     m = {
@@ -64,7 +65,7 @@ def main():
         "seed": "not applicable (no randomness introduced)",
     }
     m.update(state)
-    dst = os.path.join(root, "results", "task0", run, "manifest.json")
+    dst = os.path.join(root, "results", task_dir, run, "manifest.json")
     tmp = dst + ".tmp"
     json.dump(m, open(tmp, "w"), indent=2)
     os.replace(tmp, dst)

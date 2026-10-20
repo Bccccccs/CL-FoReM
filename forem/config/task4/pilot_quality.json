@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "sources": [
+    "SRC-0080"
+  ],
+  "engineering_choice": true,
+  "task_position_tolerance_m": 0.025,
+  "XY_RMSE_max_m": 0.025,
+  "XY_peak_max_m": 0.075,
+  "yaw_RMSE_max_rad": 0.05,
+  "yaw_peak_max_rad": 0.15,
+  "matched_pose_fraction_min": 0.95,
+  "valid_control_fraction_min": 0.95,
+  "estimate_age_max_sim_s": 0.1,
+  "truth_match_max_sim_s": 0.02,
+  "initialization_timeout_wall_s": 120,
+  "init_attempt_fraction_min": 1.0,
+  "pilot_success_required": false,
+  "rule": "fixed before pilot; XY RMSE uses task .025m, yaw .05rad independent conservative engineering choice; peaks3x engineering guard; original task quaternion distance .05 dimensionless; no convergence claim",
+  "task_quaternion_distance_tolerance": 0.05,
+  "task_equivalent_rotation_tolerance_rad": 0.4510268118
+}

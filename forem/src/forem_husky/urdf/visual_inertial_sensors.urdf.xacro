@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!-- Engineering rig SRC-0069/0071; whole-stereo left90 SRC-0103: no inertia/collision/visual additions, no inherited physics changes. -->
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+<xacro:macro name="task4_raw_sensors" params="parent">
+  <link name="task4_imu_link"/>
+  <joint name="task4_imu_mount" type="fixed"><parent link="${parent}"/><child link="task4_imu_link"/><origin xyz="0.35 0 0.45" rpy="0 0 0"/></joint>
+  <xacro:macro name="task4_optical" params="side y">
+    <link name="task4_${side}_optical"/>
+    <joint name="task4_${side}_mount" type="fixed"><parent link="task4_imu_link"/><child link="task4_${side}_optical"/><origin xyz="${-y} 0 0" rpy="-1.5707963267948966 0 0"/></joint>
+  </xacro:macro>
+  <xacro:task4_optical side="left" y="0.06"/>
+  <xacro:task4_optical side="right" y="-0.06"/>
+  <gazebo reference="${parent}">
+    <sensor name="task4_stereo" type="multicamera">
+      <pose>0.35 0 0.45 0 0 1.5707963267948966</pose><always_on>true</always_on><update_rate>20</update_rate><visualize>false</visualize>
+      <camera name="left"><pose>0 0.06 0 0 0 0</pose><horizontal_fov>1.5707963267948966</horizontal_fov><image><width>640</width><height>480</height><format>R8G8B8</format></image><clip><near>0.05</near><far>30</far></clip><noise><type>gaussian</type><mean>0</mean><stddev>0</stddev></noise></camera>
+      <camera name="right"><pose>0 -0.06 0 0 0 0</pose><horizontal_fov>1.5707963267948966</horizontal_fov><image><width>640</width><height>480</height><format>R8G8B8</format></image><clip><near>0.05</near><far>30</far></clip><noise><type>gaussian</type><mean>0</mean><stddev>0</stddev></noise></camera>
+      <plugin name="task4_multicamera" filename="libgazebo_ros_multicamera.so"><robotNamespace>/task4/plugin</robotNamespace><cameraName>stereo</cameraName><imageTopicName>image_raw</imageTopicName><cameraInfoTopicName>camera_info</cameraInfoTopicName><frameName>task4_left_optical</frameName><hackBaseline>0.12</hackBaseline><updateRate>0</updateRate></plugin>
+    </sensor>
+    <sensor name="task4_imu" type="imu">
+      <pose>0.35 0 0.45 0 0 0</pose><always_on>true</always_on><update_rate>200</update_rate><visualize>false</visualize>
+      <plugin name="task4_imu_raw" filename="libgazebo_ros_imu_sensor.so"><robotNamespace>/task4/plugin</robotNamespace><topicName>imu</topicName><bodyName>base_link</bodyName><frameName>task4_imu_link</frameName><gaussianNoise>0</gaussianNoise><updateRateHZ>2000</updateRateHZ></plugin>
+    </sensor>
+  </gazebo>
+</xacro:macro>
+</robot>

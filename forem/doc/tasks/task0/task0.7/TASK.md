@@ -1,6 +1,8 @@
 # task0.7 审核问题修正与重新验收 — 任务
 
-状态：review（Claude已于2026-09-30执行并自测，结果见[RESULTS](RESULTS.md)；待Codex复核，父task0保持review）。
+状态：done（经task0.13独立复核；当前固定底座UR5环境范围验收通过）。
+
+历史状态记录：状态：review（Claude已于2026-09-30执行并自测，结果见[RESULTS](RESULTS.md)；待Codex复核，父task0保持review）。
 
 ## 目标与范围
 
