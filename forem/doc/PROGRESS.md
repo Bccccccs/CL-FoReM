@@ -30,7 +30,7 @@
 
 |任务ID|负责人|状态|记录|
 |---|---|---|---|
-|PROJECT-GIT-PUSH-20261020|Codex|active（2026-10-20T15:11:17+08:00开始；按用户要求提交并推送当前文件；只做Git同步及必要记录）|[记录](agent_logs/project/20261020-codex-git-push.md)|
+|PROJECT-GIT-PUSH-20261020|Codex|done（2026-10-20T15:12:00+08:00；当前文件提交2380ff5及此前42提交已推送origin/main，远程哈希一致；本条及日志作为收尾记录提交）|[记录](agent_logs/project/20261020-codex-git-push.md)|
 |TASK7.6-BENCH-20261020|Codex|review（2026-10-20T14:46:35.571249+08:00交付；r1–r9有界基准、原件125项重算、清理/预算核查；非环境实施，待Claude/用户复核）|[日志](agent_logs/task7/task7.6/20261020-codex-ik-bench.md) · [结果](tasks/task7/task7.6/RESULTS.md) · [SRC-0399](SOURCES.md#src-0399)|
 |TASK7-SECOND-REVIEW-A-20261019|Codex|done（2026-10-19T23:40:47+08:00开始；2026-10-19T23:54:56+08:00交付17项第二轮建议；仅只读核查与文档）|[记录](agent_logs/task7/20261019-codex-review-evidence.md)|
 |TASK7-EVIDENCE-B-20261019|Codex|done（2026-10-20 Claude已采纳并写入task7文档，见[日志](agent_logs/task7/20261020-claude-second-review-fixes.md)；原记录：2026-10-19T23:40:47+08:00开始；2026-10-19T23:54:56+08:00八项核查/替换建议与SRC-0382–0390已交付；物理TCP等价未证实、R2D2原文未取得，官方代码已核）|[记录](agent_logs/task7/20261019-codex-review-evidence.md)|
