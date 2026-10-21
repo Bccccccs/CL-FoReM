@@ -4,6 +4,18 @@
 
 2026-10-16按用户指令整理：现有任务归为阶段一“CBL复现”，task7起为阶段二“世界模型闭环”；无用文档已删除，原文备份见[SRC-0321](SOURCES.md#src-0321)。
 
+## 三条主线
+
+2026-10-21按用户指令分为三条并行主线（[SRC-0430](SOURCES.md#src-0430)）：
+
+|主线|入口|内容|
+|---|---|---|
+|项目主线|本文与[tasks/](tasks/)|现有全部文档；开发工作继续在这里推进|
+|实验主线|[experiments/](experiments/README.md)|论文所需实验的设计、协议与结果汇总（尚未设计）|
+|论文主线|[paper/](paper/README.md)|论文的设计与写作（尚未设计）|
+
+`PROGRESS`、`DECISIONS`、`SOURCES`三条主线共用。
+
 ## 目录
 
 ```text
@@ -14,6 +26,8 @@ forem/doc/
   DECISIONS.md   决策记录
   SOURCES.md     论据来源台账
   tasks/         一任务一目录，每层 TASK / PROCEDURE / RESULTS 三文档
+  experiments/   实验主线（入口README）
+  paper/         论文主线（入口README）
   agent_logs/    Agent过程记录，按 project/ 与 taskN/taskN.M/ 镜像任务编号；TEMPLATE.md为模板
 ```
 
@@ -34,4 +48,4 @@ task1、task2编号已删除，不复用。子任务入口见各任务PROCEDURE�
 
 ## 放置规则
 
-任务计划/流程/结果只写在对应`tasks/`节点三文档；Agent过程记录放`agent_logs/<project | taskN | taskN/taskN.M>/`，文件名`YYYYMMDD-agent-topic.md`；代码、配置、日志、产物分别放`forem/src`、`config`、`logs`、`results`。
+任务计划/流程/结果只写在对应`tasks/`节点三文档；Agent过程记录放`agent_logs/<project | taskN | taskN/taskN.M>/`（实验主线、论文主线分别放`agent_logs/experiments/`、`agent_logs/paper/`），文件名`YYYYMMDD-agent-topic.md`；代码、配置、日志、产物分别放`forem/src`、`config`、`logs`、`results`。

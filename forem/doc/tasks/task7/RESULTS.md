@@ -60,9 +60,36 @@
 - Claude起草[task7.5 RESULTS](task7.5/RESULTS.md) (B)环境规格草案v1（B.0–B.17），新增[SRC-0376](../../SOURCES.md#src-0376)；待用户确认B1–B14。没有代码、安装、训练或评估结果。
 - 记录：[日志](../../agent_logs/task7/20261019-claude-codex-reply-and-env-spec.md)。
 
+## 2026-10-20 两层SAC决定（Claude，claude-opus-5-5，推理强度未知；只写文档）
+
+- 用户指出10-19框架与CBL不一致（CBL的SAC按10 Hz输出底盘动作，我们只有上层SAC选点），经讨论决定：下层改为10 Hz连续(v, ω)的SAC（机械臂由IK求解），单独训练后冻结；候选特征改为冻结下层对每个候选的一次确定性推演；世界模型先只反馈到选点；保留“上层SAC＋规则路径执行器”作对照组G7；不采用TD-MPC2式序列规划。依据[SRC-0400](../../SOURCES.md#src-0400)、[DECISIONS](../../DECISIONS.md) TASK7-LOWER-SAC-20261020。
+- 更新：TASK新增“2026-10-20 两层SAC”入口节与术语补充，改写§2.3、§2.7第3/7/8步与说明、§2.9，更新U5/U18/U20/U23/U24/U25、新增U31–U38，§4新增G7，§5–§8同步；PROCEDURE实施阶段加入阶段4L，准备子任务表新增task7.13并列出受影响的子任务；新建[task7.13](task7.13/TASK.md)三文档；task7.4、7.5、7.6、7.10、7.11 TASK状态行下注明受影响内容（正文未改）。
+- 待定：U31–U38（其中U38“用CBL自写SAC而非RLlib”为Claude推荐，用户未单独表态）。没有代码、安装、训练或评估结果。
+- 同日稍后用户“都按你的推荐来”（[SRC-0401](../../SOURCES.md#src-0401)，DECISIONS TASK7-DEFAULTS-20261020）：下层改为3维（vel_norm, ω, v），同步沿用CBL末端速度范围与放慢惩罚、不同步下限0；冻结下层取确定性动作；CBL自写SAC；下层无记忆、子目标从规则候选均匀抽；task7.9 R1–R8按草案；不用SC²-WM热力图权重、自训练保留为可选（L1标签改为下层推演可到达，换生成器时下层重新验收）。已写入TASK、task7.9、task7.13、task7.4 §1注。
+- 记录：[日志](../../agent_logs/task7/20261020-claude-lower-sac.md)。
+
+## 2026-10-20晚些 复核处理、CBL核查与下层规格（Claude，claude-opus-5-5，推理强度未知；只写文档）
+
+- Codex两层SAC文档复核14项已处理（[日志](../../agent_logs/task7/20261020-claude-lower-sac-review-fixes.md)）。
+- Codex task7.13 CBL下层代码核查交付（SRC-0402–0406），Claude抽查复核采用。
+- Claude写task7.13下层规格v1（[task7.13 RESULTS](task7.13/RESULTS.md) L.1–L.10，推导[SRC-0407](../../SOURCES.md#src-0407)）；用户“按照推荐推进”确定D1–D12（[SRC-0408](../../SOURCES.md#src-0408)，DECISIONS TASK7-LOWER-SPEC-20261020）。
+- 回写：父TASK入口、§2.7时序、§2.9、U31/U32/U34/U36/U37/U39；task7.4 RESULTS文首修订节（I5、§6、阶段L与冻结门槛、⑦、折扣）及⑦/§14/§15标注；task7.5 RESULTS新增B.R（B8＝0.05 s子步、B9、B10、到达容差、末端推进、风险特征、批量推演接口、新增单元测试）；task7.6 RESULTS新增§6R主方案成本公式；task7.10 TASK列入f_k字段。没有代码、安装、训练或评估。
+
+## 2026-10-20晚 第二轮复核处理与“忠于三个原项目”（Claude，claude-opus-5-5，推理强度未知；只写文档）
+
+- Codex第二轮复核14项：文字与公式更正已改入task7.13、7.4、7.6、7.10、父TASK、SOURCES、DECISIONS；接口补充D13–D20写入task7.13（[日志](../../agent_logs/task7/task7.13/20261020-claude-lower-spec-review-fixes.md)）。
+- 用户“按照你的推荐，要忠于三个原项目”（[SRC-0409](../../SOURCES.md#src-0409)，DECISIONS TASK7-FAITHFUL-20261020）：D13–D20确定，其中D17、D18、D19改取CBL做法；父TASK新增“与三个原项目的一致性”表（22项，其中7项“偏离，可复议”待用户决定）。
+
+## 2026-10-20晚 task7.10/7.11规格、数值预算与冻结前复核（Claude，claude-opus-5-5，推理强度未知；只写文档）
+
+- task7.10上层T1–T9（[SRC-0413](../../SOURCES.md#src-0413)）、task7.11 f_p F1–F9（[SRC-0415](../../SOURCES.md#src-0415)）、剩余数值与预算N1–N12（[SRC-0417](../../SOURCES.md#src-0417)）由用户确定；验证平台暂缓（U40，[SRC-0411](../../SOURCES.md#src-0411)）。
+- Codex冻结前复核18项（[日志](../../agent_logs/task7/20261020-codex-spec-freeze-review.md)）：Claude抽查6项源码均属实；B类5项由用户确定（[SRC-0418](../../SOURCES.md#src-0418)），A类已改（[处理记录](../../agent_logs/task7/20261020-claude-spec-freeze-review-assessment.md#处理)），C类延后到对应阶段前。
+- 下一步：请用户授权环境核心实施（另建实施子任务）；训练协议细项在正式训练前补定。没有代码、安装、训练或评估。
+
 ## 交接
 
 - 负责人：Claude（10-16设计文档、10-19晚框架写入与准备子任务建立）；Codex（10-19上午并行调研）；准备子任务与实施负责人未登记。
-- 2026-10-20状态：task7.1–7.3调研done；task7.5(A)审计done；task7.4、7.5(B)、7.7、7.8已有设计交付，结构由用户确定、数值待定；task7.6（计时，运行需授权）与task7.10–7.11未开始；task7.9草案v1已写（R1–R8待用户确认）；task7.12暂缓；Codex第二轮复核已由Claude处理（见[日志](../../agent_logs/task7/20261020-claude-second-review-fixes.md)）。
+- 2026-10-20 16:50状态（按Codex复核#13更新）：task7.1–7.3调研done；task7.5(A)审计done；task7.4、7.5(B)、7.7、7.8已有设计交付，结构多数由用户确定、数值待定，其中7.4、7.5依赖旧路径执行器的部分待按两层SAC重写；task7.6计时基准已交付（review，待复核）；task7.9 R1–R8已定（[SRC-0401](../../SOURCES.md#src-0401)）；task7.10–7.11尚未起草；task7.12暂缓；task7.13新建，第1步CBL代码核查由Codex执行中；Codex第二轮复核已由Claude处理（见[日志](../../agent_logs/task7/20261020-claude-second-review-fixes.md)）；两层SAC复核14项由Claude处理中（见[日志](../../agent_logs/task7/20261020-claude-lower-sac-review-fixes.md)）。
 - 原下一步（10-19，已部分完成）：按PROCEDURE“准备与设计子任务”批次推进；task7.4起草与task7.5(A)只读审计可先开始；task7.6、task7.12运行需用户授权；task7.1–7.3由Codex父任务结项并补登SRC-0341–0355。实施阶段需另行授权。
+- 2026-10-20两层SAC决定后：下一步为task7.13下层SAC设计（U32、U36、U37、U39及数值）及task7.4/7.5/7.6/7.10/7.11受影响部分的重写；仍未授权实施。
 - 无运行任务。

@@ -1,6 +1,8 @@
 # task7.6 — IK与路径评估计时基准
 
-状态：**review（2026-10-20，Codex有界基准已交付，待Claude/用户复核；[SRC-0399](../../../SOURCES.md#src-0399)，见[RESULTS](RESULTS.md)；不冻结求解器、B8/B13/B14/E7）**。父任务：[task7](../TASK.md)；框架依据[SRC-0359](../../../SOURCES.md#src-0359)。
+状态：**done（2026-10-20 21:35 Claude复核通过，见[RESULTS](RESULTS.md)末节；原状态：review，Codex有界基准已交付；[SRC-0399](../../../SOURCES.md#src-0399)，见[RESULTS](RESULTS.md)；不冻结求解器、B8/B13/B14/E7）**。父任务：[task7](../TASK.md)；框架依据[SRC-0359](../../../SOURCES.md#src-0359)。
+
+> **2026-10-20框架变更影响**（2026-10-20按Codex复核#1、#9扩写）：下层改为单独训练并冻结的SAC，10 Hz输出3维（末端速度vel_norm＋ω＋v，[SRC-0401](../../../SOURCES.md#src-0401)），候选原始特征f_k来自其确定性推演（[SRC-0400](../../../SOURCES.md#src-0400)，[父TASK](../TASK.md)“2026-10-20 两层SAC”节）。本节点受影响：IK计时结果仍可用；“每点N条路径×检查点”的成本公式只适用于G7，主方案须按“K条下层推演×步数＋每步下层推理”重算（父TASK U37）；两者成本高低须按各自步长、时域与提前停止比较，不预设。2026-10-20 Claude已在[RESULTS](RESULTS.md) §6R写出主方案公式（按0.05 s子步与段超时上限；t_π、t_coll与渲染待测）。
 
 ## 目标
 
