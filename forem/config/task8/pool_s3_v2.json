@@ -1,0 +1,14 @@
+{
+  "run_id": "t8-pool-20261027",
+  "source": "results/task7/maps/a/20261021T021400Z",
+  "output": "results/task8/t8-pool-20261027/cube-pool-v2",
+  "ledger": "logs/task8/t8-pool-20261027/budget.json",
+  "semantic_manifest": "results/task8/t8-exec-20261026/semantic-pool/index.json",
+  "workers": 4,
+  "profile_maps": 24,
+  "sampling": "cube-export-v2: O=A union B; write world voxel centres; B closed exact faces without production tau",
+  "coordinate_format": "%.12g",
+  "geometry_backend": "pcd-voxel-v3",
+  "export_protocol": "cube-export-v2",
+  "protocol_sources": ["SRC-1081", "SRC-1100", "SRC-1160", "SRC-1161"]
+}

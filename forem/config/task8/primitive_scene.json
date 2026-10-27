@@ -1,0 +1,234 @@
+{
+  "schema": "task8-primitive-scene-config-v1",
+  "task": "task8.10",
+  "run_id": "t8-prim-20261027",
+  "sources": [
+    "SRC-1181",
+    "SRC-1220",
+    "SRC-1081",
+    "SRC-0997"
+  ],
+  "note": "Planning values from task8.10 PROCEDURE section 3; engineering choices (SRC-1181), not literature facts. Changing a value requires parent approval.",
+  "backends": {
+    "default": "pcd-voxel-v3",
+    "candidate": "primitive-obb-v1",
+    "diagnostic": "primitive-voxel-diag"
+  },
+  "environment_version": "task8-prim-v1",
+  "tolerances": {
+    "rotation_unit_error": 1e-06,
+    "objects_vs_boxes_m": 1e-09,
+    "float64_distance_m": 1e-09,
+    "boundary_band_m": 1e-09,
+    "derived_occupancy_contact_slack_m": 1e-12,
+    "deep_wall_chord_m": 0.05,
+    "deep_wall_max_range_m": 30.0,
+    "diff_layer_m": 0.05
+  },
+  "sensor": {
+    "azimuth_bins": 360,
+    "elevation_bins": 90,
+    "origin_z_m": 0.5,
+    "max_range_m": 6.0
+  },
+  "seeds": {
+    "master": 20261027,
+    "contains": 1,
+    "rays": 2,
+    "chassis": 3,
+    "capsule": 4,
+    "intervene": 5,
+    "diff": 6,
+    "perf": 7,
+    "reset": 20261027
+  },
+  "paths": {
+    "semantic_manifest": "results/task8/t8-exec-20261026/semantic-pool/index.json",
+    "fixture_manifest": "results/task8/t8-exec-20261026/cube-pool/manifest.json",
+    "cube_manifest": "results/task8/t8-pool-20261027/cube-pool-v2/manifest.json",
+    "cube_audit_selection": "results/task8/t8-pool-20261027/cube-pool-v2/audit-selection.json",
+    "reference": "results/task8/t8-prim-20261027/reference/reference.py",
+    "ledger_dir": "logs/task8/t8-prim-20261027",
+    "mapgen_all_maps": "../mapgen/outputs/all_maps"
+  },
+  "ledger": {
+    "limit_s": 8400
+  },
+  "full": {
+    "cube_maps": 24,
+    "A": {
+      "cube_all": true,
+      "cube_pcd_hash": "sample",
+      "cube_pcd_hash_sample": 200
+    },
+    "B": {
+      "contains_random": 100000,
+      "boundary_offset_m": 1e-09,
+      "ray_poses": 20,
+      "grazing_boxes_per_map": 40,
+      "chassis_poses": 10000,
+      "capsules": 10000,
+      "float32_ray_poses": 5
+    },
+    "C": {
+      "per_box_voxelize": true,
+      "per_box_max_boxes": 400,
+      "wall_ray_poses": 20,
+      "deep_holes_max_boxes": 400,
+      "deep_cells_per_map": 8000
+    },
+    "D": {
+      "ray_poses": 20,
+      "collision_poses": 2000,
+      "grid_scans": 6,
+      "reset_episodes": 5
+    },
+    "E": {
+      "maps": [
+        "home_map_000",
+        "sparse_validation_00000",
+        "random_cubes"
+      ],
+      "ray_poses": 5,
+      "chassis_poses": 1000,
+      "capsules": 1000,
+      "contains_random": 20000,
+      "translate_m": 0.3
+    },
+    "F": {
+      "semantic_maps": 2,
+      "cube_maps": 2,
+      "profiles": [
+        "sync_v5",
+        "decision_sync_legacy",
+        "decision_async_legacy"
+      ],
+      "dtype": "float32",
+      "device": "cuda:0"
+    },
+    "G": {
+      "batches": [
+        1,
+        64,
+        256
+      ],
+      "warmup": 2,
+      "repeats": 7,
+      "maps": [
+        "home_map_000",
+        "warehouse_map_000",
+        "sparse_validation_00000"
+      ],
+      "dtype": "float32",
+      "collision_batches": [
+        1,
+        64,
+        256
+      ]
+    }
+  },
+  "smoke": {
+    "cube_maps": 2,
+    "A": {
+      "semantic": 3,
+      "cube_all": false,
+      "cube": 20,
+      "cube_pcd_hash": "sample",
+      "cube_pcd_hash_sample": 3
+    },
+    "B": {
+      "contains_random": 2000,
+      "boundary_offset_m": 1e-09,
+      "ray_poses": 1,
+      "grazing_boxes_per_map": 3,
+      "chassis_poses": 300,
+      "capsules": 300,
+      "float32_ray_poses": 1
+    },
+    "C": {
+      "per_box_voxelize": true,
+      "per_box_max_boxes": 20,
+      "wall_ray_poses": 1,
+      "deep_holes_max_boxes": 400,
+      "deep_cells_per_map": 1500
+    },
+    "D": {
+      "ray_poses": 2,
+      "collision_poses": 100,
+      "grid_scans": 2,
+      "reset_episodes": 0
+    },
+    "E": {
+      "maps": [
+        "home_map_000",
+        "sparse_validation_00000",
+        "random_cubes"
+      ],
+      "ray_poses": 1,
+      "chassis_poses": 100,
+      "capsules": 100,
+      "contains_random": 1000,
+      "translate_m": 0.3
+    },
+    "F": {
+      "semantic_maps": 1,
+      "cube_maps": 1,
+      "profiles": [
+        "sync_v5"
+      ],
+      "dtype": "float32",
+      "device": "cuda:0"
+    },
+    "G": {
+      "batches": [
+        1,
+        4
+      ],
+      "warmup": 1,
+      "repeats": 2,
+      "maps": [
+        "home_map_000"
+      ],
+      "dtype": "float32",
+      "collision_batches": [
+        1,
+        4
+      ]
+    }
+  },
+  "H": {
+    "protected_globs": [
+      "src/task7_sim/**/*.py",
+      "src/task7_lower/**/*.py",
+      "src/task8_sim/*.py",
+      "src/task8_sim/tests/*.py",
+      "src/task8_lower/*.py"
+    ],
+    "allowed_changed": [
+      "src/task8_sim/episode.py",
+      "src/task8_sim/env.py",
+      "src/task8_sim/decision_env.py",
+      "src/task8_sim/primitive_assets.py",
+      "src/task8_sim/primitive_scene.py"
+    ],
+    "allowed_changed_globs": [
+      "src/task8_sim/tests/test_primitive_*.py",
+      "src/task8_sim/__pycache__/*"
+    ],
+    "asset_dirs": [
+      "results/task8/t8-exec-20261026/semantic-pool",
+      "results/task8/t8-exec-20261026/cube-pool"
+    ],
+    "asset_manifests": [
+      "results/task8/t8-pool-20261027/cube-pool-v2/manifest.json",
+      "results/task8/t8-pool-20261027/cube-pool-v2/final-report.json"
+    ],
+    "forbidden_tokens_in_new_files": [
+      ".backward(",
+      "torch.optim",
+      "optimizer.",
+      "LowerSAC",
+      "task7_lower"
+    ]
+  }
+}

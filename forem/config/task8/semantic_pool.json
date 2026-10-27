@@ -1,0 +1,11 @@
+{
+  "schema_version": "task8-pcd-v1",
+  "split": "smoke",
+  "difficulty_rule": "source filename prefix before _map_; source category, not calibrated difficulty",
+  "source_categories": ["home", "hospital", "laboratory", "library", "office", "restaurant", "warehouse", "workshop"],
+  "semantic_policy_input": false,
+  "geometry_authority": "pcd",
+  "diagnostic_box_convention": "corner xyz, local positive size xyz, cos(theta), sin(theta); audit only",
+  "diagnostic_rounding_tolerance_m": 0.000001,
+  "cache_backend_version": "pcd-voxel-v3"
+}

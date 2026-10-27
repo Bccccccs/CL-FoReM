@@ -1,0 +1,13 @@
+{
+  "run_id": "t8-pool-20261027",
+  "source": "results/task7/maps/a/20261021T021400Z",
+  "output": "results/task8/t8-pool-20261027/cube-pool",
+  "ledger": "logs/task8/t8-pool-20261027/budget.json",
+  "semantic_manifest": "results/task8/t8-exec-20261026/semantic-pool/index.json",
+  "workers": 4,
+  "profile_maps": 24,
+  "sampling": "task8.1 fixture local cells: counts=ceil(size/0.05), local=(i+0.5)*size/count; corner rotation then translation",
+  "coordinate_format": "%.12g",
+  "geometry_backend": "pcd-voxel-v3",
+  "protocol_sources": ["SRC-1021", "SRC-1081", "SRC-1100", "SRC-1160"]
+}

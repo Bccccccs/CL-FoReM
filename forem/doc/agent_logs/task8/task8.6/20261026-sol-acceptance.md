@@ -1,0 +1,45 @@
+# task8.6 independent acceptance — t8-exec-20261026
+
+Owner Codex, actual gpt-6.1-sol / high (explicit dispatch). Recommended Codex GPT6.1sol / Claude Sonnet5.5 high for cross-module geometry/provenance acceptance; recommendation is not actual Claude execution. Authorized scope: independent review of task8.1–8.5, smoke/verify/test tools, bounded profile and SAC evidence handoff. No training, old task restoration, production changes, commit/push, semantic observation additions. Shared documents remain parent-owned.
+
+Started 2026-10-26 Asia/Shanghai. Read dispatch-common, root and forem AGENTS, ENV, README/PROGRESS, parent and child task records, SRC-0984–0996 relevant sections. main has existing changes, preserved. GPU compute process check empty. New tests/tools only scripts/task8_pcd_{smoke,verify}.py and src/task8_sim/tests/test_pcd_integration.py; new products under acceptance/ and smoke-* only. Shared ledger owner prefix 8.6, initial allocation 300 cumulative seconds, no budget reset. Parent is responsible for PROGRESS registration.
+
+Review focus: source/asset manifest, raw map JSON+NPZ+ledger rather than map-summary verdicts; PCD authority, closed-contact implementation, ghost body masks, Core reuse, partial reset, local Grid boundary, profiles and restoration rejection. Controlled decision routes remain clearly distinct from default sampler episodes.
+
+## Execution deviation — strict compliance fails
+
+Command c88bf75471 mistakenly selected the whole old `src/task7_lower/tests/test_lower.py` instead of exact observation nodes. Two collected instances `test_sac_matches_reference_and_full_resume[False]` and `[True]` executed four SAC update calls each (s at update0, AST reference at update0, s at update1, clone at update1), total eight source-derived calls. They construct LowerSAC(...,'cpu',100); optimizer/network/batch device CPU. This is a real violation of the no-network/optimizer-execution constraint, even though no task trainer or long training run was launched. Do not characterize this run as clean protocol compliance. Parent was immediately informed and prohibited further network/optimizer/replay tests.
+
+Code audit: the two nodes use deepcopy/full_state_dict/load_full_state_dict only in memory; neither nodes nor those methods invoke torch.save/file checkpoint writing. Do not re-run to count. Container-root metadata audit 62cb0d67db scanned 36,116 files under results/task7, logs/task7, config/task7, src/task7_sim/lower/upper after unsafe command start: zero modified mtimes, no scan errors. This is metadata evidence, not a full historical product hash baseline. Original 157-file hashes are independently checked by packaging. No /tmp evidence deleted. Parent docker-top check found only container sleep and no GPU compute; final process check to be repeated.
+
+The same overbroad command had four failures solely because hardcoded CUDA old tests were run with CUDA_VISIBLE_DEVICES empty; 71 passed/2 skipped. Corrected exact allowlist 83dc84c05b uses only Core/zero callable/FK/IK: test_core::test_rollout_batch_pure_order_independent_gpu32_cpu64, test_core::test_core_execution_gpu32_cpu64_reference_rewards_and_commit, test_kinematics::test_ik_gpu32_cpu64_residuals_and_branch_limits, test_kinematics::test_dls_and_known_singular_gpu32_cpu64_reference. Read these nodes before execution; no networks or optimizers; four passed, rc0. No repeat of unsafe paths. Functional A-F evidence and strict execution compliance are separate; acceptance records no_network_optimizer_execution=false and verify exits nonzero for the known violation.
+
+## New bounded evidence
+
+- 854392b5b2 rc1/2.267375s: verifier tests RED, four missing-module failures; intervention and missing-acceptance tests passed.
+- c5555a4d2d rc0/2.267300s: six tool/intervention tests GREEN.
+- 8e747bc371 rc0/2.918322s: seven tests, including ragged partial reset CPU.
+- 2e2dc38e0f b1 and a02356ca91 b2 fresh default random-cube smoke rc0, 5.020983/5.521904s wrapper elapsed, one action per call, two committed substeps per row plus automatic new scan. Scripted actor, no neural inference benchmark.
+- 11aa8b6172 rc0/23.446160s: exact both controlled decision profile tests, Grid-only truth substitution, CUDA ragged reset, four passed. Original integration outputs not overwritten.
+- c4234dbbbe owner8.6-runtime-office_map_002 rc0/12.281019s: semantic default sampler and real decision_async_legacy Grid-only boundary/rollout→selected subgoal→one lower action→commit/scan, bounded slice not full DecisionEnv.step. Original map total10.936490+12.281019=23.217509s (<30s), parent to append shared map budget. New output smoke-semantic/ only.
+- 9a9f710717 package first raw audit finished all24 map records+48 NPZ and CPU FK, then failed ledger key jobs vs actual commands; 19.741245s, original raw audit preserved. c7ccb6bd18 metadata audit same schema-key error rc1/.164403s. Both failures retained, fixed only verifier packaging schema use, no production change.
+
+No parent/shared documentation hash is frozen by acceptance manifest. Full commands/rc/time remain authoritative in parent budget.json. Independent code/asset review evidence sources remain SRC-0991–0996; new acceptance/performance/ragged/deviation claims pending parent source registration.
+
+## Final tool gate correction and delivery
+
+Parent review identified contradictory compliance summaries could hide a nonempty deviation record. Added pure-dictionary test first (7d9297b287 RED), then helper `execution_is_compliant` requires both correct summaries AND no deviation; 26e0e0de8a GREEN six pure checks. Source/tests frozen and manifest refreshed afterward. The corrected required-gate negative uses valid other evidence and matches gate B specifically (65f31d6ffa three pass), avoiding failure for an unrelated empty-evidence reason. Final safe integration allowlist 0f9682dfed nine passed; no additional network/optimizer/replay tests.
+
+Detailed report appended to task8.6 RESULTS with technical A-F pass vs strict execution fail, original logs, ragged reset representation limits, all helper failures and actual microprofile. Parent sources SRC-0997 (deviation) / SRC-0998 (technical/performance) must stay linked. Final package/verify IDs and budget appended after completion; no running long task remains.
+
+Final freeze 4f63d737f1 rc0/1.466127s, final CLI e078400de4 rc1/20.541937s: functional pass, all required A-F pass, maps24, strict execution fail. Verification JSON is captured actual stdout. Final docker top only docker-init/sleep; GPU compute empty. Office002 total23.217508986s/30 recorded in acceptance/map-budget-supplement.json. No running task. Parent final audit/source registration remain.
+
+## r2 component profile authorization and exact function allowlist
+
+Parent review found F component timings incomplete. Existing first acceptance directory/verification remain immutable historical delivery. Supplement under acceptance-r2, within original300s allocation (149.636356s already used). n=3 is bounded engineering measurement, not repeated training or general throughput evidence; parent to append SRC-0998.
+
+Exact permitted calls: task8_sim.assets.load_asset; VoxelScene.from_asset and occupancy/provenance; Kinematics.world_tcp / solve_world; GhostRobotGeometry.__call__; SceneCollision.__call__; PcdPanorama.__call__; Grid.empty / update; PcdEpisodeSampler.sample with fresh RandomStreams.for_env, same seed and same PCD pool; original route.xyz/quat/s/length value comparison; torch tensor conversion/synchronize/CUDA Events/no_grad; NumPy savez_compressed and JSON/hash output. Scripted actor only tensor zeros with nonzero progress. No NN, LowerSAC, optimizer, replay, old test directory, task trainer or semantic map interaction. Compare fresh sampler/planner to the same sampler's cached planner/scene with identical fresh RNG streams; assert sampled base/q/route/witness identity. CPU float64 and CUDA0 float32 fixed real inputs. Profile inner43s, outer45s, every calculation via owner8.6-component-profile; GPU serial/no fallback.
+
+r2 profile 7b7809a89a rc0/9.927845s; script wall7.832650s, n3 CPU64/CUDA0float32 all requested pure components measured separately. Fixed state actual inputs; three fresh/cached sampler pairs perdevice assert exact base/q/route/witness/seed equality and same cached planner/scene IDs. New sampler is not disk-cold, OS cache unflushed. GPU IK first cold sample/p95 retained, no claimed GPU superiority. Scene total build n3 plus last-build internal provenance only (not fabricated n3 subfield statistics). GPU events include stream idle/host launch gaps. Sim/action0; no neural/optimizer/replay execution. Original acceptance preservation hashes checked in r2 packaging.
+
+r2 final package+CLI ff10b8016a rc1/20.642633s, functional pass/maps24/execution strict fail; manifest421. Original12 acceptance files preservation check pass. Additional30.570479s, cumulative node180.206835s of300. No process remains; parent final check/source closeout only. New final evidence is acceptance-r2/; initial acceptance/ preserved.

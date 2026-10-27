@@ -1,0 +1,12 @@
+{
+  "schema_version": "task8-pcd-v1",
+  "geometry_backend": "pcd-voxel-v3",
+  "frame_id": "world",
+  "length_unit": "m",
+  "resolution_m": 0.05,
+  "point_representation": "solid_volume_samples",
+  "bounds": {"min": [-5, -5, 0], "max": [5, 5, 1.6], "upper_exclusive": true},
+  "semantic_policy_input": false,
+  "fixture_seed": 20261026,
+  "sha256_format": {"pcd": "lowercase hexadecimal, 64 characters", "sidecar": "lowercase hexadecimal, 64 characters, or null without sidecar"}
+}

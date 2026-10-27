@@ -1,0 +1,13 @@
+{
+  "environment_version": "task8-pcd-v3",
+  "map_backend": "pcd-voxel-v3",
+  "sensor_policy": "ghost-v1",
+  "semantic_policy_input": false,
+  "pool_required": true,
+  "split": "smoke",
+  "profiles": {
+    "sync_v5": {"synchronous": true, "failure_mode": "cbl_continue", "async_time_penalty": 0.0, "episode_end_bootstrap": true, "ik_avoid_collision": true},
+    "decision_sync_legacy": {"synchronous": true, "failure_mode": "terminal", "async_time_penalty": 1.0, "episode_end_bootstrap": false, "ik_avoid_collision": true},
+    "decision_async_legacy": {"synchronous": false, "failure_mode": "terminal", "async_time_penalty": 1.0, "episode_end_bootstrap": false, "ik_avoid_collision": true}
+  }
+}
