@@ -25,6 +25,8 @@
 |8.8|done：r4独立A–F PASS，C/D各24通过0失败；非墙与接触外诊断保留；SRC-1085/1087/1089|[RESULTS](task8.8/RESULTS.md)|
 |8.9|closed：2026-10-27用户作废（SRC-1220）；8.9.1.1森林raycast、8.9.1.2 scene缓存已并入v3并保留，8.9.2 cube-pool-v2已发布；未smoke/未长训|[RESULTS](task8.9/RESULTS.md)|
 |8.10|done（2026-10-27）：primitive-obb-v1可选后端A/C/E/F/H pass、B pass_approved（SRC-1310）、D/G报告，S4独立验收；默认仍v3|[RESULTS](task8.10/RESULTS.md)|
+|8.11|done（2026-10-27）：W/I/C pass、R/T报告，X2独立验收|[RESULTS](task8.11/RESULTS.md)|
+|8.12|draft（仅建档，未授权训练）|[RESULTS](task8.12/RESULTS.md)|
 
 以上为规划阶段历史，当时没有新代码、地图生成、扫描渲染或机器人运行。当前实施结果见下方t8-exec-20261026；规划/哈希核查本身不构成迁移验收。
 

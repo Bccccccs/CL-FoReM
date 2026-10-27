@@ -24,6 +24,8 @@
 |7 task8.8（2026-10-26追加）|[TASK](task8.8/TASK.md) / [PROCEDURE](task8.8/PROCEDURE.md) / [RESULTS](task8.8/RESULTS.md)|scene.py闭合面归属v3、格点夹具tests、版本字段；新run账本≤900s|Codex父协调；S1 Sol high→S2 Luna low→S3 Sol medium→S4独立Sol high；依8.7 v2代码，用户选闭合面规则SRC-1021|
 |8 task8.9（2026-10-27追加）|[TASK](task8.9/TASK.md) / [PROCEDURE](task8.9/PROCEDURE.md) / [RESULTS](task8.9/RESULTS.md)|第二阶段规划；子任务8.9.1/8.9.2可并行，8.9.3依两者与用户决定；执行另行派发，8.9.3需训练授权|Codex父协调（推荐）；Claude规划与复核。2026-10-27用户作废，closed（SRC-1220）|
 |9 task8.10（2026-10-27追加）|[TASK](task8.10/TASK.md) / [PROCEDURE](task8.10/PROCEDURE.md) / [RESULTS](task8.10/RESULTS.md)|新增可选后端primitive-obb-v1（默认仍v3）、独立参照R、A–H对照验收；新文件优先；8.9已关闭，接线隔离条件解除（SRC-1220）|推荐Codex父协调；S1/S2/S4 Sol high、S3 terra low；2026-10-27已由Claude子Agent执行完毕（done，见RESULTS）|
+|10 task8.11（2026-10-27追加）|[TASK](task8.11/TASK.md) / [PROCEDURE](task8.11/PROCEDURE.md) / [RESULTS](task8.11/RESULTS.md)|依赖8.10 done；W接线→I初始化→R分布→T吞吐→X2独立验收|Claude父；X1/X2 Sonnet5.5 high（Codex推荐GPT6.1sol high）|
+|11 task8.12（2026-10-27追加）|[TASK](task8.12/TASK.md) / [PROCEDURE](task8.12/PROCEDURE.md) / [RESULTS](task8.12/RESULTS.md)|依赖8.11验收；smoke（8.12.1）→长训（8.12.2），均需用户批准|smoke terra low/Sonnet low；验收与判定Sol/Sonnet high|
 
 并行仅2a/2b/2c的互不重叠实现/离线工作；GPU验证由父串行调度，不能各自领取完整1800s预算。8.3可先用最小测试替身；未接8.2真实查询不能验收完成。8.4不得改8.2/8.3文件，应发接口问题回原负责人。子Agent不得写PROGRESS/DECISIONS/SOURCES；提供待登记主张由父统一落账。每节点独立日志`forem/doc/agent_logs/task8/task8.N/YYYYMMDD-agent-topic.md`。
 

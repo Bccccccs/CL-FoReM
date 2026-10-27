@@ -22,7 +22,7 @@ from task7_sim.core import Core
 from .sac import LowerSAC,update_due
 from .replay import Replay
 from .diagnostics import diagnostic_record,check_watchdog
-from .evaluation import evaluate
+from .evaluation import evaluate,resolve_map_backend
 
 FORMAT='task8-lower-full-v1'
 
@@ -78,7 +78,7 @@ def save_checkpoint(path,sac,replay,env,state,config):
     path=Path(path);path.parent.mkdir(parents=True,exist_ok=True);tmp=path.with_suffix('.tmp')
     with without_graph_cache(env):
         data=dict(format=FORMAT,observation_version=VERSION,action_version=ACTION_VERSION,
-                  contract=_contract(),pool_hashes=_pool_hashes(config),config=config,
+                  contract=_contract(),map_backend=resolve_map_backend(config),pool_hashes=_pool_hashes(config),config=config,
                   sac=sac.full_state_dict(),replay=replay.state_dict(),
                   environment=environment_state(env),state=state,rng=rng_state())
         torch.save(data,tmp)
@@ -104,6 +104,7 @@ def load_checkpoint(path,device):
         raise ValueError('checkpoint protocol mismatch')
     if s['contract']!=_contract():raise ValueError('environment/observation source contract changed')
     cfg=s['config']
+    if s.get('map_backend','pcd-voxel-v3')!=resolve_map_backend(cfg):raise ValueError('checkpoint map_backend mismatch')
     if s['pool_hashes']!=_pool_hashes(cfg):raise ValueError('pool or evaluation manifest changed')
     if s['state'].get('unsafe_update'):raise ValueError('nonfinite/failed partial optimizer update: forensic checkpoint cannot resume')
     sac=LowerSAC(74 if cfg['synchronous'] else 75,device,cfg);sac.load_full_state_dict(s['sac'])
@@ -143,6 +144,7 @@ def validate_config(config):
     if config['update_every_transfers']<1:raise ValueError('UTD interval must be positive')
     if config['log_interval']!=1000:raise ValueError('diagnostics must be every 1000 transitions')
     if not (0<config['batch_size']<config['replay_capacity']):raise ValueError('replay capacity/batch size')
+    resolve_map_backend(config)
 
 
 def train(config,output,*,transfers=None,resume=None,max_wall_s=None,env_factory=PcdEpisodeEnv,evaluator=evaluate):
@@ -170,7 +172,7 @@ def train(config,output,*,transfers=None,resume=None,max_wall_s=None,env_factory
         else:
             random.seed(config['seed']);np.random.seed(config['seed']);torch.manual_seed(config['seed'])
             if device.type=='cuda':torch.cuda.manual_seed_all(config['seed']);torch.cuda.reset_peak_memory_stats(device)
-            env=env_factory(config['environments'],seed=config['seed'],pool=config['pool'],profile=config['profile'],device=device,dtype=torch.float32,split=config['train_split'])
+            env=env_factory(config['environments'],seed=config['seed'],pool=config['pool'],profile=config['profile'],device=device,dtype=torch.float32,split=config['train_split'],map_backend=resolve_map_backend(config))
             env.kin.dls_cuda_graph=config['dls_cuda_graph']
             sac=LowerSAC(74 if config['synchronous'] else 75,device,config)
             replay=Replay(config['replay_capacity'],74 if config['synchronous'] else 75,config['seed'],device)
@@ -182,7 +184,7 @@ def train(config,output,*,transfers=None,resume=None,max_wall_s=None,env_factory
         limit=config['total_transfers'] if transfers is None else transfers
         if limit>config['total_transfers'] or limit<state['steps']:raise ValueError('invalid transfer stop')
         atomic_json(output/'config.json',config)
-        runtime=dict(torch=torch.__version__,cuda=torch.version.cuda,physical_gpu=os.environ.get('CUDA_VISIBLE_DEVICES'),
+        runtime=dict(map_backend=resolve_map_backend(config),torch=torch.__version__,cuda=torch.version.cuda,physical_gpu=os.environ.get('CUDA_VISIBLE_DEVICES'),
             device=str(device),gpu=torch.cuda.get_device_name(device) if device.type=='cuda' else None,
             threads=torch.get_num_threads(),interop_threads=torch.get_num_interop_threads(),affinity=sorted(os.sched_getaffinity(0)),
             tf32_matmul=torch.backends.cuda.matmul.allow_tf32,tf32_cudnn=torch.backends.cudnn.allow_tf32)

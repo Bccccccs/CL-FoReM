@@ -20,7 +20,8 @@ class ProfileTimeout(BaseException):pass
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('mode',choices=('prepare','run'))
-    p.add_argument('--family',required=True,choices=('cube','semantic'))
+    p.add_argument('--family',required=True,choices=('cube','semantic','cubepool'),help='cubepool (task8.11): 64 strided train-split maps of the real cube-pool-v2')
+    p.add_argument('--map-backend',default='pcd-voxel-v3',help='task8.11: map backend for sampling/prepare and env (default unchanged)')
     p.add_argument('--root',required=True);p.add_argument('--batch',type=int,choices=(1,16,64,256),default=1)
     p.add_argument('--steps',type=int,default=20);p.add_argument('--warmup',type=int,default=2)
     p.add_argument('--window-steps',type=int,default=None,help='Independent bounded window; aggregate >=20 samples per batch separately.')
@@ -40,7 +41,7 @@ def main():
     if a.window_id:name+='-'+a.window_id
     output=root/(name+'.json')
     if output.exists():raise FileExistsError(output)
-    report=dict(status='running',family=a.family,mode=a.mode,batch=a.batch,steps_requested=a.steps,warmup_requested=a.warmup,completed_steps=0,completed_warmup=0,guard=calls,notes=['No optimizer or SAC object constructed; no backward/update.', 'Profiling synchronization adds overhead; CUDA events include stream idle during Python/CPU work.', 'Episodes sampled once per map; factory reuses accepted episode on reset. This is a bounded scene rotation workload, not full random training.'])
+    report=dict(status='running',map_backend=a.map_backend,family=a.family,mode=a.mode,batch=a.batch,steps_requested=a.steps,warmup_requested=a.warmup,completed_steps=0,completed_warmup=0,guard=calls,notes=['No optimizer or SAC object constructed; no backward/update.', 'Profiling synchronization adds overhead; CUDA events include stream idle during Python/CPU work.', 'Episodes sampled once per map; factory reuses accepted episode on reset. This is a bounded scene rotation workload, not full random training.'])
     report.update(window_id=a.window_id,window_steps_requested=a.window_steps,measurement_protocol='r2-independent-windows-v1',window_note='Each window starts fresh from the same cached episodes and actor RNG seed4718, then independently warms up. Trajectories repeat; timing samples do not establish broader state-distribution coverage.')
     tm=Timings()
     def flush():
@@ -75,7 +76,11 @@ def prepare(a,root,report,tm,flush):
     from task8_sim.episode import PcdEpisodeSampler,RandomStreams
     from task7_sim.kinematics import Kinematics
     from task8_sim.robot import GhostRobotGeometry
-    if a.family=='cube':
+    if a.family=='cubepool':
+        manifest=Path('/root/mm_husky_ws/results/task8/t8-pool-20261027/cube-pool-v2/manifest.json')
+        train=[e for e in json.loads(manifest.read_text())['maps'] if e['split']=='train']
+        entries=train[::len(train)//64][:64]
+    elif a.family=='cube':
         pool=root/'cube-pool';pool.mkdir(exist_ok=False);entries=[]
         for i in range(64):
             seed=20261027+i;boxes=fixture_specs(seed)['random_cubes'];xyz=np.concatenate([_sample(box) for box in boxes]);pcd=pool/f'cube_{i:03d}.pcd'
@@ -88,7 +93,7 @@ def prepare(a,root,report,tm,flush):
         entries=json.loads(manifest.read_text())['maps']
     report.update(pool=str(manifest),maps=[],expected_maps=len(entries))
     cache=root/(a.family+'-episodes');cache.mkdir(exist_ok=False)
-    sampler=PcdEpisodeSampler(manifest,split=entries[0]['split'],difficulty=None,device='cuda:0',dtype=torch.float32,kin=Kinematics(),robot=GhostRobotGeometry(),profile='sync_v5')
+    sampler=PcdEpisodeSampler(manifest,split=entries[0]['split'],difficulty=None,device='cuda:0',dtype=torch.float32,kin=Kinematics(),robot=GhostRobotGeometry(),profile='sync_v5',map_backend=a.map_backend)
     streams=RandomStreams(4718,1)
     for i,entry in enumerate(entries):
         sampler.entries=[entry];before=dict(sampler.timing)
@@ -114,11 +119,14 @@ def run(a,root,report,tm,flush):
     prep=json.loads((root/(a.family+'-prepare.json')).read_text())
     if prep['status']!='pass':raise RuntimeError('prepare incomplete')
     episodes=[torch.load(x['cache'],map_location='cuda:0',weights_only=False) for x in prep['maps']]
-    env=PcdEpisodeEnv(a.batch,seed=4718,pool=prep['pool'],profile='sync_v5',device='cuda:0',dtype=torch.float32,factory=lambda i,r:episodes[i%len(episodes)])
+    env=PcdEpisodeEnv(a.batch,seed=4718,pool=prep['pool'],profile='sync_v5',device='cuda:0',dtype=torch.float32,factory=lambda i,r:episodes[i%len(episodes)],map_backend=a.map_backend)
     env.kin.dls_cuda_graph=True
     # Instrument only this process; on-disk production source stays unchanged.
     tm.wrap(env.kin,'solve_world','IK_solve_world');tm.wrap(env.kin,'dls','IK_DLS_nested')
     tm.wrap(SceneBatch,'raycast','raycast');tm.wrap(SceneBatch,'collide','collision')
+    if a.map_backend!='pcd-voxel-v3':
+        from task8_sim.primitive_scene import PrimitiveSceneBatch
+        tm.wrap(PrimitiveSceneBatch,'raycast','raycast');tm.wrap(PrimitiveSceneBatch,'collide','collision')
     tm.wrap(Grid,'update','grid_update');tm.wrap(Grid,'crop','grid_crop');tm.wrap(Core,'observe','observation_build')
     with tm.measure('reset_factory_cold'):env.reset(deadline=START+a.wall_s-2)
     report['cold_timings']=tm.summary()

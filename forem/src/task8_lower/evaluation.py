@@ -9,6 +9,16 @@ from task7_lower.observation import preprocess
 from task7_sim.episode import RandomStreams
 from task8_sim.env import PcdEpisodeEnv
 from task8_sim.episode import PcdEpisodeSampler,SamplingIncomplete,check_sampling
+from task8_sim.primitive_scene import V3_BACKEND,resolve_backend
+
+
+def resolve_map_backend(config):
+    """Config key map_backend (default pcd-voxel-v3). environment_geometry_version, when present, must name the same backend."""
+    backend=resolve_backend(config.get('map_backend',V3_BACKEND))
+    version=config.get('environment_geometry_version')
+    if version is not None and version!=backend:
+        raise ValueError(f'environment_geometry_version {version!r} contradicts map_backend {backend!r}')
+    return backend
 
 
 def evaluation_plan(cube,semantic,config,seeds=None):
@@ -59,16 +69,16 @@ class EvaluationStreams(RandomStreams):
 
 
 def evaluation_environment(jobs,config,pool,device,*,deadline=None,cancel=None):
-    samplers=[]
+    backend=resolve_map_backend(config);samplers=[]
     for job in jobs:
         sampler=PcdEpisodeSampler(pool,split=job['entry']['split'],difficulty=None,
-            device=device,dtype=torch.float32,kin=None,robot=None,profile=config['profile'])
+            device=device,dtype=torch.float32,kin=None,robot=None,profile=config['profile'],map_backend=backend)
         sampler.entries=[job['entry']];sampler.kin.dls_cuda_graph=config['dls_cuda_graph']
         samplers.append(sampler)
     def factory(i,streams):
         return samplers[i].sample(streams,deadline=deadline,cancel=cancel)
     env=PcdEpisodeEnv(len(jobs),seed=config['validation_seed'],pool=pool,profile=config['profile'],
-        device=device,dtype=torch.float32,factory=factory)
+        device=device,dtype=torch.float32,factory=factory,map_backend=backend)
     # reset passes this SAME per-job object to sampler; choose_candidate consumes
     # its independent .other stream. Row position never enters the job seed.
     env.streams=EvaluationStreams(jobs)
