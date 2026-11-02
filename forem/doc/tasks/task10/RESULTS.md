@@ -115,3 +115,67 @@ sg docker -c 'docker exec --user 1004:1004 -e PYTHONPATH=/workspace/src -e TASK1
 ### 决策者复核 · 2026-11-02
 
 A/B 接口与四场景配对管线验收，C 有效训练与恢复未通过，D 暂不派发。报告复算与八项哈希核对一致。更正上文“下一采样通过”的口径：本次 replay 仅 16 条，restore_evidence 的 32 条抽样分支未执行；真实抽样恢复仍待验。下一轮优先细分复位/候选推演成本、补齐全量计数并验证同输入等价，再核定覆盖预热与有效 GPU 更新的墙钟。恢复验收需同时覆盖非空样本身份、更新后的优化器和可重建采集边界。[复核依据](../../SOURCES.md#src-t10-010)
+
+
+## 2026-11-02 · 63e1f6e审核后的成本与恢复补证（review）
+
+本轮只补成本/恢复与预算建议，未启动新的1000预热试训。原失败试训16/0及全部旧证据保留。推荐GPT6.1sol/high、Sonnet5.5/high：跨层计时、GPU状态、恢复锁和预算需要因果核对；实际父模型/强度未知，10.5 terra/high、10.6 sol/high、10.7独立terra/high，委派记录见各节点。[授权/界限SRC-T10-011](../../SOURCES.md#src-t10-011)。
+
+新run namespace `t10-cost-recovery-20261102`，产物绝对根`/home/ybc/projects/CL-FoReM-task10/forem/results/task10/t10-cost-recovery-20261102`，log根同工作树`forem/logs/task10/`。代码以63e1f6e为起点，准备提交d22169f，最终实现/只读报告随本分支提交；实际脚本/恢复模块SHA在measurement-contract、diagnosis、online config及汇总中，未把dirty运行假称固定旧commit。
+
+### 计数与同输入对照
+
+- 真sampler从seed101/8env重建旧两批selected，16行的观测、候选/mask/19维f_k、实际结果及失败计数逐项与旧journal一致；比较双方先用旧exact_cpu表示，只排除`candidates.diagnostics.search_wall_seconds`。
+- 完整baseline包括初始、两次prepare与两次结束行reset，共5边界。名义312槽、有效196槽，推演1037 B3批/40948行调用，41893尝试/41166提交；真实执行2359尝试/2299提交、369 B3批/2952行调用。末次reset33槽/7251尝试/7086提交是本轮重建补计，旧日志仍保持其历史下界。[SRC-T10-012](../../SOURCES.md#src-t10-012)。
+- 首探针8行因decoded-grid键集合比较失败；修复后余24行继续原900s绝对截止，完整baseline完成，但instrumented被外层截止rc124，未通过全轨迹对照。首失败8已确认、新baseline16已确认、仪表批8预留未确认；原性能相位保守按32消费，不重开窗口。
+- 父从预留240s做一次0真实选择/0更新、初始8场景、最多104槽/256提案的独立instrumented复核；50.110s/rc0，初边界观测/候选逐位等于旧首journal及baseline同SHA，实际68槽。仅此初边界对照通过，不扩大为全instrumented轨迹通过；baseline和缓存factory reset总耗时不能拿来宣称仪表/优化收益。**未采用性能优化。**
+
+### 采集瓶颈分解
+
+完整baseline业务wall共250.984s/16：reset（含内部候选）118.616s、真实执行59.414s、prepare72.955s。实际场景采样只有7.875s，44提案/16接受，故reset主成本不是生成新场景，主要在其内部推演。候选生成合计1.370s，所有边界推演合计182.057s（这两个时间已经嵌于reset/prepare，不再次相加）。
+
+初始68有效槽预测inclusive39.686144s的exclusive分解如下；这是单初边界profile，非所有地图稳态分布。
+
+|推演分项|exclusive wall秒|占39.686s|
+|---|---:|---:|
+|IK调用（含内部机器人分支检验）|24.4241|61.54%|
+|B3预处理/推理|0.4695|1.18%|
+|局部碰撞|2.2812|5.75%|
+|栅格crop|0.7108|1.79%|
+|observe（含路线栅格投影等）|3.1665|7.98%|
+|扫掠风险（含几何）|4.0716|10.26%|
+|其余Core调度/未包裹计算|4.5624|11.50%|
+
+同初态候选生成1.2895s（内含IK1.2708s），实际采样5.2114s、episode reset setup5.2766s。GPU event为含CPU提交间隙的嵌套stream interval，不是kernel compute；父子inclusive与exclusive不可重复相加。瓶颈证据支持先检查推演IK及观测/风险路径，不能称B3网络为主要瓶颈。[完整来源/限制SRC-T10-012](../../SOURCES.md#src-t10-012)。
+
+### 恢复修复及验收范围
+
+`runner.restore_evidence`现转入`recovery.verify_learner_checkpoint`，有数据时sample(min(32,len))并核对非空身份，空池not_verified。旧真实16在`collector-boundary/real-replay-evidence.json`独立验证sample16身份、RNG/模型/计数，通过；不代表正式训练32序列或预热达标。[SRC-T10-013](../../SOURCES.md#src-t10-013)。
+
+GPU派生夹具复制原16到32，provenance明确非新真实、非在线预热；共5次跨分支update。更新1次的checkpoint有85个Adam状态条目，model与moments原存储CUDA0、step CPU；仅vcm/candidate_encoder/head_a变动。加载后的完整model/optimizer/target/scheduler、下一32样本身份、RNG精确；下一GPU更新损失全字段相同，但CNN weight及Adam moments共11叶逐位不同（weight最大3.72529e-9）。严格下一更新验收未通过，原因尚未证实，不因数值小而放宽容差；原300s截止后没有再做deterministic诊断。诊断rc0只表示记录完成，JSON为exact_mismatch。CPU组合34passed/8.60s、profiling CPU7passed，二者为夹具，不替代在线结果。
+
+安全采集边界限定：全batch自然episode结束，最后transition已入回放且journal原子持久化，prepare_next完成，无pending/inflight，下一回合尚未采样。存sampler三purpose RNG、policy generator、episode IDs/totals、learner/replay、账本/hash/原monotonic deadline及Linux boot_id。持flock后重验账本/journal/owner/时限，拒同PID（显式test_only例外）、旧owner活着、stale账本、自定义可变factory或重启host；修复了锁前校验TOCTOU。
+
+在线实际验证只用batch1：PID223自然终局第1行保存后退出，PID231新进程从同checkpoint重建下一场景/观测/候选/采样RNG/generator/选点均exact，提交恢复后1行；账本reserved=completed2/inflight0，journal为episode1/2各decision0，无重复，继续使用原360s deadline，旧snapshot因ledgerchanged拒绝。外层143.857s/rc0，0在线更新。**未验证batch8全终局边界可用性、任意中途恢复或跨主机重启。**
+
+### 下一试训预算建议（交决策者核定，尚未执行）
+
+保持seed101、冻结B3 seed4718、batch8、1000随机预热、既定奖励/折扣/严格成功与每新增真实决策一次update。建议下一端到端试训仍用**1200条真实决策、200次更新，训练墙钟7h**；原四场景配对另30min，候选总7.5h。现有runner的1800s硬限未擅改，新预算核定前不能照此启动。
+
+复算：采集系数=(新baseline业务250.984s + 旧上层.120s + journal.142s + replay搬运.094s)/16=15.708732s/决策；1000预热约4.364h。短GPU诊断两next-update连恢复/比较共3.9285s，只得这两次平均更新耗时≤1.96425s；估价向上取4s/update，固定预留60s，整体乘1.25作为工程余量：`(1200×15.708732 + 200×4 + 60)×1.25 = 24638.10s ≈ 6.844h`，取整7h。[SRC-T10-014](../../SOURCES.md#src-t10-014)。
+
+这些系数/余量不是置信上界：只有16个独特旧决策；派生fixture只有40个loss位置，正式最多256且更长prefix未测。7h在当前采集系数/60s固定费下隐含update平均余量31.448s，但尚未证实长prefix/重尾reset在此内。建议适用batch8原路径，**不适用直接改batch1**；batch8恢复未验、GPU严格下一更新未过，交由决策者核定风险和后续验收口径，不称正式长训条件通过。
+
+### 总账、复算和交接
+
+四相位caps900/300/360/240合计1800s；worker666.288s，首测至最后在线产物global1762.212s（含修复/等待）。新真实测量已确认26行，另8预留未确认保守按34收费（上限36）；GPU fixture5次单列。原试训16/0、旧三actor/地图/全部失败记录未改。总账`measurement-ledger.json`保留首错误、续测原epoch/attempt及124；不能把被杀后陈旧active快照当运行中。
+
+```bash
+cd /home/ybc/projects/CL-FoReM-task10
+# 只读复算（已执行rc0，不启动训练/模型）
+python3 forem/scripts/task10_cost_recovery_report.py --root forem/results/task10/t10-cost-recovery-20261102 --old forem/results/task10/t10-smoke-20261102-s101 --output forem/results/task10/t10-cost-recovery-20261102/summary-final.json
+```
+
+原始有界命令、参数和PID完整记在measurement-ledger及phase log；同phase只允许显式修复后续原deadline，不能新建预算重跑。只读storage审计为`task10_recovery_storage_audit.py`，数据为storage-audit.json；独立审查见[10.7 RESULTS](task10.7/RESULTS.md)，恢复原始CPU日志task10.6-cpu-recovery-crossprocess2.log。所有新增代码/配置/脚本位于forem，未改冻结参考69文件或科学参数。
+
+交接给决策者：成本与限定恢复已有实测；完整instrumented轨迹、默认GPU严格下一更新与batch8恢复仍未通过/未验证。建议核定上述7h+配对预算及这些验收口径，之后另派新试训；本执行者不自启千次预热、正式训练或task11。负责人Codex、状态review；推荐GPT6.1sol/high、Sonnet5.5/high继续核验，理由为上述跨层状态/时钟/预算约束。

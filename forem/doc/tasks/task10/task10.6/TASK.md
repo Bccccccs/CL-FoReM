@@ -6,3 +6,9 @@
 执行者获准按难度选择可用模型和强度、独立完成或委派，无需另问；再委派前建三文档、独占文件与依赖验收，不能另设预算。
 
 推荐GPT6.1sol/high、Sonnet5.5/high；跨模块计时/恢复一致性需高强度。实际派发gpt-6.1-sol/high。沿用默认模型。 方法沿父[SRC-T10-001](../../../SOURCES.md#src-t10-001)、审核[SRC-T10-010](../../../SOURCES.md#src-t10-010)；新授权/依据由父统一登记。
+
+本轮实现边界细化：仅支持全batch自然episode终局、prepare_next完成、最后transition与原始journal均落盘、ledger无in_flight，下一episode尚未采样的边界。不支持活动Core中途恢复；batch8同时终局未验。恢复限同Linux host boot、原monotonic deadline；重启系统、旧进程仍存活、ledger/journal变动、custom mutable sampling factory均拒绝；单一恢复持有flock。范围内实现与测试由当前执行者独立完成，未再委派。新增数值/方法证据由父统一登记SOURCES（下述RESULTS提供草稿；未登记前不作全局已验收结论）。
+
+父后续要求在线证据跨真实进程；同预算内save/exit→newPID resume入口已交父，CPU真跨进程通过。samePID例外仅显式test_only合成fixture。恢复来源预留[SRC-T10-013](../../../SOURCES.md#src-t10-013)，父实测后登记。
+
+父收尾：状态review，无运行工作。父核验与具体已通过/未通过范围见[父RESULTS](../RESULTS.md)，不把CPU夹具或诊断rc0当线上总通过。

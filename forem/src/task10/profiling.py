@@ -91,3 +91,47 @@ def comparable_candidates(candidates):
     del diagnostics['search_wall_seconds']
     out['diagnostics'] = diagnostics
     return out
+
+
+def comparison_snapshot(fields, exact_cpu):
+    """Match journal storage, excluding only the documented volatile timer."""
+    result = exact_cpu(fields)
+    if 'candidates' in result:
+        result['candidates'] = comparable_candidates(result['candidates'])
+    return result
+
+
+def validate_batch_budget(baseline_batches, profile_batches, max_decisions):
+    if not (1 <= profile_batches <= baseline_batches <= 2):
+        raise ValueError('require 1 <= profile batches <= baseline batches <= 2')
+    if max_decisions not in (8, 16, 24, 32) or 8*(baseline_batches+profile_batches) > max_decisions:
+        raise ValueError('batch plan exceeds decision budget')
+    return baseline_batches, profile_batches, max_decisions
+
+
+def snapshot_digest(value):
+    """Stable audit digest of a CPU replay tree, not a substitute for comparison."""
+    import hashlib
+    import torch
+    digest = hashlib.sha256()
+    def add(part):
+        digest.update(len(part).to_bytes(8, 'big'))
+        digest.update(part)
+    def visit(item):
+        add(type(item).__name__.encode())
+        if isinstance(item, torch.Tensor):
+            tensor = item.detach().cpu().contiguous()
+            add(str(tensor.dtype).encode())
+            add(repr(tuple(tensor.shape)).encode())
+            add(tensor.numpy().tobytes())
+        elif isinstance(item, dict):
+            for key in sorted(item):
+                visit(key)
+                visit(item[key])
+        elif isinstance(item, (list, tuple)):
+            for child in item:
+                visit(child)
+        else:
+            add(repr(item).encode())
+    visit(value)
+    return digest.hexdigest()

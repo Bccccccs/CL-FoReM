@@ -79,3 +79,10 @@
 - task10.5 `cost_profile`，gpt-6.1-terra/high，采集成本分解与同输入核验；独占forem/src/task10/profiling.py、forem/scripts/task10_cost_probe.py、forem/src/task10/tests/test_profiling.py。两者独立并行，实现后依赖父运行/复跑签收。[TASK](task10.5/TASK.md) · [PROCEDURE](task10.5/PROCEDURE.md) · [RESULTS](task10.5/RESULTS.md)。
 
 - task10.6 `recovery_check`，gpt-6.1-sol/high，非空抽样、更新后优化器与采集恢复边界；独占forem/src/task10/recovery.py、forem/src/task10/tests/test_recovery.py、forem/scripts/task10_recovery_probe.py；runner.py仅restore_evidence函数。两者独立并行，实现后依赖父运行/复跑签收。[TASK](task10.6/TASK.md) · [PROCEDURE](task10.6/PROCEDURE.md) · [RESULTS](task10.6/RESULTS.md)。
+
+- task10.7 audit_cost_recovery，terra/high（默认推荐sol/high、Sonnet5.5/high），依赖10.5/10.6交付后验收；只写自己的三文档/日志，不采集更新。[TASK](task10.7/TASK.md) · [PROCEDURE](task10.7/PROCEDURE.md) · [RESULTS](task10.7/RESULTS.md)。父负责全部共享及总预算。
+
+
+### 本轮成本/恢复交接（非新试训授权）
+
+执行者保留选模/拆分/委派权限，所有代理共父范围/总资源/截止；新派发仍先建三文档、独占写入与父验收。本轮bounded阶段已结束：完整baseline/单初边界分项、真实16非空恢复及batch1自然终局跨进程续计通过；instrumented全轨迹超时、GPU严格下一更新未过，batch8恢复未验。[RESULTS](RESULTS.md)、[SRC-T10-012](../../SOURCES.md#src-t10-012)、[013](../../SOURCES.md#src-t10-013)。下一1200decisions/200updates、保留1000预热、batch8训练7h+配对另30min只是待核定建议[SRC-T10-014](../../SOURCES.md#src-t10-014)；现有1800s入口不变，不自动执行。推荐GPT6.1sol/high、Sonnet5.5/high，因恢复数值口径、跨层时钟与采集预算需综合审查。

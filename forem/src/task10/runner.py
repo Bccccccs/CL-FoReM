@@ -117,39 +117,9 @@ def check_finite(tree):
 
 
 def restore_evidence(path, learner, replay, config, counters):
-    """Compare checkpoint RNG, next replay sample and counters without collection."""
-    import torch
-    from task7_upper.stages import save_checkpoint, load_checkpoint
-    from task7_lower.training import rng_state, restore_rng
-    from task10.learning import EpisodeReplay, Stage1Learner
-    from task7_upper.model import UpperModel
-    save_checkpoint(path, learner, replay, counters=counters, config=config)
-    rng = rng_state()
-    sample_a = replay.sample(32) if len(replay) >= 32 else []
-    random_a = torch.rand(4, device='cuda:0')
-    next_replay_state = replay.state_dict()
-    # Use independent objects so restore cannot accidentally validate itself.
-    model = UpperModel(vector_dim=counters['vector_dim']).cuda()
-    other = Stage1Learner(model, total_updates=200)
-    other_replay = EpisodeReplay(seed=101)
-    saved, environment = load_checkpoint(path, other, other_replay, config=config)
-    sample_b = other_replay.sample(32) if len(other_replay) >= 32 else []
-    random_b = torch.rand(4, device='cuda:0')
-    identity = lambda items: [(x.episode_key, x.start, len(x.steps)) for x in items]
-    if identity(sample_a) != identity(sample_b) or not torch.equal(random_a, random_b):
-        raise AssertionError('checkpoint replay/RNG mismatch')
-    if saved != counters or environment is not None or other.updates != learner.updates:
-        raise AssertionError('checkpoint counter/environment contract mismatch')
-    if tensor_state_hash(other.model) != tensor_state_hash(learner.model):
-        raise AssertionError('checkpoint model mismatch')
-    # Verification must not change the next collection/training RNG stream.
-    replay.load_state_dict(next_replay_state)
-    # Restore from the saved checkpoint state, not the post-test draws.
-    payload = torch.load(path, map_location='cpu', weights_only=False)
-    replay.load_state_dict(payload['replay'])
-    restore_rng(rng)
-    return dict(learner_rng_next_sample=True, counters=True, updates=other.updates,
-                collector_resumable=False, snapshot='offline learner, not online recovery')
+    """Nonempty learner-only evidence without advancing caller replay/global RNG."""
+    from .recovery import verify_learner_checkpoint
+    return verify_learner_checkpoint(path, learner, replay, config, counters)
 
 
 def train(args, launched):

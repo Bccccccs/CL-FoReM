@@ -52,3 +52,39 @@ class ComparisonTest(unittest.TestCase):
                 with p.measure('ik'): pass
         self.assertEqual(p.records['reset.ik']['calls'], 1)
         self.assertEqual(p.records['prediction.ik']['calls'], 1)
+
+class ReplayCanonicalizationTest(unittest.TestCase):
+    def test_exact_cpu_canonicalizes_grid_and_only_ignores_search_time(self):
+        try:
+            import torch
+            from task7_upper.replay import exact_cpu
+        except ImportError:
+            self.skipTest('torch unavailable')
+        from task10.profiling import comparison_snapshot
+        old = {'observation': {'grid_uint8': torch.tensor([3], dtype=torch.uint8)},
+               'candidates': {'c_k': torch.tensor([1.]), 'diagnostics': {'search_wall_seconds': 1., 'n_gen': 1}}}
+        new = {'observation': {'grid': torch.tensor([0.]), 'grid_uint8': torch.tensor([3], dtype=torch.uint8)},
+               'candidates': {'c_k': torch.tensor([1.]), 'diagnostics': {'search_wall_seconds': 3., 'n_gen': 1}}}
+        snapshot = comparison_snapshot(new, exact_cpu)
+        self.assertEqual(set(old['observation']), set(snapshot['observation']))
+        self.assertTrue(torch.equal(old['observation']['grid_uint8'], snapshot['observation']['grid_uint8']))
+        self.assertEqual(snapshot['candidates']['diagnostics'], {'n_gen': 1})
+        self.assertEqual(comparison_snapshot(old, exact_cpu)['candidates']['diagnostics'], snapshot['candidates']['diagnostics'])
+        self.assertIn('grid', new['observation'])
+
+    def test_batch_budget_rejects_excess_and_missing_baseline(self):
+        from task10.profiling import validate_batch_budget
+        self.assertEqual(validate_batch_budget(2, 1, 24), (2, 1, 24))
+        for args in [(2, 2, 24), (1, 2, 24), (3, 1, 32), (2, 1, 25)]:
+            with self.assertRaises(ValueError): validate_batch_budget(*args)
+
+class BoundaryHashTest(unittest.TestCase):
+    def test_digest_detects_scientific_changes_and_is_stable(self):
+        try:
+            import torch
+        except ImportError:
+            self.skipTest('torch unavailable')
+        from task10.profiling import snapshot_digest
+        a = {'obs': torch.tensor([1, 2]), 'candidates': {'n': 3}}
+        self.assertEqual(snapshot_digest(a), snapshot_digest({'candidates': {'n': 3}, 'obs': torch.tensor([1, 2])}))
+        self.assertNotEqual(snapshot_digest(a), snapshot_digest({'obs': torch.tensor([1, 3]), 'candidates': {'n': 3}}))

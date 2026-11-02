@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""One durable, non-retriable bounded measurement phase; no training policy."""
+"""Durable bounded phases; explicit repairs retain original deadlines/attempts."""
 import argparse
 import fcntl
 import json
@@ -16,6 +16,7 @@ def main():
     parser.add_argument('--ledger', type=Path, required=True)
     parser.add_argument('--phase', choices=('performance', 'recovery_fixture', 'collector_boundary', 'verification'), required=True)
     parser.add_argument('--seconds', type=float, required=True)
+    parser.add_argument('--continue-failed', action='store_true', help='explicit repair within the original absolute phase deadline')
     parser.add_argument('command', nargs=argparse.REMAINDER)
     args = parser.parse_args()
     caps = dict(performance=900, recovery_fixture=300, collector_boundary=360, verification=240)
@@ -28,19 +29,31 @@ def main():
     with args.ledger.with_suffix('.lock').open('a') as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
         state = json.loads(args.ledger.read_text()) if args.ledger.exists() else dict(total_cap_seconds=1800, jobs={})
-        if args.phase in state['jobs'] or any(j['status'] == 'active' for j in state['jobs'].values()):
-            raise RuntimeError('phase already consumed or another phase active; no automatic retry')
-        if sum(j['cap_seconds'] for j in state['jobs'].values())+args.seconds > 1800:
+        old = state['jobs'].get(args.phase)
+        if any(j['status'] == 'active' for j in state['jobs'].values()):
+            raise RuntimeError('another phase active; GPU measurements are serialized')
+        permitted = old is not None and old['cap_seconds'] == args.seconds and args.continue_failed and old['status'] == 'failed'
+        if old is not None and not permitted:
+            raise RuntimeError('phase already consumed; no automatic retry')
+        if old is None and args.continue_failed:
+            raise RuntimeError('no failed phase to continue')
+        if sum(j['cap_seconds'] for j in state['jobs'].values())+(args.seconds if old is None else 0) > 1800:
             raise RuntimeError('cumulative declared caps exceed shared budget')
         started = time.monotonic()
-        job = dict(status='active', started_epoch=time.time(), cap_seconds=args.seconds, command=command, supervisor_pid=os.getpid())
+        origin = time.time() if old is None else old['started_epoch']
+        remaining = origin+args.seconds-time.time()
+        if remaining <= 2:
+            raise RuntimeError('original absolute phase deadline expired')
+        history = [] if old is None else old.get('attempts', [old])
+        job = dict(status='active', started_epoch=origin, cap_seconds=args.seconds, command=command,
+                   supervisor_pid=os.getpid(), attempts=history)
         state['jobs'][args.phase] = job
         atomic_json(args.ledger, state)
         process = subprocess.Popen(command, start_new_session=True)
         job['worker_pid'] = process.pid
         atomic_json(args.ledger, state)
         try:
-            code = process.wait(timeout=max(.01, args.seconds-(time.monotonic()-started)-2))
+            code = process.wait(timeout=max(.01, remaining-(time.monotonic()-started)-2))
         except subprocess.TimeoutExpired:
             os.killpg(process.pid, signal.SIGTERM)
             try:
@@ -49,9 +62,14 @@ def main():
                 os.killpg(process.pid, signal.SIGKILL)
                 process.wait(timeout=1)
             code = 124
+        attempt = dict(returncode=code, command=command, elapsed_seconds=time.monotonic()-started,
+                       started_epoch=time.time()-(time.monotonic()-started), finished_epoch=time.time(),
+                       worker_pid=process.pid)
+        job['attempts'].append(attempt)
         job.update(status='done' if code == 0 else 'failed', returncode=code,
-                   elapsed_seconds=time.monotonic()-started, finished_epoch=time.time())
-        state['consumed_worker_seconds'] = sum(j.get('elapsed_seconds', 0) for j in state['jobs'].values())
+                   elapsed_seconds=time.time()-origin, worker_seconds=sum(a['elapsed_seconds'] for a in job['attempts']),
+                   finished_epoch=time.time())
+        state['consumed_worker_seconds'] = sum(j.get('worker_seconds', j.get('elapsed_seconds', 0)) for j in state['jobs'].values())
         atomic_json(args.ledger, state)
         print(json.dumps(dict(phase=args.phase, **job)), flush=True)
         return code if 0 <= code <= 255 else 128-code

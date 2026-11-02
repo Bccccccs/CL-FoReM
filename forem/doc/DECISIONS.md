@@ -382,3 +382,6 @@ Husky高频(2 kHz)交替复测；门槛事后修订（SRC-0054）。
 
 
 2026-11-02 · task10 有界执行保持失败与预算：唯一试训16真实决策/0更新在旧adapter变长diagnostics处失败，修复后不以新run重置既有预算。0更新actor只作完整配对管线核查，结果0/4对随机3/4不作为学习收益；正式训练与task11基线交付NOT_READY。理由为有效GPU更新、collector恢复与完整性能证据尚缺，替代的重启、缩预热、改科学语义或把未训练actor当正式对照均未采用。[SRC-T10-008](SOURCES.md#src-t10-008)、[009](SOURCES.md#src-t10-009)。负责人Codex（父实际模型/强度未知），独立审查terra/high；推荐GPT6.1sol/high、Sonnet5.5/high，下一轮若获派发仅先补原协议C所缺证据，不自动长训。
+
+
+2026-11-02 · task10成本/恢复补证：不把900s超时的instrumented残留快照或GPU exact_mismatch诊断rc0当通过；限定采用已验证的batch1自然全终局恢复边界，batch8/中途恢复仍待。未采用性能优化、未改预热/奖励/严格成功；7h训练（1200/200）+配对另30min为待决策者核定建议，非新授权。依据[SRC-T10-012](SOURCES.md#src-t10-012)、[013](SOURCES.md#src-t10-013)、[014](SOURCES.md#src-t10-014)。原300s过后不自加deterministic诊断；保留GPU微差与完整负结果。负责人Codex，实际父模型/强度未知；推荐GPT6.1sol/high、Sonnet5.5/high，跨状态/时钟/预算审查。

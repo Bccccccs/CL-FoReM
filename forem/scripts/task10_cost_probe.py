@@ -18,7 +18,15 @@ def main():
     parser.add_argument('--old-run', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--seconds', type=float, default=900)
+    parser.add_argument('--baseline-batches', type=int, default=2)
+    parser.add_argument('--profile-batches', type=int, default=2)
+    parser.add_argument('--max-decisions', type=int, default=32)
     args = parser.parse_args()
+    from task10.profiling import validate_batch_budget
+    try:
+        validate_batch_budget(args.baseline_batches, args.profile_batches, args.max_decisions)
+    except ValueError as exc:
+        parser.error(str(exc))
     if not 0 < args.seconds <= 900:
         parser.error('seconds must be in (0, 900]')
     if args.output.exists():
@@ -33,7 +41,8 @@ def main():
     from task10.runner import initialize
     from task10.lower import FrozenB3
     from task10.environment import Task10Env
-    from task10.profiling import Profiler, patch_methods, comparable_candidates
+    from task10.profiling import Profiler, patch_methods, comparison_snapshot, snapshot_digest
+    from task7_upper.replay import exact_cpu
     from task7_sim.core import Core
     from task7_sim.kinematics import Kinematics
     from task7_sim.perception import Grid, LocalCollision
@@ -43,7 +52,7 @@ def main():
     from task7_sim import candidates, risk
     from task10 import environment
     torch.set_num_threads(2)
-    result = dict(status='active', max_seconds=args.seconds, max_decisions=32,
+    result = dict(status='active', max_seconds=args.seconds, max_decisions=args.max_decisions, baseline_batches=args.baseline_batches, profile_batches=args.profile_batches,
                   reserved=0, completed=0, passes=[], error=None,
                   gpu_event_note='inclusive CUDA stream intervals may include CPU submission gaps; not kernel compute; never add to wall or nested intervals',
                   comparison_excluded_paths=['candidates.diagnostics.search_wall_seconds'])
@@ -70,6 +79,7 @@ def main():
         policy = FrozenB3(device='cuda:0', artifact_root='/reference', source_root='/reference/source')
         episodes = {i: [] for i in range(8)}
         baseline = []
+        boundary_baseline = []
         for instrumented in (False, True):
             initialize(101)
             env = Task10Env(8, policy, seed=101, pool='/reference/results/task8/t8-pool-20261027/cube-pool-v2/manifest.json', split='train', device='cuda:0', risk_chunk_size=256, observation_chunk_size=128, reuse_route_raster=True)
@@ -98,7 +108,18 @@ def main():
             boundaries = []
             def boundary(*a, **kw):
                 obs, cand, timing = Task10Env._boundary(env, *a, **kw)
-                boundaries.append(copy.deepcopy(timing))
+                snapshot = comparison_snapshot(dict(observation=obs, candidates=cand), exact_cpu)
+                index = len(boundaries)
+                digest = snapshot_digest(snapshot)
+                compared = False
+                if instrumented:
+                    if index >= len(boundary_baseline):
+                        raise AssertionError('instrumented boundary exceeds baseline coverage')
+                    compare(boundary_baseline[index], snapshot, f'baseline.boundary{index}')
+                    compared = True
+                else:
+                    boundary_baseline.append(snapshot)
+                boundaries.append(dict(timing=copy.deepcopy(timing), compared=compared, sha256=digest))
                 return obs,cand,timing
             env._boundary = boundary
             record = dict(instrumented=instrumented, boundaries=boundaries, batches=[])
@@ -115,8 +136,10 @@ def main():
                     record['business_wall_s'][stage] = record['business_wall_s'].get(stage, 0.) + elapsed
             with patch_methods(profiler, targets) if instrumented else nullcontext():
                 call('reset', env.reset, deadline=deadline)
-                for j in range(2):
+                for j in range(args.profile_batches if instrumented else args.baseline_batches):
                     selected = torch.tensor(log[j]['selected'], device='cuda:0', dtype=torch.long)
+                    if result['reserved'] + 8 > args.max_decisions:
+                        raise RuntimeError('probe decision budget exceeded')
                     result['reserved'] += 8
                     flush()
                     step = call('actual', env.step, selected, deadline=deadline)
@@ -124,12 +147,9 @@ def main():
                     fields = step.replay_fields
                     keys = ('observation','candidates','selected','selected_prediction','actual_result_v1',
                             'r_t','attempted_substeps','committed_substeps','terminated','truncated','triggers')
-                    for key in keys:
-                        expected, observed = journals[j][key], fields[key]
-                        if key == 'candidates':
-                            expected, observed = comparable_candidates(expected), comparable_candidates(observed)
-                        compare(expected, observed, f'old.batch{j}.{key}')
-                    snapshot = {key: copy.deepcopy(comparable_candidates(fields[key]) if key == 'candidates' else fields[key]) for key in keys}
+                    expected = comparison_snapshot({key: journals[j][key] for key in keys}, exact_cpu)
+                    snapshot = comparison_snapshot({key: fields[key] for key in keys}, exact_cpu)
+                    compare(expected, snapshot, f'old.batch{j}')
                     if not instrumented: baseline.append(snapshot)
                     else: compare(baseline[j], snapshot, f'baseline.batch{j}')
                     record['batches'].append(dict(old_equal=True, selected=log[j]['selected'],
@@ -144,6 +164,7 @@ def main():
             record['sample_stats'] = dict(sampler.stats)
             record['sample_timing'] = dict(sampler.timing)
             flush()
+        result['boundary_coverage'] = dict(baseline=len(boundary_baseline), instrumented=len(result['passes'][1]['boundaries']), compared=sum(x['compared'] for x in result['passes'][1]['boundaries']))
         result['status'] = 'complete'
     except BaseException as exc:
         result['status'] = 'failed'
