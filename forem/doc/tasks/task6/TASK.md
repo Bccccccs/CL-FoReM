@@ -2,7 +2,7 @@
 
 > **当前状态（2026-10-19核对）：active：6.1、6.3 done；6.2 paused；6.4阶段一done、阶段二暂缓；6.5阶段一review待复核。** 本文件下方的状态行和“尚未执行/进行中”等表述是当时的记录，以本行为准。
 
-> **阶段一（CBL复现）· Gazebo失败诊断**（2026-10-16归类）：6.1 done——F0（cbl自写SAC，sim）0.433，F1–F6单参数无显著提升；6.2（RLlib在Gazebo训练）paused于26.9万步，评估0.02–0.04；6.3 done——F0零样本到Gazebo 0.16/0.20；6.4阶段一done——CBL原版B sim 0.78→Gazebo 0.72、上游PR2 0.78→0.32；6.5阶段一review——原作者PR2 sim 0.86→Gazebo 0.52。世界模型不在本任务，见[task7](../task7/TASK.md)。
+> **阶段一（CBL复现）· Gazebo失败诊断**（2026-10-16归类）：6.1 done——F0（cbl自写SAC，sim）0.433，F1–F6单参数无显著提升；6.2（RLlib在Gazebo训练）paused于26.9万步，评估0.02–0.04；6.3 done——F0零样本到Gazebo 0.16/0.20；6.4阶段一done——CBL原版B sim 0.78→Gazebo 0.72、上游PR2 0.78→0.32；6.5阶段一review——原作者PR2 sim 0.86→Gazebo 0.52。6.6 done（2026-10-27）——CBL自己的15个检查点sim 0.480、Z-B 0.223、Z-A 0.236。世界模型不在本任务，见[task7](../task7/TASK.md)。
 
 状态：**尚未执行（2026-10-12重新开始；文档阶段）**。流程制定、决策、汇总和复核由Claude负责；子任务由Codex执行，用户派发。
 
@@ -74,6 +74,7 @@ F1–F6解读：某组明显“救活”F0即为嫌疑参数；只有F6能救活
 |[task6.3](task6.3/TASK.md)|sim训练的F0策略在Gazebo中零样本评估：Z-A原论文项目Gazebo测试配置、Z-B与R-48同口径；只评估不训练（2026-10-13新增）|Codex|task6.1 done（已满足）|
 |[task6.4](task6.4/TASK.md)|按N²M²原论文方法用上游原版评估脚本对task5 A（PR2）/B（Husky）做Gazebo零样本评估；阶段一simpleobstacle，阶段二A其余8任务（Claude放行）；只评估不训练（2026-10-13新增）|Codex|task5 A/B checkpoint已存在；不得干扰task5 D21与task6.2|
 |[task6.5](task6.5/TASK.md)|用原作者预训练模型复现N²M²的sim与Gazebo结果：阶段一原作者PR2 simpleobstacle sim＋Gazebo（原文86.0%/81.6%）；阶段二按结果放行（PR2其余8任务与TIAGo，或差异排查）；只评估不训练（2026-10-14新增）|Codex|task6.4的A正式评估结束后同容器运行，或同镜像新容器|
+|[task6.6](task6.6/TASK.md)|评估CBL自己的检查点（`checkpoints_simpleobstacle`14个＋`pnp_plus` 4000）：sim与Gazebo Z-B/Z-A各50回合，参考双tanh动作；只评估不训练（2026-10-27新增，[SRC-1241](../../SOURCES.md#src-1241)）|done（Claude子Agent Sonnet5.5执行，Claude复核）|task6.1、6.3产物（已满足）；与task8.10等其他会话共享主机时按CPU预算分批|
 
 task6.1、task6.2互不共享代码和容器，可以由两个Codex会话并行执行；task6.3在forem-dev中只做评估，不触碰task6.2的容器。CPU、GPU分配按父[PROCEDURE](PROCEDURE.md#资源与优先级)统一协调。
 

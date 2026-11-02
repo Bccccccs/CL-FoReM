@@ -8,7 +8,7 @@
 |实验主线|[experiments/](../experiments/README.md)|论文所需实验的设计、协议与结果汇总|
 |**论文主线**|本目录`paper/`|论文的设计与写作|
 
-当前只建立入口，**尚未设计论文的任何内容**（题目、问题、贡献、结构均未定）。
+已开展paper0调研、paper1叙事候选与[paper2](paper2/TASK.md)SAC实现/消融呈现建议；论文题目、主贡献与venue仍未定，未写完整论文。
 
 ## 与其他主线的关系
 
@@ -24,7 +24,9 @@
 
 |文档|内容|状态|
 |---|---|---|
-|—|尚无|—|
+|[paper0](paper0/TASK.md)|投稿venue（CCF-A）、发表门槛与实验设计调研（只调研，SRC-0600）|已授权，Codex执行|
+|[paper1](paper1/TASK.md)|叙事框架候选：两层SAC与生物运动系统分工的类比（SRC-1300；文献待核验）|draft，仅记录|
+|[paper2](paper2/TASK.md)|下层SAC实现说明与基线消融呈现（SRC-1341）|review，建议已记录|
 
 ## Agent模型与推理强度
 

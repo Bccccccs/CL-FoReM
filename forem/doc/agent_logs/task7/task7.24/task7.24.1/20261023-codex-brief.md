@@ -1,0 +1,30 @@
+# task7.24.1 implementation brief — read first
+
+You implement the approved short-route task trial, NOT single-candidate-reset training. Actual requested model gpt-6.1-sol/medium. No further subagents.
+
+## Binding inputs
+- Root AGENTS: /home/ybc/projects/CL-FoReM/AGENTS.md and /home/ybc/projects/CL-FoReM/forem/AGENTS.md.
+- Your TASK/PROCEDURE/RESULTS: /home/ybc/projects/CL-FoReM/forem/doc/tasks/task7/task7.24/task7.24.1/.
+- Spec: /home/ybc/projects/CL-FoReM/forem/doc/tasks/task7/task7.24/TASK.md (SRC-0971 user approved).
+- Implement P0/P1 of /home/ybc/projects/CL-FoReM/forem/doc/tasks/task7/task7.24/PROCEDURE.md, plus code for later P2–P4 execution. Read only relevant sections; parent rulings in /home/ybc/projects/CL-FoReM/forem/doc/agent_logs/task7/task7.24/20261023-codex-ledger.md.
+
+## Scope and ownership
+Only modify code/config/scripts in /home/ybc/.codex/worktrees/task7-24-short-task/CL-FoReM/forem, not main worktree source. Current working baseline is DIRTY-MAIN snapshot copied into isolated native worktree, not HEAD old source. Snapshot /home/ybc/projects/CL-FoReM/forem/results/task7/t7.24-short-20261023/source-baseline and147-file baseline-manifest.json. Current original dependencies protected. No Git commits, merges or pushes; no installation/rebuilding/stopping containers or others' jobs.
+Runtime mirror: /home/ybc/projects/CL-FoReM/forem/build/task7.24/source (container /root/mm_husky_ws/build/task7.24/source). Sync only this task's updated files from worktree before compute; record sha; no changing mirror during a live compute. Existing main map pool is /root/mm_husky_ws/results/task7/maps/a/20261021T021400Z. Results host /home/ybc/projects/CL-FoReM/forem/results/task7/t7.24-short-20261023 (container corresponding /root/mm_husky_ws/results/task7/t7.24-short-20261023). Logs /home/ybc/projects/CL-FoReM/forem/logs/task7/task7.24.
+Only write own docs/triple and own independent log; parent owns sharedSOURCES/PROGRESS and ledger. Your proposed evidence id SRC-0972, hand full entry to parent.
+
+## Scientific contract
+- Sync only, v5 cbl_continue/episode_end_bootstrap/IK collision choice unchanged; no reward, timing, candidate, action, observation or failure semantic changes. Original multi-segment episode preserved.
+- A default original task sampler; B final route.length in [1,2]m using rejection only. Original sample_goal radius[.5,8] unchanged. Keep full legality/witness. DefaultNone exact RNG/output parity. Track proposal/accept/reject and accepted map/difficulty distribution; B may shift accepted map distribution—report, don't conceal. Sampling deadline aborts rather than silently changing map when validating a pinned map.
+- From-scratch equal init/trainseed4718. E256, replay100000/batch256, warmup1000 (learning begins original>256 replay rule), LR schedule4999743 updates independent of run cap. Each A/B50ktransfers later; no reset per candidate.
+- All task container compute shared cap14400s (tests/sampling/timing/train/eval/retries). Implement budgeted runner BEFORE any container compute, use remaining cap to bound every command with inner-container timeout/TERM cleanup and record command/start/end/rc/wall/activejobs. Avoid unbounded background or killed docker-client leaving python alive. CPU host doc/hash checks not counted. Only GPU3 if rechecked free, single computing worker.
+- Evaluation: materialize same100 fixedvalidationmaps, one original and one short-route case/map; full initial state+route+initial scans/candidate identity preserved between two actors; fixed validation RNG14718 isolated/restored. Existing pure local case evaluator per first segment, deterministic actor, original terminal semantics, no full-route rollout requirement, NO G7/D10. Evaluate fresh init and both endpoints on both case sets. Reuse one init result if weights exactequal. Bounded inference batches allowed same shape/order both policies; don't load100 snapshots concurrently unbounded.
+- Counts: actual candidate pose tolerance vs route-end event separately; reason1 can coincidecandidate, compute truepredicate rather than treatingall1asfail; preserve oldarrival category. Inplace/zero-time cases counted explicitly, no fake interaction. No filtering based on policy/G7success. Data never feeds training.
+- Exact50k endpoint requires full checkpoint/actor/metadata even though existinginterval250k; appendbudget-safe final persistence independent of cadence. Trial-specific semantic identity/codehashes must be saved/resume checked. Sample deadline may be renewed per bounded operation; do not persist an expired absolute walltime into a resumed sampler.
+
+## Implementation and checks
+Use TDD for meaningful new behavior. First run narrow relevant preexisting tests to establish baseline, all through budget. Read test-driven-development skill as needed. Implement only existing approved plan paths; operational budget helper is necessary authorized support. Keep geometry/Core/SACmath unchanged. Test defaultparity, finalroutevsstraightdistance, bounds and deadline nofallback, eval caseidentity and outcome splitting, no evaluationreplay/RNGleak, exactcap/fullcheckpoint/resume withoutduplicates. No repetitive full regression if focused checks already cover changes; report limits.
+Do not start A/B50ktraining. Deliver tested code+driver/phase commands and proposed timing/eval batching; coordinator will get independent Solhigh review before launching phases. Any heavy real-case generation/profile not required for unit validation should wait for reviewed runner.
+
+## Report
+Write full report in your RESULTS and /home/ybc/projects/CL-FoReM/forem/doc/agent_logs/task7/task7.24/task7.24.1/20261023-codex-work.md. Include changedpaths, baseline+newtest logs/rc, hashes, budget consumed+remaining, exact nextphase commands, assumptions and risk. Return only DONE/DONE_WITH_CONCERNS/NEEDS_CONTEXT/BLOCKED plus paths and one-line test summary. No self-reported pass without actual logs. If questions, message parent; keep implementing independent parts.

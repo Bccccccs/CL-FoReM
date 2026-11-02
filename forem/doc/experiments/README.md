@@ -8,7 +8,7 @@
 |**实验主线**|本目录`experiments/`|论文所需实验的设计、协议与结果汇总|
 |论文主线|[paper/](../paper/README.md)|论文的设计与写作|
 
-当前只建立入口，**尚未设计任何实验**；本文不构成任何实验、训练或运行的授权。
+2026-10-31开始[experiment0](experiment0/TASK.md)下层SAC基线选择与优化设计；运行授权/边界以SRC-1336及task9.5为准，本文不额外授权其他实验。
 
 ## 与其他主线的关系
 
@@ -25,7 +25,7 @@
 
 |编号|内容|状态|三文档|关联项目任务|
 |---|---|---|---|---|
-|—|尚无|—|—|—|
+|experiment0|下层SAC参数/更新机制优化与基线选择|active，新增训练尚未执行|[TASK](experiment0/TASK.md) / [PROCEDURE](experiment0/PROCEDURE.md) / [RESULTS](experiment0/RESULTS.md)|[task9.5](../tasks/task9/task9.5/TASK.md)|
 
 ## Agent模型与推理强度
 

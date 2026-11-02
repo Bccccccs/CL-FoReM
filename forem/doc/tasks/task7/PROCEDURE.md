@@ -1,5 +1,15 @@
 # task7 — 流程（草案）
 
+## 2026-10-26 当前冻结入口
+
+**状态：paused（用户明确冻结task7及其全部后续执行）**。依据[SRC-0984](../../SOURCES.md#src-0984)。已完成成果保留，未完成项暂停；下文历史active/review/待执行/旧授权不构成继续运行许可，所有后代任务同样受本冻结入口约束。后续先按[task8](../task8/TASK.md)规划PCD地图迁移与ghost传感器；本轮不恢复训练、D10、7.24或诊断，不修改task7源码/配置/产物。
+
+冻结快照：v5已停、未完成5M，下层未冻结验收；正式D10因OOM未闭合，7.18.7/7.18.8调查与7.24剩余工作保留，7.22仅部分流水线交付，上层正式训练/ManiSkill仍未放行。最新既有训练证据[SRC-0983](../../SOURCES.md#src-0983)，本轮源码/进程只读核查[SRC-0985](../../SOURCES.md#src-0985)。历史结果不删除、不改写成完成。
+
+规划记录：[task8日志](../../agent_logs/task8/20261026-codex-pcd-plan.md)。推荐Codex GPT6.1sol / medium、Claude Sonnet5.5 / medium（跨任务合同及冻结边界核对），普通记录low；本轮实际模型/强度未知。
+
+---
+
 状态：**draft，未授权实施**。设计与未定事项见[TASK](TASK.md)。
 
 ## 递归规则
@@ -65,7 +75,10 @@
 |task7.16|**A类程序化长方体地图生成器与地图池**（forem模块，mapgen不动）|Codex执行；Claude复核|与7.15、7.17并行|[TASK](task7.16/TASK.md) · [PROCEDURE](task7.16/PROCEDURE.md) · [RESULTS](task7.16/RESULTS.md)|7.17集成、7.18训练与验证地图|
 |task7.17|**回合环境**：任务采样、路线规划（照N²M²/CBL原代码）、批量reset封装、G1遮挡计数|Codex执行；Claude复核|依赖7.14；与7.15、7.16并行|[TASK](task7.17/TASK.md) · [PROCEDURE](task7.17/PROCEDURE.md) · [RESULTS](task7.17/RESULTS.md)|7.18的输入|
 |task7.18|**阶段L**：下层SAC网络与训练（两变体各1种子×5M）|Codex执行；Claude复核|依赖7.15、7.16、7.17复核done|[TASK](task7.18/TASK.md) · [PROCEDURE](task7.18/PROCEDURE.md) · [RESULTS](task7.18/RESULTS.md)|冻结前验收见7.19|
-|task7.19|**G7规则路径执行器与阶段L冻结验收**（D10）|Claude起草G7-1–G7-4、用户确认；Codex实现|设计可与7.18并行；验收依赖7.18检查点|[TASK](task7.19/TASK.md) · [PROCEDURE](task7.19/PROCEDURE.md) · [RESULTS](task7.19/RESULTS.md)|决定下层是否冻结、进入阶段1|
+|task7.19|**G7规则路径执行器与阶段L冻结验收**（D10）|G7-1–G7-4已定（2026-10-21，[SRC-0434](../../SOURCES.md#src-0434)）；Codex实现|实现待7.15、7.17 done；验收依赖7.18检查点|[TASK](task7.19/TASK.md) · [PROCEDURE](task7.19/PROCEDURE.md) · [RESULTS](task7.19/RESULTS.md)|决定下层是否冻结、进入阶段1|
+|task7.20|**上层决策级批量环境与G1规则选点**（2026-10-21 Claude起草，**已授权**（[SRC-0439](../../SOURCES.md#src-0439)），[SRC-0438](../../SOURCES.md#src-0438)）|Codex执行；Claude复核|依赖7.15、7.17 done；与7.21并行|[TASK](task7.20/TASK.md) · [PROCEDURE](task7.20/PROCEDURE.md) · [RESULTS](task7.20/RESULTS.md)|供7.22训练与各组评估|
+|task7.21|**上层网络模块**：VCM、候选编码、头A/B、偏置层、f_p（2026-10-21 Claude起草，**已授权**（[SRC-0439](../../SOURCES.md#src-0439)），[SRC-0438](../../SOURCES.md#src-0438)）|Codex执行；Claude复核|只依赖规格，可立即并行|[TASK](task7.21/TASK.md) · [PROCEDURE](task7.21/PROCEDURE.md) · [RESULTS](task7.21/RESULTS.md)|供7.22|
+|task7.22|**上层训练流水线**：经验池、离散SAC、阶段1/2/3、评估；有界核查与试训，正式训练另行授权（2026-10-21 Claude起草，**已授权**（[SRC-0439](../../SOURCES.md#src-0439)），[SRC-0438](../../SOURCES.md#src-0438)）|Codex执行；Claude复核|依赖7.20、7.21 done；正式训练前提D10通过（7.19）|[TASK](task7.22/TASK.md) · [PROCEDURE](task7.22/PROCEDURE.md) · [RESULTS](task7.22/RESULTS.md)|交付正式训练墙钟推算，供用户授权|
 |task7.12|ManiSkill可行性冒烟（U13）|Codex|**暂缓**（用户2026-10-19：现在只考虑sim，[SRC-0362](../../SOURCES.md#src-0362)）；恢复后建容器/安装/运行需授权|[TASK](task7.12/TASK.md) · [PROCEDURE](task7.12/PROCEDURE.md) · [RESULTS](task7.12/RESULTS.md)|实施阶段8的前提|
 
 2026-10-20两层SAC决定（[SRC-0400](../../SOURCES.md#src-0400)）的影响：新增task7.13；下列子任务已有交付中按“路径计划/路径族/固定评分”写的部分须重写，现只在各自TASK状态行下注明，正文未改：task7.4合同⑦（到达与决策超时）、⑨（全部路径不可行时的分层排序）及上层训练阶段（前加阶段L）；task7.5 B6风险特征（[SRC-0393](../../SOURCES.md#src-0393)按“最优路径扫过区域”定义）、B7（不同步路径族s分配）；task7.6成本公式（IK计时仍可用）；task7.10候选特征e_k来源；task7.11 f_p输入中的候选特征。原路径执行器规格保留为对照组G7的定义。
@@ -82,3 +95,20 @@
 上午的调研子任务task7.1–7.3建立于旧讨论方案，其结论（TD-MPC2、SC²-WM反馈、IK）按新框架在task7.4、7.9–7.11中复核引用；其结项与来源SRC-0341–0355由Codex父任务处理。原“父Codex独占SOURCES与父文档”的安排：2026-10-19晚用户直接指示Claude写文档，Claude已在[交流文档](../../agent_logs/task7/20261019-claude-codex-sync.md)说明改动。
 
 推荐模型：Codex GPT6.1sol / Claude Sonnet5.5，各子任务强度见其TASK；设计与审计多为medium。
+
+
+## 2026-10-23 接手审核
+
+新增task7.23（用户授权SRC-0960）：Codex父Agent统筹，task7.23.1–7.23.3只读并行审查，完成后父Agent核验汇总，不构成新实验授权。[TASK](task7.23/TASK.md) · [PROCEDURE](task7.23/PROCEDURE.md) · [RESULTS](task7.23/RESULTS.md)。
+
+
+## 后续尝试：task7.24短程任务训练（2026-10-23草案）
+
+按用户“用短任务代替较长训练任务”澄清新增task7.24。Codex负责文档与只读预查；建议顺序P0协议确认→P1隔离实现/测试→P2有界采样/性能检查→P3原分布/短路线A-B→P4判读。实现与试跑参数尚未确认，不自动开训；不依赖D10恢复才能写方案，也不替代冻结验收。[TASK](task7.24/TASK.md) · [PROCEDURE](task7.24/PROCEDURE.md) · [RESULTS](task7.24/RESULTS.md)。推荐Codex GPT6.1sol / Claude Sonnet5.5 medium；依据[SRC-0969](../../SOURCES.md#src-0969)。
+
+
+## 2026-10-24 task7.25调研流程
+
+负责人Codex；顺序为现状/旧资产核查→原论文/官方代码检索→三问题综合与待授权验证流程→文档和来源核查。文档工作不依赖D10恢复；未来候选标签/闭环比较依赖可靠下层与相应执行授权，不启动后续阶段。父结果汇总本轮已核事实与未执行项，不以调研替代实验验收。[TASK](task7.25/TASK.md) · [PROCEDURE](task7.25/PROCEDURE.md) · [RESULTS](task7.25/RESULTS.md)。本层及task7.25保持递归三文档规则；未新派子Agent。依据[SRC-0974](../../SOURCES.md#src-0974)、[SRC-0982](../../SOURCES.md#src-0982)。
+
+推荐Codex GPT6.1sol / medium、Claude Sonnet5.5 / medium，因跨地图/候选/控制因果核对；实际配置未知。

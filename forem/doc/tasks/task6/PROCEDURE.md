@@ -15,6 +15,7 @@
 |task6.3 sim策略Gazebo零样本迁移|[TASK](task6.3/TASK.md) · [PROCEDURE](task6.3/PROCEDURE.md) · [RESULTS](task6.3/RESULTS.md)|Codex（用户派发）|task6.1 done；与task6.2独立，可并行|提供Z-A/Z-B结果，判断“在Gazebo里训练”与“Gazebo执行”哪个是主因|
 |task6.4 task5 A/B按原论文Gazebo零样本评估|[TASK](task6.4/TASK.md) · [PROCEDURE](task6.4/PROCEDURE.md) · [RESULTS](task6.4/RESULTS.md)|Codex（用户派发）|task5 A/B checkpoint；运行位置须与task5 D21、task6.2隔离|判断N²M²方法本身能否迁移，区分“我们的链路”与“Husky本身”|
 |task6.5 原作者模型复现N²M²|[TASK](task6.5/TASK.md) · [PROCEDURE](task6.5/PROCEDURE.md) · [RESULTS](task6.5/RESULTS.md)|Codex（用户派发）|task6.4环境；A正式评估结束后|确认N²M²在我们环境中能否复现sim与Gazebo结果，为27个百分点损失的排查定基准|
+|task6.6 评估CBL自己的检查点|[TASK](task6.6/TASK.md) · [PROCEDURE](task6.6/PROCEDURE.md) · [RESULTS](task6.6/RESULTS.md)|done（Claude子Agent执行，Claude复核）|task6.1、6.3产物；无其他子任务依赖|给出CBL自写SAC实际达到的sim/Gazebo水平，与F0、task5.5对照|
 |父汇总|本目录[RESULTS](RESULTS.md)|Claude|6.1–6.5均review|四组对照、F1–F6结论与迁移结论|
 
 两个子任务互相独立（不同容器、不同代码副本、不同run-id前缀`t6.1-`/`t6.2-`），可以同时开工。各自的Claude门槛（6.1筛选后、6.2确定N时）通过用户转达。

@@ -1,5 +1,15 @@
 # task7 — 结果与交接
 
+## 2026-10-26 当前冻结入口
+
+**状态：paused（用户明确冻结task7及其全部后续执行）**。依据[SRC-0984](../../SOURCES.md#src-0984)。已完成成果保留，未完成项暂停；下文历史active/review/待执行/旧授权不构成继续运行许可，所有后代任务同样受本冻结入口约束。后续先按[task8](../task8/TASK.md)规划PCD地图迁移与ghost传感器；本轮不恢复训练、D10、7.24或诊断，不修改task7源码/配置/产物。
+
+冻结快照：v5已停、未完成5M，下层未冻结验收；正式D10因OOM未闭合，7.18.7/7.18.8调查与7.24剩余工作保留，7.22仅部分流水线交付，上层正式训练/ManiSkill仍未放行。最新既有训练证据[SRC-0983](../../SOURCES.md#src-0983)，本轮源码/进程只读核查[SRC-0985](../../SOURCES.md#src-0985)。历史结果不删除、不改写成完成。
+
+规划记录：[task8日志](../../agent_logs/task8/20261026-codex-pcd-plan.md)。推荐Codex GPT6.1sol / medium、Claude Sonnet5.5 / medium（跨任务合同及冻结边界核对），普通记录low；本轮实际模型/强度未知。
+
+---
+
 状态：**尚未执行**。没有代码、安装、训练或评估结果。
 
 ## 2026-10-16 文档记录（Claude，claude-opus-5-5）
@@ -93,3 +103,20 @@
 - 原下一步（10-19，已部分完成）：按PROCEDURE“准备与设计子任务”批次推进；task7.4起草与task7.5(A)只读审计可先开始；task7.6、task7.12运行需用户授权；task7.1–7.3由Codex父任务结项并补登SRC-0341–0355。实施阶段需另行授权。
 - 2026-10-20两层SAC决定后：下一步为task7.13下层SAC设计（U32、U36、U37、U39及数值）及task7.4/7.5/7.6/7.10/7.11受影响部分的重写；仍未授权实施。
 - 无运行任务。
+
+
+## 2026-10-23 task7.23 Codex接手审核
+
+用户授权Codex子Agent接手当前进度审核（SRC-0960）。三个独立审核已返回并由父Codex核关键原件；下层v5同步续训与同步500k正式D10仍在进行，后期退化、不同步候选失配、上层部分流水线与正式成本是主要依赖。没有完成阶段L冻结或上层正式训练验收。[审核TASK](task7.23/TASK.md) · [审核PROCEDURE](task7.23/PROCEDURE.md) · [审核RESULTS](task7.23/RESULTS.md)，证据[SRC-0961](../../SOURCES.md#src-0961)–[SRC-0964](../../SOURCES.md#src-0964)。推荐Codex GPT6.1sol / medium、Claude Sonnet5.5 / medium；本次三子Agent实际请求gpt-6.1-sol/medium，父模型/强度未知；理由为跨协议、产物与运行现场审核。不新增科学决定或实施授权。
+
+
+## 2026-10-23 task7.24后续尝试文档
+
+已建立[短程训练TASK](task7.24/TASK.md)、[PROCEDURE](task7.24/PROCEDURE.md)、[RESULTS](task7.24/RESULTS.md)；只有方案与旧数据CPU预查。未实施/开训/评估，长度/预算建议待确认；原D10部分数据到达分类已拆分以免误读。[SRC-0969](../../SOURCES.md#src-0969) · [SRC-0970](../../SOURCES.md#src-0970)。
+
+
+## 2026-10-24 task7.25地图/前瞻点/问题空间调研
+
+[三问题结果](task7.25/RESULTS.md)与[后续验证流程](task7.25/PROCEDURE.md)已写。静态核24对旧mapgen资产（8类各3图），全部有离地结构；当前JSON格式具备兼容基础，但需要地图池索引/补墙合同与表示/任务验证。U-Net方向承接task7.9 L1，核SC²-WM实际代码及VLN-3DFF原文，未实施或验证效果。建议将核心问题表述为部分可观测环境下的底盘子目标选择及机械臂运动协调，分开表示、候选、决策与执行问题。[SRC-0975](../../SOURCES.md#src-0975) · [SRC-0976](../../SOURCES.md#src-0976) · [SRC-0977](../../SOURCES.md#src-0977) · [SRC-0982](../../SOURCES.md#src-0982)
+
+本轮只核文档、源码/资产与原始文献，不调用加载器/渲染/训练/仿真，不接管7.24，不更新旧运行快照为实时状态。推荐Codex GPT6.1sol / medium、Claude Sonnet5.5 / medium，跨接口核对需medium；实际模型/强度未知。
