@@ -1,6 +1,6 @@
 # task10 流程
 
-递归规则：当前无子任务。如获授权拆分，子任务继承编号并各备 TASK、PROCEDURE、RESULTS；父流程登记顺序、依赖、负责人及验收关系并链接三文档。
+递归规则：已授权拆分task10.1–10.4（见文末执行拆分）；子任务继承编号并各备 TASK、PROCEDURE、RESULTS，父流程登记顺序、依赖、负责人及验收关系并链接三文档。
 
 1. 核对旧 task7.20 决策环境、task7.21 候选编码、task7.22 普通离散 SAC 路径与 B3 接口。列出观测、候选/掩码、各候选推演特征、选中索引、B3 子目标、终止前反馈的来源及时间；仅所选候选有真实执行结果。
 2. 分别拟定候选推演与真实执行的失败、时间、奖励及终止规则。旧 legacy/terminal 与 B3 sync_v5/cbl_continue 存在差异。先按源码核查，说明适配选择与待验项，再评审。冻结清单保留三个 actor；实际采用哪个须预先记录。
@@ -54,3 +54,15 @@
 执行负责人获授权自行拆分、派发子 Agent，并选择平台可用的合适模型和推理强度。[授权记录](../../SOURCES.md#src-t10-002)。按根 AGENTS.md，派发前建立稳定编号的子任务三文档及独立日志，更新父流程链接、依赖、负责人、模型/强度、输入、独占写入范围、交付与验收条件。
 
 默认选 GPT6.1sol 或 Sonnet5.5。清单与哈希核对用 low，按定稿接口实现与测试用 medium，跨层失败时钟、终局折扣、回放边界和集成审查用 high；确需换模型时记录理由、可用型号和实际配置。可先并行开展 B3 输入/动作核验与 SAC 回报/回放夹具，两者分开写文件；依赖接口的集成按 A→B→C 推进。父 Agent 负责共享文档和唯一的试训账本，复查差异、复跑关键夹具、统一启动有界试训并签收。所有子 Agent 共用父任务预算。
+
+## 2026-11-02 执行拆分
+
+父负责人 Codex；task10.1、task10.2 独立并行，父完成环境集成后按 A→B→C 统一验收和启动，预算共用。
+
+- task10.1 `b3_contract`，GPT6.1sol/medium（Claude备选Sonnet5.5/medium）：冻结 B3 观测、动作与推演输入核验。[TASK](task10.1/TASK.md) · [PROCEDURE](task10.1/PROCEDURE.md) · [RESULTS](task10.1/RESULTS.md)。独占 forem/src/task10/lower.py、forem/src/task10/tests/test_lower.py；依赖父协议，父复跑后进入集成。
+
+- task10.2 `learning_contract`，GPT6.1sol/high（Claude备选Sonnet5.5/high）：SAC 奖励、Bellman 与短回合回放。[TASK](task10.2/TASK.md) · [PROCEDURE](task10.2/PROCEDURE.md) · [RESULTS](task10.2/RESULTS.md)。独占 forem/src/task10/learning.py、forem/src/task10/tests/test_learning.py；依赖父协议，父复跑后进入集成。
+
+- task10.3 `env_contract`，GPT6.1sol/high（Claude备选Sonnet5.5/high）：B3同步推演与执行。独占task10/environment.py、tests/test_environment.py。[TASK](task10.3/TASK.md) · [PROCEDURE](task10.3/PROCEDURE.md) · [RESULTS](task10.3/RESULTS.md)。与1/2独立注入接口开发，父按A→B→C集成后验收。
+
+- task10.4 `review_contract`，gpt-6.1-terra/high（sol容量错误的替代；默认推荐GPT6.1sol/high、Sonnet5.5/high）：独立集成审查，依赖1/2/3交付，只写自己文档/日志，父修复复跑。[TASK](task10.4/TASK.md) · [PROCEDURE](task10.4/PROCEDURE.md) · [RESULTS](task10.4/RESULTS.md)。

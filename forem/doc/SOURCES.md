@@ -9819,3 +9819,24 @@ SRC-1067终审追加（2026-10-26）：29a92dfa01 finalizer rc0/0.114258219s，�
 <a id="src-t10-002"></a>
 
 **SRC-T10-002 · 子 Agent 派发权限。** 来源为用户于 2026-11-02 在 task10 决策聊天明确指示“你要允许他派发子agent，选择合适的模型干活”。Codex 同日核对原文及根 AGENTS.md 的任务组织第 5 条、模型推荐表。授权执行负责人选择子 Agent 和模型；具体分工与强度为工程建议，实际派发时登记。
+
+
+<a id="src-t10-003"></a>
+
+**SRC-T10-003 · 冻结 B3 输入与动作核验。** 类型：项目源码核查与确定性夹具实测；FoReM/Codex，2026-11-02，基于7b705c1新增task10模块。精确位置：`forem/src/task10/lower.py::{verify_frozen_manifest,validate_payload,FrozenB3}`、`tests/test_lower.py`；原路径`task7_lower/observation.py::preprocess`、`networks.py::Actor.predict`、`task7_sim/motion.py::actions`、`core.py::{observe,current_observation,step,_finish,feature_vector,rollout}`。核查日/人：2026-11-02，Codex子Agent gpt-6.1-sol/medium，父复跑记录见[task10.1 RESULTS](tasks/task10/task10.1/RESULTS.md)。原结果：69源码及三actor/config和三pool清单共9项hash一致；float32同设备CPU/CUDA各3原始观测对照原版输入/输出最大误差0，14测试rc0。采用seed4718冻结确定性策略，同一预处理与原始[u,omega,v]输出，动作缩放仍由Core负责；不能根据形状猜加载格式。限制：同设备合成观测核验，不证明跨设备位相同、全场景资产已核验、闭环表现或吞吐；完整final.pt不参与推理且未重新hash。
+
+<a id="src-t10-004"></a>
+
+**SRC-T10-004 · 尝试时钟奖励与短回合学习合同。** 类型：既定工程选择的项目源码核查、CPU确定性实测；FoReM/Codex learning_contract，2026-11-02。参数与方法沿用[SRC-T10-001](#src-t10-001)。精确位置：`forem/src/task10/learning.py::{attempt_reward,bellman,Stage1Learner,EpisodeReplay,sequence_outputs,update_sequences}`及`tests/test_learning.py`（15项）；命令/结果见[task10.2 RESULTS](tasks/task10/task10.2/RESULTS.md)。核查日/人：2026-11-02，gpt-6.1-sol/high，父复跑见父结果。原结论：84passed/2既有GPU条件skipped/rc0（含旧upper回归）；短回合/首段loss、仅选中Q标签、完整同回合prefix、独立bootstrap、恢复RNG/下一采样/下一更新参数逐项一致。Core.begin的零进展inplace可零尝试结束段，因此保留dt=0、g=1，不虚增时间；失败零提交仍按真实尝试数计时。采用：stage1按真实selected结果学习，任务内所有结束不bootstrap。限制：夹具非任务采集，CPU恢复不证明环境在线中途恢复、有效GPU学习或成功率。
+
+<a id="src-t10-005"></a>
+
+**SRC-T10-005 · B3同步推演与执行隔离适配。** 类型：项目源码核验和确定性CPU夹具实测；FoReM/Codex env_contract（sol/high容量中断）→env_continue（terra/high），2026-11-02。精确位置：`forem/src/task10/environment.py::{PredictionCore,_first_failure_step,attempt_features,predict_candidates,Task10Env}`、`tests/test_environment.py`，版本起点7b705c1，最终代码版本由父RESULTS绑定。原结论：14环境夹具rc0；已知碰撞表达相同则推演/执行一致，未知局部障碍可与真值分歧，状态/队列/计数/网格/RNG隔离，失败上限及尝试时钟/首次失败/selected映射成立。核查日/人：2026-11-02，Codex terra/high；[结果](tasks/task10/task10.3/RESULTS.md)。采用：复用原Core科学步进，PredictionCore仅禁传感渲染并保留终局bookkeeping；19维原顺序但使用尝试时间；真实transition先返回、持久记录，再prepare_next填充bootstrap所需候选，终局行明确placeholder。限制：局部栅格与真实primitive碰撞表达通常不同；夹具不证明真实B3表现；环境中途restore不支持，离线learner snapshot不能当collector恢复。
+
+<a id="src-t10-006"></a>
+
+**SRC-T10-006 · 本轮执行授权与运行工程配置。** 类型：用户明确授权、工程选择；用户/Codex，2026-11-02。用户要求在CL-FoReM-task10、codex/task10-upper-wm包含7b705c1，按A→B→C实现，默认sol/Sonnet并可自行派发选模，单上层seed101、≤1200真实决策、≤200更新、≤1800s（先到即停），随后按协议4场景配对另≤1800s；正式长训和task11另批。位置：本会话原始指令、[父PROCEDURE](tasks/task10/PROCEDURE.md)、`forem/config/task10/smoke.json`、`scripts/task10_run_bounded.sh`、`task10/runtime.py::Budget`与`runner.py`；核查人Codex，日期2026-11-02。采用：GPU1空闲核查后独立容器，batch8便于1000预热与1200决策无过冲，2线程、risk256/observation128/route-raster复用/DLS CUDA graph沿用upper_train配置性能字段和既有B3设置，非新科学参数；batch8为工程选择，收益待本轮测量。清理/记账含在30min内，内部预留20s/10s，容器内外部timeout于1798s TERM、1800s KILL（短夹具实际-9、0.203s），禁止重置账本重试。所有Agent共用预算，代理只跑确定性夹具。限制：不预先保证达到1000预热/有效更新或完成配对；时限优先、缺失保留。模型实际派发参数见各子节点，父模型/强度无法核实，不能把推荐写成实际配置。
+
+<a id="src-t10-007"></a>
+
+**SRC-T10-007 · 集成前审查与确定性门。** 类型：项目实测、独立代码审查；FoReM/Codex，2026-11-02。精确位置：`forem/src/task10/tests`、`task7_upper/tests`，`task10/runtime.py::atomic_torch`及`runner.py`真实执行journal先于complete；[task10.4 RESULTS](tasks/task10/task10.4/RESULTS.md)、[父日志](agent_logs/task10/20261102-codex-execution.md)。核查人：父Codex、独立terra/high；原结果：父初次组合115passed/2条件skipped/rc0，后续增加混合batch reset与磁盘故障夹具5passed/rc0，最终组合另记父RESULTS。两项启动前审查缺陷为journal/complete中断窗口与协作式deadline无外部硬监督，已落实原子fsync journal先于complete、容器内timeout监督。采用：同工作树集成门，保留所有已执行失败/部分审计，不以代理自报直接通过。限制：确定性门不是真实训练/配对、性能收益或正式训练就绪证据。
