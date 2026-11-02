@@ -207,7 +207,8 @@ def train(args, launched):
         if resume:
             cfg = json.loads((args.output/'contract.json').read_text())
             for key in ('code_sha256', 'config_sha256', 'lower_hashes', 'lower_actor', 'splits',
-                        'seed', 'dtype', 'device', 'threads', 'torch'):
+                        'seed', 'dtype', 'device', 'threads', 'torch', 'gpu', 'physical_gpu',
+                        'code_commit', 'random_seed'):
                 if not tree_equal(cfg.get(key), current_contract.get(key)):
                     raise ValueError(f'resume execution contract changed: {key}')
             payload = torch.load(resume, map_location='cpu', weights_only=False)
@@ -268,6 +269,8 @@ def train(args, launched):
             if reference_mode or resumed_expected is not None:
                 boundary_start = collector_snapshot(env, generator, selected)
                 if resumed_expected is not None:
+                    atomic_torch(args.output/'boundary-resumed.pt', dict(start=boundary_start,
+                        collector_pid=os.getpid(), deadline_monotonic=budget.deadline, started_monotonic=budget.started))
                     differences = mismatch_report(resumed_expected['start'], boundary_start)
                     if differences:
                         atomic_json(args.output/'boundary-comparison.json', dict(status='exact_mismatch', phase='next_batch_start', differences=differences))
@@ -347,15 +350,19 @@ def train(args, launched):
                         started_monotonic=budget.started, real_decisions=8))
                     status = 'boundary_saved'
                 else:
+                    atomic_torch(args.output/'boundary-resumed.pt', dict(start=boundary_start, end=reference_end,
+                        collector_pid=os.getpid(), deadline_monotonic=budget.deadline, started_monotonic=budget.started))
                     differences = mismatch_report(resumed_expected['end'], reference_end)
-                    resumed_comparison.update(status='verified' if not differences else 'exact_mismatch',
+                    deadline_exact = budget.deadline == resumed_expected['deadline_monotonic']
+                    started_exact = budget.started == resumed_expected['started_monotonic']
+                    resumed_comparison.update(status='verified' if not differences and deadline_exact and started_exact else 'exact_mismatch',
                         next_journal_replay_ledger_exact=not differences, differences=differences,
                         old_pid=resumed_expected['collector_pid'], new_pid=os.getpid(),
-                        original_deadline_exact=budget.deadline == resumed_expected['deadline_monotonic'],
-                        original_started_exact=budget.started == resumed_expected['started_monotonic'])
+                        original_deadline_exact=deadline_exact,
+                        original_started_exact=started_exact)
                     atomic_json(args.output/'boundary-comparison.json', resumed_comparison)
-                    if differences:
-                        raise AssertionError('resumed next journal/replay/ledger differs')
+                    if differences or not deadline_exact or not started_exact:
+                        raise AssertionError('resumed next journal/replay/ledger or original deadline differs')
                     status = 'resumed_batch_verified'
                 break
             if stop_at_boundary and bool(ended.all()):

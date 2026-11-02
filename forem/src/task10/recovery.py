@@ -8,6 +8,7 @@ import fcntl
 import os
 from pathlib import Path
 import random
+import struct
 import time
 
 import numpy as np
@@ -20,14 +21,20 @@ from .runtime import atomic_torch, Budget, sha256
 
 def tree_equal(a, b):
     if isinstance(a, torch.Tensor):
-        return isinstance(b, torch.Tensor) and a.dtype == b.dtype and a.shape == b.shape and torch.equal(a.cpu(), b.cpu())
+        return (isinstance(b, torch.Tensor) and a.dtype == b.dtype and a.shape == b.shape
+                and torch.equal(a.detach().cpu().contiguous().reshape(-1).view(torch.uint8),
+                                b.detach().cpu().contiguous().reshape(-1).view(torch.uint8)))
     if isinstance(a, np.ndarray):
-        return isinstance(b, np.ndarray) and np.array_equal(a, b)
+        return isinstance(b, np.ndarray) and a.dtype == b.dtype and a.shape == b.shape and a.tobytes() == b.tobytes()
     if isinstance(a, dict):
         return isinstance(b, dict) and a.keys() == b.keys() and all(tree_equal(a[k], b[k]) for k in a)
     if isinstance(a, (tuple, list)):
         return type(a) is type(b) and len(a) == len(b) and all(tree_equal(x, y) for x, y in zip(a, b))
-    return a == b
+    if isinstance(a, float):
+        return type(a) is type(b) and struct.pack('d', a) == struct.pack('d', b)
+    if isinstance(a, np.generic):
+        return type(a) is type(b) and a.tobytes() == b.tobytes()
+    return type(a) is type(b) and a == b
 
 
 def _scalar(value):
@@ -311,7 +318,7 @@ def mismatch_report(left, right, prefix='root'):
         for i, (a, b) in enumerate(zip(left, right)):
             result.extend(mismatch_report(a, b, f'{prefix}[{i}]'))
     elif not tree_equal(left, right):
-        entry = dict(path=prefix)
+        entry = dict(path=prefix, bitwise_equal=False)
         if isinstance(left, torch.Tensor) and isinstance(right, torch.Tensor) and left.shape == right.shape:
             a, b = left.detach().cpu().double(), right.detach().cpu().double()
             entry.update(shape=list(left.shape), dtype=str(left.dtype),

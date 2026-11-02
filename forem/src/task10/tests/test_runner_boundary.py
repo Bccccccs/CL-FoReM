@@ -227,6 +227,10 @@ def test_real_train_batch8_continuous_reference_then_new_pid_exact(tmp_path):
     assert reference['real_decisions'] == 8
     assert run_fixture(tmp_path, resume=tmp_path/'collector-boundary.pt', stop=False) == 0
     comparison = json.loads((tmp_path/'boundary-comparison.json').read_text())
+    actual = torch.load(tmp_path/'boundary-resumed.pt', weights_only=False)
+    from task10.gpu_diagnosis import compare_tree
+    assert compare_tree(reference['start'], actual['start'])['exact']
+    assert compare_tree(reference['end'], actual['end'])['exact']
     assert comparison['status'] == 'verified'
     assert comparison['next_batch_start_exact']
     assert comparison['next_journal_replay_ledger_exact']
@@ -234,3 +238,33 @@ def test_real_train_batch8_continuous_reference_then_new_pid_exact(tmp_path):
     assert comparison['old_pid'] != comparison['new_pid']
     assert len(list((tmp_path/'real-executions').glob('*.pt'))) == 3
     assert len(list((tmp_path/'continuous-reference'/'real-executions').glob('*.pt'))) == 1
+
+
+def test_resume_rejects_current_gpu_contract_before_ledger_change(tmp_path):
+    code = 'import sys; from task10.tests.test_runner_boundary import run_fixture; sys.exit(run_fixture(sys.argv[1]))'
+    child = subprocess.run([sys.executable, '-c', code, str(tmp_path)], capture_output=True, text=True)
+    assert child.returncode == 0, child.stderr + child.stdout
+    before = sha256(tmp_path/'training-budget.json')
+    with pytest.MonkeyPatch.context() as patch:
+        runner = install_cpu_fixture(patch, tmp_path)
+        old_contract = runner.contract
+        patch.setattr(runner, 'contract', lambda *args: dict(old_contract(*args), physical_gpu='changed'))
+        args = SimpleNamespace(output=tmp_path, resume=tmp_path/'collector-boundary.pt',
+            stop_at_boundary=False, boundary_reference=False, max_decisions=24, max_updates=0, seconds=120)
+        with pytest.raises(RuntimeError, match='before acquiring'):
+            runner.train(args, time.monotonic())
+    assert sha256(tmp_path/'training-budget.json') == before
+
+
+def test_resume_does_not_accept_changed_reference_deadline(tmp_path):
+    code = ('import sys; from task10.tests.test_runner_boundary import run_fixture; '
+            'sys.exit(run_fixture(sys.argv[1], reference=True))')
+    child = subprocess.run([sys.executable, '-c', code, str(tmp_path)], capture_output=True, text=True)
+    assert child.returncode == 0, child.stderr + child.stdout
+    reference = torch.load(tmp_path/'boundary-reference.pt', weights_only=False)
+    reference['deadline_monotonic'] += 1
+    torch.save(reference, tmp_path/'boundary-reference.pt')
+    assert run_fixture(tmp_path, resume=tmp_path/'collector-boundary.pt', stop=False) == 1
+    comparison = json.loads((tmp_path/'boundary-comparison.json').read_text())
+    assert comparison['status'] == 'exact_mismatch'
+    assert comparison['original_deadline_exact'] is False
