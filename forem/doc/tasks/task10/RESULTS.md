@@ -24,3 +24,12 @@ Codex 已根据用户委托选定单个冻结 B3、普通上层 stage 1、按尝
 独立task10.4发现并已修复两P1：真实执行完整原子journal先于账本complete；容器内timeout1798s TERM/1800s KILL，短有界监督夹具实际-9/0.203s。磁盘写失败保留in_flight、不重试；混合批reset保留survivor状态/观测/候选逐位一致。环境不支持中途恢复；offline-learner仅验证学习器RNG/下一回放/更新计数，不能作为在线collector恢复。[独立审查](task10.4/RESULTS.md)。
 
 运行版本将在启动前本地提交；run-id `t10-smoke-20261102-s101`；新产物位于本工作树`forem/results/task10/t10-smoke-20261102-s101`与`forem/logs/task10/`。独立容器`forem-task10-runtime`，GPU1，主仓forem及results只读，工作树forem挂/workspace；2 CPU线程，8真实env，局部推演仅有效槽；配置`forem/config/task10/smoke.json`。先检查GPU空闲后启动；目前试训/配对尚未执行，所有真实计数为0。
+
+
+### 唯一试训结果（failed；未重启）
+
+run-id `t10-smoke-20261102-s101`，运行代码17f1833，首次启动15:32:00.657675+08，原1800s截止未改变。pre-ledger UID错误零交互后修为`docker exec --user1004:1004`；最终16真实决策、16回放、0更新，墙钟332.8524s，worker body251.5289s，reserved/completed均16、in_flight0；已完成8回合中5严格成功仅为随机预热诊断。[实测/故障/推导SRC-T10-008](../../SOURCES.md#src-t10-008)。
+
+混合复位后旧ReplayAdapter堆叠非模型输入的变长diagnostics，导致[4]/[]冲突；两份完整执行journal与全部失败均保留。新适配器仅批处理模型消费字段，未删审计数据；原适配器2failed、新适配器对合成及真实回放2passed，最终120passed/2既有条件skipped/rc0，独立审查复核通过。**本轮不重启试训**。尚无有效训练梯度、update吞吐、学到选点或collector恢复证据，正式训练门未过。0更新actor仍将用于四场景配对管线检查，不能把配对差异解释为学习收益。
+
+原始产物：`forem/results/task10/t10-smoke-20261102-s101/{contract.json,training-budget.json,training-summary.json,real-executions/,offline-learner.pt,final.actor.pt}`；原日志`forem/logs/task10/t10-smoke-20261102-s101-train.log`，RED/GREEN及最终测试日志同目录。final.actor SHA256 b87d7d9223a80ca134508b101a5220ef447ea71e8ee0dfe17e40f3cc12a01920。`pending-intent.json`是已被16条journal/账本覆盖的旧intent，非未决交互；不得仅凭文件名判定inflight。

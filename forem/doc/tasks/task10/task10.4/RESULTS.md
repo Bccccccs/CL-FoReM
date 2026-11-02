@@ -26,3 +26,11 @@
 定向命令：`sg docker -c 'docker exec -e TASK10_ARTIFACT_ROOT=/reference -e PYTHONPATH=/workspace/src forem-task10-runtime python3 -m pytest -q -p no:cacheprovider /workspace/src/task10/tests/test_runtime.py /workspace/src/task10/tests/test_integration.py'`，退出码 0、5 passed、1.77 s。混合 reset 夹具核查未终止行状态、网格、观测和候选不变；`retain_transitions=False` 仅阻止 Core 保存下层 transition，仍保留 attempts 和 trace。未执行真实采集、训练或配对。复审未发现其他启动阻断；最终集成代码及监督短测试由父负责人验收。
 
 父统一登记来源：[SRC-T10-007](../../../SOURCES.md#src-t10-007)。父集成复跑与签收以父RESULTS后续记录为准。
+
+## 唯一试训失败与适配器修复复审 · 2026-11-02
+
+唯一试训使用源码 17f1833，账本 `t10-smoke-20261102-s101/training-budget.json` 显示状态 failed、reserved/completed 各 16、in_flight 0、更新 0；summary 同报回放 16、pending_real_transitions 0、下层哈希不变、离线 learner RNG/计数恢复检查通过且 collector 恢复不支持。`real-executions.jsonl` 指向 batch-000008 与 batch-000016，两批各有 8 条选点和真实结果。`pending-intent.json` 文件仍存在，reserved_through=16；该 intent 与已完成账本、对应 journal 对账后为已覆盖记录，不代表还有待处理真实转换。未独立重算 journal 每个字段或验证物理断电持久性。
+
+失败为旧适配器将变长候选审计 diagnostics 与模型输入一并 stack，混合 reset 后形状不一致。现 task10.learning.ReplayAdapter 只向既有环境输入适配器传 c_k、mask、f_k、inplace（异步加 progress），与 `task7_upper.stages.environment_inputs` 对候选的消费一致；原回放行未修改，diagnostics 仍用于审计。旧实现的红测和真实 checkpoint 红测见 `forem/logs/task10/adapter-red-actual.log`；修复后绿测见 `adapter-green.log`。独立定向复跑：容器 `TASK10_SMOKE_OUTPUT=/workspace/results/task10/t10-smoke-20261102-s101`、`PYTHONPATH=/workspace/src`，pytest `test_adapter.py`，退出码 0，2 passed / 1.55s，含从真实离线 checkpoint 重建所有 episode 历史及参数不变检查。无采集、更新或试训重启。定向验证支持所报告的故障修复，但不证明整个训练链路及 GPU 梯度已通过。
+
+此次 0 更新的 actor 尚未训练，后续配对只能用于未训练管线核查，不可解释为学习收益。GPU 有效梯度、正式可行性、完整训练及基线验收均未满足。初次 UID 基础设施错误发生在创建账本前；同一预算时钟继续而非重置的记录及后续核验由父负责人维护。

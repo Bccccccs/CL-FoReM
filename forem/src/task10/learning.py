@@ -17,6 +17,25 @@ import torch
 from task7_upper.replay import exact_cpu
 from task7_upper.sac_discrete import DiscreteSAC, distribution
 from task7_upper.stages import runtime, restore_runtime, concatenate
+from task7_upper.stages import ReplayAdapter as LegacyReplayAdapter
+
+
+class ReplayAdapter(LegacyReplayAdapter):
+    """Batch exact model inputs while leaving variable audit metadata in replay.
+
+    Candidate diagnostics describe the generated batch (whose size changes at
+    masked reset). They have no model input semantics and must not be stacked
+    as if they were one fixed-width feature per environment.
+    """
+    def __call__(self, rows, *, next_state=False):
+        prefix = 'next_' if next_state else ''
+        fields = ('c_k', 'mask', 'f_k', 'inplace')
+        if self.asynchronous:
+            fields += ('progress',)
+        selected = [{prefix+'observation': r[prefix+'observation'],
+                     prefix+'candidates': {k: r[prefix+'candidates'][k] for k in fields}}
+                    for r in rows]
+        return super().__call__(selected, next_state=next_state)
 
 
 def attempt_reward(progress_before, progress_after, total_length, attempted_steps, *,

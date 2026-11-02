@@ -156,10 +156,10 @@ def train(args, launched):
     import torch
     from task10.lower import FrozenB3
     from task10.environment import Task10Env
-    from task10.learning import EpisodeReplay, Stage1Learner, update_sequences
+    from task10.learning import EpisodeReplay, Stage1Learner, update_sequences, ReplayAdapter
     from task7_upper.model import UpperModel
     from task7_upper.replay import row, exact_cpu
-    from task7_upper.stages import environment_inputs, ReplayAdapter, rebuild_online
+    from task7_upper.stages import environment_inputs, rebuild_online
     from task7_upper.sac_discrete import distribution
 
     args.output.mkdir(parents=True, exist_ok=True)

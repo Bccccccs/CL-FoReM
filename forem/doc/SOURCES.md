@@ -9840,3 +9840,12 @@ SRC-1067终审追加（2026-10-26）：29a92dfa01 finalizer rc0/0.114258219s，�
 <a id="src-t10-007"></a>
 
 **SRC-T10-007 · 集成前审查与确定性门。** 类型：项目实测、独立代码审查；FoReM/Codex，2026-11-02。精确位置：`forem/src/task10/tests`、`task7_upper/tests`，`task10/runtime.py::atomic_torch`及`runner.py`真实执行journal先于complete；[task10.4 RESULTS](tasks/task10/task10.4/RESULTS.md)、[父日志](agent_logs/task10/20261102-codex-execution.md)。核查人：父Codex、独立terra/high；原结果：父初次组合115passed/2条件skipped/rc0，后续增加混合batch reset与磁盘故障夹具5passed/rc0，最终组合另记父RESULTS。两项启动前审查缺陷为journal/complete中断窗口与协作式deadline无外部硬监督，已落实原子fsync journal先于complete、容器内timeout监督。采用：同工作树集成门，保留所有已执行失败/部分审计，不以代理自报直接通过。限制：确定性门不是真实训练/配对、性能收益或正式训练就绪证据。
+
+
+<a id="src-t10-008"></a>
+
+**SRC-T10-008 · 唯一上层试训、失败修复与成本推导。** 类型：项目实测、故障源码核查、条件成本推导；FoReM/Codex，2026-11-02。run-id `t10-smoke-20261102-s101`，代码17f1833，GPU1/cuda:0、float32、8env/2线程。原始证据均在工作树 `/home/ybc/projects/CL-FoReM-task10/forem/results/task10/t10-smoke-20261102-s101/` 的contract、training-budget、training-summary、real-executions/batch-000008.pt及000016.pt、offline-learner.pt；日志同工作树`forem/logs/task10/t10-smoke-20261102-s101-train.log`。精确位置：`task10/runner.py::train`、旧`task7_upper/stages.py::ReplayAdapter`、修复`task10/learning.py::ReplayAdapter`、`tests/test_adapter.py`、`scripts/task10_report.py`；核查日/人：2026-11-02，父Codex及独立terra/high。
+
+原结论：首次pre-ledger因UID1000/1004错误退出、无交互，修UID并保留原epoch（2026-11-02 15:32:00.657675+08），不重置30min；有效worker最终16真实决策/16回放/0更新、8完成回合（5严格成功，仅预热诊断）、无inflight，状态failed，墙钟332.8524s（含81.3s基础设施与修复），实际worker body251.5289s。失败在混合复位后，旧adapter堆叠变长诊断字段[4]与[]，非学习信号/科学条件异常。真实16条执行与失败结果全部保留，无重启采集或缩预热。修复只筛模型实际消费的候选字段，诊断仍留回放；原适配器合成与本次回放两测试明确2failed，新适配器2passed，父最终组合120passed/2既有条件skipped/20.99s/rc0，独立复跑本次回放2passed。B3 tensor hash前后相同、无梯度；上层tensor CUDA，Adam未更新因而无训练optimizer状态可验；峰值已分配显存5388289536bytes。offline恢复RNG/计数通过，但不支持collector中途恢复。不能称为有效GPU训练或学到选点。
+
+成本为条件推导：training-summary分项lower_load_hashes+initial_reset+online_memory_inference+decision_total+execution_journal+next_boundary+replay_to_cpu+reset_ended合计247.813842712s，除16真实决策=15.4883651695s/决策，即采集1000条约4.3023小时；仅16条/两batch、含冷启动，不能作为正式工期承诺，训练后选点与场景分布会改变成本。更新成本未测；完整成本式 `D×采集秒/决策 + U×更新秒/次 + 评估 + 检查点`，其中更新项待验证。重建日志中已完成推演下界163槽/822批B3调用/33853行调用/34642尝试子步，尚不含最后一次reset的未日志化诊断，不能冒称全量。最终actor SHA256 `b87d7d9223a80ca134508b101a5220ef447ea71e8ee0dfe17e40f3cc12a01920`，0更新；后续四场景配对仅验证管线，学习效果门不通过。采用：保留本次失败与实际预算，修实现后不重置账本；正式训练条件尚不具备。限制：未获1000预热/有效GPU梯度/实际update性能，在线恢复与完整IK细分计时待补；有界授权不能自动转正式。
