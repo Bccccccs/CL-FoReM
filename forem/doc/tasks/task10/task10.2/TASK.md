@@ -10,3 +10,5 @@
 推荐 GPT6.1sol/high、Sonnet5.5/high；理由：终局折扣及回放边界需严谨因果核对。实际派发 gpt-6.1-sol/high。 依据：[SRC-T10-001](../../../SOURCES.md#src-t10-001)、[授权](../../../SOURCES.md#src-t10-002)。
 
 2026-11-02 15:20 +08:00：实现和确定性核验完成，状态 **review**，等待父 Agent 独立复跑与集成验收。实际接口、命令、限制及来源草稿见 [RESULTS](RESULTS.md)。未启动环境采集、冒烟训练或配对评估。
+
+2026-11-02父签收：本节点确定性实现/审查交付done，父复跑及实际试训/配对限制见[父RESULTS](../RESULTS.md)。不代表父C有效训练或D就绪。推荐GPT6.1sol/high、Sonnet5.5同档，实际子Agent配置保留上述历史记录。

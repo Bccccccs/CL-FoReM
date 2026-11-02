@@ -57,3 +57,5 @@ sg docker -c 'docker exec -e PYTHONPATH=/workspace/src -e OMP_NUM_THREADS=1 -e M
 复跑第3项同一完整命令，**84 passed, 2 skipped in 13.08s / rc0**（本节点15项＋原task7_upper回归），并 `git diff --check`、`python3 -m py_compile forem/src/task10/learning.py forem/src/task10/tests/test_learning.py` 均rc0。此前83项是修正前历史结果。`update_sequences` 返回值包含 `updated`（true/false）；成功路径其余loss/alpha/norm为float、updates/loss_transitions为int，profile的timing只含float秒与int调用次数，可直接JSON记录，无tensor。来源草稿的最终计数以上述84/15为准。
 
 父统一登记来源：[SRC-T10-004](../../../SOURCES.md#src-t10-004)。父集成复跑与签收以父RESULTS后续记录为准。
+
+2026-11-02父签收：done（本节点确定性实现/审查交付）；父最终组合120passed/2既有条件skipped/rc0，唯一试训16/0及配对0/4对3/4按[父RESULTS](../RESULTS.md)如实保留。正式门NOT_READY，未将子自报作为总通过。最终证据见[SRC-T10-009](../../../SOURCES.md#src-t10-009)。

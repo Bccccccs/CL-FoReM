@@ -43,3 +43,5 @@ sg docker -c 'docker exec -e PYTHONPATH=/workspace/src -e TASK10_ARTIFACT_ROOT=/
 建议 `SRC-T10-003`，类型：项目源码核验 + 小夹具实测；作者/机构：FoReM/Codex；年份版本：2026-11-02，工作树 `CL-FoReM-task10`（基于 lower-sac-baseline-v1，未提交）。主张：冻结69项源码与9项推理依赖全部一致，seed4718 actor格式严格通过；同设备CPU/CUDA float32原版输入/输出误差0；上述预处理、动作与旧推演差异。精确位置：`forem/src/task10/lower.py::{verify_frozen_manifest,validate_payload,FrozenB3}`、`tests/test_lower.py`，原源码 `task7_lower/observation.py::{FIELDS,preprocess}`、`task7_lower/networks.py::Actor.predict`、`task7_sim/motion.py::actions`、`task7_sim/core.py::{observe,current_observation,step,_finish,feature_vector,rollout}`、`task7_sim/decision_env.py`。证据路径：本RESULTS与独立日志；核查人：Codex gpt-6.1-sol/medium；核查日2026-11-02。原始结论：14passed/rc0，最大误差0，无性能或任务成功主张。采用：task10统一用此actor读入；父按本节差异适配推演。限制：合成三观测、同设备对照，未执行训练、场景复评、完整推演/执行一致性，不证明研究收益；SOURCES登记前此草稿不作为全局已登记条目。
 
 父统一登记来源：[SRC-T10-003](../../../SOURCES.md#src-t10-003)。父集成复跑与签收以父RESULTS后续记录为准。
+
+2026-11-02父签收：done（本节点确定性实现/审查交付）；父最终组合120passed/2既有条件skipped/rc0，唯一试训16/0及配对0/4对3/4按[父RESULTS](../RESULTS.md)如实保留。正式门NOT_READY，未将子自报作为总通过。最终证据见[SRC-T10-009](../../../SOURCES.md#src-t10-009)。

@@ -11,3 +11,5 @@
 修复复审：父已将完整执行 journal 持久化置于 budget.complete 之前，并新增容器内 timeout 脚本；读取实现及故障注入、混合 reset 测试。定向 runtime/integration 测试退出码 0，5 passed / 1.77s；未执行采集。原进程中断顺序缺陷已修复，内部协作式截止缺口有外部监督方案但父方短超时进程验证仍待完成；atomic_json 的父目录 fsync 和脚本非可执行权限作为限制已告知父负责人。见 RESULTS 修复复审条目。
 
 唯一试训失败后受派只读复审：17f1833 的账本 16/16 决策、0 更新、in_flight 0、failed；两份各八条真实执行 journal、16 条 replay 与 summary 一致。pending-intent.json 仍存在但 reserved_through=16 已被完成账本及 journal 覆盖；离线恢复报告不能表示在线采集恢复。核对 task10 ReplayAdapter 过滤的字段与 environment_inputs 一致且未改写 replay；使用真实 offline-learner 复跑 test_adapter.py，退出码 0、2 passed / 1.55 s。无真实采集/更新/重启。已向父负责人报告，GPU 梯度与正式可行性未满足，配对 actor 为未训练权重。
+
+最终产物只读核验：训练 ledger 16/16、inflight 0、0 更新、failed，checkpoint replay 16；两 journal 各 8，三条失败20次及终止保留。actor 文件 SHA 与配对合同一致，实际 0 update；manifest 排序前四 ID、101/102 种子、四对初态/proposal/sidecar/boxes hash 一致。summary 统计 actor 0/4、uniform 3/4、胜负平 0/3/1、无缺失，配对墙钟 380.483s。结论 NOT_READY，见 RESULTS；未运行采集/更新/配对，结果不代表学习收益。

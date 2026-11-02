@@ -34,3 +34,13 @@
 失败为旧适配器将变长候选审计 diagnostics 与模型输入一并 stack，混合 reset 后形状不一致。现 task10.learning.ReplayAdapter 只向既有环境输入适配器传 c_k、mask、f_k、inplace（异步加 progress），与 `task7_upper.stages.environment_inputs` 对候选的消费一致；原回放行未修改，diagnostics 仍用于审计。旧实现的红测和真实 checkpoint 红测见 `forem/logs/task10/adapter-red-actual.log`；修复后绿测见 `adapter-green.log`。独立定向复跑：容器 `TASK10_SMOKE_OUTPUT=/workspace/results/task10/t10-smoke-20261102-s101`、`PYTHONPATH=/workspace/src`，pytest `test_adapter.py`，退出码 0，2 passed / 1.55s，含从真实离线 checkpoint 重建所有 episode 历史及参数不变检查。无采集、更新或试训重启。定向验证支持所报告的故障修复，但不证明整个训练链路及 GPU 梯度已通过。
 
 此次 0 更新的 actor 尚未训练，后续配对只能用于未训练管线核查，不可解释为学习收益。GPU 有效梯度、正式可行性、完整训练及基线验收均未满足。初次 UID 基础设施错误发生在创建账本前；同一预算时钟继续而非重置的记录及后续核验由父负责人维护。
+
+## 最终产物独立核对 · 2026-11-02
+
+只读核对 `forem/results/task10/t10-smoke-20261102-s101`，无采集、更新或重跑。训练账本 failed、16 reserved/completed、in_flight 0、0 updates；离线 checkpoint 计数 16/0、回放 16；两份真实 journal 各 8 条，其中三条失败数 20 且终止标志保留。末次 intent 文件仍在但已由第 16 条账本与 journal 覆盖，不是待处理转换。下层不变与 learner 离线恢复为运行 summary 所报，不能作为 collector 中途恢复证据。
+
+配对合同所列 actor SHA256 `b87d7d9223a80ca134508b101a5220ef447ea71e8ee0dfe17e40f3cc12a01920` 与现存文件实算一致；actor 元数据 0 更新、16 决策。原 manifest 的 100 张 validation 地图按 ID 排序前四确为 sparse_validation_00000–00003，与合同一致。四对记录的 initial_hash、proposal_seed、sidecar 与 boxes hash 各自相等；场景种子 101、随机参照种子 102。逐行复算：每策略 4/4 完成、0 缺失，actor 严格成功 0/4，uniform 3/4；actor 相对 uniform 胜/负/平 0/3/1，缺失 0；与 summary 一致。配对 summary wall 380.483 秒、账本 380.488 秒，均低于 1800 秒。上述数字仅验证未训练 actor 的配对管线，不是学习效果结论。
+
+**正式条件 NOT_READY**：真实 GPU 梯度与实际 update 未验证；collector 中途恢复明确不支持；已有 profile 仅粗分阶段，不足以证明正式运行可行性。适配器修复和四场景配对不改变唯一试训失败的事实；正式训练、预算、可行性和恢复验收未完成。
+
+2026-11-02父签收：done（本节点确定性实现/审查交付）；父最终组合120passed/2既有条件skipped/rc0，唯一试训16/0及配对0/4对3/4按[父RESULTS](../RESULTS.md)如实保留。正式门NOT_READY，未将子自报作为总通过。最终证据见[SRC-T10-009](../../../SOURCES.md#src-t10-009)。

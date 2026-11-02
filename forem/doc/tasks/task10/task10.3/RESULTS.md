@@ -17,3 +17,5 @@
 补充整套核验：按 task10.1 日志设置 `TASK10_ARTIFACT_ROOT=/reference`，容器命令 `PYTHONPATH=/workspace/src TASK10_ARTIFACT_ROOT=/reference python3 -m pytest -q -p no:cacheprovider /workspace/src/task10/tests` 退出码 0，46 passed in 10.83s。上述直接运行失败的路径条件仍保留作为过程记录。
 
 父统一登记来源：[SRC-T10-005](../../../SOURCES.md#src-t10-005)。父集成复跑与签收以父RESULTS后续记录为准。
+
+2026-11-02父签收：done（本节点确定性实现/审查交付）；父最终组合120passed/2既有条件skipped/rc0，唯一试训16/0及配对0/4对3/4按[父RESULTS](../RESULTS.md)如实保留。正式门NOT_READY，未将子自报作为总通过。最终证据见[SRC-T10-009](../../../SOURCES.md#src-t10-009)。

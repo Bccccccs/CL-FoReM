@@ -379,3 +379,6 @@ Husky高频(2 kHz)交替复测；门槛事后修订（SRC-0054）。
 2026-11-02：先 [task10 上层 SAC](tasks/task10/TASK.md)，再 [task11 世界模型](tasks/task11/TASK.md)。以[最新分期](SOURCES.md#src-1360)取代旧合并草案。
 
 2026-11-02 · task10 上层 SAC v1：固定 4718 下层，stage 1 对可见候选评分，以严格成功为终局回报、路线进度作势函数、B3 尝试时间作折扣时钟。取代旧上层直接累加进展/失败罚项的做法，避免把未严格完成回合的累计进展作为最终目标。该选择尚待有界验证。[依据](SOURCES.md#src-t10-001) · [合同](tasks/task10/PROCEDURE.md)
+
+
+2026-11-02 · task10 有界执行保持失败与预算：唯一试训16真实决策/0更新在旧adapter变长diagnostics处失败，修复后不以新run重置既有预算。0更新actor只作完整配对管线核查，结果0/4对随机3/4不作为学习收益；正式训练与task11基线交付NOT_READY。理由为有效GPU更新、collector恢复与完整性能证据尚缺，替代的重启、缩预热、改科学语义或把未训练actor当正式对照均未采用。[SRC-T10-008](SOURCES.md#src-t10-008)、[009](SOURCES.md#src-t10-009)。负责人Codex（父实际模型/强度未知），独立审查terra/high；推荐GPT6.1sol/high、Sonnet5.5/high，下一轮若获派发仅先补原协议C所缺证据，不自动长训。

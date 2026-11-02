@@ -8,3 +8,5 @@
 交付：实现、确定性测试、源码证据、命令/退出码/未通过项；父复跑后验收。预算：只做确定性小夹具，不启动训练、配对或新采集。
 
 推荐 GPT6.1sol/medium、Sonnet5.5/medium；理由：接口适配核对。实际派发 gpt-6.1-sol/medium。 依据：[SRC-T10-001](../../../SOURCES.md#src-t10-001)、[授权](../../../SOURCES.md#src-t10-002)。
+
+2026-11-02父签收：本节点确定性实现/审查交付done，父复跑及实际试训/配对限制见[父RESULTS](../RESULTS.md)。不代表父C有效训练或D就绪。推荐GPT6.1sol/medium、Sonnet5.5同档，实际子Agent配置保留上述历史记录。

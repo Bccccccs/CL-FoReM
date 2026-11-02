@@ -66,3 +66,8 @@
 - task10.3 `env_contract`，GPT6.1sol/high（Claude备选Sonnet5.5/high）：B3同步推演与执行。独占task10/environment.py、tests/test_environment.py。[TASK](task10.3/TASK.md) · [PROCEDURE](task10.3/PROCEDURE.md) · [RESULTS](task10.3/RESULTS.md)。与1/2独立注入接口开发，父按A→B→C集成后验收。
 
 - task10.4 `review_contract`，gpt-6.1-terra/high（sol容量错误的替代；默认推荐GPT6.1sol/high、Sonnet5.5/high）：独立集成审查，依赖1/2/3交付，只写自己文档/日志，父修复复跑。[TASK](task10.4/TASK.md) · [PROCEDURE](task10.4/PROCEDURE.md) · [RESULTS](task10.4/RESULTS.md)。
+
+
+## 最终执行交接（2026-11-02）
+
+本轮A/B确定性门通过，C唯一试训16decisions/0updates失败后修复、不重启；四场景配对完整但actor未训练，正式D为NOT_READY。详见[RESULTS](RESULTS.md)、[SRC-T10-008](../../SOURCES.md#src-t10-008)、[009](../../SOURCES.md#src-t10-009)。后续必须用`task10.learning.ReplayAdapter`仅批模型消费字段，保留变长诊断作审计，禁止旧适配器递归stack全部候选元数据。真实记录原子journal先于budget.complete，再prepare_next，pending候选不得入训练回放；环境不自动reset/恢复。已过期绝对时限入口直接退出124，不能将timeout的0s用作硬上限。推荐GPT6.1sol/high、Sonnet5.5/high；原因是有效更新、恢复和分项性能仍需跨模块验收。
