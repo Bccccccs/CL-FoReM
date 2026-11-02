@@ -9808,3 +9808,10 @@ SRC-1067终审追加（2026-10-26）：29a92dfa01 finalizer rc0/0.114258219s，�
 <a id="src-1360"></a>
 
 **SRC-1360 · task10/11 分期及旧接口边界。** 来源类型：用户决定及项目源码静态核查。2026-11-02 用户：“那就task10做上层SAC，11再做世界模型”。Codex 同日登记。先行 task10 负责多候选上层 SAC，task11 在基线上研究 WM。工程依据：FoReM 提交 ed4fe40 的 forem/src/task7_sim/decision_env.py（DecisionEnv.step）、task8_sim/decision_env.py（PcdDecisionEnv）、task7_sim/core.py（Core.__init__、rollout）及 B3 配置见 SRC-1356。旧候选并行推演与单段执行接口可作设计参考；legacy 与 B3 的失败处理不能按已兼容验收。用户决定的是任务分工，未批准训练、预算或具体 WM 修正方案。
+
+<a id="src-t10-001"></a>
+
+**SRC-T10-001 · 上层基线协议 v1。** 来源类型：本项目源码静态核查、用户委托及决策者工程选择。Codex，2026-11-02 核查。用户本轮委托“由你来设计上层SAC……写文档”。分工和冻结产物见 [SRC-1360](#src-1360)、[SRC-1356](#src-1356)。源码位置均相对 FoReM 6aa517f：
+- 候选与学习器：forem/src/task7_sim/decision_env.py 的 DecisionEnv._boundary、step；task7_sim/core.py 的 feature_vector、rollout、Core.step、_finish（源码目录均在 forem/src 下）；task7_upper/candidate_encoder.py 的 CandidateEncoder、model.py 的 UpperModel.forward、sac_discrete.py 的 bellman、DiscreteSAC.update、stages.py 的 sequence_outputs，以及 forem/config/task7/upper_train.json。旧同步路径为 13 槽、6 维几何和 19 维推演摘要，stage 1 使用状态、候选注意力、actor 与双 Q；旧奖励为进展、失败和终点奖励，旧折扣用提交时间。旧序列训练含 burn-in，短回合的损失覆盖须另验。
+- 下层与环境：冻结清单所列 B3_5M-seed4718/config.json、task8_lower/sac.py 的 LowerSAC.select_action、task8_sim/decision_env.py 的 PcdDecisionEnv.__init__、上述 Core。B3 为 sync_v5/cbl_continue；旧决策环境只接 legacy；旧 rollout 创建局部碰撞 Core，不能据此宣称已复现 B3 时序。
+- 采用方式：复用上层 stage 1 结构、候选规格与优化器。固定 4718、按尝试时钟折扣、以严格成功为终局奖励并用路线进度势函数塑形、将完整任务限额作为上层终局，以及评估和有界核查安排，均为此次设计选择；公式、单位、条件及验收见 [PROCEDURE](tasks/task10/PROCEDURE.md)。未核验学习效果、耗时或适配后的数值一致性。
