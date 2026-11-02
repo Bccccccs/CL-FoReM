@@ -441,6 +441,10 @@ def paired(args, launched):
 
 def main():
     launched = time.monotonic()
+    if 'TASK10_STARTED_EPOCH' in os.environ:
+        # An infrastructure failure before ledger creation still consumes the
+        # original invocation's wall budget; retry cannot grant a fresh clock.
+        launched -= max(0., time.time()-float(os.environ['TASK10_STARTED_EPOCH']))
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('phase', choices=('train', 'paired'))
     parser.add_argument('--output', type=Path, required=True)
