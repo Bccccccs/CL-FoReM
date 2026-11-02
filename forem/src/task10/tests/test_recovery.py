@@ -92,7 +92,9 @@ def boundary_setup(tmp_path):
     budget.reserve(1); budget.complete(1)
     journal = tmp_path/'journal.pt'
     atomic_torch(journal, {'fields': dict(run_id='fixture-only', environment_id=torch.tensor([0]),
-        episode_id=torch.tensor([1]), decision_index=torch.tensor([0]))})
+        episode_id=torch.tensor([1]), decision_index=torch.tensor([0]),
+        **{key: replay.episodes[('fixture-only', 0, 1)][-1][key].reshape(1)
+           for key in ('terminated', 'truncated', 'selected', 'reward', 'dt', 'bootstrap_mask')})})
     generator = torch.Generator().manual_seed(101)
     return env, learner, replay, budget, journal, generator
 
@@ -220,3 +222,25 @@ save_episode_boundary(p/'child-boundary.pt',learner,replay,environment=env,
     with pytest.raises(ValueError, match='ledger changed'):
         load_episode_boundary(tmp_path/'child-boundary.pt', learner, replay,
             environment_factory=lambda: BoundaryFixture(tmp_path/'pool.json'), config={})
+
+
+@pytest.mark.parametrize('changed', ['terminated', 'truncated', 'selected', 'reward', 'dt', 'bootstrap_mask'])
+def test_boundary_rejects_journal_identity_with_different_real_transition(tmp_path, changed):
+    env, learner, replay, budget, journal, generator = boundary_setup(tmp_path)
+    raw = torch.load(journal, weights_only=False)
+    value = raw['fields'][changed]
+    raw['fields'][changed] = ~value if value.dtype == torch.bool else value + 1
+    atomic_torch(journal, raw)
+    with pytest.raises(ValueError, match='journal.*transition'):
+        save_episode_boundary(tmp_path/'bad.pt', learner, replay, environment=env,
+            policy_generator=generator, budget=budget, config={},
+            counters={'decisions': 1, 'updates': 0}, journal_paths=[journal])
+
+def test_boundary_rejects_replay_terminal_type_different_from_live_core(tmp_path):
+    env, learner, replay, budget, journal, generator = boundary_setup(tmp_path)
+    env.episodes.core.terminated[:] = False
+    env.episodes.core.truncated[:] = True
+    with pytest.raises(ValueError, match='terminal.*core'):
+        save_episode_boundary(tmp_path/'bad.pt', learner, replay, environment=env,
+            policy_generator=generator, budget=budget, config={},
+            counters={'decisions': 1, 'updates': 0}, journal_paths=[journal])

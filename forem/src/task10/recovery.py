@@ -183,13 +183,21 @@ def save_episode_boundary(path, learner, replay, *, environment, policy_generato
         raise ValueError('unfinished decision reservation')
     if counters['decisions'] != budget.state['completed_decisions'] or counters['updates'] != learner.updates or learner.updates != budget.state['updates']:
         raise ValueError('learner/counter/ledger mismatch')
-    journals, covered = [], set()
+    journals, covered = [], {}
     for value in journal_paths:
         p = Path(value)
-        journal = torch.load(p, map_location='cpu', weights_only=False)
+        # Accept only durable readable journals, including callers other than the
+        # atomic_torch writer used by the normal train path.
+        with p.open('rb') as stream:
+            os.fsync(stream.fileno())
+            journal = torch.load(stream, map_location='cpu', weights_only=False)
         f = journal['fields']
         for i in range(len(f['episode_id'])):
-            covered.add((str(f['run_id']), int(f['environment_id'][i]), int(f['episode_id'][i]), int(f['decision_index'][i])))
+            identity = (str(f['run_id']), int(f['environment_id'][i]), int(f['episode_id'][i]), int(f['decision_index'][i]))
+            if identity in covered:
+                raise ValueError('duplicate committed journal transition identity')
+            covered[identity] = {key: f[key][i] for key in
+                ('terminated', 'truncated', 'selected', 'reward', 'dt', 'bootstrap_mask') if key in f}
         journals.append(dict(path=str(p.resolve()), sha256=sha256(p)))
     for i in range(env.batch):
         key = (env.run_id, i, int(ep.episode_count[i]))
@@ -197,6 +205,12 @@ def save_episode_boundary(path, learner, replay, *, environment, policy_generato
         identity = (*key, int(c.decisions[i])-1)
         if last is None or int(last['decision_index']) != identity[-1] or not bool(last['terminated'] | last['truncated']) or identity not in covered:
             raise ValueError('last natural transition missing from replay/journal')
+        if bool(last['terminated']) != bool(c.terminated[i]) or bool(last['truncated']) != bool(c.truncated[i]):
+            raise ValueError('replay terminal flags differ from live core')
+        committed = covered[identity]
+        for key in ('terminated', 'truncated', 'selected', 'reward', 'dt', 'bootstrap_mask'):
+            if key not in committed or not tree_equal(torch.as_tensor(last[key]).cpu(), torch.as_tensor(committed[key]).cpu()):
+                raise ValueError(f'journal real transition differs from replay: {key}')
     # Flush keeps elapsed wall time current; the exact ledger digest forbids stale rewind.
     budget.flush()
     payload = dict(format='task10-natural-episode-boundary-v1', config=deepcopy(config),

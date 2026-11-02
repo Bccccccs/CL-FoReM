@@ -3,8 +3,8 @@
     PYTHONPATH=src python3 -u -m task10.runner train --output results/task10/RUN
     PYTHONPATH=src python3 -u -m task10.runner paired --output results/task10/RUN
 
-Collector restoration is explicitly unsupported; offline learner snapshots do
-not grant permission to repeat or rewind a real decision ledger.
+Collector restoration is limited to a fully committed natural whole-batch
+episode boundary; the original ledger and absolute deadline remain binding.
 """
 import argparse
 from contextlib import contextmanager
@@ -92,7 +92,7 @@ def contract(args, policy, pool):
                 dtype='torch.float32', device='cuda:0', gpu=torch.cuda.get_device_name(0),
                 physical_gpu=os.environ.get('TASK10_PHYSICAL_GPU', 'unknown'),
                 torch=torch.__version__, threads=torch.get_num_threads(),
-                collector_resume='unsupported; no automatic restart or budget rewind',
+                collector_resume='all natural episode ends before next reset; explicit new-PID resume only',
                 limits=dict(decisions=1200, updates=200, training_seconds=1800, paired_seconds=1800))
 
 
@@ -122,6 +122,31 @@ def restore_evidence(path, learner, replay, config, counters):
     return verify_learner_checkpoint(path, learner, replay, config, counters)
 
 
+def collector_comparable(value):
+    """Exclude measured wall time; retain scientific fields and identity."""
+    if isinstance(value, dict):
+        return {k: collector_comparable(v) for k, v in value.items()
+                if k not in ('search_wall_seconds', 'timing')}
+    if isinstance(value, list):
+        return [collector_comparable(v) for v in value]
+    if isinstance(value, tuple):
+        return tuple(collector_comparable(v) for v in value)
+    return value
+
+
+def collector_snapshot(env, generator, selected):
+    from task7_upper.replay import exact_cpu
+    from task7_lower.training import rng_state
+    from .recovery import _streams_state
+    return dict(scene_digest=state_digest(env), observation=exact_cpu(env.observation),
+        candidates=collector_comparable(exact_cpu(env.candidates)), selected=selected.cpu().clone(),
+        episode_ids=env.episodes.episode_count.cpu().clone(),
+        decision_ids=env.episodes.core.decisions.cpu().clone(),
+        proposal_seeds=list(env.episodes.proposal_seeds),
+        sampler_streams=_streams_state(env.episodes), policy_generator=generator.get_state().cpu(),
+        rng=rng_state())
+
+
 def train(args, launched):
     import torch
     from task10.lower import FrozenB3
@@ -131,12 +156,33 @@ def train(args, launched):
     from task7_upper.replay import row, exact_cpu
     from task7_upper.stages import environment_inputs, rebuild_online
     from task7_upper.sac_discrete import distribution
+    from .recovery import save_episode_boundary, load_episode_boundary, tree_equal, mismatch_report
 
     args.output.mkdir(parents=True, exist_ok=True)
-    budget = Budget(args.output/'training-budget.json', started=launched, seconds=1800)
-    # Checkpoint, accounting and process exit are inside the same wall budget.
-    budget.deadline -= 20
-    budget.state['cleanup_reserve_seconds'] = 20
+    resume = getattr(args, 'resume', None)
+    stop_at_boundary = getattr(args, 'stop_at_boundary', False)
+    boundary_reference = getattr(args, 'boundary_reference', False)
+    max_decisions = getattr(args, 'max_decisions', 1200)
+    max_updates = getattr(args, 'max_updates', 200)
+    seconds = getattr(args, 'seconds', 1800)
+    if max_decisions % 8 or not 8 <= max_decisions <= 1200 or not 0 <= max_updates <= 200 or not 20 < seconds <= 1800:
+        raise ValueError('invalid bounded batch8 limits')
+    if boundary_reference and (not stop_at_boundary or max_updates != 0):
+        raise ValueError('boundary reference requires explicit stop and a zero-update diagnostic')
+    budget = None
+    if not resume:
+        budget = Budget(args.output/'training-budget.json', started=launched, seconds=seconds,
+                        decisions=max_decisions, updates=max_updates)
+        # The inherited deadline includes cleanup; resume never grants a new clock.
+        budget.deadline -= 20
+        budget.state['cleanup_reserve_seconds'] = 20
+    saved_clean = False
+    original_budget = None
+    reference_mode = False
+    output = args.output
+    run_name = args.output.name
+    resumed_expected = None
+    resumed_comparison = None
     timers = Timers()
     started = time.monotonic()
     learner = model = replay = env = cfg = None
@@ -150,34 +196,64 @@ def train(args, launched):
         with timers.measure('lower_load_hashes'):
             policy = FrozenB3(device='cuda:0', artifact_root='/reference', source_root='/reference/source')
         pool = Path('/reference/results/task8/t8-pool-20261027/cube-pool-v2/manifest.json')
-        cfg = contract(args, policy, pool)
-        atomic_json(args.output/'contract.json', cfg)
-        emit(args.output/'events.jsonl', dict(event='training_start', seed=101, code_commit=cfg['code_commit'],
-             deadline_seconds=1800, gpu=cfg['gpu'], physical_gpu=cfg['physical_gpu']))
+        current_contract = contract(args, policy, pool)
         lower_before = tensor_state_hash(policy.actor)
-        env = Task10Env(8, policy, seed=101, pool=pool, split='train', device='cuda:0', run_id=args.output.name,
-                       code_commit=cfg['code_commit'], config_hash=cfg['config_sha256'],
-                       risk_chunk_size=256, observation_chunk_size=128, reuse_route_raster=True)
-        env.episodes.kin.dls_cuda_graph = True
-        with timers.measure('initial_reset'):
-            obs, candidates = env.reset(deadline=budget.deadline)
-        item = environment_inputs(obs, candidates, env_ids=range(8), asynchronous=False, device='cuda:0')
-        vector_dim = item['vcm_inputs']['observation'][1].shape[-1]
-        cfg['actual_upper_inputs'] = dict(vector_dim=vector_dim,
-            observation_shapes={k: list(v.shape) for k, v in obs.items() if isinstance(v, torch.Tensor)},
-            geometry_shape=list(item['geometry'].shape), features_shape=list(item['features'].shape),
-            mask_shape=list(item['mask'].shape), failure_denominator=env.episodes.core.failure_limit,
-            result_order=list(__import__('task7_upper.stages', fromlist=['RESULT_FIELDS']).RESULT_FIELDS))
-        atomic_json(args.output/'contract.json', cfg)
-        emit(args.output/'events.jsonl', dict(event='initial_boundary_ready', vector_dim=vector_dim,
-             reset_seconds=timers.records['initial_reset'][-1], timing=env.last_timing))
-        model = UpperModel(vector_dim=vector_dim).cuda()
-        learner = Stage1Learner(model, total_updates=200)
-        replay = EpisodeReplay(seed=101)
+        def factory():
+            value = Task10Env(8, policy, seed=101, pool=pool, split='train', device='cuda:0', run_id=run_name,
+                           code_commit=cfg['code_commit'], config_hash=cfg['config_sha256'],
+                           risk_chunk_size=256, observation_chunk_size=128, reuse_route_raster=True)
+            value.episodes.kin.dls_cuda_graph = True
+            return value
+        if resume:
+            cfg = json.loads((args.output/'contract.json').read_text())
+            for key in ('code_sha256', 'config_sha256', 'lower_hashes', 'lower_actor', 'splits',
+                        'seed', 'dtype', 'device', 'threads', 'torch'):
+                if not tree_equal(cfg.get(key), current_contract.get(key)):
+                    raise ValueError(f'resume execution contract changed: {key}')
+            payload = torch.load(resume, map_location='cpu', weights_only=False)
+            if Path(payload['ledger_path']).resolve() != (args.output/'training-budget.json').resolve():
+                raise ValueError('resume must use the original output and ledger')
+            if (max_decisions, max_updates, seconds) != (payload['ledger']['max_decisions'], payload['ledger']['max_updates'], payload['ledger']['max_seconds']):
+                raise ValueError('resume limits must match the original ledger')
+            vector_dim = payload['counters']['vector_dim']
+            model = UpperModel(vector_dim=vector_dim).cuda()
+            learner = Stage1Learner(model, total_updates=200)
+            replay = EpisodeReplay(seed=101)
+            bundle = load_episode_boundary(resume, learner, replay, environment_factory=factory, config=cfg)
+            env, generator, budget, history = (bundle[k] for k in
+                ('environment', 'policy_generator', 'budget', 'histories'))
+            if (args.output/'boundary-reference.pt').exists():
+                resumed_expected = torch.load(args.output/'boundary-reference.pt', map_location='cpu', weights_only=False)
+            completed_episodes = [json.loads(line) for line in (output/'episodes.jsonl').read_text().splitlines()] if (output/'episodes.jsonl').exists() else []
+            emit(args.output/'events.jsonl', dict(event='collector_resumed', pid=os.getpid(),
+                decisions=budget.state['completed_decisions'], started_monotonic=budget.started,
+                deadline_monotonic=budget.deadline))
+        else:
+            cfg = current_contract
+            cfg['effective_limits'] = dict(decisions=max_decisions, updates=max_updates, seconds=seconds)
+            atomic_json(args.output/'contract.json', cfg)
+            emit(args.output/'events.jsonl', dict(event='training_start', seed=101, code_commit=cfg['code_commit'],
+                 deadline_seconds=seconds, gpu=cfg['gpu'], physical_gpu=cfg['physical_gpu']))
+            env = factory()
+            with timers.measure('initial_reset'):
+                obs, candidates = env.reset(deadline=budget.deadline)
+            item = environment_inputs(obs, candidates, env_ids=range(8), asynchronous=False, device='cuda:0')
+            vector_dim = item['vcm_inputs']['observation'][1].shape[-1]
+            cfg['actual_upper_inputs'] = dict(vector_dim=vector_dim,
+                observation_shapes={k: list(v.shape) for k, v in obs.items() if isinstance(v, torch.Tensor)},
+                geometry_shape=list(item['geometry'].shape), features_shape=list(item['features'].shape),
+                mask_shape=list(item['mask'].shape), failure_denominator=env.episodes.core.failure_limit,
+                result_order=list(__import__('task7_upper.stages', fromlist=['RESULT_FIELDS']).RESULT_FIELDS))
+            atomic_json(args.output/'contract.json', cfg)
+            emit(args.output/'events.jsonl', dict(event='initial_boundary_ready', vector_dim=vector_dim,
+                 reset_seconds=timers.records['initial_reset'][-1], timing=env.last_timing))
+            model = UpperModel(vector_dim=vector_dim).cuda()
+            learner = Stage1Learner(model, total_updates=200)
+            replay = EpisodeReplay(seed=101)
+            history = [[] for _ in range(8)]
+            generator = torch.Generator(device='cuda:0').manual_seed(101)
         adapter = ReplayAdapter(False, 'cuda:0')
-        history = [[] for _ in range(8)]
-        generator = torch.Generator(device='cuda:0').manual_seed(101)
-        while budget.state['reserved_decisions'] < 1200 and learner.updates < 200:
+        while budget.state['reserved_decisions'] < max_decisions and (max_updates == 0 or learner.updates < max_updates):
             budget.check()
             with timers.measure('online_memory_inference'):
                 model.eval()
@@ -189,8 +265,16 @@ def train(args, launched):
                     if budget.state['completed_decisions'] < 1000:
                         probability = env.candidates['mask'].float()/env.candidates['mask'].sum(-1, keepdim=True)
                     selected = torch.multinomial(probability, 1, generator=generator).squeeze(-1)
+            if reference_mode or resumed_expected is not None:
+                boundary_start = collector_snapshot(env, generator, selected)
+                if resumed_expected is not None:
+                    differences = mismatch_report(resumed_expected['start'], boundary_start)
+                    if differences:
+                        atomic_json(args.output/'boundary-comparison.json', dict(status='exact_mismatch', phase='next_batch_start', differences=differences))
+                        raise AssertionError('resumed next batch scene/observation/candidates/selection differs')
+                    resumed_comparison = dict(next_batch_start_exact=True)
             budget.reserve(8)
-            atomic_json(args.output/'pending-intent.json', dict(
+            atomic_json(output/'pending-intent.json', dict(
                 reserved_through=budget.state['reserved_decisions'],
                 completed_before=budget.state['completed_decisions'], selected=selected.tolist()))
             with timers.measure('decision_total'):
@@ -199,11 +283,11 @@ def train(args, launched):
             # Raw selected-slot execution is durable before an expensive next
             # prediction. Deadline/cancel cannot silently discard failed rows.
             with timers.measure('execution_journal'):
-                journal = args.output/'real-executions'/f"batch-{budget.state['reserved_decisions']:06d}.pt"
+                journal = output/'real-executions'/f"batch-{budget.state['reserved_decisions']:06d}.pt"
                 atomic_torch(journal, dict(reserved_through=budget.state['reserved_decisions'],
                     next_boundary_ready=False, fields=exact_cpu(result.replay_fields)))
-                emit(args.output/'real-executions.jsonl', dict(completed=budget.state['reserved_decisions'],
-                     journal=str(journal.relative_to(args.output)),
+                emit(output/'real-executions.jsonl', dict(completed=budget.state['reserved_decisions'],
+                     journal=str(journal.relative_to(output)),
                      selected=selected.tolist(), terminated=result.terminated.tolist(),
                      truncated=result.truncated.tolist(), reward=result.reward.tolist(),
                      attempted=result.replay_fields['attempted_substeps'].tolist(),
@@ -220,7 +304,7 @@ def train(args, launched):
                               attempted_seconds=float(c.attempt_time[i]), committed_seconds=float(c.time[i]),
                               route_progress=float(c.state.s[i]), route_length=float(c.route.length[i]))
                 completed_episodes.append(record)
-                emit(args.output/'episodes.jsonl', record)
+                emit(output/'episodes.jsonl', record)
             with timers.measure('next_boundary'):
                 result = env.prepare_next(result, deadline=budget.deadline)
             check_finite(result.replay_fields)
@@ -228,7 +312,7 @@ def train(args, launched):
                 fields = result.replay_fields
                 for i in range(8):
                     transition = row(fields, i, 8)
-                    key = (args.output.name, i, int(fields['episode_id'][i]))
+                    key = (run_name, i, int(fields['episode_id'][i]))
                     replay.append(key, transition)
                     history[i].append(exact_cpu(transition))
             pending_result = None
@@ -236,7 +320,7 @@ def train(args, launched):
                 history[i] = []
             for _ in range(min(8, max(0, budget.state['completed_decisions']-1000-learner.updates))):
                 budget.check()
-                if learner.updates >= 200:
+                if learner.updates >= max_updates:
                     break
                 with timers.measure('update_total'):
                     learned = update_sequences(learner, replay, budget.state['completed_decisions'], adapter, profile=True)
@@ -244,23 +328,91 @@ def train(args, launched):
                     raise RuntimeError('post-warmup replay not ready')
                 budget.update()
                 gradient_report = gradients(model)
-                emit(args.output/'updates.jsonl', learned)
-            emit(args.output/'decisions.jsonl', dict(completed=budget.state['completed_decisions'],
+                emit(output/'updates.jsonl', learned)
+            emit(output/'decisions.jsonl', dict(completed=budget.state['completed_decisions'],
                  updates=learner.updates, attempted=int(fields['attempted_substeps'].sum()),
                  committed=int(fields['committed_substeps'].sum()),
                  selected=selected.tolist(), timing=result.info.get('timing', {})))
-            if budget.state['completed_decisions'] >= 1200 or learner.updates >= 200:
+            emit(output/'batch-boundaries.jsonl', dict(batch=budget.state['completed_decisions']//8,
+                ended_rows=int(ended.sum()), ended=ended.tolist(),
+                completed=budget.state['completed_decisions'], reserved=budget.state['reserved_decisions'],
+                in_flight=budget.state['in_flight'], replay=len(replay)))
+            if reference_mode or resumed_expected is not None:
+                reference_end = dict(fields=collector_comparable(fields), replay=collector_comparable(replay.state_dict()),
+                    ledger={k: budget.state[k] for k in ('reserved_decisions','completed_decisions','in_flight','updates','max_decisions','max_updates','max_seconds')},
+                    journal=collector_comparable(torch.load(journal, map_location='cpu', weights_only=False)))
+                if reference_mode:
+                    atomic_torch(args.output/'boundary-reference.pt', dict(start=boundary_start, end=reference_end,
+                        collector_pid=os.getpid(), deadline_monotonic=budget.deadline,
+                        started_monotonic=budget.started, real_decisions=8))
+                    status = 'boundary_saved'
+                else:
+                    differences = mismatch_report(resumed_expected['end'], reference_end)
+                    resumed_comparison.update(status='verified' if not differences else 'exact_mismatch',
+                        next_journal_replay_ledger_exact=not differences, differences=differences,
+                        old_pid=resumed_expected['collector_pid'], new_pid=os.getpid(),
+                        original_deadline_exact=budget.deadline == resumed_expected['deadline_monotonic'],
+                        original_started_exact=budget.started == resumed_expected['started_monotonic'])
+                    atomic_json(args.output/'boundary-comparison.json', resumed_comparison)
+                    if differences:
+                        raise AssertionError('resumed next journal/replay/ledger differs')
+                    status = 'resumed_batch_verified'
+                break
+            if stop_at_boundary and bool(ended.all()):
+                journals = sorted((args.output/'real-executions').glob('batch-*.pt'))
+                report = save_episode_boundary(args.output/'collector-boundary.pt', learner, replay,
+                    environment=env, policy_generator=generator, budget=budget, config=cfg,
+                    counters=dict(decisions=budget.state['completed_decisions'], updates=learner.updates, vector_dim=vector_dim),
+                    journal_paths=journals)
+                saved_clean = True
+                emit(args.output/'events.jsonl', dict(event='collector_boundary_saved', report=report,
+                    pid=os.getpid(), deadline_monotonic=budget.deadline))
+                if not boundary_reference:
+                    status = 'boundary_saved'
+                    break
+                if budget.state['max_decisions']-budget.state['completed_decisions'] < 8:
+                    status = 'boundary_saved_no_reference_budget'
+                    break
+                # Continue the same loop through one real batch as a control. Its
+                # separate ledger cannot invalidate the saved collector ledger.
+                from copy import deepcopy
+                original_budget = budget
+                shadow = Budget.__new__(Budget)
+                shadow.started, shadow.deadline = budget.started, budget.deadline
+                shadow.state = deepcopy(budget.state)
+                output = args.output/'continuous-reference'
+                output.mkdir(exist_ok=False)
+                shadow.path = output/'training-budget.json'
+                shadow.flush()
+                budget = shadow
+                reference_mode = True
+            if budget.state['completed_decisions'] >= max_decisions or (max_updates and learner.updates >= max_updates):
                 break
             if ended.any():
                 with timers.measure('reset_ended'):
                     env.reset(indices=torch.where(ended)[0].tolist(), deadline=budget.deadline)
-        status = 'bounded_complete'
+        if status == 'incomplete':
+            status = 'bounded_complete'
     except (TimeoutError, StopIteration) as exc:
         status, error = 'budget_stop', str(exc)
     except Exception as exc:
         status, error = 'failed', repr(exc)
         traceback.print_exc()
     finally:
+        reference_consumed = 0
+        if original_budget is not None:
+            reference_consumed = budget.state['reserved_decisions'] - original_budget.state['reserved_decisions']
+            budget.state.update(status=status, error=error)
+            budget.flush()
+            budget = original_budget
+            # Keep the ordinary learner artifacts consistent with the original
+            # saved ledger; reference artifacts live in their own directory.
+            snapshot = torch.load(args.output/'collector-boundary.pt', map_location='cpu', weights_only=False)
+            learner.load_state_dict(snapshot['learner'])
+            replay.load_state_dict(snapshot['replay'])
+            history = [[] for _ in range(8)]
+        if budget is None:
+            raise RuntimeError('collector restore failed before acquiring a valid budget')
         # Final actor is always the last weights, never selected on validation.
         recovery = None
         if env is not None and budget.state['in_flight']:
@@ -285,7 +437,10 @@ def train(args, launched):
                 status, error = 'failed', 'frozen B3 changed or received gradients'
         timings = timing_summary(timers.records)
         summary = dict(status=status, error=error, budget=budget.state,
-                       wall_seconds=time.monotonic()-launched, training_body_seconds=time.monotonic()-started,
+                       wall_seconds=time.monotonic()-budget.started, process_pid=os.getpid(),
+                       collector_boundary_saved=saved_clean, continuous_reference_reserved_decisions=reference_consumed,
+                       original_deadline_monotonic=budget.deadline, original_started_monotonic=budget.started,
+                       training_body_seconds=time.monotonic()-started,
                        actual_decisions=budget.state['completed_decisions'], updates=0 if learner is None else learner.updates,
                        completed_episodes=len(completed_episodes), strict_successes=sum(x['strict_success'] for x in completed_episodes),
                        incomplete_episodes=[] if env is None else [dict(environment=i, decisions=len(h)) for i, h in enumerate(history) if h],
@@ -297,12 +452,13 @@ def train(args, launched):
                        peak_cuda_memory_bytes=torch.cuda.max_memory_allocated(),
                        model_device=None if model is None else str(next(model.parameters()).device),
                        optimizer_devices=[] if learner is None else sorted({str(v.device) for s in learner.optimizer.state.values() for v in s.values() if isinstance(v, torch.Tensor)}))
-        budget.state.update(status=status, error=error)
-        budget.flush()
+        if not saved_clean:
+            budget.state.update(status=status, error=error)
+            budget.flush()
         summary['budget'] = budget.state
-        atomic_json(args.output/'training-summary.json', summary)
+        atomic_json(args.output/('resume-summary.json' if resume else 'training-summary.json'), summary)
         emit(args.output/'events.jsonl', dict(event='training_exit', status=status, decisions=summary['actual_decisions'], updates=summary['updates'], error=error))
-    return 0 if status in ('bounded_complete', 'budget_stop') else 1
+    return 0 if status in ('bounded_complete', 'budget_stop', 'boundary_saved', 'boundary_saved_no_reference_budget', 'resumed_batch_verified') else 1
 
 
 def paired(args, launched):
@@ -418,6 +574,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('phase', choices=('train', 'paired'))
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--resume', type=Path)
+    parser.add_argument('--stop-at-boundary', action='store_true')
+    parser.add_argument('--boundary-reference', action='store_true')
+    parser.add_argument('--max-decisions', type=int, default=1200)
+    parser.add_argument('--max-updates', type=int, default=200)
+    parser.add_argument('--seconds', type=float, default=1800)
     args = parser.parse_args()
     args.output = args.output.resolve()
     def stop(signum, frame):
