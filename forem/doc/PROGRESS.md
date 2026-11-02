@@ -320,3 +320,5 @@ r1历史记录（已由SRC-1041授权r2续跑）：2026-10-26 task8.8：地图�
 2026-11-02T15:34:21.150568+08:00 · T10-EXEC-20261102 · Codex · active · 唯一试训t10-smoke-20261102-s101已启动，基础设施失败零消费修UID后沿用15:32绝对截止16:02，无预算重置；worker runtime:238，代码17f1833。[日志](agent_logs/task10/20261102-codex-execution.md)
 
 2026-11-02 15:43 +08 · T10-EXEC-20261102 · Codex · active · 唯一试训16真实决策/0更新因旧adapter变长diagnostics退出，修复并120passed/2skipped后不重启；账本/失败完整，正式门NOT_READY，准备独立限时4场景配对。[SRC-T10-008](SOURCES.md#src-t10-008)
+
+2026-11-02 16:05 +08 · T10-GATE-REVIEW · Codex · done（独立复算）；task10 仍为 review，C 未通过。见[复核记录](agent_logs/task10/20261102-codex-gate-review.md)。

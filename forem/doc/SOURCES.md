@@ -9860,3 +9860,7 @@ SRC-1067终审追加（2026-10-26）：29a92dfa01 finalizer rc0/0.114258219s，�
 性能成本输入：paired_reset 8次共220.675046338s、paired_decision 12次共100.954408571s、paired_next_boundary4次共48.885494988s，余为加载/记账等；本8回合平均47.5604257123s/完整回合（含复位/推演），仅本配对负载的系数。与SRC-T10-008采集15.4883651695s/决策组成条件成本式 `T≈15.488D + c_update·U + 47.560N_eval + T_checkpoint`（秒，D为新增训练决策、U为更新、N_eval为完整评估回合；checkpoint+恢复实测0.942750832s/本次）。更新项未测；冷启动/小样本/未训练actor限制显著，不能据此核定完整正式工期。瓶颈为复位及候选推演所在的端到端环境路径；本轮未把IK、碰撞、局部栅格、B3 inference细分，不据此给它们排序。峰值显存仅有试训torch已分配5.02GiB，配对峰值未独立记录。
 
 采用/限制：结果仅验配对管线，0更新actor不能解释学习收益，也不是可交task11的训练基线。正式条件NOT_READY：1000预热及真实GPU有效梯度/更新未达、实际update成本未知、环境中途恢复不支持、仅粗profile且推演全量计数不完整。失败不通过新增采集、缩预热或改奖励掩盖；正式长训/task11未执行。所有自建容器已停且GPU compute为空。最后补强过期绝对deadline入口直接退出124（0.018s夹具），避免GNU timeout的0秒表示禁用计时；此为运行包装边界修复，不影响本次两个正remaining执行的结果。
+
+<a id="src-t10-010"></a>
+
+**SRC-T10-010 · 决策者只读复核。** 项目实测复算、静态核查及推导。Codex，2026-11-02，基线提交 12bc3ab，run-id t10-smoke-20261102-s101。使用 task10_report.py 生成临时报告与 accounting-final.json 逐字节相同；重算 audit-final.json 登记的七份文件及 final.actor.pt 的 SHA-256 均一致。final-deterministic-tests.log 末行 120 passed、2 skipped（本次未重跑）。runner.py::restore_evidence 在 len(replay)<32 时将两次抽样均设为空列表，本轮16条只能确认计数、模型及 CUDA RNG 等已执行检查，无法核验下一真实采样一致。按 SRC-T10-008 的 15.488 s/决策估算 1000 条采集约 4.30 小时；30 分钟内仅完成预热就要求平均不超过 1.8 s/决策。只是小样本预算可行性比较，不是实测稳态吞吐或新预算。
