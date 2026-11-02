@@ -45,20 +45,8 @@ def tensor_state_hash(module):
 
 
 def initialize(seed):
-    import numpy as np
-    import torch
-    torch.set_num_threads(2)
-    random.seed(seed)
-    np.random.seed(seed)
-    torch.manual_seed(seed)
-    # Neither matmul TF32 nor cuDNN benchmark may silently change comparisons.
-    torch.backends.cuda.matmul.allow_tf32 = False
-    torch.backends.cudnn.allow_tf32 = False
-    torch.backends.cudnn.benchmark = False
-    if not torch.cuda.is_available():
-        raise RuntimeError('CUDA is required; no silent CPU fallback')
-    torch.cuda.set_device(0)
-    torch.cuda.reset_peak_memory_stats()
+    from .entry import initialize_determinism
+    return initialize_determinism(seed)
 
 
 class Timers:
@@ -84,26 +72,36 @@ def contract(args, policy, pool):
         for path in sorted((ROOT/'src'/module).glob('*.py')):
             hashes[str(path.relative_to(ROOT))] = sha256(path)
     hashes['scripts/task10_run_bounded.sh'] = sha256(ROOT/'scripts/task10_run_bounded.sh')
+    from .entry import resolve_profile, runtime_report
+    resolved = resolve_profile(run_profile=getattr(args, 'run_profile', 'smoke'),
+        config=getattr(args, 'config', None), seconds=getattr(args, 'seconds', None),
+        max_decisions=getattr(args, 'max_decisions', None), max_updates=getattr(args, 'max_updates', None))
     return dict(run_id=args.output.name, code_commit=os.environ.get('TASK10_CODE_COMMIT', 'unknown'),
-                code_sha256=hashes, config=json.loads((ROOT/'config/task10/smoke.json').read_text()),
-                config_sha256=sha256(ROOT/'config/task10/smoke.json'),
+                code_sha256=hashes, config=resolved['config'], config_path=resolved['config_path'],
+                config_sha256=resolved['config_sha256'], run_profile=resolved['run_profile'],
+                actual_runtime=runtime_report(),
                 lower_hashes=policy.hash_report, lower_actor=policy.actor_sha256,
                 splits=split_manifest(pool), seed=101, random_seed=102,
                 dtype='torch.float32', device='cuda:0', gpu=torch.cuda.get_device_name(0),
                 physical_gpu=os.environ.get('TASK10_PHYSICAL_GPU', 'unknown'),
                 torch=torch.__version__, threads=torch.get_num_threads(),
                 collector_resume='all natural episode ends before next reset; explicit new-PID resume only',
-                limits=dict(decisions=1200, updates=200, training_seconds=1800, paired_seconds=1800))
+                limits=resolved['limits'])
 
 
 def gradients(model):
     import torch
     report = {}
-    for name, module in model._groups().items():
+    groups = dict(model._groups())
+    groups.update({f'head_a.{name}': getattr(model.head_a,name) for name in ('actor','q1','q2')})
+    for name, module in groups.items():
         parameters = list(module.parameters())
         report[name] = dict(trainable=sum(p.numel() for p in parameters if p.requires_grad),
                             with_gradient=sum(p.grad is not None for p in parameters),
-                            nonzero=sum(p.grad is not None and bool(torch.count_nonzero(p.grad)) for p in parameters))
+                            nonzero=sum(p.grad is not None and bool(torch.count_nonzero(p.grad)) for p in parameters),
+                            parameter_devices=sorted({str(p.device) for p in parameters}),
+                            gradient_devices=sorted({str(p.grad.device) for p in parameters if p.grad is not None}),
+                            finite=all(p.grad is None or bool(torch.isfinite(p.grad).all()) for p in parameters))
     return report
 
 
@@ -120,6 +118,17 @@ def restore_evidence(path, learner, replay, config, counters):
     """Nonempty learner-only evidence without advancing caller replay/global RNG."""
     from .recovery import verify_learner_checkpoint
     return verify_learner_checkpoint(path, learner, replay, config, counters)
+
+
+def durable_learner_checkpoint(path, learner, replay, config, counters):
+    """Durable learner/replay/RNG evidence; never claims environment resume."""
+    from task7_upper.stages import save_checkpoint
+    save_checkpoint(path, learner, replay, counters=counters, config=config)
+    descriptor = os.open(str(Path(path).parent), os.O_RDONLY | os.O_DIRECTORY)
+    try:
+        os.fsync(descriptor)
+    finally:
+        os.close(descriptor)
 
 
 def collector_comparable(value):
@@ -162,20 +171,34 @@ def train(args, launched):
     resume = getattr(args, 'resume', None)
     stop_at_boundary = getattr(args, 'stop_at_boundary', False)
     boundary_reference = getattr(args, 'boundary_reference', False)
-    max_decisions = getattr(args, 'max_decisions', 1200)
-    max_updates = getattr(args, 'max_updates', 200)
-    seconds = getattr(args, 'seconds', 1800)
-    if max_decisions % 8 or not 8 <= max_decisions <= 1200 or not 0 <= max_updates <= 200 or not 20 < seconds <= 1800:
+    from .entry import resolve_profile
+    from .training_evidence import snapshot_before, finish_evidence
+    run_profile = getattr(args, 'run_profile', 'smoke')
+    if run_profile == 'online-trial' and (resume or stop_at_boundary or boundary_reference):
+        raise ValueError('online trial cannot resume or wait for a collector boundary')
+    if run_profile == 'online-trial' and not all(k in os.environ for k in
+            ('TASK10_HARD_DEADLINE_MONOTONIC', 'TASK10_HARD_DEADLINE_EPOCH')):
+        raise ValueError('online trial requires the normal outer supervision entry')
+    resolved = resolve_profile(run_profile=run_profile, config=getattr(args, 'config', None),
+        seconds=getattr(args, 'seconds', None), max_decisions=getattr(args, 'max_decisions', None),
+        max_updates=getattr(args, 'max_updates', None))
+    max_decisions, max_updates = resolved['limits']['decisions'], resolved['limits']['updates']
+    seconds = resolved['seconds']
+    if max_decisions % 8 or max_decisions < 8 or seconds <= 20:
         raise ValueError('invalid bounded batch8 limits')
     if boundary_reference and (not stop_at_boundary or max_updates != 0):
         raise ValueError('boundary reference requires explicit stop and a zero-update diagnostic')
     budget = None
     if not resume:
         budget = Budget(args.output/'training-budget.json', started=launched, seconds=seconds,
-                        decisions=max_decisions, updates=max_updates)
-        # The inherited deadline includes cleanup; resume never grants a new clock.
-        budget.deadline -= 20
+                        decisions=max_decisions, updates=max_updates, run_profile=run_profile)
+        # One hard deadline; stop starting scientific work 20s earlier for cleanup.
         budget.state['cleanup_reserve_seconds'] = 20
+        budget.state['work_deadline_monotonic'] = budget.deadline-20
+        if run_profile == 'online-trial' and (float(os.environ['TASK10_HARD_DEADLINE_MONOTONIC']) != budget.deadline
+                or float(os.environ['TASK10_HARD_DEADLINE_EPOCH']) != budget.state['deadline_epoch']):
+            raise ValueError('Python and outer supervisor hard deadlines differ')
+        budget.flush()
     saved_clean = False
     original_budget = None
     reference_mode = False
@@ -191,13 +214,22 @@ def train(args, launched):
     status, error = 'incomplete', None
     pending_result = None
     gradient_report = None
-    initialize(101)
+    first_update_summary = None
+    warmup_recorded = False
+    last_update_checkpoint = None
     try:
+        initialize(101)
         with timers.measure('lower_load_hashes'):
             policy = FrozenB3(device='cuda:0', artifact_root='/reference', source_root='/reference/source')
         pool = Path('/reference/results/task8/t8-pool-20261027/cube-pool-v2/manifest.json')
         current_contract = contract(args, policy, pool)
         lower_before = tensor_state_hash(policy.actor)
+        if budget is not None:
+            cfg_deadline = dict(started_monotonic=budget.started, hard_deadline_monotonic=budget.deadline,
+                work_deadline_monotonic=budget.deadline-20, started_epoch=budget.state['started_epoch'],
+                hard_deadline_epoch=budget.state['deadline_epoch'], cleanup_reserve_seconds=20,
+                outer_hard_deadline_monotonic=os.environ.get('TASK10_HARD_DEADLINE_MONOTONIC'),
+                outer_hard_deadline_epoch=os.environ.get('TASK10_HARD_DEADLINE_EPOCH'))
         def factory():
             value = Task10Env(8, policy, seed=101, pool=pool, split='train', device='cuda:0', run_id=run_name,
                            code_commit=cfg['code_commit'], config_hash=cfg['config_sha256'],
@@ -232,12 +264,13 @@ def train(args, launched):
         else:
             cfg = current_contract
             cfg['effective_limits'] = dict(decisions=max_decisions, updates=max_updates, seconds=seconds)
+            cfg['deadline'] = cfg_deadline
             atomic_json(args.output/'contract.json', cfg)
             emit(args.output/'events.jsonl', dict(event='training_start', seed=101, code_commit=cfg['code_commit'],
                  deadline_seconds=seconds, gpu=cfg['gpu'], physical_gpu=cfg['physical_gpu']))
             env = factory()
             with timers.measure('initial_reset'):
-                obs, candidates = env.reset(deadline=budget.deadline)
+                obs, candidates = env.reset(deadline=budget.deadline-20)
             item = environment_inputs(obs, candidates, env_ids=range(8), asynchronous=False, device='cuda:0')
             vector_dim = item['vcm_inputs']['observation'][1].shape[-1]
             cfg['actual_upper_inputs'] = dict(vector_dim=vector_dim,
@@ -254,8 +287,17 @@ def train(args, launched):
             history = [[] for _ in range(8)]
             generator = torch.Generator(device='cuda:0').manual_seed(101)
         adapter = ReplayAdapter(False, 'cuda:0')
+        if run_profile == 'online-trial':
+            with timers.measure('initial_checkpoint'):
+                durable_learner_checkpoint(args.output/'initial-learner.pt', learner, replay, cfg,
+                    dict(decisions=budget.state['completed_decisions'], updates=learner.updates, vector_dim=vector_dim))
+            emit(output/'events.jsonl', dict(event='initial_learner_saved', wall_seconds=time.monotonic()-budget.started,
+                decisions=budget.state['completed_decisions'], replay=len(replay), updates=learner.updates,
+                lower_tensor_hash=lower_before, lower_actor_sha256=policy.actor_sha256))
         while budget.state['reserved_decisions'] < max_decisions and (max_updates == 0 or learner.updates < max_updates):
             budget.check()
+            if time.monotonic() >= budget.deadline-20:
+                raise TimeoutError('cleanup reserve reached')
             with timers.measure('online_memory_inference'):
                 model.eval()
                 rebuild_online(model, history, adapter)
@@ -281,7 +323,7 @@ def train(args, launched):
                 reserved_through=budget.state['reserved_decisions'],
                 completed_before=budget.state['completed_decisions'], selected=selected.tolist()))
             with timers.measure('decision_total'):
-                result = env.step(selected, deadline=budget.deadline)
+                result = env.step(selected, deadline=budget.deadline-20)
             pending_result = result
             # Raw selected-slot execution is durable before an expensive next
             # prediction. Deadline/cancel cannot silently discard failed rows.
@@ -291,7 +333,8 @@ def train(args, launched):
                     next_boundary_ready=False, fields=exact_cpu(result.replay_fields)))
                 emit(output/'real-executions.jsonl', dict(completed=budget.state['reserved_decisions'],
                      journal=str(journal.relative_to(output)),
-                     selected=selected.tolist(), terminated=result.terminated.tolist(),
+                     selected=selected.tolist(), selection_mode='uniform_warmup' if budget.state['completed_decisions'] < 1000 else 'sac',
+                     epoch=time.time(), wall_seconds=time.monotonic()-budget.started, terminated=result.terminated.tolist(),
                      truncated=result.truncated.tolist(), reward=result.reward.tolist(),
                      attempted=result.replay_fields['attempted_substeps'].tolist(),
                      committed=result.replay_fields['committed_substeps'].tolist()))
@@ -309,7 +352,7 @@ def train(args, launched):
                 completed_episodes.append(record)
                 emit(output/'episodes.jsonl', record)
             with timers.measure('next_boundary'):
-                result = env.prepare_next(result, deadline=budget.deadline)
+                result = env.prepare_next(result, deadline=budget.deadline-20)
             check_finite(result.replay_fields)
             with timers.measure('replay_to_cpu'):
                 fields = result.replay_fields
@@ -321,22 +364,93 @@ def train(args, launched):
             pending_result = None
             for i in torch.where(ended)[0].tolist():
                 history[i] = []
+            if run_profile == 'online-trial' and not warmup_recorded and budget.state['completed_decisions'] >= 1000:
+                if len(replay) < 1000 or learner.updates:
+                    raise AssertionError('warmup evidence requires 1000 fresh real transitions and zero updates')
+                with timers.measure('warmup_checkpoint'):
+                    durable_learner_checkpoint(output/'warmup-complete.pt', learner, replay, cfg,
+                        dict(decisions=budget.state['completed_decisions'], updates=learner.updates, vector_dim=vector_dim))
+                emit(output/'events.jsonl', dict(event='warmup_complete', decisions=budget.state['completed_decisions'],
+                    replay=len(replay), updates=learner.updates, wall_seconds=time.monotonic()-budget.started,
+                    epoch=time.time(), checkpoint='warmup-complete.pt'))
+                warmup_recorded = True
+            updates_before_batch = learner.updates
             for _ in range(min(8, max(0, budget.state['completed_decisions']-1000-learner.updates))):
                 budget.check()
+                if time.monotonic() >= budget.deadline-20:
+                    raise TimeoutError('cleanup reserve reached before update')
                 if learner.updates >= max_updates:
                     break
-                with timers.measure('update_total'):
-                    learned = update_sequences(learner, replay, budget.state['completed_decisions'], adapter, profile=True)
+                first = learner.updates == 0 and run_profile == 'online-trial'
+                before = None
+                if first:
+                    with timers.measure('first_update_evidence_before'):
+                        durable_learner_checkpoint(output/'first-update-before.pt', learner, replay, cfg,
+                            dict(decisions=budget.state['completed_decisions'], updates=0, vector_dim=vector_dim))
+                        before = snapshot_before(learner, policy)
+                        from .recovery import fragment_identity
+                        replay_rng = replay.rng.getstate()
+                        try:
+                            first_identities = fragment_identity(replay.sample())
+                        finally:
+                            replay.rng.setstate(replay_rng)
+                        atomic_json(output/'first-update-sample.json', dict(sample_identity=first_identities,
+                            decisions=budget.state['completed_decisions'], derived_fixture=False))
+                    emit(output/'events.jsonl', dict(event='first_update_start', decisions=budget.state['completed_decisions'],
+                        replay=len(replay), updates=0, epoch=time.time(), wall_seconds=time.monotonic()-budget.started))
+                try:
+                    with timers.measure('update_total'):
+                        learned = update_sequences(learner, replay, budget.state['completed_decisions'], adapter, profile=True)
+                except Exception as exc:
+                    if first:
+                        payload = finish_evidence(before, learner, policy, error=repr(exc))
+                        atomic_torch(output/'first-update-evidence.pt', payload)
+                        atomic_json(output/'first-update-evidence.json', payload['summary'])
+                    raise
                 if learned.get('updated', True) is False:
                     raise RuntimeError('post-warmup replay not ready')
-                budget.update()
-                gradient_report = gradients(model)
+                learned.update(decisions=budget.state['completed_decisions'], replay_transitions=len(replay),
+                    wall_seconds=time.monotonic()-budget.started, epoch=time.time(),
+                    update_wall_seconds=timers.records['update_total'][-1])
+                with timers.measure('gradient_evidence'):
+                    gradient_report = gradients(model)
+                learned['gradient_report'] = gradient_report
+                if run_profile == 'online-trial':
+                    # Update evidence is write-ahead of the update ledger, just as
+                    # real execution journals precede decision completion.
+                    with timers.measure('update_checkpoint'):
+                        atomic_torch(output/'latest-update.pt', dict(format='task10-update-evidence-v1',
+                            learner=learner.state_dict(), decisions=budget.state['completed_decisions'],
+                            updates=learner.updates, wall_seconds=time.monotonic()-budget.started))
+                    last_update_checkpoint = learner.updates
                 emit(output/'updates.jsonl', learned)
+                budget.update()
+                if first:
+                    with timers.measure('first_update_evidence_after'):
+                        payload = finish_evidence(before, learner, policy, update_result=learned)
+                        payload['context'] = dict(kind='first real online update after fresh warmup',
+                            decisions=budget.state['completed_decisions'], replay_transitions=len(replay),
+                            epoch=time.time(), wall_seconds=time.monotonic()-budget.started,
+                            sample_identity=first_identities)
+                        atomic_torch(output/'first-update-evidence.pt', payload)
+                        first_update_summary = payload['summary']
+                        atomic_json(output/'first-update-evidence.json', first_update_summary)
+                        durable_learner_checkpoint(output/'first-update-after.pt', learner, replay, cfg,
+                            dict(decisions=budget.state['completed_decisions'], updates=learner.updates, vector_dim=vector_dim))
+                    emit(output/'events.jsonl', dict(event='first_update_complete', decisions=budget.state['completed_decisions'],
+                        replay=len(replay), updates=learner.updates, epoch=time.time(),
+                        wall_seconds=time.monotonic()-budget.started, status=first_update_summary['status']))
+                    if first_update_summary['must_stop'] or not first_update_summary['gpu_update_verified']:
+                        raise RuntimeError('first GPU update/actor/twin-Q/B3 evidence failed')
+            if run_profile == 'online-trial' and learner.updates != updates_before_batch:
+                with timers.measure('batch_learner_checkpoint'):
+                    durable_learner_checkpoint(output/'latest-learner.pt', learner, replay, cfg,
+                        dict(decisions=budget.state['completed_decisions'], updates=learner.updates, vector_dim=vector_dim))
             emit(output/'decisions.jsonl', dict(completed=budget.state['completed_decisions'],
                  updates=learner.updates, attempted=int(fields['attempted_substeps'].sum()),
                  committed=int(fields['committed_substeps'].sum()),
                  selected=selected.tolist(), timing=result.info.get('timing', {})))
-            emit(output/'batch-boundaries.jsonl', dict(batch=budget.state['completed_decisions']//8,
+            emit(output/'batch-boundaries.jsonl', dict(epoch=time.time(), wall_seconds=time.monotonic()-budget.started, batch=budget.state['completed_decisions']//8,
                 ended_rows=int(ended.sum()), ended=ended.tolist(),
                 completed=budget.state['completed_decisions'], reserved=budget.state['reserved_decisions'],
                 in_flight=budget.state['in_flight'], replay=len(replay)))
@@ -397,7 +511,7 @@ def train(args, launched):
                 break
             if ended.any():
                 with timers.measure('reset_ended'):
-                    env.reset(indices=torch.where(ended)[0].tolist(), deadline=budget.deadline)
+                    env.reset(indices=torch.where(ended)[0].tolist(), deadline=budget.deadline-20)
         if status == 'incomplete':
             status = 'bounded_complete'
     except (TimeoutError, StopIteration) as exc:
@@ -437,8 +551,14 @@ def train(args, launched):
                                 decisions=budget.state['completed_decisions']))
                 # This is an offline learner artifact at a completed append
                 # boundary. It cannot restore an in-progress physical episode.
-                recovery = restore_evidence(args.output/'offline-learner.pt', learner, replay, cfg,
-                              dict(decisions=budget.state['completed_decisions'], updates=learner.updates, vector_dim=vector_dim))
+                if run_profile == 'online-trial':
+                    durable_learner_checkpoint(args.output/'offline-learner.pt', learner, replay, cfg,
+                        dict(decisions=budget.state['completed_decisions'], updates=learner.updates, vector_dim=vector_dim))
+                    recovery = dict(collector_resumable=False, learner_checkpoint_saved=True,
+                        note='continuous trial: no collector restoration attempted')
+                else:
+                    recovery = restore_evidence(args.output/'offline-learner.pt', learner, replay, cfg,
+                        dict(decisions=budget.state['completed_decisions'], updates=learner.updates, vector_dim=vector_dim))
             lower_after = tensor_state_hash(policy.actor)
             if lower_before != lower_after or any(p.grad is not None for p in policy.actor.parameters()):
                 status, error = 'failed', 'frozen B3 changed or received gradients'
@@ -455,7 +575,11 @@ def train(args, launched):
                        replay_transitions=0 if replay is None else len(replay),
                        gradient_report=None if learner is None else gradient_report,
                        lower_unchanged=None if learner is None else lower_before == lower_after,
-                       recovery=recovery, timing=timings,
+                       recovery=recovery, timing=timings, run_profile=run_profile,
+                       warmup_real_decisions=min(1000, 0 if replay is None else len(replay)),
+                       warmup_complete=warmup_recorded, first_update_evidence=first_update_summary,
+                       last_durable_update_checkpoint=last_update_checkpoint,
+                       last_durable_execution_decision=budget.state['completed_decisions'],
                        peak_cuda_memory_bytes=torch.cuda.max_memory_allocated(),
                        model_device=None if model is None else str(next(model.parameters()).device),
                        optimizer_devices=[] if learner is None else sorted({str(v.device) for s in learner.optimizer.state.values() for v in s.values() if isinstance(v, torch.Tensor)}))
@@ -572,28 +696,86 @@ def paired(args, launched):
     return 1 if status == 'failed' else 0
 
 
+def entry_check(args, launched):
+    """Old fixture through this normal entry; never contributes online warmup."""
+    import torch
+    from .entry import resolve_profile, runtime_report
+    from .gpu_diagnosis import run_controls
+    from .learning import Stage1Learner, EpisodeReplay, ReplayAdapter
+    from task7_upper.model import UpperModel
+    from task7_upper.stages import load_checkpoint
+    resolved = resolve_profile(run_profile=args.run_profile, config=args.config, seconds=args.seconds,
+        max_decisions=args.max_decisions, max_updates=args.max_updates, phase='entry-check')
+    args.output.mkdir(parents=True, exist_ok=False)
+    budget = Budget(args.output/'entry-budget.json', started=launched, seconds=resolved['seconds'],
+                    decisions=0, updates=0)
+    budget.check()
+    initialize(101)
+    settings = runtime_report()
+    atomic_json(args.output/'entry-contract.json', dict(resolved=resolved, actual_runtime=settings,
+        budget=budget.state, source=str(args.fixture_source), source_sha256=sha256(args.fixture_source),
+        code_commit=os.environ.get('TASK10_CODE_COMMIT','unknown'), new_real_decisions=0))
+    source = torch.load(args.fixture_source, map_location='cpu', weights_only=False)
+    if not str(source['config'].get('evidence_kind','')).startswith('derived-replay-fixture'):
+        raise ValueError('entry check requires explicitly derived old replay fixture')
+    learner = Stage1Learner(UpperModel(vector_dim=source['counters']['vector_dim']).cuda(), source['learner']['total_updates'])
+    replay = EpisodeReplay(capacity=source['replay']['capacity'])
+    load_checkpoint(args.fixture_source, learner, replay, config=source['config'])
+    report = run_controls(learner, replay, ReplayAdapter(False, 'cuda:0'), config=source['config'],
+        counters=source['counters'], output=args.output/'controls', deadline=budget.deadline)
+    if report['status'] != 'verified':
+        report.update(actual_runtime=settings, normal_entry=True, old_real_decisions_not_warmup=True,
+                      wall_seconds_from_outer=time.monotonic()-launched)
+        atomic_json(args.output/'entry-summary.json',report)
+        budget.state.update(status=report['status']);budget.flush()
+        return 1
+    budget.check()
+    from .lower import FrozenB3
+    from .recovery import fixture_update
+    from .training_evidence import snapshot_before, finish_evidence
+    policy = FrozenB3(device='cuda:0', artifact_root='/reference', source_root='/reference/source')
+    before = snapshot_before(learner, policy)
+    # One extra explicitly derived update tests the exact evidence path; no
+    # real decision or online warmup counter is fabricated.
+    atomic_json(args.output/'entry-evidence-attempt.json', dict(fixture_updates_reserved=5,new_real_decisions=0))
+    budget.check()
+    update = fixture_update(learner, replay, ReplayAdapter(False,'cuda:0'))
+    payload = finish_evidence(before, learner, policy, update_result=update)
+    atomic_torch(args.output/'entry-update-evidence.pt',payload)
+    atomic_json(args.output/'entry-update-evidence.json',payload['summary'])
+    report.update(actual_runtime=settings, old_real_decisions_not_warmup=True,
+        fixture_update_calls=report['fixture_update_calls']+1, update_evidence=payload['summary'],
+        lower_actor_sha256=policy.actor_sha256,
+        wall_seconds_from_outer=time.monotonic()-launched, normal_entry=True)
+    if payload['summary']['must_stop'] or not payload['summary']['gpu_update_verified']:
+        report['status']='evidence_failed'
+    atomic_json(args.output/'entry-summary.json',report)
+    budget.state.update(status=report['status']);budget.flush()
+    return 0 if report['status']=='verified' else 1
+
+
 def main():
-    launched = time.monotonic()
-    if 'TASK10_STARTED_EPOCH' in os.environ:
-        # An infrastructure failure before ledger creation still consumes the
-        # original invocation's wall budget; retry cannot grant a fresh clock.
-        launched -= max(0., time.time()-float(os.environ['TASK10_STARTED_EPOCH']))
+    from .entry import launched_from_environment
+    launched = launched_from_environment()
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('phase', choices=('train', 'paired'))
+    parser.add_argument('phase', choices=('train', 'paired', 'entry-check'))
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--resume', type=Path)
     parser.add_argument('--stop-at-boundary', action='store_true')
     parser.add_argument('--boundary-reference', action='store_true')
-    parser.add_argument('--max-decisions', type=int, default=1200)
-    parser.add_argument('--max-updates', type=int, default=200)
-    parser.add_argument('--seconds', type=float, default=1800)
+    parser.add_argument('--run-profile', choices=('smoke','online-trial'), default='smoke')
+    parser.add_argument('--config', type=Path)
+    parser.add_argument('--fixture-source', type=Path)
+    parser.add_argument('--max-decisions', type=int)
+    parser.add_argument('--max-updates', type=int)
+    parser.add_argument('--seconds', type=float)
     args = parser.parse_args()
     args.output = args.output.resolve()
     def stop(signum, frame):
         raise TimeoutError('external bounded supervisor stop')
     signal.signal(signal.SIGTERM, stop)
     signal.signal(signal.SIGINT, stop)
-    return (train if args.phase == 'train' else paired)(args, launched)
+    return {'train':train, 'paired':paired, 'entry-check':entry_check}[args.phase](args, launched)
 
 
 if __name__ == '__main__':

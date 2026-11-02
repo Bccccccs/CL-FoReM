@@ -1,6 +1,7 @@
 """Durable bounded-run accounting and exact learner-only checkpoint evidence."""
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import time
@@ -52,15 +53,29 @@ class Budget:
     Reserve before calling the real environment. Uncovered reservations remain
     consumed after interruption; they can never be silently replayed.
     """
-    def __init__(self, path, *, started, seconds, decisions=1200, updates=200):
+    def __init__(self, path, *, started, seconds, decisions=1200, updates=200,
+                 run_profile='smoke', started_epoch=None):
         self.path = Path(path)
         if self.path.exists():
             raise RuntimeError('existing budget ledger: automatic restart is prohibited')
-        if not 0 < seconds <= 1800 or not 0 <= decisions <= 1200 or not 0 <= updates <= 200:
+        cap = {'smoke': 1800, 'online-trial': 25200}.get(run_profile)
+        if (cap is None or not math.isfinite(seconds) or not math.isfinite(started)
+                or not 0 < seconds <= cap or not 0 <= decisions <= 1200 or not 0 <= updates <= 200):
             raise ValueError('outside task10 bounded authorization')
+        if run_profile == 'online-trial' and (seconds != 25200 or decisions != 1200 or updates != 200):
+            raise ValueError('online-trial limits must match explicit authorization')
         self.started = started
         self.deadline = started + seconds
-        self.state = dict(max_seconds=seconds, max_decisions=decisions, max_updates=updates,
+        if started_epoch is None:
+            inherited_epoch = os.environ.get('TASK10_STARTED_EPOCH')
+            started_epoch = (float(inherited_epoch) if inherited_epoch is not None
+                             else time.time() - (time.monotonic() - started))
+        if not math.isfinite(started_epoch):
+            raise ValueError('invalid budget epoch origin')
+        self.state = dict(run_profile=run_profile, started_monotonic=started,
+                          deadline_monotonic=self.deadline, started_epoch=started_epoch,
+                          deadline_epoch=started_epoch + seconds,
+                          max_seconds=seconds, max_decisions=decisions, max_updates=updates,
                           reserved_decisions=0, completed_decisions=0, updates=0,
                           in_flight=0, status='active', pid=os.getpid())
         self.flush()
