@@ -53,3 +53,5 @@ task1、task2编号已删除，不复用。子任务入口见各任务PROCEDURE�
 任务计划/流程/结果只写在对应`tasks/`节点三文档；Agent过程记录放`agent_logs/<project | taskN | taskN/taskN.M>/`（实验主线、论文主线分别放`agent_logs/experiments/`、`agent_logs/paper/`），文件名`YYYYMMDD-agent-topic.md`；代码、配置、日志、产物分别放`forem/src`、`config`、`logs`、`results`。
 
 2026-10-23当前入口纠错依据[进度审核SRC-0960](SOURCES.md#src-0960)、[PROGRESS](PROGRESS.md)及其已有授权/结果链接；没有新增实施或实验授权。
+
+2026-11-02 · task9.7 下层 SAC 成功率改善（本分支，仅计划）：[TASK](tasks/task9/task9.7/TASK.md) · [PROCEDURE](tasks/task9/task9.7/PROCEDURE.md) · [RESULTS](tasks/task9/task9.7/RESULTS.md)。

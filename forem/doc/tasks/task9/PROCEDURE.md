@@ -23,3 +23,5 @@
 2026-11-02：新增[task9.6语义复评](task9.6/PROCEDURE.md)，用户要求现在启动、下午看结果；仅既有B3三5M final与24×4固定语义回合，不训练。[SRC-1354](../../SOURCES.md#src-1354)。
 
 2026-11-02 14:14：[task9.6](task9.6/RESULTS.md) done，12:06三B3-5M语义复评完成、父逐case核验PASS，132/288=45.83%，与原成败全部一致；[SRC-1355](../../SOURCES.md#src-1355)。不替代9.4全批独立验收。
+
+2026-11-02 · task9.7 依赖既有 task9.4–9.6 证据，负责人待派发；按失败核查→配对比较→对照草案顺序，仅验收文档，尚未执行。[TASK](task9.7/TASK.md) · [PROCEDURE](task9.7/PROCEDURE.md) · [RESULTS](task9.7/RESULTS.md)。
