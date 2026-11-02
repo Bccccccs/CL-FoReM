@@ -249,3 +249,11 @@ sg docker -c 'docker exec --user 1004:1004 -e CUDA_VISIBLE_DEVICES= -e PYTHONPAT
 
 ### 第三次决策复核 · 2026-11-02
 本轮诊断按预登记停止，可结项。接受夹具确定性对照；56 条真实执行完整，batch8 全自然终局 0 次，在线恢复未验。采用夹具已验的确定性设置作为下一版上层学习器配置，接入后须核对正常入口实际设置、同输入输出与成本。当前不放行 7h。若以尽早取得在线更新为优先，可提请用户单独批准一次允许中断后以不完整结果结项的连续有界试训，保持原科学协议；恢复能力仍须独立验收。否则维持既定恢复门。此处未授权运行或扩展恢复机制。[来源](../../SOURCES.md#src-t10-020)
+
+## 2026-11-02 · 用户批准唯一连续在线试训（active）
+
+本轮授权取代此前“当前不放行”的启动限制，只批一次连续1200真实/200更新/7h且允许故障不完整结项；不恢复/重启，不配对/正式长训/task11。[SRC-T10-021](../../SOURCES.md#src-t10-021)。推荐GPT6.1sol/high、Sonnet5.5/high，因deadline/有效GPU梯度跨模块；父实际模型/强度未知，10.11/12实际sol/high，独立10.13 terra/high。所有人共享预算，父唯一启动并持续监控。
+
+入口代码b5b60ee：显式online-trial25200与默认smoke1800、同原epoch两层timeout及ledger/合同硬截止，20s清理在hard内；确定性CUBLAS pre-Python/cuDNN/算法True、TF32/benchmarkFalse、threads2；CPU203passed/3条件skipped/47.09s，正常入口GPU旧fixture5更新/0真实、两组严格同输入与取证verified_cuda、rc0/14.641s。独立审核缺口已修复，原始RED和完整原件保留。[SRC-T10-022](../../SOURCES.md#src-t10-022)。
+
+唯一试训run-id `t10-online-20261102-s101`，从空回放初始化，B3-5M4718、上层101/batch8/train和1000真实均匀预热/既定科学合同不变，连续采集不等全8终局。开始北京时间19:29:28，硬截止2026-11-03 02:29:28；GPU1，container workerPID554、父3815493。actual contract runtime flags与25200/1200/200及outer deadline已核对，源码/配置冻结；运行中，当前不预宣称预热完成或真实GPU更新。原件根、实际命令、监控与停止方法见[父日志](../../agent_logs/task10/20261102-codex-online-trial.md)与[SRC-T10-023](../../SOURCES.md#src-t10-023)。结束后统一只读复算/报告，不拿旧16/56条及预检5更新混计。

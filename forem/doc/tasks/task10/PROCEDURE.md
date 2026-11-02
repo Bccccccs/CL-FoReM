@@ -100,3 +100,12 @@
 ### GPU / 正常batch8恢复交接
 
 本轮已按总cap1800s/64真实/12fixture更新结束，实际56真实/0在线更新、12fixture更新；主56达到cap，没有全8自然终局，真实恢复未验。入口显式--stop-at-boundary/--resume，--boundary-reference仅零更新诊断，原截止/账本不重置；不能持有已结束行凑边界。最终审核后严格字节/双端原件与合同补丁ede1299仅CPU实测。后续不得重跑旧目录，不擅启预热或1200/200；由决策者核定配置和下一预算。[结果](RESULTS.md) · [依据](../../SOURCES.md#src-t10-018)。推荐GPT6.1sol/high、Sonnet5.5/high，跨进程状态与数值需综合核验；执行者可范围内选模/先建档委派，共享授权/预算/截止。
+
+## 本次单一连续在线试训（用户另批，2026-11-02）
+
+唯一新run-id t10-online-20261102-s101，1200真实/200在线更新/25200s，先到即停，允许故障不完整结项，不恢复/重启/加预算。1000真实预热、B3 4718/上层101/batch8/train及原科学语义不变；先入口验证再真实。smoke默认1800s保留。
+- 10.11入口，sol/high，独占runtime/entry/外层shell/7h配置/入口测试；[TASK](task10.11/TASK.md) · [PROCEDURE](task10.11/PROCEDURE.md) · [RESULTS](task10.11/RESULTS.md)。
+- 10.12首更证据，sol/high，独占training_evidence及测试；[TASK](task10.12/TASK.md) · [PROCEDURE](task10.12/PROCEDURE.md) · [RESULTS](task10.12/RESULTS.md)。
+两者独立，父接runner并串行GPU1验证/唯一训练，核验原件；执行者可按难度选可用模型/强度并先建档再委派，共享授权/预算/截止。推荐GPT6.1sol/high、Sonnet5.5/high，因deadline合同/有效GPU梯度需跨模块核查。[父日志](../../agent_logs/task10/20261102-codex-online-trial.md)。
+
+- 10.13独立审核，terra/high，只写三文档/日志，父核验；[TASK](task10.13/TASK.md) · [PROCEDURE](task10.13/PROCEDURE.md) · [RESULTS](task10.13/RESULTS.md)。不启动GPU/真实采集。
