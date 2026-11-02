@@ -9864,3 +9864,8 @@ SRC-1067终审追加（2026-10-26）：29a92dfa01 finalizer rc0/0.114258219s，�
 <a id="src-t10-010"></a>
 
 **SRC-T10-010 · 决策者只读复核。** 项目实测复算、静态核查及推导。Codex，2026-11-02，基线提交 12bc3ab，run-id t10-smoke-20261102-s101。使用 task10_report.py 生成临时报告与 accounting-final.json 逐字节相同；重算 audit-final.json 登记的七份文件及 final.actor.pt 的 SHA-256 均一致。final-deterministic-tests.log 末行 120 passed、2 skipped（本次未重跑）。runner.py::restore_evidence 在 len(replay)<32 时将两次抽样均设为空列表，本轮16条只能确认计数、模型及 CUDA RNG 等已执行检查，无法核验下一真实采样一致。按 SRC-T10-008 的 15.488 s/决策估算 1000 条采集约 4.30 小时；30 分钟内仅完成预热就要求平均不超过 1.8 s/决策。只是小样本预算可行性比较，不是实测稳态吞吐或新预算。
+
+
+<a id="src-t10-011"></a>
+
+**SRC-T10-011 · 成本与恢复补证授权/有界测量协议。** 来源类型：用户明确任务、工程测量设计；用户/Codex，2026-11-02。用户要求接续63e1f6e，优先复用日志/真实回放，分解复位/候选/B3/IK/碰撞/栅格，计全推演与子步，非空抽样及已更新optimizer恢复，给可重建无重复采集边界与下一试训预算；保持1000预热、奖励、严格成功，由决策者核定新试训。精确位置：本轮用户指令、[父流程](tasks/task10/PROCEDURE.md)与[日志](agent_logs/task10/20261102-codex-cost-recovery.md)、task10.5/10.6三文档、`scripts/task10_measure_job.py`及新namespace `forem/results/task10/t10-cost-recovery-20261102/measurement-contract.json`；核查2026-11-02，父Codex。采用工程上限（非性能事实）：两遍旧seed101、8env、两批selected轨迹≤32测量决策/900s；派生离线GPU恢复夹具≤8更新/300s（复制来源身份明确非新真实或在线预热）；自然终局可重建在线核查≤4测量决策/360s；复核240s，总worker测量≤1800s，全部子Agent共用、GPU1串行，不重置旧run预算、不启动1000预热试训。计时wrapper不编辑冻结69源；排除比较的唯一波动字段为候选诊断search_wall_seconds，科学输出/失败计数仍严格比较。baseline真采样、instrumented复用捕获episode的reset总时间不可当优化收益；估计采样用baseline原始分项，GPUstream interval含CPU提交间隙，不称kernel compute。默认GPT6.1sol/Sonnet5.5；恢复实际sol/high、性能terra/high（上轮sol容量错误替代），父实际模型/强度未知。结论及测量尚待执行，不以协议数字当性能结果。

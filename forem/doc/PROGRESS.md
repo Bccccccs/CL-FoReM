@@ -322,3 +322,5 @@ r1历史记录（已由SRC-1041授权r2续跑）：2026-10-26 task8.8：地图�
 2026-11-02 15:43 +08 · T10-EXEC-20261102 · Codex · active · 唯一试训16真实决策/0更新因旧adapter变长diagnostics退出，修复并120passed/2skipped后不重启；账本/失败完整，正式门NOT_READY，准备独立限时4场景配对。[SRC-T10-008](SOURCES.md#src-t10-008)
 
 2026-11-02 16:05 +08 · T10-GATE-REVIEW · Codex · done（独立复算）；task10 仍为 review，C 未通过。见[复核记录](agent_logs/task10/20261102-codex-gate-review.md)。
+
+2026-11-02T16:11:50.649490+08:00 · T10-COST-RECOVERY-20261102 · Codex · active · 接续63e1f6e审核，优先旧回放，分解采集开销/全量计数，修恢复证据和可重建边界；不启动1000预热或新正式试训。[日志](agent_logs/task10/20261102-codex-cost-recovery.md)
