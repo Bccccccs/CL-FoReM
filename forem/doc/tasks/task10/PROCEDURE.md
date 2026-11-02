@@ -86,3 +86,17 @@
 ### 本轮成本/恢复交接（非新试训授权）
 
 执行者保留选模/拆分/委派权限，所有代理共父范围/总资源/截止；新派发仍先建三文档、独占写入与父验收。本轮bounded阶段已结束：完整baseline/单初边界分项、真实16非空恢复及batch1自然终局跨进程续计通过；instrumented全轨迹超时、GPU严格下一更新未过，batch8恢复未验。[RESULTS](RESULTS.md)、[SRC-T10-012](../../SOURCES.md#src-t10-012)、[013](../../SOURCES.md#src-t10-013)。下一1200decisions/200updates、保留1000预热、batch8训练7h+配对另30min只是待核定建议[SRC-T10-014](../../SOURCES.md#src-t10-014)；现有1800s入口不变，不自动执行。推荐GPT6.1sol/high、Sonnet5.5/high，因恢复数值口径、跨层时钟与采集预算需综合审查。
+
+
+## 本轮 GPU / 正常batch8恢复（2026-11-02）
+
+依赖SRC-T10-015，先按父[日志](../../agent_logs/task10/20261102-codex-gpu-batch8.md)统一1800s总账、GPU1串行。10.8与10.9独立开发，父集成后复验；0预热/长训/task11。
+- task10.8 GPU诊断，GPT6.1sol/high，独占新诊断模块/脚本/测试。[TASK](task10.8/TASK.md) · [PROCEDURE](task10.8/PROCEDURE.md) · [RESULTS](task10.8/RESULTS.md)。
+- task10.9恢复核验，GPT6.1sol/high，独占recovery.py及恢复/入口夹具，父独占runner.py。[TASK](task10.9/TASK.md) · [PROCEDURE](task10.9/PROCEDURE.md) · [RESULTS](task10.9/RESULTS.md)。
+执行者可自主选可用模型/强度、独立完成或先建档后委派；所有子Agent共享父授权/预算/截止，父核验原证据。推荐Codex GPT6.1sol/high、Claude Sonnet5.5/high，理由为CUDA归因及恢复时钟/账本跨模块核对。
+
+- task10.10 独立审核，terra/high，依赖10.8/10.9和父集成afc56f6，只写本节点/日志、不运行采集或GPU。[TASK](task10.10/TASK.md) · [PROCEDURE](task10.10/PROCEDURE.md) · [RESULTS](task10.10/RESULTS.md)。
+
+### GPU / 正常batch8恢复交接
+
+本轮已按总cap1800s/64真实/12fixture更新结束，实际56真实/0在线更新、12fixture更新；主56达到cap，没有全8自然终局，真实恢复未验。入口显式--stop-at-boundary/--resume，--boundary-reference仅零更新诊断，原截止/账本不重置；不能持有已结束行凑边界。最终审核后严格字节/双端原件与合同补丁ede1299仅CPU实测。后续不得重跑旧目录，不擅启预热或1200/200；由决策者核定配置和下一预算。[结果](RESULTS.md) · [依据](../../SOURCES.md#src-t10-018)。推荐GPT6.1sol/high、Sonnet5.5/high，跨进程状态与数值需综合核验；执行者可范围内选模/先建档委派，共享授权/预算/截止。

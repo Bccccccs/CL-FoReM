@@ -44,6 +44,8 @@ def report(root):
         if p.exists():
             evidence[str(p.relative_to(root))] = sha(p)
     return dict(run_id=root.name, phase_status=ledger['phases'], attempts=ledger['attempts'],
+        measurement_global_wall_seconds=ledger.get('measurement_global_wall_seconds'),
+        supervised_gpu_and_online_worker_wall_seconds=ledger.get('supervised_gpu_and_online_worker_wall_seconds'),
         total_fixture_updates=fixture_updates, charged_real_decisions=charged,
         completed_primary_real_decisions=primary_completed,
         completed_continuous_control_real_decisions=reference_completed,

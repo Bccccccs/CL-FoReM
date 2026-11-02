@@ -1,5 +1,7 @@
 # 当前进度
 
+2026-11-02T17:42:49.550264+08:00 **T10-GPU-BATCH8-20261102 · Codex · review / NOT_READY**：afc56f6正常入口7批56真实/0更新，结束行4/4/2/5/7/6/5，无全8安全边界，真实跨进程恢复未验；journal/回放56身份无漏重。GPU12派生更新：默认纯内存也差、确定性两组逐位一致，具体kernel未定位；ede1299补严格字节/完整恢复原件等，163passed/3条件skipped。总测量1318.73/1800s，7h仅估价，当前不建议放行1200/200。[RESULTS](tasks/task10/RESULTS.md) · [来源](SOURCES.md#src-t10-019) · [日志](agent_logs/task10/20261102-codex-gpu-batch8.md)。
+
 2026-11-02T17:05:10.196916+08:00 **T10-COST-RECOVERY-20261102 · Codex · review**：采集约15.709s/决策，首批推演IK24.42/39.69s、B3 .47s；重建补齐196有效槽/41893预测尝试。真实16非空抽样、已更新Adam初态与batch1自然终局跨进程2行无重计通过；GPU下一更新11叶微差、全instrumented超时及batch8恢复未验保留。建议下一1200/200训练7h+配对另30min，待决策者核定，未新试训。[RESULTS](tasks/task10/RESULTS.md) · [来源](SOURCES.md#src-t10-014) · [日志](agent_logs/task10/20261102-codex-cost-recovery.md)。
 
 2026-11-02T16:01:49.507445+08:00 **T10-EXEC-20261102 · Codex · review / NOT_READY**：实现/修复与120passed/2条件skipped；唯一试训16真实决策/0更新failed后未重启，失败/账本完整；4场景配对8/8完成，0更新actor0/4、随机3/4，胜负平0/3/1，仅管线读数。GPU有效更新/collector恢复/完整性能未过；专用容器已停、GPU compute空，不正式长训/task11。[RESULTS](tasks/task10/RESULTS.md) · [日志](agent_logs/task10/20261102-codex-execution.md) · [SRC-T10-009](SOURCES.md#src-t10-009)。

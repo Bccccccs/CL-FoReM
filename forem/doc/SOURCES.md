@@ -9898,3 +9898,33 @@ SRC-1067终审追加（2026-10-26）：29a92dfa01 finalizer rc0/0.114258219s，�
 <a id="src-t10-015"></a>
 
 **SRC-T10-015 · 第二次决策复核。** 项目静态核查与只读复算，Codex，2026-11-02，提交 bdd0ce1。对 SRC-T10-012 至 014 的 run 使用 task10_cost_recovery_report.py 向临时文件复算，与 summary-final.json 逐字节相同。核对 forem/src/task10/runner.py 的 train（预算 1800 秒、八行、循环末对结束行 reset、只在退出时做离线检查点）、recovery.py::save_episode_boundary（要求全批自然结束）、forem/scripts/task10_run_bounded.sh（独立的 1798/1800 秒监督）。正常训练入口没有调用采集边界保存或恢复；诊断的 batch1 结论不能覆盖 batch8 入口。估算 7h 仅用于排期；该审核未采集或重跑 GPU。下一步是接入并验证正常入口，在同一输入上区分 GPU 重复更新本身与恢复引入的差异；属于工程验收决定。
+
+<a id="src-t10-016"></a>
+
+**SRC-T10-016 · 本轮GPU归因/正常batch8恢复授权。** 来源类型：用户明确指令，2026-11-02，本会话；核查人Codex，2026-11-02。用户要求在task10工作树确认ca57b4b；只定位GPU下一更新差异（内存重复与实际存取对照）、把自然全批边界恢复接入正常train并验证batch8；固定B3 seed4718/上层101/既定语义，保持严格逐位口径；运行前登记短验证cap，参照/失败/恢复均收费，沿用30分钟上限、旧账本只读、新run-id，不启动预热/7h试训/配对/task11。精确本地记录：[父日志](agent_logs/task10/20261102-codex-gpu-batch8.md)，新run-id t10-gpu-batch8-20261102。采用：父统一GPU1串行及总1800s、真实64/fixture更新12上限，10.8/10.9先建档委派。限制：本指令未放行1200/200试训；预算建议仍交决策者核定。
+
+<a id="src-t10-017"></a>
+
+**SRC-T10-017 · 同前态GPU重复/存取双对照。** 来源类型：项目原始数值实测，Codex task10.8与父Agent，2026-11-02；核查日2026-11-02。run-id `t10-gpu-batch8-20261102`，本工作树`forem/results/task10/`下三组`gpu-default`、`gpu-deterministic`、`gpu-default-repeat`的diagnosis.json和各组memory_vs_memory.pt/memory_vs_checkpoint.pt；输入旧derived-fixture.pt SHA256 `b9ddd64e125392602dc7ed1e734df2fc4b0939daad21a32b01be137a9274abcf`，原16真实条派生32anchors、40loss位置，非新增真实或预热。执行时诊断模块SHA `557d44a15e75d44dfcf19c0031685641520880b4a748c2f37d7c094d18aa2c7d`；afc56f6包含非有限JSON后续CPU修复（本次输入全有限，原始测量版SHA保留）。精确符号：gpu_diagnosis::{clone_memory,run_controls,_snapshot,_measured_update,compare_tree}。每组两条双路径、4更新，共12fixture更新/0真实；每组更新前模型/target/Adam/scheduler/温度/模式/设置/RNG及样本逐位一致（state4163张量叶、sample5472叶），两条纯内存路径均不save/load，存取组仅右支实际save_checkpoint/load_checkpoint。
+
+原始结论：默认与重复两次都在两组CNN裁剪前梯度首次观察到微差，loss/RNG相同；首差为按稳定字典遍历顺序的`model.vcm.f_enc.cnn.0.bias[0]`，不是GPU算子执行先后。首默认纯内存组max_abs=5.4569682106375694e-12、4梯度叶不同；后权重cnn.2.weight最大3.725290298461914e-9，post_state10叶不同。存取组首同bias梯度max2.9103830456733704e-11、5梯度叶不同、post_state13叶不同。该差异无需保存/恢复即可发生，不能归因于checkpoint存取。确定性组配置`CUBLAS_WORKSPACE_CONFIG=:4096:8`（Python启动前）、torch.use_deterministic_algorithms(True)、cudnn.deterministic=True；两组共有配置threads2、TF32(matmul/cudnn)=False、benchmark=False；确定性两组全部比较阶段逐位一致。采用：严格口径不放宽，定位为当前GPU更新非确定性表现（CNN backward梯度观测层），不宣称具体kernel根因；默认严格下一更新验收仍失败。
+
+实测耗时：三次Python进程9.970928/10.734226/9.943892s，父监督12.771956/13.535860/12.579413s；默认首更1.064186s/热0.090655–0.093046，确定性首更1.260951s/热0.136430–0.138486，默认复现首更1.055803s/热0.092599–0.096687。含冷启动的每次4更新均值不可替代正式最大32×8且更长prefix的训练成本。复算：task10_gpu_diagnosis_report.py逐项重算6个原始pt比较树，与原JSON相等（rc0），紧凑gpu-analysis.json；初次输出权限失败rc1无新GPU或交互，修正输出后rc0。限制：3次同一旧数据/同GPU1/torch2.7.1+cu128/同主机，不证明所有设备或训练状态均可逐位恢复；不把热更新微基准当端到端成本。[详细结果](tasks/task10/task10.8/RESULTS.md)。
+
+<a id="src-t10-018"></a>
+
+**SRC-T10-018 · 正常train的自然batch8边界接线与有界可达性。** 来源类型：项目实现、CPU确定性夹具及真实采集，Codex task10.9、父与task10.10独立审查，2026-11-02核查。起点ca57b4b，接线/真实运行afc56f6；最终审核缺口修复ede1299。精确位置：runner.py::train、collector_snapshot/collector_comparable；recovery.py::save_episode_boundary/load_episode_boundary/tree_equal；task10_run_bounded.sh透传参数；task10_batch8_probe.py统一相位与账本。旧ledger只读，新证据根为本工作树`forem/results/task10/t10-gpu-batch8-20261102/`。
+
+实现与CPU实测：仅显式stop-at-boundary且整批自然结束、prepare_next清pending、最后transition入回放、journal已持久化、ledger无inflight且计数一致后保存；mixed结束行立即沿原路径reset，不保留终止行等其他行凑全结束。新PID重建下一回合，继承原Linux boot/monotonic started/deadline、policy与sampler/global RNG、learner/replay及episode总数；拒旧owner活着、配置/当前GPU等合同改变、陈旧ledger或journal、重复恢复锁。安全保存还核对真实journal的selected/reward/dt/terminated/truncated/bootstrap_mask与最后回放、core终局一致，重复身份拒绝。CPU反例7failed后修复；旧ca57b4b正常入口缺collector-boundary的RED保留；最初入口25passed，父组合31passed。
+
+独立审核发现旧tree_equal只数值比较、恢复端完整start/end未落盘、当前GPU等合同字段未纳入核对、deadline/start布尔值不决定status。真实运行期间源码冻结；运行退出后以3个signed-zero失败、原件缺失/截止失败、独立旧PID退出后的GPU合同反例失败验证，再最小修复至ede1299：tensor/array/Python浮点按字节、双端start/end原件、deadline/start影响验收、当前GPU/physical_gpu/code_commit/random_seed合同检查。最终整个task10+task7_upper组合163passed/3条件skipped、40.09s、rc0（CPU隐藏CUDA）；跳过为CUDA下层对照1项和显式GPU训练条件2项，不算新增GPU。原始日志`forem/logs/task10/t10-gpu-batch8-final-tests.log`及各*-red.log；最终CPU完整start/end独立原件字节复算exact，原件`cpu-final/{strict-reference,cross-process}/`与`cpu-final/strict-recomputed.json`。这是合成batch8，不能当真实恢复验收。
+
+真实实测：正常入口afc56f6，GPU1、B3 seed4718、上层101、batch8、threads2、TF32/benchmark=False；固定1000预热/科学条件未改，限定0更新。容器forem-task10-runtime，容器PID322/宿主3743824，父orchestrator3743784。主采集cap56、参照额外最多8、恢复在主cap余量内收费，阶段cap1320s，所有进程继承1793611584.2162204 epoch、monotonic deadline8821662.907824922。7批56真实，逐批自然结束4/4/2/5/7/6/5，无全8边界，按决策cap退出rc0；无collector-boundary.pt，不启动参照或新进程恢复。最终reserved=completed=56、inflight0、replay56、在线更新0，最后仍有3活动行，明确未完成，不伪造终局。Python wall614.676152s、父监督616.170092s、相位616.172633s。storage-audit.json只读逐位核对7份journal与回放56身份/560实际字段，无漏计/重复，actor有效槽成立、冻结B3前后不变。该一致性不证明collector恢复。限制：**真实batch8安全边界可达性、跨进程下一批8场景/观测/候选/选择/ID/journal/ledger及原deadline尚未验证**；最终字节修复只有CPU实测，未追加真实或GPU运行。限定同主机同boot干净自然边界，任意中途/主机重启不支持。[父结果](tasks/task10/RESULTS.md)、[10.9](tasks/task10/task10.9/RESULTS.md)、[独立审查](tasks/task10/task10.10/RESULTS.md)。
+
+<a id="src-t10-019"></a>
+
+**SRC-T10-019 · 本轮总账及1200/200预算复算。** 来源类型：项目实测、推导与工程估价，Codex，2026-11-02核查。新namespace measurement-ledger.json、summary-final.json、gpu-analysis.json、batch8/{training-budget,training-summary,contract}.json；复算脚本task10_gpu_batch8_report.py、task10_batch8_storage_audit.py、task10_gpu_diagnosis_report.py，代码ede1299（汇总脚本后续仅加入全局wall字段）。总cap1800s、真实64、派生GPU更新12，先登记再运行，GPU1串行；3次GPU各4更新/0真实（监督wall12.771956/13.535860/12.579413s）、真实阶段56/0、无参照/恢复消费，所有失败CPU和只读复算在原global窗口、无追加GPU/真实，详见总账auxiliary_verification。测量及必要复验闭账global1318.725992s，受监督GPU/采集worker wall合计655.057321s（非CPU核时）；旧账本未重置。该轮计数56真实/12fixture更新，不加到旧16/0试训作预热。
+
+真实阶段相位616.172633/56=11.003083s/决策（含初始加载、所有已执行reset/prepare、journal/回放/离线checkpoint、无在线update；第7批后按cap不再reset，阶段无采集恢复）。与旧16决策的15.708732s/决策不是同输入优化对照，不能称提速。保守排期继续用max(旧15.708732,新11.003083)=15.708732。工程假设保持SRC-T10-014的4s/update、固定60s、1.25余量：`(1200×15.708732 + 200×4 +60)×1.25=24638.098s=6.843916h`，整小时候选7h。若只用新均值算得更短，不据此缩预算；4s/update和1.25都不是实测上界或置信界。确定性热更新40loss位置约0.136–0.138s、首更1.261s，仅诊断成本，正式32×8=256 loss且长prefix/训练分布尚未测，不能直接代入为正式耗时。
+
+采用：**不建议当前放行1200真实/最多200更新试训**；7h只保留排期估值。主要缺口是真实batch8自然边界/跨进程恢复未验，默认CUDA严格下一更新仍失败，确定性设置尚未核定纳入正常训练合同，完整序列成本无界证据。交回决策者核定后续验证和配置；本轮不扩大墙钟、不启动1000预热、7h试训、配对或task11。原30分钟Python/外层硬限制仍保留，诊断改设置不自动修改正常训练语义。[本轮授权](#src-t10-016)、[GPU实测](#src-t10-017)、[入口实测](#src-t10-018)、[旧成本估计](#src-t10-014)。
