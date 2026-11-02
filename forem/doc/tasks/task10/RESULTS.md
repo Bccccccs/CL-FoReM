@@ -179,3 +179,7 @@ python3 forem/scripts/task10_cost_recovery_report.py --root forem/results/task10
 原始有界命令、参数和PID完整记在measurement-ledger及phase log；同phase只允许显式修复后续原deadline，不能新建预算重跑。只读storage审计为`task10_recovery_storage_audit.py`，数据为storage-audit.json；独立审查见[10.7 RESULTS](task10.7/RESULTS.md)，恢复原始CPU日志task10.6-cpu-recovery-crossprocess2.log。所有新增代码/配置/脚本位于forem，未改冻结参考69文件或科学参数。
 
 交接给决策者：成本与限定恢复已有实测；完整instrumented轨迹、默认GPU严格下一更新与batch8恢复仍未通过/未验证。建议核定上述7h+配对预算及这些验收口径，之后另派新试训；本执行者不自启千次预热、正式训练或task11。负责人Codex、状态review；推荐GPT6.1sol/high、Sonnet5.5/high继续核验，理由为上述跨层状态/时钟/预算约束。
+
+### 第二次决策复核 · 2026-11-02
+
+复算 summary-final 与原件一致。接受旧16条非空采样、初始边界成本和 batch1 限定恢复。7h 可列排期估值，当前不放行启动。正常 train 入口尚无 batch8 采集保存/恢复调用；Python 预算、外层监督均仍为30分钟。下次先用同一数据做连续对连续、连续对存取后下一更新的 CUDA 对照，再经正常入口验证 batch8 可达安全边界的跨进程恢复与原截止/账本，不能主动截短 episode 来制造边界。按同设置列实测耗时；若实际批次无法到达边界或确定性配置改变成本，回报限制与预算。完成后再复核 1200/200 的试训放行。[复核记录](../../SOURCES.md#src-t10-015)
