@@ -332,3 +332,5 @@ r1历史记录（已由SRC-1041授权r2续跑）：2026-10-26 task8.8：地图�
 2026-11-02T17:01:01.985198+08:00 · T10-COST-RECOVERY-20261102 · Codex · review · baseline计数/分项及限定batch1跨进程恢复已核，GPU下一更新严格未过/完整instrumented超时；形成1200/200+7h预算建议待决策者，未新试训。[日志](agent_logs/task10/20261102-codex-cost-recovery.md)
 
 2026-11-02 · T10-GATE-R2 · Codex · done（复算及入口审核），task10 仍为 review；7h 试训待放行。[日志](agent_logs/task10/20261102-codex-second-gate.md)
+
+2026-11-02 18:45 +08 · T10-GATE-R3 · Codex · done（短验证审核），task10 在线训练与真实 batch8 恢复仍待验。[记录](agent_logs/task10/20261102-codex-third-gate.md)
