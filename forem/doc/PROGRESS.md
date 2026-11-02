@@ -302,3 +302,5 @@ r1历史记录（已由SRC-1041授权r2续跑）：2026-10-26 task8.8：地图�
 2026-11-02 14:24 +08 · SAC-SPLIT · Codex · active · 固定现有下层推理基线，建立两个本地分支和文档计划。[交接](agent_logs/project/20261102-codex-sac-split.md)
 
 2026-11-02 · SAC-SPLIT · Codex · done（本地分线和首版计划）；task10 review 待派发。[TASK](tasks/task10/TASK.md) · [PROCEDURE](tasks/task10/PROCEDURE.md) · [RESULTS](tasks/task10/RESULTS.md) · [日志](agent_logs/task10/20261102-codex-plan.md)。
+
+2026-11-02：先 [task10 上层 SAC](tasks/task10/TASK.md)，再 [task11 世界模型](tasks/task11/TASK.md)。以[最新分期](SOURCES.md#src-1360)取代旧合并草案。 Codex · 分期文档 done，task10 待细化评审，task11 待基线。[记录](agent_logs/project/20261102-codex-task10-task11-scope.md)。

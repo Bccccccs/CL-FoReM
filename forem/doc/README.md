@@ -54,4 +54,4 @@ task1、task2编号已删除，不复用。子任务入口见各任务PROCEDURE�
 
 2026-10-23当前入口纠错依据[进度审核SRC-0960](SOURCES.md#src-0960)、[PROGRESS](PROGRESS.md)及其已有授权/结果链接；没有新增实施或实验授权。
 
-2026-11-02 · task10 固定下层的上层 SAC 与世界模型（本分支，仅计划）：[TASK](tasks/task10/TASK.md) · [PROCEDURE](tasks/task10/PROCEDURE.md) · [RESULTS](tasks/task10/RESULTS.md)。
+2026-11-02：先 [task10 上层 SAC](tasks/task10/TASK.md)，再 [task11 世界模型](tasks/task11/TASK.md)。以[最新分期](SOURCES.md#src-1360)取代旧合并草案。

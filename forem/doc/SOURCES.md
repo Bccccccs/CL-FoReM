@@ -9804,3 +9804,7 @@ SRC-1067终审追加（2026-10-26）：29a92dfa01 finalizer rc0/0.114258219s，�
 <a id="src-1356"></a>
 
 **SRC-1356 · B3-5M 基线与两分支计划。** 来源类型：用户决定、工程选择与本地文件核查。用户 / Codex，2026-11-02 本次会话“我同意你的说法，由你建立分支……只计划文档”。核查人 Codex，2026-11-02。采用 B3-5M 三个 final 作为共同下层基线，task10 规划上层 SAC 与世界模型，task9 规划下层改善。精确 run 路径、actor/config SHA-256、地图索引与版本核查见[快照清单](agent_logs/project/20261102-codex-sac-split.md)。原始成绩及局限沿用 SRC-1352、1353、1355。此次授权覆盖本地分线与计划，不构成新训练或整批独立验收结果。
+
+<a id="src-1360"></a>
+
+**SRC-1360 · task10/11 分期及旧接口边界。** 来源类型：用户决定及项目源码静态核查。2026-11-02 用户：“那就task10做上层SAC，11再做世界模型”。Codex 同日登记。先行 task10 负责多候选上层 SAC，task11 在基线上研究 WM。工程依据：FoReM 提交 ed4fe40 的 forem/src/task7_sim/decision_env.py（DecisionEnv.step）、task8_sim/decision_env.py（PcdDecisionEnv）、task7_sim/core.py（Core.__init__、rollout）及 B3 配置见 SRC-1356。旧候选并行推演与单段执行接口可作设计参考；legacy 与 B3 的失败处理不能按已兼容验收。用户决定的是任务分工，未批准训练、预算或具体 WM 修正方案。

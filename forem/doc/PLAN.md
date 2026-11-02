@@ -25,3 +25,5 @@
 ## Agent与模型
 
 推荐Codex GPT6.1sol、Claude Sonnet5.5；文档/常规执行low或默认，跨模块设计与核对medium。实际配置在各日志中另记。
+
+2026-11-02：先 [task10 上层 SAC](tasks/task10/TASK.md)，再 [task11 世界模型](tasks/task11/TASK.md)。以[最新分期](SOURCES.md#src-1360)取代旧合并草案。
