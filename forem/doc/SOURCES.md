@@ -9815,3 +9815,7 @@ SRC-1067终审追加（2026-10-26）：29a92dfa01 finalizer rc0/0.114258219s，�
 - 候选与学习器：forem/src/task7_sim/decision_env.py 的 DecisionEnv._boundary、step；task7_sim/core.py 的 feature_vector、rollout、Core.step、_finish（源码目录均在 forem/src 下）；task7_upper/candidate_encoder.py 的 CandidateEncoder、model.py 的 UpperModel.forward、sac_discrete.py 的 bellman、DiscreteSAC.update、stages.py 的 sequence_outputs，以及 forem/config/task7/upper_train.json。旧同步路径为 13 槽、6 维几何和 19 维推演摘要，stage 1 使用状态、候选注意力、actor 与双 Q；旧奖励为进展、失败和终点奖励，旧折扣用提交时间。旧序列训练含 burn-in，短回合的损失覆盖须另验。
 - 下层与环境：冻结清单所列 B3_5M-seed4718/config.json、task8_lower/sac.py 的 LowerSAC.select_action、task8_sim/decision_env.py 的 PcdDecisionEnv.__init__、上述 Core。B3 为 sync_v5/cbl_continue；旧决策环境只接 legacy；旧 rollout 创建局部碰撞 Core，不能据此宣称已复现 B3 时序。
 - 采用方式：复用上层 stage 1 结构、候选规格与优化器。固定 4718、按尝试时钟折扣、以严格成功为终局奖励并用路线进度势函数塑形、将完整任务限额作为上层终局，以及评估和有界核查安排，均为此次设计选择；公式、单位、条件及验收见 [PROCEDURE](tasks/task10/PROCEDURE.md)。未核验学习效果、耗时或适配后的数值一致性。
+
+<a id="src-t10-002"></a>
+
+**SRC-T10-002 · 子 Agent 派发权限。** 来源为用户于 2026-11-02 在 task10 决策聊天明确指示“你要允许他派发子agent，选择合适的模型干活”。Codex 同日核对原文及根 AGENTS.md 的任务组织第 5 条、模型推荐表。授权执行负责人选择子 Agent 和模型；具体分工与强度为工程建议，实际派发时登记。

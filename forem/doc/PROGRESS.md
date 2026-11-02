@@ -308,3 +308,5 @@ r1历史记录（已由SRC-1041授权r2续跑）：2026-10-26 task8.8：地图�
 2026-11-02 15:01 +08 · T10-SAC-DESIGN · Codex · active · 上层协议与派发交接。[记录](agent_logs/task10/20261102-codex-sac-design.md)
 
 2026-11-02 · T10-SAC-DESIGN · Codex · done（设计交付）；task10 实施待派发，正式运行待预算。[交接](tasks/task10/RESULTS.md)
+
+2026-11-02 · T10-SAC-DESIGN · Codex · done（补充执行负责人派发子 Agent 与选模授权）。[父流程](tasks/task10/PROCEDURE.md)
