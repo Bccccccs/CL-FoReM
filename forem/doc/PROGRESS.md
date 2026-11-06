@@ -1,5 +1,7 @@
 # 当前进度
 
+2026-11-06 · PROJECT-REFERENCE-SYNC-20261106 · Codex · done：四个对照仓库源码快照已推送 main，临时分支已删除；[记录](agent_logs/project/20261106-codex-reference-sync.md)。
+
 2026-11-06T12:22:52+08:00 · PROJECT-REMOTE-SYNC-20261106 · Codex · done：项目及四份可取得的历史 PPT 已推送 GitHub，独立工作树分别保存为备份分支；[记录](agent_logs/project/20261106-codex-remote-sync.md)。
 
 2026-11-05T10:02:15+08:00 · T10.17-STATUS-20261105 · Codex · done（只读核查），r2训练继续active。09:55约5760/10000真实、4760/9000更新；24检查点发布、最新5632，2k/5k均有，首CUDA更及既有保存审计通过。GPU1约65.4/95.6GiB；按缓存剩余地图增长估计终点约69.1GiB、余26.5GiB，非OOM保证。当前未见新增报错，无训练改动/重复测试/跨卡实施。[依据](SOURCES.md#src-t10-status-20261105)。
