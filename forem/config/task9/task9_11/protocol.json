@@ -1,0 +1,80 @@
+{
+  "run_id": "t9.11-lr-20261103T171820+0800",
+  "started_at": "2026-11-03T17:18:20+08:00",
+  "deadline": "2026-11-06T03:18:20+08:00",
+  "max_wall_seconds": 208800,
+  "max_worker_seconds": 208800,
+  "max_gpu_seconds": 208800,
+  "max_output_bytes": 2199023255552,
+  "max_diagnostic_log_bytes": 8589934592,
+  "formal_consumed": 12000000,
+  "smoke_consumed": 4000,
+  "max_evaluation_episodes": 11768,
+  "g1_max_worker_seconds": 1800,
+  "smoke_group_max_worker_seconds": 4300,
+  "recording_gates_max_worker_seconds": 3600,
+  "formal_run_max_worker_seconds": 43200,
+  "final_test_max_worker_seconds": 14400,
+  "preferred_gpu_index": 0,
+  "preferred_gpu_uuid": "GPU-e2eab186-4b18-f63f-2ada-c61aa98ed587",
+  "forbidden_busy_gpu": 1,
+  "new_output_root": "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.11-lr-20261103T171820+0800",
+  "new_log_root": "/home/ybc/projects/CL-FoReM-task9/forem/logs/task9/t9.11-lr-20261103T171820+0800",
+  "authorization": "2026-11-03 user: \u6d3e\u53d1\u5427; executes approved task9.11 protocol through staged independent gates; no extra confirmation required within scope",
+  "automatic_retry": false,
+  "format": "task9-lr-protocol-v1",
+  "arms": [
+    "C",
+    "L"
+  ],
+  "seeds": [
+    4718,
+    4719
+  ],
+  "formal_order": [
+    [
+      "C",
+      4718
+    ],
+    [
+      "L",
+      4718
+    ],
+    [
+      "C",
+      4719
+    ],
+    [
+      "L",
+      4719
+    ]
+  ],
+  "historical_root": "/history",
+  "container_output": "/output",
+  "container_logs": "/runlogs",
+  "review_root": "/output/review",
+  "save_allowance_s": 1800,
+  "cancellation_drain_bound_s": 600,
+  "emergency_margin_s": 60,
+  "profile_cost_multiplier": 1.1,
+  "profile_restore_allowance_s": 300,
+  "poll_s": 5,
+  "max_formal_transfers": 3000000,
+  "first_update": 260,
+  "formal_updates": 299975,
+  "evaluation_roles": [
+    "validation",
+    "semantic_transfer"
+  ],
+  "training_diagnostics": "original",
+  "reviewer": "task9.11.4",
+  "external_activity_roots": [
+    "/workspace/doc/agent_logs/task9/task9.11/task9.11.3/cpu-preparation",
+    "/workspace/doc/agent_logs/task9/task9.11/task9.11.4"
+  ],
+  "external_output_roots": [
+    "/workspace/doc/agent_logs/task9/task9.11/task9.11.3",
+    "/workspace/doc/agent_logs/task9/task9.11/task9.11.4"
+  ],
+  "unmetered_log_reserve_bytes": 268435456
+}

@@ -1,5 +1,136 @@
 # 当前进度
 
+2026-11-05T20:26:11+08:00 · TASK9-STATUS-20261105 · Codex · done（仅状态核查） · 现场task9 L4718/C4719两路remaining训练，约1.244M/0.832M（各3M），L4719等待；另有task10长训8176/10000决策。未干预运行。[记录](agent_logs/task9/20261105-codex-running-status.md) · [来源](SOURCES.md#src-task9-status-20261105)。
+
+2026-11-04T11:32:34.885431+08:00 · TASK9.11.18 · paused · 用户澄清本聊天仅提供提示词，由用户自行派发。此前本聊天对“全部批准”的直接开工解释有误，本聊天派工已撤回，.18/.18.1/.18.2停止，等用户另行派发。
+
+
+2026-11-04T11:16:49.034684+08:00 · TASK9.11.18 · Codex · active · 用户整批批准，11月7日03:18:20截止，累计资源不增；开始实施、独立审查与可行性核账。[任务](tasks/task9/task9.11/task9.11.18/TASK.md)。
+
+2026-11-04T11:14:56.017732+08:00 · TASK9.11-STARTUP-REVIEW · Codex · done（仅审核与整批派发提案） · .17范围通过，正式0，原窗口不足以支持历史参照工期；日历延期与执行派发尚待决定。[记录](agent_logs/task9/task9.11/task9.11.17/20261104-codex-startup-decision.md)。
+
+2026-11-04T11:09:10.558989+08:00 · TASK9.11.17-REAL-RECEIPTS · Codex · review（限定准备原语/非执行草案已独审交付，真实NOT_READY） · 175源46218cc5…f587，父22/独立28、518引用/五原反例核真；C局部政策落覆盖账、旧FAIL/UNKNOWN保留；11:07原窗余40.181h，主体历史参照42.716–43.131h＋Q仍不利，完整真实cost/control/设备/执行链前置未齐，无实验/签令。[结果](tasks/task9/task9.11/task9.11.17/RESULTS.md) · [父§21](tasks/task9/task9.11/RESULTS.md#21-用户采纳后task91117准备适配与独审交付2026-11-04) · [SRC-1430](SOURCES.md#src-1430)/[1431](SOURCES.md#src-1431)。
+
+2026-11-04T10:43:46.328839+08:00 · TASK9.11.17-REAL-RECEIPTS · Codex · active · 用户采纳SRC-1428推荐；旧C限定组合/1800s局部政策核销、真实收据/续接协议草案与独审准备；不延时/加预算/真实运行/签令。[三文档](tasks/task9/task9.11/task9.11.17/TASK.md) · [日志](agent_logs/task9/task9.11/task9.11.17/20261104-codex-real-receipts.md)。
+
+2026-11-04T10:35:06.029620+08:00 · TASK9.11-RELEASE-REVIEW-20261104 · Codex · done（评审交付；task9.11 review / NOT_READY待用户决定） · 原窗末检余40h43m53s；历史主体参照42.716–43.131h＋Q不利、无可证必需下限；旧C组合/局部核销/真实会计与入口及窗口待决，4000/980/formal0/test0、58h/2TiB/截止不变，无实验/签令。[一页表](tasks/task9/task9.11/RESULTS.md#20-2026-11-04正式实验放行评审一页决策表) · [详细记录](agent_logs/task9/task9.11/20261104-codex-release-review.md) · [SRC-1428](SOURCES.md#src-1428)。
+
+2026-11-04T10:25:20.691413+08:00 · TASK9.11-RELEASE-REVIEW-20261104 · Codex · active · 只读正式放行评审，沿用SRC-1423候选通过；核实时窗/原账/旧C门/执行合同，仅文档，不签令不运行。[记录](agent_logs/task9/task9.11/20261104-codex-release-review.md)。
+
+2026-11-04T10:16:11.524566+08:00 · TASK9.11-FIRST-GPU-FINAL-REVIEW · Codex · done（SRC-1423候选工程通过，真实NOT_READY） · 复核首次及后置冲突、正常区间和证据身份。[记录](agent_logs/task9/task9.11/20261104-codex-first-gpu-final-review.md) · [SRC-1427](SOURCES.md#src-1427)。
+
+2026-11-04T10:14:04.273849+08:00 · TASK9.11-FIRST-GPU-P1 · Codex · done（修复/独审交付，真实NOT_READY） · SRC-1423冻结替身反例关闭；171源3ae8183a…97d3ad2，父143项/独立32项，原三JSON同字节；GPU两账保留、失败费保留，2313新/5689旧引用核真。旧STOP/UNKNOWN/预算截止不变，无真实许可。[RESULTS §19](tasks/task9/task9.11/RESULTS.md#19-src-1423首次gpu设备归属最小修复2026-11-04) · [SRC-1425](SOURCES.md#src-1425)/[1426](SOURCES.md#src-1426)。
+
+2026-11-04T10:01:46.171023+08:00 · TASK9.11-FIRST-GPU-P1 · Codex · active · SRC-1423首次设备三方一致性最小修复；.15实施→.16独审，仅stdlib替身，保留dirty/旧STOP/UNKNOWN，无真实执行许可。[日志](agent_logs/task9/task9.11/20261104-codex-first-gpu-repair.md)。
+
+2026-11-04T09:57:52.803893+08:00 · TASK9.11-GPU-P1-REVIEW · Codex · done（审核交付，真实NOT_READY） · CPU隔离和区间并集复核通过，首次record指定GPU而inspect无卡仍被接受。[审核](agent_logs/task9/task9.11/20261104-codex-gpu-accounting-review.md) · [SRC-1423](SOURCES.md#src-1423)。
+
+2026-11-04T09:51:50.948895+08:00 · TASK9.11-GPU-ACCOUNTING-P1 · Codex · done（仅修复与独审交付；真实NOT_READY） · v3 0bbda355…7476c1a9/170源，父132/独立54同SHA及5689引用核真；CPU只加worker、GPU区间去重/预留分列、改写/身份反例拒绝，F1/F2保留。旧STOP/C FAIL/UNKNOWN、58h/2TiB和原截止不变。[完整交付](tasks/task9/task9.11/RESULTS.md#17-src-1417-p1-gpu两账修复最终交付2026-11-04) · [SRC-1420](SOURCES.md#src-1420)/[1421](SOURCES.md#src-1421)/[1422](SOURCES.md#src-1422)。
+
+2026-11-04T09:20:23.177330+08:00 · TASK9-COMPARE-20261104 · Codex · done（比较说明） · 已核冻结B3-5M→B1-L的温度规则/α学习率与3M预算；同期B1→L唯一actor/critic日程变量，无已证新策略提升。[记录](agent_logs/task9/20261104-codex-sac-comparison.md) · [SRC-1418](SOURCES.md#src-1418)。
+
+2026-11-04T09:19:57.967381+08:00 · TASK9-COMPARE-20261104 · Codex · active · 只读比较冻结B3-5M与9.11 B1-L，区分科学变量/工程修复/已证效果。[记录](agent_logs/task9/20261104-codex-sac-comparison.md)。
+
+2026-11-04T09:19:52.133670+08:00 · TASK9.11-CROSS-STAGE-REVIEW · Codex · done（审核交付，真实NOT_READY） · F1/F2联合续行通过，GPU重复/错误归类风险P1已定位，复核168/158/101项。[记录](agent_logs/task9/task9.11/20261104-codex-cross-stage-review.md) · [SRC-1417](SOURCES.md#src-1417)。
+
+2026-11-04T09:19:52.111642+08:00 · TASK9.11-CROSS-STAGE-REVIEW · Codex · active · 只读复核F1/F2与独立联合原件。[日志](agent_logs/task9/task9.11/20261104-codex-cross-stage-review.md)。
+
+2026-11-04T09:17:35.237465+08:00 · TASK9-STATUS-20261104 · Codex · done（仅状态核查） · 现场task9训练进程/运行容器均无、GPU compute空；9.11仍4000 smoke/980评估/正式0/test0，最新为修复独审交付、真实NOT_READY。原截止11-06 03:18:20，日历余约42.01h，未证全方案可行；未恢复实验。[记录](agent_logs/task9/20261104-codex-training-status.md) · [SRC-1416](SOURCES.md#src-1416)。
+
+2026-11-04T09:16:49.781762+08:00 · TASK9-STATUS-20261104 · Codex · active · 只读核查task9当前训练与9.11最新交付，不恢复运行。[记录](agent_logs/task9/20261104-codex-training-status.md)。
+
+2026-11-03T23:54:39.967393+08:00 · TASK9.11-CROSS-STAGE-REPAIR · Codex · done（仅集成修复/独审交付，真实NOT_READY） · .11/.12同168源c8523c9a…11ef177，父116项、独立130＋1次归档联合执行PASS，158引用/101原件/878旧保护核真。F1历史自然到期保资格/保费，F2新增独立审核费经新snapshot后可续行，旧protocol/release/closure字节不变；v1漏费FAIL保留。23:53:06快照worker下界4441.072345s、精确余额UNKNOWN；原52h上限占额情景比日历余量少34.771min，未证全方案可行。旧C组合/有限会计与取值/历史UNKNOWN/真实许可待用户决定，原预算截止科学不变，无真实实验。[完整矩阵/账与交接](tasks/task9/task9.11/RESULTS.md#15-f1f2跨阶段联合修复与独立交付2026-11-03) · [独审](tasks/task9/task9.11/task9.11.12/RESULTS.md) · [SRC-1413–1415](SOURCES.md#src-1413)。
+
+2026-11-03T23:00:27.137730+08:00 · TASK9.11-INTEGRATION-REVIEW · Codex · done（审核交付；真实NOT_READY） · 接受R1/R3/R5及已测候选闭环；新增P1旧阶段令过期使历史闭账失效、追加审核成本与protocol/closure冻结冲突；164源码/54引用hash一致，86项为既有测试。未改实现/运行实验。[审核](agent_logs/task9/task9.11/20261103-codex-integration-review.md) · [SRC-1411](SOURCES.md#src-1411)。
+
+2026-11-03T22:58:42.257016+08:00 · TASK9.11-INTEGRATION-REVIEW · Codex · active · 复核v3集成源码/原测试/独立裁决与跨阶段时钟、累计账本；仅只读审核和文档。[记录](agent_logs/task9/task9.11/20261103-codex-integration-review.md)。
+
+2026-11-03T22:48:48.791274+08:00 · TASK9.11-INTEGRATION-REPAIR · Codex · done（本轮工程集成/独立交付；真实NOT_READY） · v3统一164源1ba4e989…9105b1，父81/独立86项PASS、54引用核真；生产prepare→实际worker二次准入→wait→候选闭账→后继/幂等通过。R1/R3/R5已知代码缺口修复，R2/R4真实应用仍待旧C/历史UNKNOWN/有限会计与执行合同决定；旧STOP/4000smoke/980评估/formal0/test0和原deadline不变，无真实实验。[完整矩阵](tasks/task9/task9.11/task9.11.9/RESULTS.md) · [独审](tasks/task9/task9.11/task9.11.10/RESULTS.md) · [SRC-1408–1410](SOURCES.md#src-1408)。
+
+2026-11-03T22:12:50.117521+08:00 · TASK9.11-END-TO-END-REVIEW · Codex · done（审核交付；真实NOT_READY） · 新增G1收集冲突、outer wait超时漏封口、配对右侧重复；正常闭账/合法续接仍阻断。旧启动竞态已修、29证据hash一致，未改实现/运行真实实验；给一次交付生产调用链替身验收矩阵。[审核](agent_logs/task9/task9.11/20261103-codex-end-to-end-review.md) · [SRC-1406](SOURCES.md#src-1406)。
+
+2026-11-03T22:08:30.654361+08:00 · TASK9.11-END-TO-END-REVIEW · Codex · active · 最新.7/.8修复的启动、实际入口、生命周期、预算和续接闭环审核；只读/文档，不运行真实实验或改实现。[记录](agent_logs/task9/task9.11/20261103-codex-end-to-end-review.md)。
+
+2026-11-03T22:00:33.957571+08:00 · TASK9.11-LIFECYCLE-REPAIR · Codex · review（修复与独立审核完成；不能放行） · .7启动握手/actual wait链及旧格式成本封口，.8独立40项+四反例/链/legacy复验通过；候选11+5通过且只在review目录封存。完整outer/旧成本UNKNOWN、旧C完整门FAIL，真实NOT_READY，无训练许可；原4000/980/formal0/test0、58h/2TiB和deadline不变。[RESULTS §11](tasks/task9/task9.11/RESULTS.md#11-本轮启动生命周期与续接修复最终交付2026-11-03) · [本轮交接](agent_logs/task9/task9.11/20261103-codex-lifecycle-repair.md) · [SRC1403–1405](SOURCES.md#src-1403)。
+
+2026-11-03T21:37:37.810005+08:00 · TASK9.11-LIFECYCLE-REPAIR · Codex · active · 修启动前watcher空窗、完整生命周期计费与续接候选合同；新增.7实施/.8独立审核，旧STOP与全部原件保留，仅stdlib替身，不运行真实Docker控制/模型/实验，不改预算/截止。[日志](agent_logs/task9/task9.11/20261103-codex-lifecycle-repair.md)。
+
+2026-11-03T21:22:01.957806+08:00 · TASK9.11-PREP-REVIEW · Codex · done（审核交付；真实仍NOT_READY） · 新增P1启动前watcher死亡空窗，完整生命周期成本/合法续接仍未闭合；原13引用hash一致，30+7为既有测试，本轮无复跑/实现修改/实验。[审核](agent_logs/task9/task9.11/20261103-codex-preparation-review.md) · [SRC-1402](SOURCES.md#src-1402)。
+
+2026-11-03T21:21:32.222102+08:00 · TASK9.11-PREP-REVIEW · Codex · active · 用户要求审核最新.5/.6准备交付；只读源码/原测试/签字，保留现有改动，不运行实验。[记录](agent_logs/task9/task9.11/20261103-codex-preparation-review.md)。
+
+2026-11-03T20:55:44.145054+08:00 · TASK9.11-PREP · Codex · review（准备与独立审查完成，等待正式执行派发；真实NOT_READY） · .5仅阶段监督/预算最小补丁，.6独立30+7合成PASS；完整host/真实Docker尾UNKNOWN，旧STOP/4000消费/980评估/正式0/test0保持。未运行真实实验、不恢复旧run/重置截止。原账本余额仅上界，所需续接/完整监督合同及准确CLI见[RESULTS §9](tasks/task9/task9.11/RESULTS.md#9-监督修复准备独立验收与剩余预算2026-11-03) · [准备交接](agent_logs/task9/task9.11/20261103-codex-supervision-preparation.md) · [SRC-1399–1401](SOURCES.md#src-1399)。
+
+2026-11-03T20:34:10.701664+08:00 · TASK9.11-PREP · Codex · active · 监督/预算最小修复与零环境验证；新增.5实施/.6独立审查，旧STOP不变，不运行真实实验、不重置预算。范围及开始见[日志](agent_logs/task9/task9.11/20261103-codex-supervision-preparation.md)。
+
+2026-11-03T20:31:21.366582+08:00 · TASK9.11-PLAN-REHANDOFF · Codex · review（规划复核交付，等待正式派发） · 沿用已有9.11唯一B1-L方案，补正三文档当前状态及STOP后执行前置；未改实现/配置/原件、未加载模型或运行实验；旧4000 smoke/980评估、正式0/test0保留，不恢复或重置预算。[三文档](tasks/task9/task9.11/TASK.md) · [记录](agent_logs/task9/task9.11/20261103-codex-plan-rehandoff.md) · [SRC-1398](SOURCES.md#src-1398)。
+
+2026-11-03T20:28:53.929080+08:00 · TASK9.11-PLAN-REHANDOFF · Codex · active · 最新用户仅规划：复核已有同题9.11，保留smoke STOP历史，不新增重复编号/恢复执行；仅文档与只读证据。[记录](agent_logs/task9/task9.11/20261103-codex-plan-rehandoff.md)。
+
+2026-11-03 20:13 +08 · TASK9.11 · review（FAIL/STOP，等待监督恢复方案） · 四smoke4000消费及980评估完成，C ON科学原件支持非干扰，但host退出记录缺失；0正式训练/0test，本任务容器已停，task10继续。父审核确认STOP。[审核](agent_logs/task9/task9.11/20261103-codex-supervisor-stop-review.md) · [SRC-1397](SOURCES.md#src-1397)。
+
+2026-11-03T17:23:47.970878+08:00 · TASK9.11-EXEC · active · .3 sol/high已接单并进行隔离实现/CPU零环境准备，.4独立检查表/272旧源hash已就绪；尚无代码/G1释放、模型/真实环境/训练。实际独立门签字后按固定预算自主续进，最终test由.4独立执行，父保留最终原件复核。[执行政策](agent_logs/task9/task9.11/execution-policy.json) · [SRC-1396](SOURCES.md#src-1396)。
+
+2026-11-03T17:19:49.958357+08:00 · TASK9.11-EXEC · Codex · active · 用户“派发吧”，.3 sol/high隔离实施、.4独立门审查；T0 11-03 17:18:20，截止11-06 03:18:20 +08，58h/2TiB，单GPU0优先、避开task10 GPU1。先实现/审查后逐门运行，不跳门不重试。[窗口](agent_logs/task9/task9.11/execution-window.json) · [SRC-1395](SOURCES.md#src-1395)。
+
+2026-11-03T17:13:14.652848+08:00 · TASK9.11-DESIGN · Codex · review（规划已交付、待正式派发） · 唯一B1-L同期B1两seed×3M，失败链/最小补证/严格成功与效率/一次独立任务测试/派工齐全；两sol审计及父原件复核通过，新增数值均工程选择，58h/2TiB待批准。无实现/模型/仿真/回放/训练。[三文档](tasks/task9/task9.11/TASK.md) · [独立审查](tasks/task9/task9.11/task9.11.2/RESULTS.md) · [SRC-1394](SOURCES.md#src-1394)。
+
+2026-11-03T17:10:36+08:00 · TASK9.7-MAP-ADVICE · Codex · done · 扩图必要性咨询：未来语义训练/未见整图泛化值得扩展，现24图保留历史诊断，当前LR对照不捆绑；仅文档意见，无地图生成/实验。[结果](tasks/task9/task9.7/RESULTS.md#11-2026-11-03语义地图集是否需要扩展咨询) · [SRC-1393](SOURCES.md#src-1393)。
+
+2026-11-03T17:09:38+08:00 · TASK9.7-MAP-ADVICE · Codex · active · 回答语义地图集是否需要扩展；仅核已有结构/评估/9.11地图角色与原始文献摘要，记录建议；不生成地图、不改配置、不启动实验。[日志](agent_logs/task9/task9.7/20261103-codex-map-expansion-advice.md)。
+
+2026-11-03T16:57:58.176365+08:00 · TASK9.11-DESIGN · Codex · active · 基于9.7–9.10设计严格成功与效率直接对照，仅文档/只读源码日志；sol证据审计与独立审查，禁止模型/仿真/回放/训练。[三文档](tasks/task9/task9.11/TASK.md) · [日志](agent_logs/task9/task9.11/20261103-codex-next-experiment-plan.md)。
+
+2026-11-03 16:51 +08 · TASK9.10 · done · 六run1176完整，C R1/N11→T R2/N10，局部新增1例但原success仍0、全量strict不变；sol独立验收和luna输入终检PASS，容器已清理。机制不部署、不扩样。[RESULTS](tasks/task9/task9.10/RESULTS.md) · [SRC-1384](SOURCES.md#src-1384)。
+
+2026-11-03 16:12 +08 · TASK9.10 · active · 三C与T4718共784回合完成；首T R2/N3待独立核，5目标原success全false；T4719运行。[记录](tasks/task9/task9.10/RESULTS.md)。
+
+2026-11-03 15:54 +08 · TASK9.10 · active · 三C共588回合完成、12目标R1/N11准确复现，T4718已按程序门启动；干预结论尚未形成。[记录](tasks/task9/task9.10/RESULTS.md)。
+
+2026-11-03 15:17 +08 · TASK9.10 · active · 首C4718完成196回合/exit0，原评估196行匹配，R1/N4，开始C4719；新干预结果尚无。[运行](tasks/task9/task9.10/RESULTS.md)。
+
+2026-11-03T14:48:11.222061+08:00 TASK9.10 · Codex · active · 用户批准子Agent执行，sol负责实现/审查，luna只核清单账本；预算1176回合/4h/2GiB。[协议](tasks/task9/task9.10/PROCEDURE.md)。
+
+2026-11-03 14:42 +08 · TASK9.10-DESIGN · Codex · review（设计交付） · 已冻结能力/效率验收路线与一次动作替换对照；新实验尚未执行。[日志](agent_logs/task9/task9.10/20261103-codex-design.md)
+
+2026-11-02T19:11:39.616117+08:00 · TASK9.9-OFFLINE · Codex · **done（离线交付与必要复核完成）** · 30原轨迹对账18/R1/N11/U0，12例首拒绝后8动作全同/4变化，唯一R约.375mm仍失败；case05三种子末五begin槽12/零动作，未选候选未知。建议优先一次拒绝后动作选择对照，仅草案，未运行。两次14派生文件一致/原JSONL复查通过；B3/C只读。[RESULTS](tasks/task9/task9.9/RESULTS.md) · [日志](agent_logs/task9/task9.9/20261102-codex-offline-mechanisms.md) · [SRC-1379–1381](SOURCES.md#src-1379)。
+
+2026-11-02T19:01:24.813436+08:00 · TASK9.9-OFFLINE · Codex · active · task9.8 C通过原轨迹的首次拒绝/零进展候选离线机制分析；仅独立统计与文档，无回放训练。[三文档](tasks/task9/task9.9/TASK.md) · [日志](agent_logs/task9/task9.9/20261102-codex-offline-mechanisms.md)。
+
+2026-11-02 · TASK9.8-C · Codex · done（C独立复算；回放数据通过，调度收尾有条件通过）。[裁决](agent_logs/task9/task9.8/20261102-codex-c-review.md)
+
+2026-11-02T18:11:15.773420+08:00 · TASK9.8-B3 · Codex · **done（B交付与必要自检）；task9.8 review待独立C** · 980完整/30详细trace覆盖通过，749事件开关精确门PASS；无拒绝18、R1/N11/U0，恢复1/12、严格成功15/30，历史五字段差异0。五worker rc0，调度收尾UID错误rc1人工仅修本run归属并停机；累计GPU5596.054313s，原19:02截止未延。无后台任务/未训练或额外回合，C未做。[RESULTS](tasks/task9/task9.8/RESULTS.md) · [SRC-1376](SOURCES.md#src-1376)。
+
+2026-11-02T17:46:48.394055+08:00 · TASK9.8-B3 · Codex · active · 前四evaluate各196/rc0，共784完整；已收齐4718/4719共20目标trace且coverage PASS，最后4720已按余额196启动。原19:02截止与旧尝试累计不变，C未做。[日志](agent_logs/task9/task9.8/20261102-codex-stage-b3.md)。
+
+2026-11-02T17:27:54.480049+08:00 · TASK9.8-B3 · Codex · active · 前三次原evaluate各196/rc0，共588完整；两例门PASS，4718正式10轨迹coverage齐，第四次4719启动。原19:02截止和累计预算保留。[日志](agent_logs/task9/task9.8/20261102-codex-stage-b3.md)。
+
+2026-11-02T17:10:56.386677+08:00 · TASK9.8-B3 · Codex · active · OFF/ON各196回合rc0，父从原row独立coverage/精确compare复核PASS（749事件，finite值零容差）；累计392完整，第三次4718余8已启动。原19:02截止/累计预算不变。仅B门通过，C未做。[日志](agent_logs/task9/task9.8/20261102-codex-stage-b3.md) · [SRC-1375](SOURCES.md#src-1375)。
+
+2026-11-02T16:33:55.522994+08:00 · TASK9.8-B3 · Codex · active · 用户明确准许修TMPDIR补零检查后继续OFF；run `t9.8-B3-20261102T163355+0800`，累计旧0回合/157.427090GPU秒/5837311bytes，原19:02+08截止不变。[日志](agent_logs/task9/task9.8/20261102-codex-stage-b3.md)。
+
+2026-11-02T16:31:55.682910+08:00 · TASK9.8-B2 · Codex · review（0回合启动失败已停） · 三项修复及正式镜像26测试通过；OFF在Adam动态导入所需临时目录不可写处失败，0evaluate/0回合；容器已停。累计GPU157.427090s。已准备TMPDIR隔离与增强零检查，按用户禁止自动重跑约束等待明确是否再启。[日志](agent_logs/task9/task9.8/20261102-codex-stage-b2.md)。
+
+2026-11-02T16:19:12.485016+08:00 · TASK9.8-B2 · Codex · active · 修复监督审核三项，零回合验证后原协议五次回放；run `t9.8-B2-20261102T161809+0800`，沿原19:02+08截止并累计旧预算。[日志](agent_logs/task9/task9.8/20261102-codex-stage-b2.md)。
+
+2026-11-02 · TASK9.8-B-AUDIT · Codex · review：失败停机与账本复核完成；B未完成，无轨迹可交C，未重试。[记录](agent_logs/task9/task9.8/20261102-codex-b-review.md)
+
+2026-11-02T16:12:17.462063+08:00 · TASK9.8-B · Codex · **review（启动失败，已停止）** · run `t9.8-B-20261102T160200+0800`，首OFF在torch导入时被新queue.py遮蔽stdlib queue而rc1，模型未加载、实际0/980回合、0trace，禁止重试故未ON/后续。单卡保守暴露88.847121秒；本轮容器已停、无后台任务。C未执行，交监督者决定。[RESULTS](tasks/task9/task9.8/RESULTS.md) · [日志](agent_logs/task9/task9.8/20261102-codex-stage-b.md) · [SRC-1371](SOURCES.md#src-1371)。
+
+2026-11-02T16:02:00+08:00 · TASK9.8-B · Codex · active · 用户明确派发B；run-id `t9.8-B-20261102T160200+0800`，硬截止19:02 +08（含准备与退出），仅单卡980回合/3GPUh/1GiB，先两例开关门。[日志](agent_logs/task9/task9.8/20261102-codex-stage-b.md)。
+
+2026-11-02 · TASK9.8-B-RELEASE · Codex · review（协议冻结、待派B）。980回合/单卡3h/墙钟3h/新输出1GiB获批，恢复口径及隔离复核已定，B/C尚未运行。[派工卡](tasks/task9/task9.8/PROCEDURE.md#b-final) · [记录](agent_logs/task9/task9.8/20261102-codex-b-release.md)
+
+2026-11-02T15:49:36.005889+08:00 · TASK9.8-A-20261102 · Codex · **done（A只读交付与父文档核验）；task9.8 review / B NOT_READY**。最终30行CSV/hash已封存、124sidecar/69原冻结项核对；推荐完整原evaluate且先两例过门需980实际回合，超32待监督调预算。旧成本约1.77–1.85h，建议GPU2/3卡时/17–20 +08/1GiB，未批准或运行。最新用户允许新旧结果不同保留双方，不要求旧逐步轨迹一致。无模型加载/仿真/训练/源码改动，B/C未执行。[RESULTS](tasks/task9/task9.8/RESULTS.md) · [日志](agent_logs/task9/task9.8/20261102-codex-stage-a.md) · [SRC-1364–1368](SOURCES.md#src-1368)。
+
+2026-11-02 TASK9.8-DESIGN · Codex · review · 监督协议及派工卡已交付；A已于本日完成只读交付（NOT_READY待回合预算），B/C尚未执行。[派工入口](tasks/task9/task9.8/PROCEDURE.md)
+
+2026-11-02 15:18 +08 TASK9.8-DESIGN · Codex · done（设计开工历史，已交付review） · 设计固定案例诊断、监督门与派发提示词。[日志](agent_logs/task9/task9.8/20261102-codex-dispatch.md)
+
+2026-11-02T15:14:21+08:00 TASK9.7-ANALYSIS-20261102 **review**：Codex完成文档交付（开始14:47:59+08）；13run终态、192旧评估/37,632行、B1/B3两seed配对与唯一B1-L日程草案已核；追加24语义图/100随机图静态结构调查，结构首因仍待证。378原始输入hash一致；仅7份文档更新，未训练/新评估/仿真/派Agent。拟议12.004M/52worker h与52h仍待审批，停在文档评审。[三文档](tasks/task9/task9.7/RESULTS.md) · [日志](agent_logs/task9/task9.7/20261102-codex-analysis.md) · [SRC-1357–1362](SOURCES.md#src-1357)。下方active为开工历史。
+
+2026-11-02T14:47:59+08:00 TASK9.7-ANALYSIS-20261102 **active**：负责人Codex；范围为已有结果只读分析、B1/B3-3M配对比较与一项单变量实验草案，仅当前分支文档更新，训练/评估/仿真/子Agent均不启动。[三文档](tasks/task9/task9.7/TASK.md) · [独立日志](agent_logs/task9/task9.7/20261102-codex-analysis.md)。
+
 2026-11-02T11:33:50.944467+08:00 TASK9.6-SEMANTIC-EVAL-20261102 **done**（14:14父核验）：12:06三B3-5M语义复评结束，49/39/44（各/96），合计132/288=45.83%；288逐case成败均与旧结果一致，三rc0，无遗留评估进程。[SRC-1355](SOURCES.md#src-1355)。[task9.6](tasks/task9/task9.6/TASK.md) · [日志](agent_logs/task9/task9.6/20261102-codex-semantic-eval.md)。
 
 2026-11-02T11:29:43.424971+08:00 TASK9-LOWER-READINESS-20261102 **done**：Codex复核14最终评估/1400回合一致；现场无训练，已有稳定候选；9.4整批独立验收/下层冻结仍待，未启动下一阶段。[SRC-1353](SOURCES.md#src-1353)。记录：[日志](agent_logs/task9/20261102-codex-lower-readiness.md)。
@@ -302,3 +433,92 @@ r1历史记录（已由SRC-1041授权r2续跑）：2026-10-26 task8.8：地图�
 2026-11-02 14:24 +08 · SAC-SPLIT · Codex · active · 固定现有下层推理基线，建立两个本地分支和文档计划。[交接](agent_logs/project/20261102-codex-sac-split.md)
 
 2026-11-02 · SAC-SPLIT · Codex · done（本地分线和首版计划）；task9.7 review 待派发。[TASK](tasks/task9/task9.7/TASK.md) · [PROCEDURE](tasks/task9/task9.7/PROCEDURE.md) · [RESULTS](tasks/task9/task9.7/RESULTS.md) · [日志](agent_logs/task9/task9.7/20261102-codex-plan.md)。
+
+2026-11-02T15:26:18.551522+08:00 · TASK9.8-A-20261102 · Codex · active · A阶段只读调查与准备文档，原件只读，不加载模型/启动环境；run-id `t9.8-A-20261102`。开始时间同本行。[日志](agent_logs/task9/task9.8/20261102-codex-stage-a.md)。
+
+2026-11-02 15:55 +08 · TASK9.8-A-SUPERVISOR · Codex · done（A监督审核）；B NOT_READY，预算与恢复口径待定。[审核记录](agent_logs/task9/task9.8/20261102-codex-supervisor-review.md)
+
+2026-11-03T22:19:23.656939+08:00 · TASK9.11-INTEGRATION-REPAIR · Codex · active · 冻结R1–R5整体合同，.9集成/.9.1生命周期/.9.2续接/.10独立审核；只做零模型零环境零真实Docker替身，旧STOP/预算/科学不变。[日志](agent_logs/task9/task9.11/20261103-codex-integration-repair.md)。
+
+2026-11-03T23:11:10.673033+08:00 · TASK9.11-CROSS-STAGE-REPAIR · Codex · active · F1历史令到期/F2动态审查成本联合修复，新增.11实施/.12独审；保留已过R1/R3/R5，零模型/环境/真实Docker/实验，预算截止不变。[冻结合同](agent_logs/task9/task9.11/20261103-codex-cross-stage-repair.md)。
+
+2026-11-04T09:23:00.481592+08:00 · TASK9.11-GPU-ACCOUNTING-P1 · Codex · active · SRC-1417 P1，.13实施/.14独审，先复算旧账再冻结同源联合验收；禁止真实实验，预算截止不变。[日志](agent_logs/task9/task9.11/task9.11.13/20261104-codex-gpu-accounting-implementation.md)。
+
+2026-11-04T09:46:42.515782+08:00 · TASK9.11-GPU-ACCOUNTING-P1 · Codex · active（最终核验） · v3冻结0bbda355…7476c1a9/170源，父132项同SHA通过；独审原容器区间/身份FAIL保留并同断言复验，正核计费明细/原件和日历余额。真实NOT_READY。[父记录](agent_logs/task9/task9.11/task9.11.13/20261104-codex-parent-gpu-accounting.md) · [SRC-1420](SOURCES.md#src-1420)。
+
+2026-11-04T11:35:01.586652+08:00 · TASK9.11.18-DIRECT-DISPATCH · Codex · active · 用户正式派发整批执行，SRC-1435；保留前次撤回、旧FAIL和UNKNOWN，先适配/独审/分门预算再真实G1，未启动训练。[日志](agent_logs/task9/task9.11/task9.11.18/20261104-codex-direct-dispatch.md)。
+
+2026-11-04T11:39:50.023653+08:00 · TASK9.11.18.3 · Codex sol/high · active · 必要历史工具/异步/设备库存，只写子节点；向.18.2提交UNKNOWN保守预留缩紧证据，未核实不采用。[任务](tasks/task9/task9.11/task9.11.18/task9.11.18.3/TASK.md)。
+
+2026-11-04T11:46:05.484323+08:00 · TASK9.11.18 · active · 仅基础设施真实启动，run t9.11-real-direct-20261104/CID ca9a26c96080…81fc74/GPU0 UUID e2eab186…d587/host PID1052911；G1 worker与训练未启动，新增转移/评估0。1920s租约占额待实际闭账。[父日志](agent_logs/task9/task9.11/task9.11.18/20261104-codex-direct-dispatch.md)。
+
+2026-11-04T12:04:11.811323+08:00 · TASK9.11.18 · active · r1精确停止/GPU实际132.722s；r2收据目录冲突在Docker前失败/无分配，修复55项＋独审通过；r3基础设施实际启动CID aceae3f432a9…97d77d2/hostPID1068447/GPU0UUID e2eab186…d587，待G1独立令，未启动训练/新增转移评估0。三旧PTY原server终态已补证，不用全窗候选占额。[日志](agent_logs/task9/task9.11/task9.11.18/20261104-codex-direct-dispatch.md)。
+
+2026-11-04T12:11:57.901105+08:00 · TASK9.11.18 · active · 真实r3 G1完整独审及父直接核过（SRC1441），14项全GPU/actual outer10.329s/exactStopped实际allocation92.855s；无真实新转移/评估。接L ON196必要适配/独审，尚未加载模型/开始LON或训练。[结果](tasks/task9/task9.11/task9.11.18/RESULTS.md) · [父记录](agent_logs/task9/task9.11/task9.11.18/20261104-codex-direct-dispatch.md)。
+
+
+2026-11-04T13:03:17.768955+08:00 · TASK9.11.18-DIRECT-DISPATCH · Codex · **blocked**（正式全案资源门） · 真实G1与L ON196完整独审＋父核通过SRC1441/1444；累计4000smoke/1176eval，余10592固定周期9408/final1184；正式训练及最终测试未启动。诊断名义参考9.326GiB对合同8GiB，另历史全局GPU尾段未闭，独裁NOT_READY/SRC1445。全部本批容器停止、task10原PID970022/GPU1继续。未改合同/58h/科学规模。[结果](tasks/task9/task9.11/task9.11.18/RESULTS.md) · [集中交接](agent_logs/task9/task9.11/task9.11.18/FINAL-PARENT-HANDOFF.md)。
+
+2026-11-04T14:50:11.176559+08:00 · TASK9.11.18-RESUME-FORMAL · Codex · active · 当前用户批准10GiB诊断日志/原2TiB，其余T0/58h/截止不变；并行入口与资源独审，复用G1/LON，PASS后C4718起原四run。[续接](agent_logs/task9/task9.11/task9.11.18/20261104-codex-resume-formal-program.md)。
+
+2026-11-04T15:05:56.374690+08:00 · TASK9.11.18-RESUME-FORMAL · Codex · active · 用户批准单张GPU使用SRC1450，原58h/T0/截止保持；formal/final入口v1已冻结验收86项，active资源误拒修v2中，独审/全案资源未放行，正式未启动。
+
+2026-11-04T15:07:43.418387+08:00 · TASK9.11.18-RESUME-FORMAL · Codex · active · 用户SRC1451批准合理完整训练所需全部预算，独审正制定明确有限新caps，不再卡原58h；保T0/历史/UNKNOWN/单卡与科学，优先尽快完成v2源码独审启动C4718。
+
+2026-11-04T15:09:38.528690+08:00 · TASK9.11.18-RESUME-FORMAL · Codex · active · SRC1451/1452新有限预算worker/GPU各160h、diag16GiB计原2TiB，历史UNKNOWN保留专项储备，后续单卡，原截止优先保持；正修同冻源envelope/active剩余时间并独审，随后C4718。
+
+2026-11-04T15:12:48+08:00 · TASK9-BUDGET-REVIEW-20261104 · Codex · active。按用户要求同步下层SAC独立树预算/审核规则，已通知当前执行者；不覆盖9.11.18活动源码/协议。记录：/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/20261104-codex-budget-review-policy.md。
+
+2026-11-04T15:13:08+08:00 · TASK9-BUDGET-REVIEW-20261104 · Codex · done（规则同步）。下层独立树根AGENTS、SOURCES、DECISIONS及父task9 PROCEDURE已同步，新增锚点/链接定向检查通过；已通知当前9.11.18执行者直接落实并推进授权任务，活动代码/子流程未覆盖。未运行新实验，不将通知当正式训练已启动。记录：/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/20261104-codex-budget-review-policy.md。
+
+2026-11-04T15:24:29.088466+08:00 · TASK9.11.18-FORMAL · Codex · active · C4718 r2真实训练已启动，hostPID1186191/GPUe2eab186…d587/CID3d6967…24fea，最近落盘16000转移/1575update；execsession94050。[首次启动](agent_logs/task9/task9.11/task9.11.18/first-formal-start-v1.json) [SRC1454](SOURCES.md#src-1454)。原r1模型前误拒已定向修复并留成本；当前250k包含自身3M，未完成profile/正式run或final。
+
+2026-11-04T15:39:35.590821+08:00 · TASK9.11.18-FORMAL · Codex/后台driver · active（用户要求退出LLM监督，训练继续） · driverPID1201603已接管当前C4718，worker1186191落盘179000转移/17875update；八训练stage自动串行，四run后待原开发B–E最终验收；未跑final。[最新后台交接](agent_logs/task9/task9.11/task9.11.18/FINAL-PARENT-HANDOFF-resume-v1.md) · [SRC1455](SOURCES.md#src-1455)。
+
+2026-11-04T16:16:15.618515+08:00 · TASK9.11.18-CHECKPOINT-REPAIR · Codex · active · r2完成250k/196周期评估但profile.pt native恢复ZIP失败，后台停止；两full archive长度/ZIP64 offset矛盾，核BudgetFile大buffer短写并必要修复/恢复或如实重跑。[修复日志](agent_logs/task9/task9.11/task9.11.18/20261104-codex-checkpoint-repair.md)。
+
+2026-11-04T16:34:44.604137+08:00 · TASK9.11.18-FORMAL-r3 · Codex/后台driver · active（必要保存I/O修复后恢复后台，退出主动监督） · r2已完成250k/196但full短写损坏不可恢复，全部消费保留；真实CPU>2GiB回环/8定向通过。r3同seed从头，worker1241380/driver1242328，16:32落盘13000/1275update；历史eval1372/未来10592/max11964。[最新r3交接](agent_logs/task9/task9.11/task9.11.18/FINAL-PARENT-HANDOFF-r3-v1.md) [SRC1457](SOURCES.md#src-1457)。
+
+2026-11-04T22:24:08.050635+08:00 · TASK9.11.18-DETACH-REPAIR · Codex · active · r3 native250k/196/full恢复27.581s及owner链均通过，但外层工具writer提前退出使driver停，当前恢复有效250k并仅修外部续行，不重跑/不伪原收据。[日志](agent_logs/task9/task9.11/task9.11.18/20261104-codex-background-detach-repair.md)。
+
+2026-11-04T22:37:12.082284+08:00 · TASK9.11.18-FORMAL-r3 · Codex/独立后台 · active（250k有效恢复后续训，退出主动监督） · 旧工具rootwait缺失保UNKNOWN，native250k/full恢复/三链已实际通过；仅修外部控制面，b8f3模型源未动。worker1439435/driver1437772/独立runner1438807，22:35:52已256000转移/25575updates，无250k或196重跑。[最新交接](agent_logs/task9/task9.11/task9.11.18/FINAL-PARENT-HANDOFF-r3-v2.md) [SRC1458](SOURCES.md#src-1458)。
+
+2026-11-05 · task9.11.18 · Codex只读审核 done；实际训练恢复待处理：C4718最后225万，guardian异常、容器退出，旧RUNNING状态不可信。范围仅原件/源码/进程核查及审核记录；未启动训练。见[SRC-1459](SOURCES.md#src-1459)及[审核交接](agent_logs/task9/task9.11/task9.11.18/20261105-codex-readonly-runtime-review.md)。
+
+2026-11-05T09:58:37.676951+08:00 · TASK9.11.18-2250K-RECOVERY · Codex · active · r3到2250k，保存后guardian FileNotFoundError停链，正在核原子rename扫描竞争并恢复最新完整状态，禁止改b8f3模型源码/丢进度；own评估1568，2250k未启动。[日志](agent_logs/task9/task9.11/task9.11.18/20261105-codex-atomic-rename-recovery.md)。
+
+2026-11-05 10:24 +08 · TASK9.11.18-FORMAL-r3 · Codex/独立后台 · active（已恢复2250k完整状态，按用户原意退出主动监督） · worker1760315/control1760146/PPID1runner1760145/GPUe2eab，native load64.117s；正补2250k唯一196评估，已started32，之后750k及原L/C/L自动接续。原FAIL和微额premodel失败成本保留，模型b8f3未改。[SRC1460](SOURCES.md#src-1460) [最新交接](agent_logs/task9/task9.11/task9.11.18/FINAL-PARENT-HANDOFF-r3-v3.md)。
+
+2026-11-05 14:52 +08 · TASK9.11.18-RECOVERY-REVIEW · Codex · active（只读审查） · attempt2已触发采样期限退出；interrupted2969467/safe_to_resume true待实际加载，未启动后续L。核时限/资源扫描/自动续行路径。[日志](agent_logs/task9/task9.11/task9.11.18/20261105-codex-recovery-review.md)。
+
+2026-11-05 15:00 +08 · TASK9.11.18-UNIFIED-RECOVERY · Codex · active · 用户要求一次定好，已查新恢复线程global扫描3.1166s/次（原local0.0415s），修复额外阻塞并以全批预算统一有限时限；interrupted2969467原safe检查通过、剩30533+末196。启用已批第二卡GPU2并行独立原run、保持汇总验收顺序，实际尚未启动；.18.1/.18.2一次schema/freeze/核查后C先恢复，nativeb8及旧成本保留。[SRC1461](SOURCES.md#src-1461)。
+
+2026-11-05 15:34 +08 · TASK9.11.18-UNIFIED-RECOVERY · Codex/独立后台 · active（修复/后台部署done，退出LLM监督） · C真实3M/299975/env3M，末评估started100/196；统一52h仍在160h各worker/GPU/diag16GiB计2TiB，双卡自动dispatch已签部署，C完成后L4718 GPU0/C4719 GPU2并行，L4719空卡续，四run后原科学验收门保持。第二卡未实际启动，不伪称并行性能实测。[SRC1461](SOURCES.md#src-1461) [最新r3-v4交接](agent_logs/task9/task9.11/task9.11.18/FINAL-PARENT-HANDOFF-r3-v4.md)。
+
+2026-11-05 · task9.11.18.4 · Codex active · 修复第二GPU占用导致整批终止及后续恢复边界，不启动训练。记录 forem/doc/agent_logs/task9/task9.11/task9.11.18/20261105-codex-shard-fix.md。
+
+2026-11-05 · task9.11.18.4 · Codex review · 当前GPU占用导致整批停止已修；零步恢复/新尝试证据与费用衔接已实现，15项控制回归通过。原始记录/模型未改，未恢复训练；新源码候选待既有指定独审增量签名（不是预算待批）。见[SRC-1462](SOURCES.md#src-1462)及[结果](tasks/task9/task9.11/task9.11.18/task9.11.18.4/RESULTS.md)。
+
+2026-11-05 · task9.11.18.4 · Codex done（修复交付，不是训练完成） · 资源等待、空目录、零步显式恢复、准备异常重入、STOP身份与失败成本已修；18项相关测试与指定独审通过，新authorization-v2已冻结、父已核。没有待批预算或重复审核；本次未启动恢复/训练，执行者可沿RESULTS已核入口继续。见[SRC-1462](SOURCES.md#src-1462)。
+
+2026-11-05T16:40:15.466918+08:00 · TASK9.11.18-SHARDS-RESUME · Codex active · 用户明确授权实际恢复；现场无本批活动任务，新授权两修改文件SHA匹配。接手L4718零步完整恢复、C4719指定卡等待及L4719自动续行；C4718不重跑。日志[实际恢复](agent_logs/task9/task9.11/task9.11.18/20261105-codex-shards-resume.md)。
+
+2026-11-05T16:42:37.646985+08:00 · TASK9.11.18-SHARDS-RESUME · Codex/独立后台 active · 实际prepare与native零步完整恢复成功，L4718已11000转移/1075updates、授权GPU0 CUDA执行；runner1924512/controller1924513/worker1924702，C4719等待指定GPU2、L4719自动续行，旧失败/费用保留。父退出持续监督但后台继续；profile250k/原3M/科学验收尚待。[交接](agent_logs/task9/task9.11/task9.11.18/20261105-codex-shards-resume.md) · [SRC-1463](SOURCES.md#src-1463)。
+
+2026-11-05T17:21:57+08:00 · TASK9.12-BIOIK · 待执行/待接手，Codex已建交接 · 用户授权BioIK探索，未改变9.11训练、未运行新实验。[三文档](tasks/task9/task9.12/TASK.md) · [交接](agent_logs/task9/20261105-codex-bioik-handoff.md) · [授权](SOURCES.md#src-task9-bioik-20261105)。
+
+2026-11-06T09:09:29.165718+08:00 · TASK9.11.18-STATUS · Codex done（状态检查）/后台active · C4718/L4718/C4719各3M及12周期；L4719已1750000转移/174975update、6完整周期，GPU0继续，runner/controller/worker存活。无新失败；未重启/重评，科学B–E及test尚待。[记录](agent_logs/task9/task9.11/task9.11.18/20261106-codex-progress.md) · [来源](SOURCES.md#src-status-20261106)。
+
+2026-11-06 · TASK9-EXPLORATION-PLAN · Codex active · 细化task9.12 BioIK及新task9.13 RLlib探索，当前仅计划和派发提示词。记录[规划日志](agent_logs/task9/20261106-codex-bioik-rllib-plan.md)。
+
+2026-11-06 · TASK9-EXPLORATION-PLAN · Codex done（计划交付）；task9.12/task9.13 review（实验未执行，待用户派发）。完整Ray RLlib SAC已由用户确认。分别固定策略测BioIK/固定IK测RLlib，资源候选GPU1/2并非预留，保护9.11与其他任务。三文档/范围/验证与统计/工程成本已落盘，[来源](SOURCES.md#src-t9-explore-20261106)。
+
+2026-11-06T09:39:41+08:00 · TASK9-EXPLORE-EXEC · Codex父 active · 用户明确执行；task9.12 A与task9.13 B已登记负责人、GPT6.1sol/high请求及白名单，准备实际派发；父协调/核原件/共享台账。GPU1/2现场空闲（启动仍复核），GPU0/3与9.11/其他任务不动。[执行日志](agent_logs/task9/20261106-codex-bioik-rllib-execution.md) · [授权](SOURCES.md#src-t9-explore-20261106)。
+
+2026-11-06T09:41:57+08:00 · TASK9-EXPLORE-EXEC · 两支已实际派发GPT6.1sol/high，A接手BioIK CPU准备，B接手完整RLlib；GPU1被task10 probe占用，A等卡不干预；GPU2为B候选。父完成真实update时序定向读核并交B。执行active。[日志](agent_logs/task9/20261106-codex-bioik-rllib-execution.md) · [证据](SOURCES.md#src-t9-exec-20261106)。
+
+2026-11-06T09:45:11+08:00 · TASK9-EXPLORE-EXEC · active · BioIK真实构建rc0（子报，父待核）并准备32校准；RLlib采用实际SAC Algorithm原生训练链＋GPU采样桥。用户已确认开发评估100随机/96语义逐seed；RLlib四run正式评估修正9408，不改每run3M。BioIK三权重两后端总1176不变。[记录](agent_logs/task9/20261106-codex-bioik-rllib-execution.md) · [来源](SOURCES.md#src-t9-exec-20261106)。
+
+2026-11-06T10:02:40+08:00 · TASK9-EXPLORE-EXEC · Codex父/两子Agent active · A真实BioIK/FK32校准及两后端各16smoke完成，正式current已完成80开发回合并后台连续补采，随后最多256请求诊断与BioIK正式；父首48行历史一致核验。B完整Algorithm链/合成恢复通过，C真实1000/75与环境54字段通过；queue遮蔽标准库事故已仅清自有进程并保留失败，正统一修Ray2.40 CUBLAS格式错误/确定性配置、重验非空pending与最终版1000smoke，正式12M尚未计划内启动。不影响9.11/他人任务。[父记录](agent_logs/task9/20261106-codex-bioik-rllib-execution.md) · [A来源](SOURCES.md#src-t9-bioik-exec-20261106) · [B来源](SOURCES.md#src-t9-rllib-exec-20261106)。
+
+2026-11-06T10:18:37+08:00 · TASK9-EXPLORE-EXEC · Codex父/独立后台 **active**。A现役正式已296/588，32校准/32smoke与接口通过，诊断最多256及BioIK588按后台队列连续进行；B最终两臂真实1000/75、非空255(+R queued3)恢复下一更新差0、observer各4回合parity通过，10:15:13启动封存正式12M矩阵，首C4718实际21000消费/2075更新，profile含3M而非额外预算。GPU1/2分别独立，无收益/胜负结论，完整评估/250k成本尚待。A driver2522044/913872408；B queue2541557/914007182、首worker2541568/914007196；PID/CID/UUID/STOP/恢复及原件见[9.12 RESULTS](tasks/task9/task9.12/RESULTS.md)、[9.13 RESULTS](tasks/task9/task9.13/RESULTS.md)。父资源采集PID2541972/914011403只读运行。原失败/工程评估/未知成本保留，未使用9.11保留测试。[父日志](agent_logs/task9/20261106-codex-bioik-rllib-execution.md) · [来源](SOURCES.md#src-t9-exec-20261106)。

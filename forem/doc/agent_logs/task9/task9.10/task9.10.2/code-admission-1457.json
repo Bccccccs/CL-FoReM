@@ -1,0 +1,74 @@
+{
+  "status": "READY_FOR_FIRST_C_ONLY",
+  "checks": [
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/scripts/task9_10/test_protocol.py",
+      "sha256": "bff18e0e2db2742fb5b85fa7fa40288407510c5d878dd07137d1039532ce0ce1",
+      "snapshot_equal": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/scripts/task9_10/supervisor.py",
+      "sha256": "9b54deade586ecee661c866bf495520d8055a0f86f1d75b09e5de15494d2b5a1",
+      "snapshot_equal": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/scripts/task9_10/replay.py",
+      "sha256": "0149fb9ad6e3aacbb82f617a43506bc82a73c324b2c52ef47758e2912d70308f",
+      "snapshot_equal": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/scripts/task9_8/replay.py",
+      "sha256": "cf59c618928edf954a78d4aea24ea77490016c065541f4a562b3925667d40f7e",
+      "snapshot_equal": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/scripts/task9_8/analysis.py",
+      "sha256": "6bdb03726ee3029fb2027ddeb6460aac4bbdec0eaa9879c864d4a0c771dd8cf9",
+      "snapshot_equal": true
+    },
+    {
+      "fixtures_final": "Ran 9 tests / OK",
+      "legacy_coverage": "Ran 26 tests / OK"
+    }
+  ],
+  "scope": "Protocol/code/zero-check review; parent owns identity/resource release; no C/T mechanism result",
+  "final_frozen_files": [
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/scripts/task9_10/test_protocol.py",
+      "snapshot": "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/source-snapshot/test_protocol.py",
+      "sha256": "6021efbcff7722be972f814c289ed06db30fc76222cd9b1c7ad7b88766ffce5c"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/scripts/task9_10/supervisor.py",
+      "snapshot": "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/source-snapshot/supervisor.py",
+      "sha256": "9b54deade586ecee661c866bf495520d8055a0f86f1d75b09e5de15494d2b5a1"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/scripts/task9_10/replay.py",
+      "snapshot": "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/source-snapshot/replay.py",
+      "sha256": "724764c3c4273820806109d57650f2cb872aea250deef4186d008749c2271cd7"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/scripts/task9_8/replay.py",
+      "snapshot": "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/source-snapshot/legacy-replay.py",
+      "sha256": "cf59c618928edf954a78d4aea24ea77490016c065541f4a562b3925667d40f7e"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/scripts/task9_8/analysis.py",
+      "snapshot": "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/source-snapshot/legacy-analysis.py",
+      "sha256": "6bdb03726ee3029fb2027ddeb6460aac4bbdec0eaa9879c864d4a0c771dd8cf9"
+    }
+  ],
+  "final_source_inventory_sha256": "7cc78e6b68f7f19b20ed25384de16b569518dd94e5d069676fffdbb9a22a92b2",
+  "final_zero_validation": {
+    "status": "PASS",
+    "epoch": 1793689150.9039183,
+    "zero_episodes": true,
+    "fixture_tests": 9,
+    "legacy_coverage_tests": 26,
+    "models_loaded": false,
+    "environment_reset": false,
+    "source_inventory_sha256": "7cc78e6b68f7f19b20ed25384de16b569518dd94e5d069676fffdbb9a22a92b2"
+  },
+  "control_metadata_fix": "Both step and finish gated; control fixture remains unavailable empty after segment change"
+}

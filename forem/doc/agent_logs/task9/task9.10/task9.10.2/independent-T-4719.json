@@ -1,0 +1,400 @@
+{
+  "status": "PASS",
+  "arm": "T",
+  "seed": 4719,
+  "counts": {
+    "N": 4
+  },
+  "actual_replacements": 4,
+  "execution_changes": 4,
+  "cases": [
+    {
+      "case_no": 3,
+      "classification": "N",
+      "first_event": 167,
+      "first_segment": 1,
+      "first_action": 42,
+      "first_substep": 0,
+      "baseline_rho_m": 1.661961372993704,
+      "max_reduction_m": 0.0,
+      "net_reduction_m": 0.0,
+      "same_segment_arrived": false,
+      "post_commits": 0,
+      "rejections": 20,
+      "commits": 82,
+      "attempts": 102,
+      "original_success": false,
+      "strict_success": false,
+      "failures": 20,
+      "final_stalls": 0,
+      "net_s_m": 0.0,
+      "net_base_xy_m": 0.0,
+      "final_route_s_m": 0.8620443344116211,
+      "route_length_m": 6.853716850280762,
+      "final_base_xy_displacement_m": 0.7177223644829375,
+      "same_segment_end_reason": 2,
+      "terminated": true,
+      "truncated": false,
+      "prefix_events": 169,
+      "boundary_inputs_and_mean_exact": true,
+      "action_changed": true,
+      "execution_action_changed": true,
+      "intervention": {
+        "serialized": "[91020261103,4719,\"home_map_002\",3570249233,0,\"semantic_transfer\",\"smoke\",3029584731548132938]",
+        "sha256": "1324ff0822a2357aa48c6a000fc0a092f6ee0325d17b5bce50c0693f7f677bf6",
+        "generator_seed": 1379507796288091514,
+        "epsilon": [
+          0.70223468542099,
+          1.0125741958618164,
+          0.460628867149353
+        ],
+        "mean": [
+          0.5892574787139893,
+          -0.6161766648292542,
+          -0.25274649262428284
+        ],
+        "log_std": [
+          -1.1370158195495605,
+          -2.0452702045440674,
+          -2.3400909900665283
+        ],
+        "mean_action": [
+          0.529361367225647,
+          -0.5484603643417358,
+          -0.24749866127967834
+        ],
+        "replacement_action": [
+          0.6720743179321289,
+          -0.45040246844291687,
+          -0.20541465282440186
+        ],
+        "segment": 1,
+        "action": 43,
+        "first_rejection": {
+          "core": 138316952732864,
+          "index": 8,
+          "segment": 1,
+          "rejected_action": 42,
+          "substep": 0
+        },
+        "rng_before": "fa29a96fac597501ee675b801db78ce1d3f690397ff8f4351ceabc6b9b54c660",
+        "rng_after": "fa29a96fac597501ee675b801db78ce1d3f690397ff8f4351ceabc6b9b54c660",
+        "rng_unchanged": true
+      }
+    },
+    {
+      "case_no": 4,
+      "classification": "N",
+      "first_event": 19,
+      "first_segment": 1,
+      "first_action": 5,
+      "first_substep": 0,
+      "baseline_rho_m": 0.9840329821027692,
+      "max_reduction_m": 0.0,
+      "net_reduction_m": 0.0,
+      "same_segment_arrived": false,
+      "post_commits": 0,
+      "rejections": 20,
+      "commits": 8,
+      "attempts": 28,
+      "original_success": false,
+      "strict_success": false,
+      "failures": 20,
+      "final_stalls": 0,
+      "net_s_m": 0.0,
+      "net_base_xy_m": 0.0,
+      "final_route_s_m": 0.031838417053222656,
+      "route_length_m": 6.352405071258545,
+      "final_base_xy_displacement_m": 0.060376388941904266,
+      "same_segment_end_reason": 3,
+      "terminated": true,
+      "truncated": false,
+      "prefix_events": 21,
+      "boundary_inputs_and_mean_exact": true,
+      "action_changed": true,
+      "execution_action_changed": true,
+      "intervention": {
+        "serialized": "[91020261103,4719,\"home_map_002\",4158490082,0,\"semantic_transfer\",\"smoke\",6076064104553683651]",
+        "sha256": "0d6e05ea55c9bac833bdc3240d3be5ea761798baa6e5ab2f739ef568f0fc32c9",
+        "generator_seed": 967717473951005384,
+        "epsilon": [
+          -0.24293388426303864,
+          0.6428820490837097,
+          0.9045038819313049
+        ],
+        "mean": [
+          -0.6564107537269592,
+          -0.19187134504318237,
+          0.7836501002311707
+        ],
+        "log_std": [
+          -1.4462722539901733,
+          -2.6678364276885986,
+          -1.8136451244354248
+        ],
+        "mean_action": [
+          -0.5759698152542114,
+          -0.1895509660243988,
+          0.654796838760376
+        ],
+        "replacement_action": [
+          -0.6129347085952759,
+          -0.14619871973991394,
+          0.731123685836792
+        ],
+        "segment": 1,
+        "action": 6,
+        "first_rejection": {
+          "core": 138316952732864,
+          "index": 9,
+          "segment": 1,
+          "rejected_action": 5,
+          "substep": 0
+        },
+        "rng_before": "fa29a96fac597501ee675b801db78ce1d3f690397ff8f4351ceabc6b9b54c660",
+        "rng_after": "fa29a96fac597501ee675b801db78ce1d3f690397ff8f4351ceabc6b9b54c660",
+        "rng_unchanged": true
+      }
+    },
+    {
+      "case_no": 6,
+      "classification": "N",
+      "first_event": 243,
+      "first_segment": 1,
+      "first_action": 61,
+      "first_substep": 0,
+      "baseline_rho_m": 1.1908611783557979,
+      "max_reduction_m": 0.0,
+      "net_reduction_m": 0.0,
+      "same_segment_arrived": false,
+      "post_commits": 0,
+      "rejections": 20,
+      "commits": 120,
+      "attempts": 140,
+      "original_success": false,
+      "strict_success": false,
+      "failures": 20,
+      "final_stalls": 0,
+      "net_s_m": 0.0,
+      "net_base_xy_m": 0.0,
+      "final_route_s_m": 0.8749294281005859,
+      "route_length_m": 7.528431415557861,
+      "final_base_xy_displacement_m": 0.33904127975433385,
+      "same_segment_end_reason": 2,
+      "terminated": true,
+      "truncated": false,
+      "prefix_events": 245,
+      "boundary_inputs_and_mean_exact": true,
+      "action_changed": true,
+      "execution_action_changed": true,
+      "intervention": {
+        "serialized": "[91020261103,4719,\"home_map_002\",803250685,0,\"semantic_transfer\",\"smoke\",4363422522331977694]",
+        "sha256": "79f1f1d4439b7cd131d8c6947f0140c4057a9665ce13b30a1781a15551c2da31",
+        "generator_seed": 8787070241946172625,
+        "epsilon": [
+          -0.18081575632095337,
+          0.6715814471244812,
+          -1.3113744258880615
+        ],
+        "mean": [
+          0.3998768627643585,
+          0.07828398048877716,
+          0.10025368630886078
+        ],
+        "log_std": [
+          -1.3799471855163574,
+          -2.906479597091675,
+          -2.407506227493286
+        ],
+        "mean_action": [
+          0.3798435926437378,
+          0.07812445610761642,
+          0.0999191552400589
+        ],
+        "replacement_action": [
+          0.3402586877346039,
+          0.11449363827705383,
+          -0.01781999133527279
+        ],
+        "segment": 1,
+        "action": 62,
+        "first_rejection": {
+          "core": 138316952732864,
+          "index": 11,
+          "segment": 1,
+          "rejected_action": 61,
+          "substep": 0
+        },
+        "rng_before": "737a1f9d39d560a25b5e565d8521be7a8543cd8762be2f1965e28d76a6109793",
+        "rng_after": "737a1f9d39d560a25b5e565d8521be7a8543cd8762be2f1965e28d76a6109793",
+        "rng_unchanged": true
+      }
+    },
+    {
+      "case_no": 9,
+      "classification": "N",
+      "first_event": 616,
+      "first_segment": 2,
+      "first_action": 154,
+      "first_substep": 0,
+      "baseline_rho_m": 1.1719288775421552,
+      "max_reduction_m": 0.0,
+      "net_reduction_m": 0.0,
+      "same_segment_arrived": false,
+      "post_commits": 0,
+      "rejections": 20,
+      "commits": 306,
+      "attempts": 326,
+      "original_success": false,
+      "strict_success": false,
+      "failures": 20,
+      "final_stalls": 0,
+      "net_s_m": 0.0,
+      "net_base_xy_m": 0.0,
+      "final_route_s_m": 2.1449978351593018,
+      "route_length_m": 4.978664398193359,
+      "final_base_xy_displacement_m": 1.6003675419766326,
+      "same_segment_end_reason": 3,
+      "terminated": true,
+      "truncated": false,
+      "prefix_events": 618,
+      "boundary_inputs_and_mean_exact": true,
+      "action_changed": true,
+      "execution_action_changed": true,
+      "intervention": {
+        "serialized": "[91020261103,4719,\"library_map_002\",2407846046,0,\"semantic_transfer\",\"smoke\",2227190365323047312]",
+        "sha256": "6f2481a65129a78efe256d732bd17fd9f673fe064d2705664617e48b7492ca66",
+        "generator_seed": 8008668588697823118,
+        "epsilon": [
+          0.20980733633041382,
+          3.0202651023864746,
+          1.2238372564315796
+        ],
+        "mean": [
+          -0.3736804723739624,
+          -0.08539916574954987,
+          0.016148269176483154
+        ],
+        "log_std": [
+          -1.503469467163086,
+          -2.336488723754883,
+          -2.3528170585632324
+        ],
+        "mean_action": [
+          -0.3572067618370056,
+          -0.08519216626882553,
+          0.016146866604685783
+        ],
+        "replacement_action": [
+          -0.3158479928970337,
+          0.20367072522640228,
+          0.13176564872264862
+        ],
+        "segment": 2,
+        "action": 155,
+        "first_rejection": {
+          "core": 138316975537408,
+          "index": 14,
+          "segment": 2,
+          "rejected_action": 154,
+          "substep": 0
+        },
+        "rng_before": "45a0201e24ca6385ccb34ea89cd0a09224ed28feb5b85453e5dfc626d278248d",
+        "rng_after": "45a0201e24ca6385ccb34ea89cd0a09224ed28feb5b85453e5dfc626d278248d",
+        "rng_unchanged": true
+      }
+    }
+  ],
+  "hashes": {
+    "forem/results/task9/t9.10-paired-20261103T144811+0800/T-4719/evaluation.json": "0de3e2144b8a764d580fb068e54f60e3359f1fc478ae69031682b695ef1143b6",
+    "forem/results/task9/t9.10-paired-20261103T144811+0800/T-4719/case03.jsonl": "20118c9e62df9978ebb6cdd8bcb25428a04ae6d7d7154eecc6d8eb4a96f44953",
+    "forem/results/task9/t9.10-paired-20261103T144811+0800/T-4719/case04.jsonl": "909e8a62e957ccc09f065a7742b6a3a2f91de654f15dd1ca8cd3aa91ee7a9f79",
+    "forem/results/task9/t9.10-paired-20261103T144811+0800/T-4719/case06.jsonl": "d282a88c02b0990244456172c1901e94035f652b0ff3edafa8b3e59e5728b48b",
+    "forem/results/task9/t9.10-paired-20261103T144811+0800/T-4719/case09.jsonl": "f3632636196771edbfbb01140fcd86dc7a3836f0f7875e0b8fcb35552af5cc4c"
+  },
+  "worker": {
+    "status": "done",
+    "exit_code": 0,
+    "started_epoch": 1793693461.7776203,
+    "end_epoch": 1793694524.2211125,
+    "wall_s": 1062.4434924125671,
+    "started_episodes": 196,
+    "completed_episodes": 196
+  },
+  "all_rows_comparison": {
+    "checked": 196,
+    "non_target_differences": 0,
+    "differences": [
+      {
+        "case_key": {
+          "map_id": "home_map_002",
+          "seed": "3570249233",
+          "stream_index": "0",
+          "role": "semantic_transfer",
+          "source_split": "smoke",
+          "proposal_seed": "3029584731548132938"
+        },
+        "target": true,
+        "differing_fields": [
+          "discounted_MC_return",
+          "Q_minus_MC"
+        ]
+      },
+      {
+        "case_key": {
+          "map_id": "home_map_002",
+          "seed": "4158490082",
+          "stream_index": "0",
+          "role": "semantic_transfer",
+          "source_split": "smoke",
+          "proposal_seed": "6076064104553683651"
+        },
+        "target": true,
+        "differing_fields": [
+          "discounted_MC_return",
+          "Q_minus_MC"
+        ]
+      },
+      {
+        "case_key": {
+          "map_id": "home_map_002",
+          "seed": "803250685",
+          "stream_index": "0",
+          "role": "semantic_transfer",
+          "source_split": "smoke",
+          "proposal_seed": "4363422522331977694"
+        },
+        "target": true,
+        "differing_fields": [
+          "discounted_MC_return",
+          "Q_minus_MC"
+        ]
+      },
+      {
+        "case_key": {
+          "map_id": "library_map_002",
+          "seed": "2407846046",
+          "stream_index": "0",
+          "role": "semantic_transfer",
+          "source_split": "smoke",
+          "proposal_seed": "2227190365323047312"
+        },
+        "target": true,
+        "differing_fields": [
+          "discounted_MC_return",
+          "Q_minus_MC"
+        ]
+      }
+    ]
+  },
+  "strict_success_by_split": {
+    "validation": {
+      "C": 63,
+      "T": 63
+    },
+    "transfer": {
+      "C": 39,
+      "T": 39
+    }
+  }
+}

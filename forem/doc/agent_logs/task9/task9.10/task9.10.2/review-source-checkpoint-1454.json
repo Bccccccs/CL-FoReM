@@ -1,0 +1,17 @@
+{
+  "stage": "rolling review only; not frozen execution version",
+  "files": [
+    {
+      "path": "forem/scripts/task9_10/replay.py",
+      "sha256": "2f2a509215915e1aa95a7786d7099399aecf9874cf805b6f64ae11b76616d810"
+    },
+    {
+      "path": "forem/scripts/task9_10/supervisor.py",
+      "sha256": "0addfa5b58d47ba7b354b5b25bb48b545150e03b8363744277aef4deb7bd9489"
+    },
+    {
+      "path": "forem/scripts/task9_10/test_protocol.py",
+      "sha256": "1c23ad5f9b3084ec3818dd00dc8a00e9075bd58ad0faa03153323563977fba43"
+    }
+  ]
+}

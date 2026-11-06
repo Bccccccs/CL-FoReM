@@ -9804,3 +9804,1116 @@ SRC-1067终审追加（2026-10-26）：29a92dfa01 finalizer rc0/0.114258219s，�
 <a id="src-1356"></a>
 
 **SRC-1356 · B3-5M 基线与两分支计划。** 来源类型：用户决定、工程选择与本地文件核查。用户 / Codex，2026-11-02 本次会话“我同意你的说法，由你建立分支……只计划文档”。核查人 Codex，2026-11-02。采用 B3-5M 三个 final 作为共同下层基线，task10 规划上层 SAC 与世界模型，task9 规划下层改善。精确 run 路径、actor/config SHA-256、地图索引与版本核查见[快照清单](agent_logs/project/20261102-codex-sac-split.md)。原始成绩及局限沿用 SRC-1352、1353、1355。此次授权覆盖本地分线与计划，不构成新训练或整批独立验收结果。
+
+
+<a id="src-1357"></a>
+## SRC-1357 — task9.7文档授权、既有13run身份/终态与冻结核查
+
+- 支撑主张：本轮只分析旧结果和写一项实验草案，task9.4原13run终态分类、原件身份和独立验收边界。
+- 类型：用户明确指令＋项目原始记录核验；不是训练/新评估或整批独立验收。作者/机构：用户、FoReM项目；版本：lower-sac-baseline-v1分线，当前HEAD `d198e5ca48f86071c05274f9da753f393ce058b4`。核查：2026-11-02，Codex（实际模型/强度未知）。
+- 用户指令（本会话）：负责task9.7，只做已有结果分析和计划文档，工作目录/分支由用户指定，原task9 logs/results只读；完成后停在文档评审，不启动训练。精确范围与开工时间见[独立日志](agent_logs/task9/task9.7/20261102-codex-analysis.md)。模型推荐依根AGENTS用户默认名，两Agent/high为跨日程/停止/因果合同审查的工程选择，非实际配置核验。
+- 原件根：`/home/ybc/projects/CL-FoReM/forem`。精确位置：`logs/task9/t9-stage2-20261029/{queue-state.json,extra/waiter-state.json}`的runs/terminal/exit_code/config_sha256；`results/task9/t9-stage2-20261029/<run>/{config.json,final.meta.json,summary.json,diverged.meta.json,interrupted.meta.json}`；5个保护停止worker日志的`Q maximum exceeds 10 times 500k reference`。完整run路径、248输入SHA-256、复算代码与JSON见独立日志；原始结果仍以[task9.4 RESULTS](tasks/task9/task9.4/RESULTS.md)为所属任务记录。
+- 核验结论：主队列12＋extra1＝13；6summary完成预算、5diverged保护停止、2H interrupted。launch配置与run配置逐字段一致；字节SHA因重排版不同，不能混用。H由用户要求保存停止，来源沿SRC-1344，rc1不作为发散证据。元数据消费步数/预算一致，pending产生的env_actions可能大于消费，未冒充完整3M。
+- 初始冻结核查：`logs/task9/t9-opt-design-20261031/parameter-inventory.json:source_sha256`69项中，本工作树源码/配置60＋原task9 logs6匹配；初始范围未访问缺失于checkout的3个task8索引，不能声称当时69项全复核。用户随后要求结构调查后只读补核这3项，结果见SRC-1362，不追写成初始核验结果。
+- 采用与限制：[task9.7 RESULTS](tasks/task9/task9.7/RESULTS.md)交付给整批独立验收人的材料索引；不加载pt、不核内部恢复、不关闭task9.4 review、不将task9.5独立PASS扩大为原13run PASS。保留旧G1失败历史；当前仅文档review。
+
+<a id="src-1358"></a>
+## SRC-1358 — task9.7完整候选的失败分层与证据缺口
+
+- 支撑主张：14完整run旧评估分母/成功率、训练seed×地图层的失败构成、终态计数与首因的区别；语义迁移单列。
+- 类型：项目原始评估的标准库复算＋本地冻结源码核查＋条件性推导；不是新实验或因果根因证明。作者FoReM项目/Codex；版本同SRC-1357、各run原生产状态；核查日期2026-11-02，核查人Codex。
+- 精确原件：原始根同SRC-1357；`results/task9/t9-stage2-20261029/{B1-seed4718,B1-seed4719,B3-seed4720,B3_5M-seed4718,B3_5M-seed4719,B3_5M-seed4720}`；`results/task9/t9-long-20261028/B3-seed{4718,4719}`；`results/task9/t9-opt-20261031/formal-{U20,E15,R200}-seed{4718,4719}`中的每250k `validation-*.json`，role的rows/step_failure_counts/segments/timeout_rate。完整输入SHA-256、复算代码与结果在[日志](agent_logs/task9/task9.7/20261102-codex-analysis.md)；各任务事实来源仍为各自三文档，汇总表见[9.7 RESULTS](tasks/task9/task9.7/RESULTS.md)。
+- 原始复算：192完整文件×196＝37,632行，100validation/96transfer分母、complete/step/唯一case与成功率均一致。身份键为map_id、seed、stream_index、role、source_split、proposal_seed；同role全部集合相同。B1/B3同两seed最终139失败中133在failures20、3在1、3在0；8个原稳定候选281失败中268在20、4在1、9在0。所有这14run的随机最终非成功均terminated、无truncated。
+- 动作计数：B1/B3配对四run2,663次失败动作，kind1/2/3/4分别1,201/782/120/560；它们不是互斥首因episode计数。8个原稳定候选共同失败13固定case（3sparse/10standard），完整列表在日志，不能判地图无解。
+- 代码位置：本工作树`src/task8_lower/evaluation.py:evaluate`只保存终态rows与动作总数；`src/task7_sim/core.py:Core.step/_finish/current_observation`记录IK未接受优先于base/arm/self碰撞、拒绝子步不commit、零失败严格成功及停滞终止；`src/task7_lower/observation.py:FIELDS`无失败标志。静态哈希绑定沿SRC-1357清单。执行/感知误差需要实际反馈/真值时间戳，现有理想环境记录不提供。
+- 推导与限制：133/139×100＝95.68%是失败终态集中程度，不是连续同动作证明。固定点只在完整动作无commit、候选/实际策略输入不变等条件下成立（SRC-1335），现有rows无法验证这些条件；缺逐case连续观测/动作/IK状态/碰撞/commit、最终reason/到达。0或少量失败terminated不得自动叫“超时”或“到达不严格”；segment timeout分母不是episode。相同固定case跨模型重复，不当作独立训练样本或显著性结论。
+
+<a id="src-1359"></a>
+## SRC-1359 — task9.7 B1/B3同预算配对、日程混杂及冻结5M描述
+
+- 支撑主张：B1/B3同seed4718/4719的最终/末三与case配对；不同温度/LR包不能单因子归因；5M预算日程单列。
+- 类型：项目实测复算＋配置/源码核查＋日程算术推导。作者FoReM/Codex；版本及核查同SRC-1357，2026-11-02 Codex。
+- 精确位置：SRC-1358所列B1/B3原始评估2.5/2.75/3M及完整曲线、run/config.json、summary.json:state.last_diagnostic。代码`src/task8_lower/sac.py:LowerSAC.__init__/set_transfer/update_from_batch`、`src/task7_lower/sac.py:LowerSAC.__init__`，按已核冻结清单绑定。输入哈希/配对四格表/曲线/diag在[日志](agent_logs/task9/task9.7/20261102-codex-analysis.md)，[结果表](tasks/task9/task9.7/RESULTS.md)是本次派生分析记录。
+- 原始结论：B1两seed末三60/69/62、67/68/72，最终62/72；B3为53/53/63、53/58/64，最终63/64。组均最终67% vs63.5%，末三66.333% vs57.333%；差B1−B3按seed最终−1/+8pp、末三+7.333/+10.667pp。四run均不退化。总同case四格（双方成功/仅B1/仅B3/双方失败）105/29/22/44，不作显著性检验。
+- 混杂：update间隔同10；B1 capped规则＋固定α LR＋指数actor/critic LR，B3同时改变温度包/α LR与actor/critic LR。3M末B1实记α约0.25930、LR7.58584e-5；B3两seedα0.009234/0.008130、LR约1e-6。α实值是学习结果，不是独立受控处理变量。
+- 日程推导：u=floor(3M/10)−floor(257/10)=299,975；B1 LR=1e-4×(1e-6/1e-4)^(u/4,999,743)=7.58584e-5，每完成update推进；B3 LR(t)=1e-4+(1e-6−1e-4)×clip(t/N,0,1)，t/N为消费转移比例。B3-5M以N=5M从头，t=3M为4.06e-5，不等于3M末延续。
+- 冻结描述：B3-3M三seed最终均63.667%，5M三seed64.667%；5M末三62/64.333/63%，组均63.111%。5M末三只描述，不套原3M判据；对比同时改变预算/日程。不自动升级/推翻SRC-1356冻结版本，不把两seed均值优点当已证明更强。
+
+<a id="src-1360"></a>
+## SRC-1360 — task9.7负结果复核与下一草案的端到端成本依据
+
+- 支撑主张：U20/E15/R200旧负结果均保留；B0/B2/T/H停止区别；完整wall与分阶段summary不能混用。
+- 类型：项目原始实测复算、既有独立验收与工程取舍输入。作者FoReM/Codex；核查2026-11-02 Codex，版本沿SRC-1351/1352及SRC-1357。不是新优化结果。
+- 精确原件：SRC-1358列出新六run全部评估；`logs/task9/t9-opt-20261031/{status-20261102/results-snapshot.json,review/final-results-review-20261102.json}`及SRC-1351/1352；B1/B3各run `summary.json:wall_s`；原13run停止证据SRC-1357，早期B0结果沿task9.2/SRC-1320，不把它混入原13run。
+- 原始结论与项目采用方式：新三方向的最终/末三组均与原任务表重算一致，均未达到双指标提高；完整数表仍以[task9.5 RESULTS](tasks/task9/task9.5/RESULTS.md)为所属事实来源，9.7引用不另维护协议。R200仅末三+0.5pp不是改善。B2/T在间隔1下停止，不能排除间隔10下单独LR改变有效；H为用户早停不伪造3M阴性完成。采用方式是避免重复无依据组合扫描/延长，并选择解耦既有配方，非证明所有其它优化无效。
+- 成本原始输入：B1完整wall_s36,580.25465457328/36,953.44800706208；B3-3M为34,147.17486317828、34,253.27988292277、34,360.16408694722（详日志原summary；单位s）。B1含周期评估/保存，除3,600得10.161/10.265h；B3约9.485–9.544h。新六run分阶段完整累计56.6976 worker h沿SRC-1351，最终summary.wall_s只为恢复后段，不能当其完整成本。
+- 限制：本轮未做性能实验；旧GPU/并发/地图轨迹成本不保证新候选wall。12h/run代理及52h总拟议上限由SRC-1361登记工程选择，需批准后有界端到端profile，不能据旧微基准放行。
+
+<a id="src-1361"></a>
+## SRC-1361 — task9.7唯一单变量草案B1-L、预算与判据（待评审）
+
+- 支撑主张：为什么提议B1-L、科学变量与对照、样本/预算/停止/验收值的来源。
+- 类型：**工程选择＋待验证假设/推导**，非用户已批准的实施协议、文献最优或实测改进。作者Codex/FoReM，2026-11-02；核查人Codex；版本为[task9.7 PROCEDURE B–D](tasks/task9/task9.7/PROCEDURE.md#b-唯一拟议实验协议尚未执行须另行批准)。所属协议只在task9.7三文档，台账仅登记依据，不复制另一套协议。
+- 机制输入：SRC-1358失败集中但无trace首因，SRC-1359 B1/B3温度与LR混杂、B1仍高LR，SRC-1360其它三个方向无改善。原始判断是需要一个可归因的LR日程对照，不是已经证实LR为根因。快速衰减可能有益，也可能妨碍学习；未同时达到主指标即不支持该配置改善。
+- 工程选择：C重跑B1、L仅改actor/critic LR为已有linear_transfers日程；α规则/固定LR/更新比及其余科学条件同B1。两臂同代码、种子4718/4719、从头3M；种子和预算沿原配对，选同期对照避免namespace/版本混杂。`alpha_lr_schedule=exp_updates`两组显式固定原B1缺省语义，α LR两端均1e-6。不是新时延选择或任务语义改动。
+- 拟议预算推导：2臂×2seed×3M＝12M，profile为其前缀；smoke每组两seed各至1,000，共≤4,000消费转移（512保存再恢复到1,000不重计），合计≤12.004M。正式12次×196×4＝9,408旧case回合，smoke196×4＝784，共10,192，迁移不选模、不调用test。G1无环境转移，≤1,800worker s与每组smoke≤4,300s沿旧有界门的工程代理，尚未测本草案。
+- 成本：SRC-1360完整B1约10.16–10.27h，采用12h/run规划缓冲；4×12+(1800+2×4300)/3600＝50.889 worker h，工程向上预留52 worker h；单卡串行全局拟议52h，自首GPU门开始计等待。每run/全局各1,800s保存退出预留可重叠、均计入上限，是沿旧门的待实测代理而非硬上界保证；未来需实际成熟回放/保存/恢复及全周期profile过门，不能装入则NOT_READY，不缩步或延时。旧周一绝对截止不套用。
+- 判据来源：沿task9.5“正常完成、不退化、最终与末三组均同时严格提高”的探索口径，但主参考改为本次同期B1；末三≤峰值−15pp计退化、Q>自身500k参考10倍/非有限保护沿原协议。全部seed/负结果公开，不作统计显著性或机制已解声明。通过不自动替换5M冻结版本；扩预算/第三seed/额外实验均需另行授权。
+- 当前采用方式与限制：仅供文档评审。训练/评估/配置/新Agent均未启动；用户后来关于语义地图训练的提问及只读结构调查另记SRC-1362，不解释成批准本实验或新增训练。
+
+<a id="src-1362"></a>
+## SRC-1362 — 用户追加语义结构调查、24图静态核查与训练必要性边界
+
+- 支撑主张：语义图低成功率是否足以要求直接训练；现有几何结构差异与表现关联；哪些因果判断仍待证。
+- 类型：用户追加问题＋项目原始评估/地图JSON核验＋源码直接核查＋几何推导/工程建议。作者用户/FoReM/Codex；核查日期2026-11-02，Codex；版本HEAD同SRC-1357、三B3-5M原actor/既有复评。用户本会话问“语义地图这一块成功率也不高，是否需要使用语义地图直接跑训练……要调查清楚什么结构影响了”。采用为继续只读结构分析与计划说明，不作为启动训练/新评估/新trace的授权。
+- 精确输入：原根`/home/ybc/projects/CL-FoReM/forem`下`results/task9/t9-semantic-20261102/seed{4718,4719,4720}/evaluation.json`与原三5M `validation-5000000.json`；顺现有run引用只读`results/task8/t8-exec-20261026/semantic-pool/index.json`及全部24个sidecar JSON的`boxes/objects/scene.walls/openings`，`results/task8/t8-pool-20261027/cube-pool-v2/{manifest.json,evaluation-seeds.json}`及100个validation sidecar。未读取/生成PCD，不加载环境或模型。输入SHA-256、24图指标/100随机图指标、标准库复算代码、源码哈希见[日志结构审计](agent_logs/task9/task9.7/20261102-codex-analysis.md)。
+- 身份核查：上述3索引与SRC-1357冻结清单哈希均匹配，补齐初始范围未读项；124sidecar与各索引hash一致。24语义图objects/parts按旋转展开与真实boxes逐行差≤1e-9，阈值沿`primitive_assets.py:compare_objects_to_boxes`，绑定元数据与实际原语。288逐case成败与原5M旧评估相同，不能推出逐步动作/失败分类相同。
+- 静态结构事实：100随机验证图11–18个boxes、z起点均0；24语义图65–167个boxes、其中21–84个z>0，含家具细杆/悬空板/隔墙/门洞。语义索引明确semantic_policy_input=False，输入代码`task7_lower/observation.py:FIELDS`与`task7_sim/core.py:observe`只有观测/高度/路线栅格及74维向量，无物体语义标签。`task7_sim/perception.py:Grid.update`用amax高度；`task8_sim/primitive_scene.py:_chassis_block`使用0.99×0.67m矩形全高度XY投影，而机械臂为3D胶囊碰撞。几何域差异事实不等于该差异已造成失败的比例。
+- 描述性关联：24map以每图三模型×4case成功数作y，Spearman秩相关walls−0.358、min门宽+0.139、boxes+0.127、elevated boxes+0.160、thin XY boxes+0.090；全部是事后探索，不做显著性/多重比较或因果推断。thin定义min(sx,sy)≤0.10m是离线描述工程阈值，非安全阈值；门宽分组≤1m也是描述选择，非机器人可通行定理。最小门宽≤1m的14图77/168成功，对照>1m的10图55/120，均45.83%，不支持“最窄门决定全部下降”。
+- 反例：home_map_002最小门1.1m，三seed各0/4；library_map_002最小门1m，3/3/4合计10/12；warehouse_map_001有167boxes仍9/12，restaurant_map_002仅65boxes却2/12。不支持仅靠物体数量/门宽解释表现。类别8/36到24/36沿SRC-1355，不能直接归为家具类别因果。
+- 几何推导：由0.99×0.67m底盘矩形，斜向45°横向投影=(0.99+0.67)/sqrt(2)=1.174m，最大投影sqrt(0.99²+0.67²)=1.195m；因此最小门宽本身不足描述转弯/长廊净空，短门洞与长通道的可通过条件不同，不能据此称1m门必不可达。未计算真实路径/轨迹净空。2.5D高度不表示多层空隙，且底盘投影忽略z；“部件化结构＋转弯/局部可行性＋观测”的共同影响只是优先待验证机制，未定根因。
+- 工程判断：当前低迁移表现不足以证明直接训练必要或能解决问题。若将现24图用于训练，它们只能算训练见过场景，不能继续作为该新策略零样本迁移验证；需先独立划分训练/验证/未见地图并明确要研究域内训练还是零样本迁移。这是评估集合定义推导，非外部文献结论；尚未设计第二项训练实验/预算。原唯一LR草案仍待评审，不因本问启动。
+- 限制：无逐case初始base/q、目标/route/候选、失败位置/对象id和逐步trace，无法将0/12定位到某门/桌椅或证明训练分布是首因。结构统计只读旧几何，不是重新采样轨迹或仿真；关联/反例和证据缺口写[task9.7 RESULTS](tasks/task9/task9.7/RESULTS.md)，不宣称“结构根因调查已闭合”。
+
+<a id="src-1363"></a>
+## SRC-1363 — task9.8 监督协议与定向回放取样
+- 用户指令与工程设计，2026-11-02，Codex。用户要求“书写文档，设计实验，给出提示词我去派发执行者”。位置为本轮用户消息与[协议](tasks/task9/task9.8/PROCEDURE.md)。授权当前文档设计，具体派工由用户发出。
+- 输入为[SRC-1358](#src-1358)、[SRC-1359](#src-1359)、[SRC-1361](#src-1361)、[SRC-1362](#src-1362)。核查旧文件 B3_5M-seed4718/validation-5000000.json 的 validation.rows 和语义 seed4718/evaluation.json 的 transfer.rows，以及 forem/scripts/task9_semantic_eval.py 的 evaluate_transfer。案例键、终态和转移数已有，逐步轨迹须新采。原件根见 SRC-1357。
+- 选取两张有反例的语义图及两个 standard 对照、按首次拒绝和原子目标进展诊断、执行与审查分离，均为本项目工程选择。限定规模为控制回放成本和事后挑样，只支持定位具体案例；恢复指标和修正分流须以新证据验证。未测成本、未运行，无外部效果主张。
+
+- 2026-11-02 用户追加“允许子agent派发，并根据任务难度选择模型”。适用于已派阶段内分工；选型表为监督者工程建议，未实际派发。
+
+<a id="src-1364"></a>
+## SRC-1364 — task9.8 A用户派工、只读边界与实际委派
+
+- 支撑主张：A阶段已获用户明确派发，可按难度委派；允许字节hash模型，禁止模型加载、仿真、训练、生产代码改动；B等待单独派发。
+- 类型：用户明确指令＋工程分工。作者用户/Codex，2026-11-02本会话。精确位置：用户“你是 FoReM task9.8 的 A 阶段主执行者”消息；本地记录[父日志](agent_logs/task9/task9.8/20261102-codex-stage-a.md)、[父PROCEDURE委派表](tasks/task9/task9.8/PROCEDURE.md#a阶段实际委派登记2026-11-02)、各task9.8.1–9.8.3三文档/独立日志。
+- 核查日期/人：2026-11-02，Codex。原始结论：本次只做只读调查和准备文档；历史根只读；提交READY/NOT_READY、绝对案例路径/hash、等价性、资源窗口及需裁决项，停在A。
+- 模型选择是用户建议范围内的工程选择：task9.8.1请求gpt-6-luna/low（明确清单复算）；9.8.2请求gpt-6.1-sol/high（批次/随机/回滚因果）；9.8.3请求gpt-6.1-sol/medium（字段和预算跨文件核对）。Claude建议分别Sonnet5.5/low、high、medium，未使用Claude；主Agent实际模型/强度无法独立核实，记未知。请求配置不冒充不可核实的底层运行设置。未遇矛盾源码需astra升级，未派astra。
+- 采用/限制：只更新本工作树文档证据，不代表B资源或额外回合已批准；子Agent自报由父从JSON/源码复核。
+
+- 同次A执行中的用户最新修订（优先于SRC-1363原派工）：
+  > 先检查能否沿用原评估入口采集轨迹。单案例容易重放就单跑；拆批会改变随机流或需要额外开发，就按原批次重新评估，只保存目标案例的详细轨迹。沿用冻结模型、地图、种子和成功判据。若新旧结果不同，两次都保留，按本次实际轨迹分析首次受阻与恢复过程，不要求逐步复现旧轨迹。整批超出原定回合上限时，先报实际回合数和预计耗时，供监督者调整预算。
+- 采用：撤销“历史逐步相等/历史终态一致”为本次诊断准入或自动停止条件；保留新旧两次结果和差异，不覆盖原件。记录器on/off非干扰仍须检查，不能把它与历史重放一致混淆。优先复用原入口；本次A只审查钩子/成本，不实现或运行。额外同伴回合须单列给监督者调整预算，本消息不自动放宽32回合或授权B。
+
+<a id="src-1365"></a>
+## SRC-1365 — task9.8 A冻结30行案例、模型/地图/索引身份
+
+- 支撑主张：依协议选10完整case×3训练seed，逐行旧终态、transfers、原JSON路径/索引及重构批次位置；三个final.pt、配置、加载记录、评估输入和124地图sidecar的字节身份。
+- 类型：项目原始评估/文件字节核查与标准库推导；非新评估或模型加载。作者FoReM/Codex，年份2026；历史run为`t9-stage2-20261029`三B3_5M与`t9-semantic-20261102`，A run为`t9.8-A-20261102`。核查2026-11-02，子Agent task9.8.1，父Codex独立复算。
+- 精确证据：历史只读根`/home/ybc/projects/CL-FoReM/forem`；`results/task9/t9-stage2-20261029/B3_5M-seed{4718,4719,4720}/{final.pt,final.actor.pt,config.json,validation-5000000.json}`及9.6各seed `loaded.json/evaluation.json`；`results/task8/t8-pool-20261027/cube-pool-v2/{manifest.json,evaluation-seeds.json}`、`results/task8/t8-exec-20261026/semantic-pool/index.json`及124sidecar。所有具体路径/字节/哈希见[输入inventory](agent_logs/task9/task9.8/task9.8.1/input-inventory.json)、[全部地图inventory](agent_logs/task9/task9.8/task9.8.1/all-evaluation-maps-inventory.json)。
+- 冻结交付：[30行CSV](agent_logs/task9/task9.8/task9.8.1/frozen-cases-30.csv)，SHA256 `e36d1888b3bb5621f4a8c70d2eb2cea5316ae5883361017dead80de4169a57b8`；[完整JSON](agent_logs/task9/task9.8/task9.8.1/frozen-cases.json)，SHA256 `c39d39132efac523ce96a61c005c5801ba6da2b49dbf087d57b347e3fe85480e`。字段与修正过程见[9.8.1 RESULTS](tasks/task9/task9.8/task9.8.1/RESULTS.md)。初版丢批次三列，父验证失败后保留legacy快照修复；旧哈希不是最终交付哈希。
+- 原始结论：random从4718 standard按map_id/seed/stream_index排序首成功00003（原行53）与首fail20非成功00000（原行50），完整六字段键在三seed唯一；semantic home002行8–11、library002行44–47。共30目标旧2695 transfers；仅4718随机失败例失败，其同case在4719/4720成功；home0/12、library10/12、random5/6均只描述本定向样本。
+- 三final.pt纯流式SHA依次`76a11b4544dbf0bac9412a4d3ec2aeb9b597e029075a87f4a43ea3f2260a7255`、`1eacf758ffdd3b485a5a30e377cf5f2788cc6544ce0a2391aa46cb431e96daf6`、`a4d89a7e7650c83a0f263efafb9aecef5abbb92c2c5fccb6d87fc491c202e60e`。父未重复扫描约104.6GB checkpoint，但独立重读actor hash/loaded/config以及全案例/124sidecar/历史69冻结文件；不将哈希等同于checkpoint可加载/内部张量本轮核验。
+- 采用/限制：本任务诊断身份清单；case选择依结果事后取样，不代表总体或模型选择。批次位置按原输出顺序及validation_environments16重构，原JSON无此字段。primitive-obb-v1只用JSON原语，PCD未读/未核；不得宣称PCD已验收。父[验证程序](agent_logs/task9/task9.8/verify_frozen_cases.py)及[结果](agent_logs/task9/task9.8/parent-verification.json)rc0，仅证明所列文档/字节核查，不是B轨迹验收。
+
+<a id="src-1366"></a>
+## SRC-1366 — task9.8 A原入口、随机流、批次与最新回放边界
+
+- 支撑主张：基础生产src实际路径；局部job/purpose RNG可重建；原evaluate无case/batch筛选或trace回调；单例不是现成易行入口；沿完整原evaluate最少调度改动。旧逐步/终态一致不再验收门，依据用户SRC-1364。
+- 类型：项目原始源码/历史启动记录静态核查＋条件推导/工程选择；非实测数值差异。作者FoReM/Codex；版本工作树HEAD `d198e5ca48f86071c05274f9da753f393ce058b4`，旧根HEAD `121cb36e64e53163be232dbafa8c32ff065a290b`，实际dirty字节按SHA绑定。核查2026-11-02，task9.8.2子Agent，父Codex核关键原件/代码。
+- 精确证据：[9.8.2 RESULTS当前第8节](tasks/task9/task9.8/task9.8.2/RESULTS.md)、[audit.json](agent_logs/task9/task9.8/task9.8.2/audit.json)、[顺序计数](agent_logs/task9/task9.8/task9.8.2/budget-order.json)、[recompute.py](agent_logs/task9/task9.8/task9.8.2/recompute.py)。历史启动`logs/task9/t9-stage2-20261029/{queue-state.json,extra/waiter-state.json}`与9.6 provenance/loaded指向`PYTHONPATH=/root/mm_husky_ws/src`，不是task9_opt副本。22对基础源码两树字节同，未声称全树同commit。
+- 代码精确位置（相对forem，绝对两根如上）：`src/task8_lower/evaluation.py:evaluation_plan 24–60, EvaluationStreams 63–68, evaluation_environment 71–86, evaluate 96–136`；`src/task7_sim/episode.py:RandomStreams 22–35`；`src/task8_sim/episode.py:PcdEpisodeSampler.sample 90–148`；`src/task8_sim/env.py:PcdEpisodeEnv.reset 55–95`；`src/task7_lower/training.py:choose_candidate 32–48,rng_state/restore_rng 87–92`；`src/task7_lower/networks.py:Actor.predict 36–37`；`src/task7_sim/kinematics.py:dls 175–221,solve_tcp_in_arm 235–254`；`src/task7_sim/search.py:inplace_progress 39–58`。完整hash见audit，evaluation SHA178e81125b082bcc2b8e260ebaacdbe6e68e64396287c52199ef015ddf148f48。
+- 原始结论：每job用RandomStreams(job.seed,1).for_env(0)，spawn_key=(0,purpose)，batch位置不进seed；初始化拒绝重采会消费本job initial流，候选other流依同mask/边界次数。确定性actor为tanh均值，但NN、DLS压缩/bucket、route/scene padding随batch形状而变，静态不证明数值轨迹相同。原evaluate固定100+96、宽16，无筛case/role/batch参数，任意原批helper仍需新调度包装；原成功判据保留。
+- 采用：按最新用户约束，优先完整原evaluate函数＋冻结加载合同，B以后仅增加诊断采样；不调用训练入口恢复训练。无需为匹配旧轨迹增加等价实验；保留新旧结果并按本次轨迹诊断，on/off非干扰仍待B验证。语义使用同原transfer jobs/helper，9.6历史原件保留比较，不必再完整调用第二个96入口。
+- 顺序推导：原B“先两例on/off通过，再其余”未撤销。完整入口严格顺序为5×196=980；先392两次4718，仅采两控制目标，再4718其余8和另两seed各10，总正式详trace30。新原批调度严格208。784/176仅在监督另行允许门前附带采其余目标详情时成立；父发现最初合并预算漏门顺序已纠正，保留历史计算条件。当前全部未实施、超32，不自行扩预算。
+- 限制：A不证明模型能加载/本次结果，不保证跨设备/库逐位复现；旧9.6缺完整runtime，当前metadata不能倒填历史。当前NOT_READY根因按最新预算边界判断，不再用历史轨迹未证强制阻断。诊断钩子尚未实现，属于未来B准备而非A失败或新增功能授权。
+
+<a id="src-1367"></a>
+## SRC-1367 — task9.8 A字段可得性、历史成本推导和资源快照
+
+- 支撑主张：旧终态/聚合日志不能恢复首次拒绝；候选/提交/held-q和原子目标字段边界；碰撞对象/三维见证缺口；980主方案及208等预算、trace/磁盘与绝对窗口均为未执行代理。
+- 类型：项目源码静态核查、旧实测wall/JSON大小/现场只读查询、标准库算术推导、工程预留和待验证开销。作者FoReM/Codex；版本同SRC-1366与旧三B3_5M/9.6原件。核查2026-11-02，task9.8.3子Agent，父Codex独立读核心路径、重算主预算和核现场。
+- 精确证据：[9.8.3 RESULTS](tasks/task9/task9.8/task9.8.3/RESULTS.md)、[cost-audit.json](agent_logs/task9/task9.8/task9.8.3/cost-audit.json)、[复算程序](agent_logs/task9/task9.8/task9.8.3/audit_cost.py)、[资源快照](agent_logs/task9/task9.8/task9.8.3/resource-snapshot.json)、[依赖metadata](agent_logs/task9/task9.8/task9.8.3/dependency-metadata.json)；父[末次现场](agent_logs/task9/task9.8/parent-final-resource-check.json)。旧wall/transfers精确原件为三`validation-5000000.json:wall_s/rows.transfers`和9.6 `status.json:wall_s`减`evaluation.json:wall_s`，绝对根同SRC-1365。
+- 字段代码：基础`src/task7_sim/core.py:step 246–329`（首次失败字段267每次覆盖；attempts278不存trialbase/trials/显式accepted；279–280提交；285成功trace；reason/结束286–302）；`kinematics.py:solve_tcp_in_arm 249–254`拒绝q被previous q替换并重算残差，不能把attempts.candidate_q当拒绝前求解解；`training.py:choose_candidate 32–48,drain_history 73–77`与`evaluation.py:126`清历史；`primitive_scene.py:_chassis_block 201–217,_arm 230–239`在any归约前有box配对，公开碰撞结果只三布尔；base为全高度XY投影，没有3D接触见证。精确字段矩阵见9.8.3，不把理想提交q当物理反馈。
+- 旧实测：完整196回合wall=1107.264042899/1168.423172612/1190.881621474s，transfers=21173/20884/22278；9.6外层差104.397958823/116.226997787/137.336324923s，含加载/构建/检查，不是纯加载profile。输入/summary字节见JSON，不将聚合摘要约6.29bytes/transfer当trace率。
+- 推导公式/条件：单worker单GPU顺序，r=max(wall_s/N)=0.05594824615072511 s/transition，L=max外层差=137.33632492274046s；T=N×r+k×L。严格原入口980用N=106681、k=5，T=6655.296472219208s=1.8486934645053357h；直接旧wall累加+5L=1.768827374h。两控制目标的原入口on/off阶段392、N42346、k2，代理0.734404745h；严格原批208、N24572、k5代理0.572622758h。target30旧2695actions，每动作最多2子步，最多5390子步记录；这些N是旧路径代理，新轨迹可不同。
+- 工程磁盘/资源选择：仅30目标详细trace，每动作32KiB（含两子步/状态/目标/少量见证，不存大观测栅格/图像/全候选表）代理88,309,760bytes；两off目标比较额外约6.26MB，再加summary/身份/异常，建议1GiB新输出额度。32KiB/action未实测，不是硬上界；off/on均需足够比较值/签名，实施前须明确其采样定义及字节计费，不将无详细trace误称完全无观测。
+- 建议报审980回合、GPU2一张、3 GPU h/3 worker h/3h墙钟，2026-11-02 17:00–20:00 Asia/Shanghai，1GiB磁盘。约1.77–1.85h未含实测记录器开销，3h是工程缓冲，不是已批准/已预约/完成保证；硬截止不自动延长。若需要完整大观测比对或超额产物，须另报预算，不默默新增。
+- 现场与限制：约15:30及父末检四卡compute空；task10容器声明GPU1，不触碰。forem-dev image sha256:e674db49b8156fded725ba4de8c2faf81aa491a367a1e151eddae169a1dfc430，旧根RW挂/root/mm_husky_ws，不能当隔离任务容器直接写原件；未建task9新容器。标准库metadata当前Python3.10.18、torch2.7.1+cu128、numpy1.23.5、scipy1.10.1，非真实张量设备测量；可用磁盘约10.138TB只为时点快照。B须隔离工作树RW、历史模型/地图RO，保留配置内部canonical路径并核实际设备/线程/flags，A不创建容器。
+- 审查纠正：曾先读opt副本，父要求改基础src；基础evaluation副本hash不同，最终结论用实际基础路径。曾报784/176合并预算，父补核先后门后修980/208；不抹去早期条件。无源码争议须astra复审。
+
+<a id="src-1368"></a>
+## SRC-1368 — task9.8 A父独立复核与NOT_READY交接
+
+- 支撑主张：A只读交付/核查完成、当前B NOT_READY，具体原因是原回合上限与所需整批执行预算待监督裁决；未运行回放，无法给策略本次成败或机制结论。
+- 类型：父独立复核、输入/代码/算术核验和工程裁决；非C独立验收、非新实验。作者/核查人Codex父，2026-11-02，A run-id`t9.8-A-20261102`；模型实际未知，请求子配置与推荐依SRC-1364。
+- 精确证据：[父RESULTS](tasks/task9/task9.8/RESULTS.md)、[父日志](agent_logs/task9/task9.8/20261102-codex-stage-a.md)、[verify_frozen_cases.py](agent_logs/task9/task9.8/verify_frozen_cases.py)、[parent-verification.json](agent_logs/task9/task9.8/parent-verification.json)、[parent-independent-audit.json](agent_logs/task9/task9.8/parent-independent-audit.json)、[frozen-inputs-parent-audit.json](agent_logs/task9/task9.8/frozen-inputs-parent-audit.json)、[worktree snapshot](agent_logs/task9/task9.8/worktree-snapshot.json)及SRC-1365–1367原件。
+- 原始核验：从六原JSON独立重选并核全30CSV/JSON、旧终态/transfers、批次重构；124sidecar依原manifest/index逐项匹配；原冻结69项历史全部匹配、checkout60源码/配置匹配、9日志/索引产物缺于checkout但原件存在；288旧/9.6语义终态和transfers一致只作为历史描述。关键基础源码父直接追到job RNG/候选/IK回滚/失败字段；主980/106681/6655.296s算术独立重算，验证rc0。
+- 原始缺陷保留：父verify第一次host3.10无hashlib.file_digest失败，改标准库流式hash；第二次发现最终CSV批次列被覆盖，退回子Agent保留旧版修复后rc0。父/子初算合并784漏门顺序，复核后修严格980。未跳过失败或将自报当通过。
+- 裁决/适用：当前推荐完整原evaluate，单case无现成易行入口；保持模型/图/seed/成功判据，历史新旧不同留双方，本次轨迹诊断，不要求旧逐步一致。超32回合先报监督调预算，保留on/off先后门。字段/隔离部署/记录器B后实施验收，本轮仅文档准备；A交付done，父task9.8仍review，B/C均未执行。无训练/模型加载/仿真/生产源码配置改动，无后台待清理任务，未提交/推送/合并；不关闭9.4整批独立验收或改变task10冻结下层。
+
+<a id="src-1369"></a>
+## SRC-1369 — task9.8 A 监督复核
+2026-11-02 Codex 只读复核，项目证据与工程判断。原始位置、版本沿 SRC-1365–1368；[独立日志](agent_logs/task9/task9.8/20261102-codex-supervisor-review.md)。A交付清单41项在审核开始时哈希匹配，复跑核验断言通过；基础 task8_lower/evaluation.py:evaluate、task7_sim/core.py:begin/step、verify_frozen_cases.py 末尾写入与 manifest.files 核支持预算、原地进展和复核覆盖风险。判断仅为A交付/B准入审核，未实测记录器时延、未加载策略。
+
+<a id="src-1370"></a>
+## SRC-1370 — B预算批准、恢复判据与隔离复核
+2026-11-02 用户本轮原令批准980实际回合、单卡3 GPU小时、墙钟3小时、新输出1 GiB，仅回放、两例开关对照先通过。未指定固定GPU或日历窗口。Codex核查本树 HEAD d198e5c 的 forem/src/task7_sim/core.py:Core.begin/step（cap、candidate.inplace、pending/failed/commit、state.s、arrived、route_end）与[SRC-1366](#src-1366)。原代码定义状态和到达；下列诊断阈值为工程选择：以首次拒绝后的已提交状态为基准，比较同段净进展，1e-6 m只过滤微小数值变化，非安全或控制精度，不改变环境成功条件。固定阈值前未查看新轨迹。复制原脚本和证据到独立目录复核为文件隔离选择，见[协议](tasks/task9/task9.8/PROCEDURE.md#b-final)和[验证日志](agent_logs/task9/task9.8/20261102-codex-b-release.md)。
+
+<a id="src-1371"></a>
+## SRC-1371 — task9.8 B实际启动失败、零回合停止记录
+
+- 类型：项目原始现场/执行证据、工程实现选择与限制；非恢复机制实测。核查人Codex，2026-11-02；run-id `t9.8-B-20261102T160200+0800`，工作树HEAD d198e5ca48f86071c05274f9da753f393ce058b4，历史根HEAD121cb36；本轮脚本字节版本由run内source-snapshot及artifact-manifest锁定。授权为用户本轮明确派B，预算/冻结规则沿[SRC-1370](#src-1370)。
+- 支撑主张/原始位置：`/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.8-B-20261102T160200+0800/input-verification.json`核input-inventory的25文件含三个final.pt SHA一致；`a-audit-eVVIgoZH/recheck.json`用现行独立副本命令返回PASS/30/124，`original-evidence-after.json`证parent-verification前后不变。哈希是字节身份，不是模型加载/设备验收。
+- 资源证据：run.json起点16:02+08、截止19:02+08；container-inspect/final-inspect记录镜像、RO历史/checkout与RW新输出、唯一GPU2 UUID `GPU-656ca5c1-681f-48a2-7d1f-a00824723f68`。GPU初末compute为空；首次启动前磁盘10,138,155,327,488bytes。container StartedAt08:07:32.658731487Z至FinishedAt08:09:01.505852608Z，差88.847121s，保守GPU h=差/3600=0.024679756；此为资源暴露窗，非kernel计时。全程仅这一张卡，无CUDA模型执行。
+- 失败精确位置：`/home/ybc/projects/CL-FoReM-task9/forem/logs/task9/t9.8-B-20261102T160200+0800/01-4718-off.log`中replay.py:4 import torch，经torch.fx.passes.infra.pass_manager的`from queue import Queue`命中本轮`/workspace/scripts/task9_8/queue.py`，ImportError。queue-state记录worker/queue rc1、约5.107s启动耗时；在main/evaluate前，episodes-started文件和loaded/evaluation产物均无，实际回合/trace0。container exit137是sleep清理，不是worker码。未自动重试、未ON/后续、未训练/smoke或派C。
+- 测试与限制：静态AST检查仅证明保留Core.step原语句；标准库8项计分/精确比较测试未运行环境且不覆盖torch导入集成。恢复阈值、两例记录器门和全部机制结论均未得到本轮验收，不将未执行30行混入U或无拒绝分母。新输出和日志bytes/最终墙钟见final-accounting，逐例未执行表case-results-30.csv，trace路径/hash为空。
+- 采用方式：[task9.8 RESULTS](tasks/task9/task9.8/RESULTS.md)与[独立日志](agent_logs/task9/task9.8/20261102-codex-stage-b.md)如实交回失败，状态review；监督者决定是否重新派B，C由独立核验人。不存在策略表现或恢复能力结论，不将此命名错误归因于冻结模型/环境。
+
+<a id="src-1372"></a>
+## SRC-1372 — B停止的监督审核
+2026-11-02 Codex；项目实测及静态审计。位置为 SRC-1371 的run、artifact-manifest、worker栈、queue-state、case-results与final-accounting，另核本树 forem/scripts/task9_8/queue.py 常量及 analysis.py:score。检查69项哈希及30条未执行行；标准库调用score以reset/final两事件复核返回no_rejection，属合成缺失轨迹反例。该缺陷未在本次实跑触发（零回合）。[审核记录](agent_logs/task9/task9.8/20261102-codex-b-review.md)。
+
+<a id="src-1373"></a>
+## SRC-1373 — B2监督问题修复、累计预算与零回合验证
+
+- 类型：2026-11-02用户本轮明确授权、原始项目文件/代码证据及工程实现；核查人Codex。run-id `t9.8-B2-20261102T161809+0800`，工作树HEAD d198e5ca48f86071c05274f9da753f393ce058b4，实际脚本版本以新run source-snapshot/manifest为准。依据[SRC-1372](#src-1372)的三项审核意见，不改变恢复阈值、成功定义或冻结原evaluate。
+- 预算来源：旧run `forem/results/task9/t9.8-B-20261102T160200+0800/final-accounting.json`记0回合/88.847121 GPU秒/2,822,519bytes；用户要求两次合计980实际回合、10800 GPU秒、1GiB并保留原2026-11-02 19:02+08截止。新run登记16:18:09+08；run.json保存prior字段与现场余额；不得因新身份顺延/重置。
+- 命令勘误原件：旧launch-commands.json.worker与logs同run queue-state.json.runs[0].command逐项相同；argv[3]为完整docker exec，之前RESULTS误取argv[2]渲染'-c'。现追加准确命令，旧失败/码1及容器清理码137保留，不改旧run任何文件。
+- 修复边界：新supervisor.py消除queue.py标准库遮蔽并从新run配置取身份/路径，输出根登记时原子创建、阶段目录重名即停；replay.py从原evaluate返回的row和原Transition.attempted/committed独立核动作/子步覆盖，OFF/ON各侧完整后才比较；analysis.py遇关键事件缺失判U。子任务9.8.4只做标准库合成回归，父核代码和测试；正式镜像同工作目录/PYTHONPATH/脚本路径的零回合验证保存queue.__file__、命令与rc，不加载模型/reset/evaluate。
+- 实测证据位置：新run的input-verification.json、a-audit-*/recheck.json、zero-import-check.json、zero-*-command.json、zero-command-contract.json与日志目录zero-regression.log；正式回放/机制结论在完成后追加，尚未执行项不当通过。新run完整路径`/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.8-B2-20261102T161809+0800/`。
+- 适用/限制：[task9.8 RESULTS](tasks/task9/task9.8/RESULTS.md)与[独立日志](agent_logs/task9/task9.8/20261102-codex-stage-b2.md)记录实际结果、缺口及预算；零回合检查不能替代OFF/ON非干扰门或C独立验收。
+
+<a id="src-1374"></a>
+## SRC-1374 — B2临时目录失败与用户明确授权B3继续
+
+- 类型：项目原始运行记录、用户异步明确授权、工程修复；核查人Codex，2026-11-02。B2路径`forem/results/task9/t9.8-B2-20261102T161809+0800`和同run logs，B3路径`forem/results/task9/t9.8-B3-20261102T163355+0800`；工作树HEAD d198e5ca48f86071c05274f9da753f393ce058b4，字节代码版本各run source-snapshot/manifest。
+- 原始失败：B2 01-4718-off.log/status记录LowerSAC→Adam→torch._dynamo→distributed.nn.jit.instantiator→TemporaryDirectory，在只读容器无可写/tmp报FileNotFoundError。worker/调度rc1，未evaluate/reset，0回合，容器清理137；旧B失败run不写。B2正式零导入/26回归此前通过，但未覆盖动态导入所需临时文件条件，不能把该零检当完整运行合同已验。两次更早零检查失败原件归档。
+- 原始资源/推导：各container-final-inspect StartedAt至FinishedAt差，B2两零检查7.420507+7.264088=14.684595s，主53.895374s，共68.579969s；与旧88.847121s合157.427090s。B2 final-accounting保守输出3,014,792bytes，加旧2,822,519=5,837,311bytes。只作资源暴露窗口，不是GPU kernel时间。新run按prior_runs逐项核这两份账本，不重置。
+- 授权与工程采用：用户在本聊天异步问答明确答“允许修复、验证后继续OFF”，原980实际回合/10800GPU秒/1GiB/2026-11-02 19:02+08截止保持。B3 TMPDIR=/output/tmp隔离且计费，零检补真实临时写读删和两动态模块导入；无模型加载/reset/evaluate。记录zero-import-check.json、zero-*-command.json及zero-regression.log为PASS/rc0，Queue来源/opt/python310/lib/python3.10/queue.py，26回归通过；实际首OFF另由队列记录。
+- 适用/限制：只授权B诊断；零检不替代ON/OFF完整性与精确比较，不改变原evaluate或恢复定义。B3实际回放与结论在[RESULTS](tasks/task9/task9.8/RESULTS.md)、[日志](agent_logs/task9/task9.8/20261102-codex-stage-b3.md)随进程追加；C由另一核验人，不由B自验冒充。
+
+<a id="src-1375"></a>
+## SRC-1375 — B3两例独立覆盖与OFF/ON精确门实测
+
+- 类型：项目原始诊断回放、B主执行者独立重算；核查人Codex，2026-11-02，非C独立核验。run `t9.8-B3-20261102T163355+0800`，代码hash见source-manifest；原生产版本沿SRC-1374，协议沿SRC-1370/1373。
+- 精确证据：本run `01-4718-off/evaluation.json`、`02-4718-on-gate/evaluation.json`及各case01.jsonl/case03.jsonl，coverage.json、gate-independent-coverage.json、gate-comparison.json、gate.json；父另外从两份原evaluate的validation row53/transfer row8调用coverage与compare重算，落parent-gate-verification.json，含两侧trace SHA。各evaluate196实际回合、worker rc0，未拆批/重试/训练。
+- 原始覆盖：validation row53 107actions、213实际pending子步/213commits/0rejection；transfer row8 84actions、148pending子步/128commits/20rejections；begin各1，含reset/final共430/319事件。动作数严格匹配各侧原row.transfers，子步匹配每动作原Transition.attempted，commit及终态/身份/顺序/重复缺失检查完整；各侧先完整，再逐项比较749事件，所有离散/finite数值完全相等，无容差放宽。
+- 项目采用：两例ON计入目标30详细trace；前392完整回合入累计预算，门通过后才启动第三次4718剩8。`diagnosis-after-gate`为仅2例已有结果的阶段快照：随机例无拒绝，home例首次第65动作substep0为IK拒绝，其后同段净进展0，依冻结定义N；不能外推其余28例或整体机制。两次完整196的历史五字段终态/transfers差异数0，仍保留双方原件。
+- 限制：B执行完整性门不等于C裁决，IK返回held q不是原始拒绝求解q，碰撞对象/三维见证仍不补造；最终30与资源账本待后续按原协议交付。
+
+<a id="src-1376"></a>
+## SRC-1376 — B最终980回合、30完整trace、恢复判分与收尾事实
+
+- 类型：项目原始回放、确定性非干扰验证、冻结公式推导与B主执行者交付核验；核查人Codex，2026-11-02。非C独立核验。run `t9.8-B3-20261102T163355+0800`，工作树HEAD d198e5ca48f86071c05274f9da753f393ce058b4、历史121cb36；实际代码锁source-snapshot/source-manifest，各loaded核路径/torch/设备/flags。
+- 精确位置：`/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.8-B3-20261102T163355+0800/`下五phase evaluation.json/coverage.json/case*.jsonl/status/loaded、parent-gate-verification、diagnosis-final summary/CSV/report、post-rejection-event-counts、parent-independent-formula-audit、input-verification-after；原始命令/退出码在同run logs/queue-state及supervisor.log，最终人工清理在manual-cleanup-recovery，原始32trace与全部文件SHA在manifest。起止/bytes以final-accounting为准。历史对照为A清单引用的原validation-5000000.json与9.6evaluation，不改原件。
+- 原始结果：原evaluate按OFF196→ON两例196→4718余8的196→4719十例196→4720十例196，共980完整；五worker rc0，目标30详细trace coverage全通过。OFF/ON两例独立coverage按各自原transfers/Transition.attempted与committed和身份/顺序/缺失/终态，再749事件有限数值精确比较PASS，父重算见SRC-1375。
+- 冻结推导：SRC-1370首次pending&failed锁同段后提交状态、float64平移XY距离/原地max(cap-s,0)、严格减少>1e-6m或同段明确arrived，route_end不替代arrived。原事件直接另写循环复算30分类，与analysis.score一致。无拒绝18、R1、N11、U0，全部受阻R+N+U=12，R/(R+N)=1/12=8.3333%，首次拒绝率12/30=40%，严格成功15/30，未执行0。逐seed分别无拒绝/R/N/U/S：4718=5/1/4/0/4，4719=6/0/4/0/5，4720=7/0/3/0/6，均10例。
+- 关键边界：全部12首次拒绝为平移目标，本轮原地受阻0（原地算法仅合成回归）。唯一R为4718 case2段2/动作39/子步1首次自碰撞分类，动作40/0一次commit使剩余1.035394084694m减少0.000374927461716m；最终失败20次且严格失败，不将诊断恢复当任务成功。N的4720/case3仍有2、4718/case6有8后续commit但XY剩余无达标减少；s/yaw变化不换算成平移目标恢复。详细yaw/终点差量另表。三case5无拒绝仍严格失败，不能计受阻或当IK失败。
+- 原始分类及限制：首次kind1 IK7、kind2底盘投影2、kind4自碰撞3；缺对象/三维见证/拒绝前原始IK解，held q不当原始候选或物理反馈，不能推出实体接触、执行/感知误差因果。U0仅指恢复可判。五次196和目标30相对历史五字段终态/transfers变化均0，历史无逐步trace，未声称历史逐步等价。结果选择的10case×3模型只用于诊断，不是总体发生率或统计独立980样本。
+- 资源与异常：GPU暴露88.847121+68.579969+5438.627223=5596.054313s，/3600=1.554459531h；整个单卡容器窗保守计，不是kernel时。worker累计wall5395.609100s。旧输出保守2,822,519+3,014,792=5,837,311bytes已累计，新输出/tmp/日志/副本/代码及最终总bytes见final-accounting。最初16:02+08至原19:02+08硬截止，未顺延。B3 worker全0，但调度收尾硬编码UID1000使hostuid1004失写权限而rc1；人工仅修本run归属1004:1004并停容器，手工0，容器清理137，18:05:06.928440+08已停，无回放重试。UID代码收尾后修为实际host值，2mock先红后绿，28总回归通过，未用新修复重跑。
+- 项目采用：[task9.8 RESULTS](tasks/task9/task9.8/RESULTS.md)与[独立日志](agent_logs/task9/task9.8/20261102-codex-stage-b3.md)完整交接。B交付/必要自检完成，主任务review等待另一人C；不部署修正/训练/世界模型或扩展研究结论。
+
+<a id="src-1377"></a>
+## SRC-1377 — task9.8 C独立复算
+2026-11-02 Codex；项目原始运行与监督复算。输入版本、run和旧证据沿SRC-1376；精确位置为B3五phase的evaluation.json、case*.jsonl及旧validation-5000000.json、三次final-accounting；工具与限制见[独立记录](agent_logs/task9/task9.8/20261102-codex-c-review.md)。确认数字及人工收尾例外；case05末五个begin同状态，按基础Core.begin/_finish的原地零进展与连续五段停滞终止解释。只限三个模型同一case，不推断全部语义图根因。
+
+
+<a id="src-1378"></a>
+## SRC-1378 — task9.9 离线机制分析用户授权
+- 类型：用户明确指令/工程范围；2026-11-02，用户，本聊天任务书；本地范围记录见[task9.9 TASK](tasks/task9/task9.9/TASK.md)与[独立日志](agent_logs/task9/task9.9/20261102-codex-offline-mechanisms.md)。核查人Codex，核查日期2026-11-02。
+- 原始要求：从C通过的task9.8原始轨迹逐例诊断12受阻案例与case05零进展；允许证据不足，只交一项对照草案或最小缺失字段；不执行实验或改策略。
+- 采用/限制：只授权离线读取、独立统计和文档；模型推荐沿根AGENTS默认GPT6.1sol/Sonnet5.5，高强度为跨模块研究诊断工程选择，不是已执行模型证明。
+
+
+<a id="src-1379"></a>
+## SRC-1379 — task9.9 从task9.8原JSONL复算的离线事实
+- 类型：项目原始轨迹的离线派生统计；作者/机构：FoReM B执行轨迹、C独立审核、Codex本次复算；版本/run：`t9.8-B3-20261102T163355+0800`，工作树HEAD `d198e5ca48f86071c05274f9da753f393ce058b4`。核查日期2026-11-02，核查人Codex，已读原JSONL及C记录，非二手转述。
+- 精确原始位置：`forem/results/task9/t9.8-B3-20261102T163355+0800/02-4718-on-gate/case01,03.jsonl`及`03-4718-remaining/`其余8条、`04-4719-all/case01–10.jsonl`、`05-4720-all/case01–10.jsonl`；逐例路径/首拒绝行号/段动作子步/端点行号在新派生`forem/results/task9/t9.9-offline-20261102/blocked-cases-12.csv`。case05末五begin原行4718为99–103、4719为303–307、4720为729–733；最后正Δs子步原行97/301/727。唯一R原03-phase case02 L158→161（拒绝→恢复）、L217终止。
+- 可复算工具：`forem/scripts/task9_9/analyze.py`，标准库，不导入项目/torch；命令与完整解释见[task9.9 RESULTS](tasks/task9/task9.9/RESULTS.md)，原始SHA及源码身份见新输出input-hashes/code-inventory，实际日志`forem/logs/task9/t9.9-offline-20261102/recompute.log`。对照基准为[SRC-1377](#src-1377)与冻结30CSV；复算运行前后186个封存B清单运行文件和C原件SHA保持。B清单另外4个活文档指针变更显式另列，非封存轨迹变更。
+- 原始结果/支撑主张：30例/2695动作，对账无拒绝18、R1、N11、U0、严格成功15；12首次拒绝全部平移，首类IK7/base2/self3。8例从首次拒绝起逐动作raw完全相同；4例变化，其中4718/case04虽变化但0提交，另3例拒绝后commit为1/8/2；后续失败类别每例仍同首类。唯一R净ρ减少0.374927461716mm仍终止失败；其余有提交的两例净ρ减少为−3.838393273/−7.383687258mm。case05末五段皆槽12、Core后progress=cap=s、立即arrived/done、0动作，最后terminated且failures0；成败跨种子四对动作1/子步0状态已分叉。
+- 推导口径：以首pending&failed后的已提交状态为锚点；ρ=Euclidean(base_xy,target_xy)，净推进=ρ_anchor−ρ_t，单位m，表中mm=m×1000；同段恢复沿[SRC-1370](#src-1370)的严格>1e−6m或arrived。raw/execution相邻差为当前减上次动作，无新“卡死”阈值。统计不以held IK q或试探状态替代提交state。
+- 采用/限制：逐case诊断、优先检验方向依据；定向30例不能估计完整地图发生率，不能从重复动作证明存在可行替代动作，不从唯一小幅R推出任务成功；C的U0不代表候选/三维机制已知。结果事实由task9.9三文档及派生表维护，本台账不另设协议。
+
+<a id="src-1380"></a>
+## SRC-1380 — task9.9 基础源码与B实际观察位置审计
+- 类型：项目官方原始源码/记录器字节证据；作者FoReM项目，版本HEAD d198e5c（当前树）/121cb36（历史根），运行源码沿B冻结；2026-11-02 Codex核查，已直接阅读。精确SHA/原路径见`forem/results/task9/t9.9-offline-20261102/code-inventory.json`，与A `frozen-inputs-parent-audit.json`对应69项冻结源码记录匹配。
+- 精确符号/位置：`forem/src/task7_lower/training.py:choose_candidate` L32–48（mask有效槽均匀抽样，同步传route.length）；`task7_sim/candidates.py:generate_candidates` L95–133（13槽，slot12 always generated；sync只原地IK搜索，CandidateBatch.progress=None、info保留搜索结果）；`task7_sim/search.py:inplace_progress` L39–64（0.05m样点、接受前缀、无地图/碰撞输入）；`task7_sim/core.py:Core.begin` L127–166（同步原地重搜、cap=max、zero立即arrived/done），`Core.observe/current_observation` L214–228及`Core.step` L246–335（无failure观测字段，只有commit更新state/render/queue）；`Core._finish` L229–244（ds<.01m且move<.05m累计stall，5段终止；strict_success要求failures=0）。`task7_sim/motion.py:actions/advance`（同步动作物理映射）；`task8_lower/evaluation.py:evaluate` L109–126（边界choose、确定性select_action、零段不动作）；`task7_lower/networks.py:Actor.predict/sample` L29–37（均值与原分布采样）。B3 `source-snapshot/replay.py:Observer.target/begin/choice/install`（target在原Core.begin后读取、只保存selected slot，不保存generated完整候选），以B封存snapshot为实际记录器版本。
+- 原始结论：生成mask不等于路径可行；同步选择输入progress与Core后记录progress不同，Core重新确定cap；零进展段不调用下层动作。拒绝不提交、queue只随commit更新，同步观测不含拒绝类别/次数。IK前缀搜索返回s的内部具体样点原因未记录，不能细分。原严格成功字段在首次失败后不可能恢复为true。
+- 采用/限制：与[SRC-1379](#src-1379)共同解释case05连续stall及重复确定性动作；非新运行/模型内部证据，未证明完整观测逐位相等、未证明任何未选项实际可推进；0.05/.01/.05/5等均引用原实现，不是本次设计阈值。参见[task9.9 RESULTS](tasks/task9/task9.9/RESULTS.md)。
+
+<a id="src-1381"></a>
+## SRC-1381 — task9.9 优先级推断与唯一单变量草案（未执行）
+- 类型：基于[SRC-1379](#src-1379)实测与[SRC-1380](#src-1380)源码的工程研究排序/待验证假设，不是外部文献结论或已实测改善；作者Codex，2026-11-02核查，位置为[task9.9 RESULTS 第4节](tasks/task9/task9.9/RESULTS.md#4-三层发现与一项后续草案)，输入run/代码沿上述来源。
+- 原始推断：已有8例完全重复动作与唯一自然小幅R，足以把首次拒绝后的动作选择列为优先检验点；不足以比较动作机制与候选机制的效应大小。case05只能证明选中原地零进展项，未选候选未知，不证明全部候选不可行或换槽成功。
+- 唯一草案：第一次pending&failed后，仅下一次同段动作由冻结policy均值改为其原分布一次采样，随后恢复确定性；隔离并预登记采样RNG，其他语义与前缀冻结；主指标为原12例同段R数/12，原R1为比较基准，恢复门沿SRC-1370。真正替换且12例可判时R≤1为该具体方案未观察改善，非所有动作均不可行的证明；strict_success因failures=0限制不作此干预改善主指标。采样seed/资源待监督决定，无新增执行授权。
+- 最小补证字段及适用性：choose_candidate抽签前generated.mask/info.only_inplace/inplace_progress/inplace_delta_s与chosen slot，Core.begin前后input progress/search result/cap/state.s；能区分仅生成原地与生成平移却选原地、以及两次搜索差异，仍不证明其他槽可推进。同步生成器没有可直接读出的平移槽实际路径可行性证书；需另有实际尝试的slot/commit/净进展证据。本轮未采新数据或做反事实IK/回放。
+- 采用/限制：仅交监督者草案；不修改模型、观测、选择器、生成器、奖励、终止或碰撞，不新增实验机制，不推总体发生率。没有把假设列为已通过验收的机制结论。
+
+<a id="src-1382"></a>
+## SRC-1382 — 下层SAC能力与效率的监督设计
+- 2026-11-03用户要求“同意你的想法……最终目的就是为了提高下层SAC的能力和效率，请你自行设计”。本轮采用为实验路线与可派发协议设计；新运行尚未执行。Codex核查，实际模型/强度未知。
+- 项目依据为SRC-1359/1360/1361（B1/LR与成本）、SRC-1377/1379/1380/1381（重复动作、零进展及恢复边界）。精确位置为task9.7 PROCEDURE、task9.9 RESULTS及本树d198e5c的forem/src/task7_lower/networks.py:Actor.params/sample/predict。未使用外部文献推断效果。
+- 新设计见[task9.10](tasks/task9/task9.10/TASK.md)。三同期对照加三干预完整评估=6×196=1176回合；目标12模型-案例组合，固定原case及seed，非12个独立场景。原B3五worker5395.6091s，等比六次6474.73092s约1.799h，仅费用代理，未含新准备/记录开销；拟议4单卡小时/4墙钟小时、2GiB是工程预留，无工期保证。
+- 采样主seed 91020261103、SHA256映射、独立CPU随机流及一次三维标准正态抽样均为预登记工程选择；沿原mean/log_std、tanh及动作映射，非最优参数主张。成功计数/样本效率/实际成本三维验收，10%成本门为工程容忍上限，非统计显著性。
+- 拒绝后干预触发时strict_success所需failures=0已失去，不能用它证成零失败成功率提高；三种子全量评估用于伴随描述。同预算LR直接训练对照仍沿SRC-1361，不由本协议偷偷增加训练量或改变策略。后续观测/训练分布修改只有条件建议，另需完整协议与执行授权。
+
+<a id="src-1383"></a>
+## SRC-1383 — task9.10 执行授权
+2026-11-03用户授权直接派子Agent执行计划，限定sol/terra/luna，并补充优先sol、低级模型仅重复统计。本轮启用task9.10协议1176回合/4h/2GiB；实现/独立审查sol/high，清单统计luna/medium；窗口与分工见父PROCEDURE和execution-window.json。task9.7长训独立协议仍未启动，先完成本机制实验。核查Codex，当前对话原令。
+
+<a id="src-1384"></a>
+## SRC-1384 — task9.10 当前执行与独立核验
+2026-11-03，FoReM原始执行与Codex父/sol核验，run t9.10-paired-20261103T144811+0800，版本HEAD d198e5c加source-inventory封存脚本，主seed与预算沿SRC-1382/1383。精确输入与实际模型请求见父三文档、.1/.2/.3记录及run目录。首C4718的status/evaluation/case-reports与[独立C核验](agent_logs/task9/task9.10/task9.10.2/independent-C-4718.json)记录196完整、R1/N4及原历史全部row一致；worker1011.007s，监督进程段1023.941s，不混同。其余运行追加以[RESULTS](tasks/task9/task9.10/RESULTS.md)和[父日志](agent_logs/task9/task9.10/20261103-codex-design.md)为事实来源，未完成项不算通过。阶段计时有嵌套和同步开销，不能相加或当作生产吞吐收益。核查人Codex，实际底层模型未知。
+- 运行期单位核查补充：forem/src/task7_sim/kinematics.py:metrics 第二项为 (3−trace(R))/4，即1−(qa·qb)^2，无量纲；角度为第三项。task9.10记录器旧字段名 original_finish.r_rad 实际保存第二项，报告须按无量纲CBL旋转残差解释，success条件沿原r<=0.05，无0.05rad主张。为保持运行代码冻结不改活记录器，独立审查日志留勘误。
+
+- 终态补充（2026-11-03）：六次1176完整/rc0，24目标trace独立复算C R1/N11→T R2/N10，新增仅4718case06；原success0→0、全量strict各seed不变。资源和来源定位详[最终结果](tasks/task9/task9.10/RESULTS.md)及.2 independent-final-paired/independent-final-integrity、run/report。结论仅为预登记一次样本的局部计数增加，不证明总体任务能力或吞吐改善。执行后不采用、不扩样为监督工程决定。
+
+<a id="src-1385"></a>
+## SRC-1385 — task9.11严格成功与效率规划授权及模型边界
+- 类型：用户明确指令/工程范围；作者用户，2026-11-03本聊天，核查人Codex，同日核查。精确位置为用户以“你是FoReM下层SAC优化的主规划者”开头的完整任务书，本地镜像见[task9.11 TASK](tasks/task9/task9.11/TASK.md)及[开工日志](agent_logs/task9/task9.11/20261103-codex-next-experiment-plan.md)。
+- 原始要求：基于9.7–9.10只规划/必要只读核查，原件只读、保留dirty；不改实现、不加载模型、不启动仿真/回放/训练；允许限定sol/terra/luna子Agent，主设计/独立审查优先sol/high，luna仅重复统计；交回可审查方案等正式派发。
+- 采用/限制：核活动编号后新建9.11及.1证据审计/.2方案审查三文档与日志；实际子请求gpt-6.1-sol/high，底层后端未知；父型号/强度未知。GPT6.1sol/high及兼容Claude Sonnet5.5/high推荐沿用户AGENTS，理由为跨模块因果与研究设计；Claude本轮不派。授权不含任何新实验或预算释放。
+
+<a id="src-1386"></a>
+## SRC-1386 — 首次失败前输入、IK返回语义与原30轨迹字段独立核查
+- 类型：项目原始源码/原JSONL的只读核查与标准库派生统计；作者FoReM、Codex父及sol证据审计子Agent，2026-11-03核查，HEAD d198e5ca48f86071c05274f9da753f393ce058b4，9.8原run t9.8-B3-20261102T163355+0800；并读9.10独立终验SRC-1384。不是新模型/环境运行。
+- 精确位置：`forem/src/task7_lower/observation.py:FIELDS/encode_grid/vector/preprocess` L9–27，`task7_sim/core.py:observe/current_observation/step/_finish` L170–329，`task7_sim/perception.py:Grid.update/crop` L95–114；`task7_sim/kinematics.py:solve_tcp_in_arm` L249–251（未accepted时q=prev）；`task8_sim/primitive_scene.py:_chassis_block/collision`及SRC-1380调用链。实际SHA、30原trace hash、12首次拒绝行号与全部字段集合见[.1 raw-field-audit](agent_logs/task9/task9.11/task9.11.1/raw-field-audit.json)、[read-evidence-inventory](agent_logs/task9/task9.11/task9.11.1/read-evidence-inventory.json)及[.1结果](tasks/task9/task9.11/task9.11.1/RESULTS.md)。
+- 原始结论：同步74=6+7+7+45+5+1+3；局部128×128、0.05m格=6.4m，observed/amax高度/未来路线XY三通道，height按0.01m量化且uint8截255（2.55m）；scan_timestamp不进向量，未来15位置无后续姿态，sync子目标无cap/progress。关节/TCP/下一TCP/路线/子目标含部分风险信息，不能据缺显式IK标签认信息不足。拒绝无提交时state/grid/queue可不变；previous_action不是上一失败试探动作。
+- 原始字段：30回合2695动作、12首拒绝IK7/base2/self3/arm0，与SRC-1379一致；首次base/self各为单碰撞标志，IK7的三个布尔均false但计算于held返回q，不能排除hold前候选碰撞。旧action_start.detail空，无完整74/grid/obs hash；完整generated mask、原始拒绝解/对象见证亦缺。case05最后5段×3seed零动作已证，未选可行性仍未知。
+- 采用/限制：支撑失败链和表示限制，**不证明**具体案例的信息不足、策略没学会、子目标不可行、感知或环境判定bug。高度/裁剪可能丢风险是待验证机制。动作/回合、观测/真值与提交/试探状态严格分开。父核关键源码/原事件后采纳，审计初次ROOT索引rc1后修审计自身rc0见独立日志，原件不改。
+
+<a id="src-1387"></a>
+## SRC-1387 — task9.11最小补证字段、触发及可区分假设
+- 类型：工程记录方案/待验证假设；作者Codex父与sol审计，2026-11-03，核查Codex；精确协议位置[task9.11 PROCEDURE A](tasks/task9/task9.11/PROCEDURE.md#a-冻结前准备与无干扰记录获正式派发后)，输入来源SRC-1386、1379/1380/1381、1384，非外部经验阈值。
+- 主张/理由：旧记录未存完整策略输入、hold前IK解、几何见证/未选候选，不能区分H_obs/H_learn/H_goal；提出首拒绝前t−1/t输入窗口、首拒绝原判定/并发标志、下一动作/段末、全部begin/finish/回合结束的旁路字段。只记录本来计算值，保RNG、梯度、分支、动作/候选/判定语义；完整输入按原shape/unit保存，不新增控制时延/阈值。
+- 采用/限制：主实验集成无干扰诊断，拿不到见证保留unknown，不把新计算填成历史。证实信息缺失需输入/几何链见证，安全替代仅能排除该状态局部无推进动作，小规模失败不能证不可行。任何额外反事实IK/动作/候选搜索须另立有界协议/预算并另获派发，本主实验不执行；没有隐藏安全过滤或动作重选。
+
+<a id="src-1388"></a>
+## SRC-1388 — task9.11唯一B1-L主实验、排序及能力效率裁决
+- 类型：工程选择＋待验证研究假设/日程推导，不是已证明错误、已改善或执行授权；作者Codex，2026-11-03核查。精确协议[task9.11 PROCEDURE B/C](tasks/task9/task9.11/PROCEDURE.md#b-唯一主实验合同)，取舍[RESULTS第4节](tasks/task9/task9.11/RESULTS.md#4-四个方向的排序与触发)。仅此任务维护细化执行协议，9.7草案留历史，不启动两批。
+- 输入/原始结论：SRC-1358旧失败构成，1359 B1/B3温度/LR混杂且B1末LR约7.586e−5，1360既有负结果，1361已有B1-L草案，1384后拒绝一次采样未改善任务。支持优先做可隔离LR对照，不支持LR为首因或更低LR必好。其余动作学习、候选、观测/判定方向按证据门保留，不能因碰撞发生就认bug。
+- 日程/数量沿SRC-1361：C=B1与L=B1-L×4718/4719从头3M；actor/critic exp_updates与linear_transfers唯一变化；显式共同alpha_lr_schedule=exp_updates、capped与αLR1e−6；每10消费转移更新，预期299975。保全部科学合同，raw网络无包装。原strict残差/单位沿SRC-1384，不新增成功门。
+- 新工程验收：开发随机final与末三组均都提高、每seed final非负且至少一正；语义final/末三组均不下降；稳定性/保护沿1361。机制/恢复/末端能力/曲线样本效率/完整wall/推理效率分开。AUC定义12个250k网格点算术均值，非0起点积分。首次拒绝率分母完整episode，另报动作1拒绝与首序号；类别按原优先级且保并发标志。停滞保持原定义分无拒绝/带拒绝，其他未确定终止unknown。
+- 成本门：同3M消费预算；完整执行worker wall（含初始化/评估/保存/恢复等，非运行审查等待另列且首启到末退wall仍报告）或推理P95/P99组均增加>10%则能力/成本权衡、效率未通过，不自动采用；≤10%只是容忍非提速。wall≤C才称墙钟效率不差，严格降低才报告观测降低；总体效率改善还要求AUC提高与推理门。10%由SRC-1382的容忍思想延伸，系本轮预登记工程选择，非统计显著性或测量误差上界。推理主门预冻结为3M final开发评估的(batch=16, active=16)，每域/arm/seed至少100次自然调用（工程最低记录量，非精度保证）；每域每seed线性经验P95/P99后两seed等权组均，L/C共四ratio均≤1.10；不足/分母0为UNKNOWN，其他形状/活跃层单列且不推广主门结论。warmup1000仅随机动作，首update t260，完整299975沿源码update_due算术，不得改成warmup后才update。两seed不宣称普适/显著性；阴性/退化不加种子、换checkpoint或续5M补过。
+
+<a id="src-1389"></a>
+## SRC-1389 — task9.11预算、存储stat与成本推导
+- 类型：项目历史实测＋仅stat证据＋公式推导＋工程上限提案；作者Codex，核查2026-11-03。精确位置[PROCEDURE D](tasks/task9/task9.11/PROCEDURE.md#d-有界资源停止与完整账本)，历史成本原输入SRC-1360/1361及1384；[checkpoint-storage-stat.json](agent_logs/task9/task9.11/checkpoint-storage-stat.json)保存只stat文件尺寸，不读/加载模型内部。
+- 原输入：B1旧完整wall36580.254655/36953.448007s含评估保存；9.10六worker累计6355.128382s，/6≈1059.188064s/196回合（不同模型/输入的成本代理，非训练成本保证）。B1-seed4718全部12周期＋final的full/actor共414474404996B，×4/2^40=1.507849TiB；额外profile/恢复/tmp/log未知须未来实测。
+- 交互推导：正式2臂×2seed×3M=12M；smoke四run各1000≤4000，总12.004M消费。256并行一批的pending每run≤255，smoke env_actions≤4000+4×255=5020；正式3M终点消费/生成均3M，中途pending保存且包含原预算。若新实现不满足此合同，开跑前NOT_READY，不偷偷放大预算。
+- 回合推导：正式4×12×196=9408，smoke4×196=784，2个OFF/ON附加ON×196=392，开发10584；独立4×296=1184，总11768。所有启动/未完成/同伴计入，不自动重试，G1仅合成零环境。
+- 墙钟工程选择：正式4×12h=48h（12h沿9.7代理），准备/G1≤1800s、两组smoke各4300s、非干扰门≤3600s、独立test≤4h，共55.888889worker h，预留到58h；全局含审查等待/最终验收≤58h，自正式T0资源准备起算且绝对截止T0+58h。392/196×1059.188/3600≈0.588h、1184/196×1059.188/3600≈1.777h，仅按旧evaluate外推；分别1h/4h预留尚未实测。单卡GPU保守暴露≤58h；无工期保证，四run首250k成熟profile检查实际CUDA/端到端全周期、周期评估/保存恢复，不能装入即停，不缩步/延时。
+- 存储工程选择≤2TiB含临时/审查副本/日志；诊断与日志≤8GiB、一次新满checkpoint临时预留40GiB。保存退出1800s沿9.7代理（各run/全局内、可重叠），需实际满replay核不足则NOT_READY。未授权压缩、并行或删旧产物。预算只是待正式派发提案，不是本轮可消耗额度。
+
+<a id="src-1390"></a>
+## SRC-1390 — 冻结后一次独立任务测试与可推广范围
+- 类型：原池/入口源码核查＋工程测试选择；作者Codex，2026-11-03核查。精确位置`forem/scripts/task8_build_pool.py:main` L182、211–214（10000/100/200与独立test seed行）、`forem/src/task8_lower/evaluation.py:evaluation_plan`（当前仅100 validation＋24×4 transfer，不直接支持test）；协议唯一位置[task9.11 PROCEDURE E](tasks/task9/task9.11/PROCEDURE.md#e-冻结后一次独立任务测试)。
+- 输入：SRC-1362现24语义图/100随机图已被分析，SRC-1357/1361旧test未调用记录；未来执行前仍须独立人核泄漏，当前不宣称已完成全历史test使用审计。
+- 工程选择：选集规则在方案冻结时定，实际manifest在冻结后、首次测试前封存；随机用现池200test，语义用现24图×4新episode。新seed=SHA256(`task9.11-final-v1|semantic|map_id|episode_index|nonce`)首8hex转uint32，nonce从0递增避旧/新seed冲突，episode_index0..3；记录manifest及种子碰撞清单。四3M final在开发门后统一锁定，一次1184，≤4h并入58h，不逐seed结果调参/换case/补跑。
+- 采用/限制：随机为未用test地图（待泄漏核验）；语义为**已分析地图上的独立新任务**，不称未见语义地图泛化，不额外生成地图。最终两域组均strict都提高且每域每seedΔ≥0才支持两域最终复核；单域/开发改善只按范围报告，test不反复选方案，不宣称两seed显著性。若泄漏/协议/准备不满足，停止测试阶段而不自换集合。
+
+<a id="src-1391"></a>
+## SRC-1391 — task9.11隔离实现清单与待实现命令合同
+- 类型：只读实现入口核查＋未来工程派工选择；作者Codex，2026-11-03核查。精确原源码`forem/src/task9_opt/runtime.py:GROUP_AXES/validate_formal_config`、`admission.py:STOP_AT/read_release`及`forem/scripts/task9_opt_worker.py:main`；新文件/CLI白名单与提示词见[PROCEDURE F/G](tasks/task9/task9.11/PROCEDURE.md#f-后续允许的实现文件与命令合同全部尚未创建运行)。
+- 原始结论：旧准入只接受U20/E15/R200与seed4718/4719，旧deadline为2026-11-02；直接复用旧worker不适用新B1-L。未来在forem/src/task9_lr、scripts/task9_11、config/task9/task9_11新namespace隔离准备，来源清单记录实际字节；旧冻结/参考/原产物不改。
+- 采用/限制：文件清单、prepare/worker/supervise/audit命令是**尚未实现、尚未运行的CLI合同**，由未来获派A完成代码/测试与独立审查后才能运行。不得把待实现命令写成现成可执行结果。允许必要科学身份/旁路日志/测试入口，不授权新网络、损失、包装、候选/环境修正；未来委派仍先建子三文档及写边界。
+
+
+<a id="src-1392"></a>
+## SRC-1392 — CoinRun论文对训练与测试环境分离的依据（仅核摘要）
+- 支撑主张：评价未见环境泛化应区分训练与测试环境；不把同图新任务等同于未见地图。
+- 类型：外部原论文出版方摘要；Karl Cobbe、Oleg Klimov、Chris Hesse、Taehoon Kim、John Schulman，Quantifying Generalization in Reinforcement Learning，ICML 2019，PMLR 97:1282–1289。URL：https://proceedings.mlr.press/v97/cobbe19a.html 。精确位置：Abstract第1段，浏览页面L13–15。
+- 核查日期/人：2026-11-03，Codex；已读官方出版页面摘要，未读本次PDF全文，不能标为全文核验。
+- 原始结论：该研究指出相同环境训练/测试难以反映泛化，采用程序生成的独立训练/测试集合，并在CoinRun观察到过拟合。
+- 项目采用及限制：只作地图级划分的外部方法论支持；CoinRun为游戏环境，不能证明Husky+UR5所需地图数量、划分比例或扩图收益。本项目具体判断见SRC-1393。
+
+<a id="src-1393"></a>
+## SRC-1393 — 语义地图集扩展必要性咨询与有条件建议
+- 类型：用户咨询＋既有项目证据的工程判断/待验证假设；作者用户/Codex，2026-11-03核查；版本HEAD d198e5ca48f86071c05274f9da753f393ce058b4，保留既有dirty。用户问“你认为语义地图集有必要扩展吗”，仅授权判断，未授权地图生成或训练。
+- 输入与精确位置：[task8.9.2 TASK](tasks/task8/task8.9/task8.9.2/TASK.md)的8类×3图与源split；[task9.7 RESULTS 第10节](tasks/task9/task9.7/RESULTS.md#10-用户追加语义结构调查与是否直接训练)及SRC-1362的24图/100图结构核查；SRC-1355/1359的三B3-5M评估；[task9.11 TASK](tasks/task9/task9.11/TASK.md)和SRC-1390的同24图新episode测试限制；外部划分方法仅沿SRC-1392。此次读既有核验记录，未重新核原地图/模型或运行评估。
+- 原事实：现24图为8类×3，已经用于多轮评估与定向分析；现策略无家具类别标签输入。历史随机194/300=64.667%，语义132/288=45.833%，为不同样本描述，不能归因扩图不足；门宽/原语数不能单独解释成败。现24图新任务仍不是未见整图测试。
+- 建议/推断：若继续语义场景训练或目标包括未见地图泛化，值得扩展并预先冻结整图独立的训练/验证/测试角色；现24图保留为历史回归/诊断集合以维持可比性。若只做当前冻结地图的LR同期对照，不把扩图设为前置条件。优先覆盖通道宽度与转弯布局、家具高度/悬空结构、局部净空/布置密度等几何变化，先在已有场景类别内改变结构；这些是工程候选轴，均非已证根因，不承诺扩图改善。
+- 范围与待验证：不预设地图数/比例/新类别，不把加图与改网络/奖励/碰撞捆绑。扩图规模需结合覆盖、采样可行性、评估成本与学习曲线另行设计；更多地图不自动修复IK、候选或表示问题。未生成资产、改实现、启动运行或派子Agent。交付见[task9.7 RESULTS 第11节](tasks/task9/task9.7/RESULTS.md#11-2026-11-03语义地图集是否需要扩展咨询)及[独立日志](agent_logs/task9/task9.7/20261103-codex-map-expansion-advice.md)。
+
+
+<a id="src-1394"></a>
+## SRC-1394 — task9.11独立设计审查与父原件核验
+- 类型：项目原始JSONL标准库复核/独立研究设计审查及行政验收；作者Codex父与两位请求sol/high子Agent，核查日期2026-11-03，核查人Codex；实际后端未知。精确证据[.1结果](tasks/task9/task9.11/task9.11.1/RESULTS.md)、[父原30事件计数](agent_logs/task9/task9.11/parent-evidence-check.json)、[.2独立审查](tasks/task9/task9.11/task9.11.2/RESULTS.md)、[独立算术/源码SHA](agent_logs/task9/task9.11/task9.11.2/independent-design-check.json)、[审查封口SHA](agent_logs/task9/task9.11/task9.11.2/final-review-hashes.json)。版本沿SRC-1386；父实际原件直接读取，无项目/模型导入。
+- 原始结论：父重数30回合2695动作、无拒绝18/首IK7/base2/self3、完整action_start.detail未保存、case05末五段原地零progress及30hash一致。独立设计审查R1–R5（验收域/推理聚合/隔离副本目录/完整wall与等待/warmup语义）均修订重读后PASS；独立算术12.004M、10584+1184=11768、55.888889h基值与58h工程上限一致。
+- 采用/限制：父接受两子审计done，主方案review等正式派发。PASS仅是规划可审查性，不是代码/性能/预算可行性/能力或效率实测通过；58h/2TiB仍待正式资源释放。原始证据hash/链接/三文档与git diff检查记录在父日志；后续行政接收文字不改已审科学协议。无实现/模型/仿真/回放/训练/独立test运行。
+
+
+<a id="src-1395"></a>
+## SRC-1395 — task9.11正式派发、执行窗口与限定实施授权
+- 类型：用户明确执行派发＋工程调度选择/只读现场核查；作者用户/Codex，2026-11-03本聊天“派发吧”，核查Codex。精确计划沿SRC-1388/1389/1390/1391，独立设计核验为SRC-1394（与其他聊天SRC-1392碰号后更正，仅重编号自身审查条目，不改CoinRun条目与原依据）。
+- 授权采用：从规划转active，按已审A→代码审查→G1→smoke/非干扰→每run250k成熟profile/remaining→开发验收→符合门时一次独立test。58h/2TiB及12.004M消费/11768评估上限授权采用，独立门不被用户一句派发跳过，也不再逐门要求用户重复批准。无自动重试/扩大预算/功能扩展/升级task10基线。
+- 窗口工程选择：首资源核查T0=2026-11-03T17:18:20+08:00，+58h截止2026-11-06T03:18:20+08:00；run=t9.11-lr-20261103T171820+0800，精确台账[execution-window.json](agent_logs/task9/task9.11/execution-window.json)。按原方案每阶段worker上限，不将code准备或排队等待藏出全局wall。
+- 原现场核查：17:18:20+08 GPU0/2/3无compute进程，GPU1有task10 PID325288约18660MiB；df /home可用9.3T；docker ps现有forem-dev/task10等不停止。GPU0 UUID GPU-e2eab186-4b18-f63f-2ada-c61aa98ed587作为拟议单卡，启动前重核，非空闲保证；9.3T不是给本任务扩配额，输出仍≤2TiB。
+- 模型/写边界：.3实施sol/high写新隔离实现/配置/脚本与本run、自身文档；.4另一sol/high仅自身审查文档/日志/阶段release。父维护共享台账，原件/旧实现只读。本轮不派Claude/luna/terra；实际后端未知，不把推荐写已执行配置。实测结果随后追加，不把开工等同通过。
+
+
+<a id="src-1396"></a>
+## SRC-1396 — task9.11派发的诊断范围与独立阶段签字职责
+- 类型：沿已授权协议的工程执行澄清，不新增功能/科学变量/预算；作者Codex父，核查2026-11-03T17:22:53.154273+08:00。输入SRC-1387/1388/1389/1390/1395，精确位置父PROCEDURE末尾和[execution-policy.json](agent_logs/task9/task9.11/execution-policy.json)、.3/.4 TASK追加。
+- 原协议依据：A回合结束字段已明确所有评估case，完整窗口采集用于首拒绝诊断；C/D训练仍保原诊断/交互/pending和profile。澄清完整首拒绝输入/候选/finish覆盖全部周期开发/门/最终test评估，不要求12M训练回合写完整三窗口。8GiB不改，装不入须NOT_READY，不能删必需证据。
+- 签字职责：.4另一sol独立核代码/G1/smoke/每run成熟profile/开发证据后实际签阶段PASS，.3按绑定SHA/原件/阶段/截止/预算机械fail-closed核后在既定用户授权内自主续进，不再要求逐门用户确认；不预签空白或自查冒充独立。父仍负责最终原件核验与共享汇总，不把子自报直接当最终通过。
+- 最终test：由.4未参与训练/选模者执行已冻结入口（父D/E），开发门/泄漏检查/四final与清单封存且剩余预算可行才运行，仍1184/4h并入全局11768/58h；只写本run/final-test及自身日志，不运行训练或改实现。这属于既定独立执行分工，不新开一轮评估。实际尚未code/G1/环境/训练/test，启动结果后续据实登记。
+
+<a id="src-1397"></a>
+## SRC-1397 — task9.11 停止的父监督审核
+2026-11-03 Codex，项目原始证据与静态审查。精确原件为task9.11.4/gate-evaluate-C-4718-FAIL-STOP.json及7个已签引用、run activities/gate-evaluate-C-4718.json、smoke-C-seed4718的OFF/ON evaluation与parity；代码forem/scripts/task9_11/supervise.py:dispatch第95–109行。父核196原有row字段/聚合、parity一致及7hash，现场本容器exited/Pid0、GPU仅task10。正式训练0；不复算522窗口，不将UNKNOWN历史host退出码改为0或143。结论与局限见[监督审核](agent_logs/task9/task9.11/20261103-codex-supervisor-stop-review.md)。持久监督/中断恢复证据改进为工程建议，未实施。
+
+
+<a id="src-1398"></a>
+## SRC-1398 — task9.11 本轮仅规划复核与状态化交接
+- 类型：最新用户规划授权、既有项目证据复核及工程交接选择；作者用户/Codex，核查2026-11-03，核查人Codex；HEAD d198e5ca48f86071c05274f9da753f393ce058b4，保留dirty。实际模型/强度未知，本轮未委派。推荐GPT6.1sol/high、Sonnet5.5/high沿用户共同约定，理由为因果/预算研究设计；不是实际运行配置。
+- 用户范围：基于task9.7–9.10完成下一轮严格成功/效率规划，原件只读，不改实现/加载模型/仿真/回放/训练，交可审查方案等正式执行派发。本树已存在同题task9.11及后续smoke STOP，因此沿用编号并补正当前交接，不抹去历史派发，也不恢复运行。
+- 精确输入：[9.10.2最终独立核验](tasks/task9/task9.10/task9.10.2/RESULTS.md)、[9.11.1信息审计](tasks/task9/task9.11/task9.11.1/RESULTS.md)、[9.11.2规划审查](tasks/task9/task9.11/task9.11.2/RESULTS.md)、[监督停止核验](agent_logs/task9/task9.11/20261103-codex-supervisor-stop-review.md)、[原STOP签字](agent_logs/task9/task9.11/task9.11.4/gate-evaluate-C-4718-FAIL-STOP.json)。源码复核task7_lower/observation.py:encode_grid/vector/preprocess、task7_sim/core.py:begin/_finish/step、perception.py:Grid.update/crop、scripts/task9_11/supervise.py:dispatch；当前字节SHA见[保护快照](agent_logs/task9/task9.11/rehandoff-readonly-hashes.json)。本次直接核STOP引用7项hash全匹配；科学统计沿既有独立核验，未冒称重新全量复算轨迹或评估。
+- 原事实/采用：194/300及132/288历史严格成功、R1到R2但路线0/12及严格成功不变沿SRC-1384；失败链与观测未知沿SRC-1386/1387。唯一B1-L对同期B1、两seed各3M及所有阈值/预算仍沿SRC-1388–1390工程选择，不新增训练轴/数字门。既有STOP记4000 smoke转移、980评估、正式0、test0，host退出/wall未知；不能当LR阴性，也不能写“所有实验尚未执行”。
+- 工程采用及限制：更新父三文档顶端状态，F/G旧命令为设计模板，不能直接重启旧run。未来执行交接须先提出监督修复、零环境中断验证、实际CLI/清单重新冻结与剩余账本/窗口裁决；当前不实施、不重置58h/2TiB、不恢复旧release、不补写历史退出码。若重新派发需明确恢复哪一阶段及剩余额度，不能借本次重复规划获得第二份预算。未作新的科学决策，故不另改DECISIONS。交接见[本轮日志](agent_logs/task9/task9.11/20261103-codex-plan-rehandoff.md)。
+
+
+<a id="src-1399"></a>
+## SRC-1399 — task9.11 监督失败后的执行准备授权与边界
+- 类型：用户2026-11-03本轮明确指令＋工程执行范围；作者/核查人Codex，核查日期2026-11-03。原指令在本chat；可移交摘要与开始时间见[准备日志](agent_logs/task9/task9.11/20261103-codex-supervision-preparation.md)，任务归属[父PROCEDURE I](tasks/task9/task9.11/PROCEDURE.md#i-2026-11-03-监督修复准备派发不派真实执行)、[.5](tasks/task9/task9.11/task9.11.5/TASK.md)、[.6](tasks/task9/task9.11/task9.11.6/TASK.md)。
+- 原始要求：必要只读；既定F隔离白名单内最小监督退出/预算修复；替身进程零模型零环境合成；更新文档、来源和可审查续跑方案。允许sol/terra/luna委派，实施与独立审查优先sol/high；独立人不写实现或共享文档。
+- 采用：新增稳定.5实施→.6独立审查，父核原件与剩余预算。推荐GPT6.1sol/high、Sonnet5.5/high因需跨进程竞争与失败恢复；实际父模型/强度未知，子请求和后端分开记录。
+- 限制：禁止加载模型、启动环境/回放/smoke/训练/最终test，禁止旧run重启、原证据改写、历史退出码补造、扩大预算/重置截止、改变科学合同、取消独立验收与task10自动晋级。旧4000/980、formal0/test0、C4718原件非干扰范围、host终态与中断原因UNKNOWN保持。停在准备/独立审查完成等待派发；本条不授予任何真实执行许可。
+
+<a id="src-1400"></a>
+## SRC-1400 — task9.11 最小阶段监督/预算修复与独立替身裁决
+- 类型：工程选择＋项目合成验证及独立审查；作者Codex，2026-11-03核查。事实来源[.5三文档](tasks/task9/task9.11/task9.11.5/RESULTS.md)、[.6独立结果](tasks/task9/task9.11/task9.11.6/RESULTS.md)、[正式裁决含原证据SHA](agent_logs/task9/task9.11/task9.11.6/FINAL-INDEPENDENT-VERDICT.json)。不依赖外部文献或真实性能外推。
+- 精确实现：supervise.py SHA71a2f9130f2bc722e233cdd8c5aac12cf35a6e4783191e2a6a8e30fd5754ec49；admission.py SHA0507c9a53a49b88cfc25506a839f770b6a3dfa519877b06b850c4378271afa90；标准库测试SHAc9ee81bd5eab388c70d084ac9419322f37fa8026caca344dfb086b13207d733d；全artifact ea27ea570ad6cdb5bb32dd7e7c691f82888bbe472a0065f2d24c6ae763a00fea。[最小diff/交接](agent_logs/task9/task9.11/task9.11.5/final-implementation-handoff.json)，原版副本与diff均在同目录。worker/训练/记录器/环境与科学配置不改。
+- 原始测试：先审专用收集/直接传递导入，仅stdlib、不经pytest/conftest；.5 attempt07 30项rc0/wall5.2715979s；另一sol独立final-suite-independent 30项rc0/wall5.2235643s，另自身7项rc0（independent-attempt02）。独立初次quiet失败后stop链.751418s>.6s的FAIL保留，修后原cap/断言不增；所有失败、过期PASS与测试清理自杀rc−9逐次保留于.5/.6。
+- 推导/工程采用：quiet inspect+probe各timeout5s、失败stop inspect/kill/inspect各5s，总25s固定调用链预留于原cap内部。替身验证逻辑，未测真实Docker链；不是fsync/调度/断电硬界，不增加stage/global预算。资源扫描沿原poll_s。
+- 原始结论：阶段持久性/准入替身PASS；写前reservation、跨进程锁、原子排他JSON与独立receipt、父/guard SIGKILL与竞争、client退出留子孙、盘错和遗留记录、版本/阶段/限额均有界验证。新PASS同版本可跳过且不重新计费；旧started/FAIL拒绝跨阶段。旧STOP及7引用SHA不变。
+- 限制：client_exit_code不是owner/容器worker独立wait状态，stage_terminal_wall_s截止发布前，不代表完整host/guard/watcher退出wall与全部尾。完整host退出、真实Docker/文件系统尾与成熟成本UNKNOWN；双守卫同死可保留reserved并拒绝恢复。prepare明确NOT_READY，未发任何真实release。独立裁决NOT_READY_FOR_REAL_EXECUTION；不声称原完整host退出问题已全修、C旧门转PASS或B1-L科学阴性。
+
+- 父最终原件核验：[preparation-final-verification.stdout.json](agent_logs/task9/task9.11/preparation-final-verification.stdout.json)/[命令](agent_logs/task9/task9.11/preparation-final-verification-command.json)，rc0/wall0.1422033s；461保护项仅授权两实现变化、160 artifact摘要一致、STOP7引用及独立裁决13引用SHA一致、原30/30/7命令rc0与stderr逐项核、9文档链接/递归检查及git diff --check0、无task9/替身残留、旧容器exited/Pid0。该核验只支持准备交付，UNKNOWN/NOT_READY不变；核验之后仅补文档与接受状态。
+
+<a id="src-1401"></a>
+## SRC-1401 — task9.11 原账本、剩余额度与实际CLI复核
+- 类型：原始JSON/文件stat实测、算术推导、工程恢复建议及明确UNKNOWN；作者/核查人Codex，2026-11-03核查。精确位置[只读审计脚本](agent_logs/task9/task9.11/preparation_readonly_audit.py)、[v3原stdout](agent_logs/task9/task9.11/preparation-audit-v3.stdout.json)、[命令/rc/wall/SHA](agent_logs/task9/task9.11/preparation-audit-v3-command.json)，输入原activities、episodes-started、.3/.4 command与SRC-1397 STOP。
+- 核验：STOP7引用SHA全一致；closed host2738.7610445022583s，外部CPU/审查/非重叠launcher差及收尾单列。ON outer开始→inner结束已知625.1855497s是worker下界，非完整终态；与同段inner不相加。历史ON完整host退出/wall、未计监控与部分父准备命令为UNKNOWN，不造上界。
+- v3时点20:38:29+08：已知worker下界3508.1126493s，原208800s减下界得剩余**上界**205291.8873507s；不是可释放精确余额。旧GPU容器7252.5301979s，剩余上限201547.4698021s；原deadline=2026-11-06T03:18:20+08，v3余196790.9762952s，随等待减少。准备与新审查继续扣减，快照不是最终余额。
+- 交互/评估推导：既有4000生成消费/300updates；smoke剩0，正式0/12M，四run各3M不变；980已发生评估，开发10584−980=9604（其中L ON196、正式9408），最终0/1184，合计剩10788。C ON失败196仍入账，不重新分配；额外C ON会增加原范围，未获授权不得跑。
+- v3存储stat：逻辑33981552541B（hardlink重复计）、唯一inode22905106453B、路径口径诊断848236641B（含diagnostics中的.pt与所有外部审计/日志）。2TiB余2165041703011B；8GiB余7741697951B，快照之后输出继续减少。原早期preparation-budget-snapshot及v2曾按后缀排除文件而漏诊断/审计.pt，**其诊断余额不得使用**；原件保留，v3用evaluation.guarded_size的路径口径纠正。只stat模型文件，不读模型内容。
+- CLI原始结论：host supervise支持prepare/smoke-and-gates/train/final-test；worker才有g1/smoke512/smoke1000/gate-evaluate/profile/remaining/final-test。prepare/audit参数按AST原文核；旧F的supervise --phase train不等于单个profile发布令，audit是描述性、不独立签令。protocol_read锁旧run/window，旧out/freeze已存在且旧C gate started无exit；新SHA使旧release失效，不能用新namespace模板冒称现有入口可续跑。
+- 采用/限制：余额均原58h/2TiB内部，NOT_READY；成熟profile/存储临时副本/恢复尾时未证，不因代理估算可容纳而宣称可行。继续保留SRC-1388–1391科学/成本门及SRC-1390一次独立测试，不缩步、跳评估、延时或自动进入task10。
+
+- 最终准备时点补充（20:51:20+08）：[最终stdout](agent_logs/task9/task9.11/preparation-audit-final.stdout.json)/[命令](agent_logs/task9/task9.11/preparation-audit-final-command.json)含本轮.5/.6已计尝试，worker已知下界3548.4163066s、余仅上界205251.5836934s，calendar余196019.6294644s；逻辑33981716502B/诊断848400602B，2TiB余2165041539050B/8GiB余7741533990B。快照之后输出与成本另增，未知不消除；不得当可释放精确余额。父三文档RESULTS §9为本轮所属参数/结果事实入口，SOURCES只登记依据。
+
+
+<a id="src-1402"></a>
+## SRC-1402 — task9.11 修复准备的再次只读审核
+- 类型：项目源码静态推导、既有原始测试证据核验及工程验收意见；作者/核查人Codex，2026-11-03；HEAD d198e5ca48f86071c05274f9da753f393ce058b4加既有dirty，具体源码SHA见[审核证据](agent_logs/task9/task9.11/preparation-review-evidence.json)。实际模型/强度未知，未委派；推荐GPT6.1sol/high、Sonnet5.5/high用于并发与成本合同审查。
+- 精确位置：forem/scripts/task9_11/supervise.py:guard第167–175行、watch的终态发布；forem/src/task9_lr/admission.py:activity_rows/check_resources。原始独立记录为task9.11.6/FINAL-INDEPENDENT-VERDICT.json及其13项引用；本轮重新hash全部匹配，读取30项与7项最终原stderr，未复跑测试。
+- 静态结论：guard在backend.resources返回后直接启动worker，未重查watcher死亡/终态；watcher在ready后、资源检查期间退出而资源检查成功时，worker可能先启动再被停止。此为控制流反例，未在真实环境发生或复现。建议补实际launch前门控/握手与零环境“资源检查期间watcher死亡、worker未启动”断言，不能声称二次检查覆盖所有并发故障。
+- 既有未完成项：完整owner/guard/watcher退出和发布尾wall UNKNOWN，准入采用阶段wall仍不能满足完整生命周期成本合同；prepare/新旧namespace与release不兼容、smoke余额0及剩余10788评估分配沿SRC-1400/1401。不得将阶段合成PASS当真实执行READY，也不把执行失败当LR科学阴性。
+- 采用/限制：审核保持NOT_READY，修复和续接合同待后续派发；本次只写审核文档/来源/进度，不改实现或原始数据，不启动真实实验。详[审核记录](agent_logs/task9/task9.11/20261103-codex-preparation-review.md)。
+
+
+<a id="src-1403"></a>
+## SRC-1403 — task9.11 本轮启动/生命周期与续接修复授权
+- 类型：用户2026-11-03本轮明确指令；核查人Codex，日期2026-11-03。原指令在本chat，可移交范围摘要见[父日志](agent_logs/task9/task9.11/20261103-codex-lifecycle-repair.md)、[父PROCEDURE K](tasks/task9/task9.11/PROCEDURE.md#k-本轮启动完整生命周期续接修复2026-11-03)。
+- 授权：修watcher启动前失效空窗、独立最外层完整生命周期与成本、合法续接候选合同和准确CLI，零模型零环境合成验证并由另一Agent独立审核。新增稳定.7实施/.8审查，sol/high；推荐GPT6.1sol/high、Sonnet5.5/high因并发与成本合同复杂，实际型号/档位未知另记。
+- 限制：不运行真实Docker控制/模型/仿真/回放/smoke/训练/最终test，不重启旧run；不改科学/预算/截止，不放宽验收或签训练许可，原dirty与失败原件保留。若必须改变验收合同，先交具体差异等待用户决定，不实施放宽。本条只授权本轮修复准备。
+
+<a id="src-1404"></a>
+## SRC-1404 — task9.11 启动反例、握手与生命周期修复独立证据
+- 类型：纯标准库替身实证、工程修复与独立审核；作者/核查人Codex，2026-11-03，HEAD d198e5ca48f86071c05274f9da753f393ce058b4加本轮dirty。参数与结果事实入口[父RESULTS §11](tasks/task9/task9.11/RESULTS.md#11-本轮启动生命周期与续接修复最终交付2026-11-03)、[.7 RESULTS](tasks/task9/task9.11/task9.11.7/RESULTS.md)、[.8 RESULTS](tasks/task9/task9.11/task9.11.8/RESULTS.md)。
+- 精确源码：supervise.py SHA40df05d8e5ed0236460d45d0bd5db3a1bb1314ef7c749c75ab8409e12c9812c2，admission.py SHA84594d21d63412567b45df51ce6362a606b433a2e86fe5e3dd7f00e1bb4e792e，stdlib test SHA59d9fd322802f98eaa4830e5bd0da6c3876076f42c2f2b4a6c246756161f9f54；whole artifact84c986cdb8e7afdc0939b9c686c3f5e7fac48409a9446cb060063cfd13e3912c（含prepare，见SRC1405）。最小diff/版本快照见.7日志与[append-only交接v2](agent_logs/task9/task9.11/task9.11.7/implementation-handoff-v2.json)，不是覆盖旧版本。
+- 原始启动反例：.8先审收集，在旧supervise71a2下fake Popen的resources期间watcher死亡、失败terminal发布、时间耗尽、owner退出均创建WORKER_LAUNCHED，4FAIL/rc1/wall.1031435989s；[baseline命令](agent_logs/task9/task9.11/task9.11.8/independent-startup-baseline-command.json)/[stderr](agent_logs/task9/task9.11/task9.11.8/independent-startup-baseline.stderr.txt)。修复后同脚本/同未启动断言4PASS/rc0/wall.0972846784s，[原命令](agent_logs/task9/task9.11/task9.11.8/independent-startup-final-command.json)。这将SRC1402静态反例变为合成实证，未声称历史真实发生。
+- 原始成本反例：.8在f8a81上发现无format/旧v1阶段PASS仍可充closed，1test2subFAIL/rc1/wall.0570203774s；[原FAIL](agent_logs/task9/task9.11/task9.11.8/independent-legacy-cost-attempt01-command.json)。通用闭账封口修复后同断言1test2subPASS/rc0/wall.0543614272s，[复验](agent_logs/task9/task9.11/task9.11.8/independent-legacy-cost-attempt02-command.json)，所有失败原件保留。
+- 最终验证：.7 attempt05 40项rc0/wall12.9649648461s；另一sol独立40项rc0/wall13.0745058041s，[最终独立命令](agent_logs/task9/task9.11/task9.11.8/final-cost-suite-independent-command.json)/[原stderr](agent_logs/task9/task9.11/task9.11.8/final-cost-suite-independent.stderr.txt)。另独立链/缺wait/篡改/SIGTERM/导入5项rc0/wall1.9354292192s。先审收集与导入，不经pytest/conftest，只有stdlib临时替身；DockerBackend仅mock。旧30+7只历史覆盖，不计本轮新测试。
+- 工程采用：resources后至实际Popen前重核ready PID/startticks/nonce、存活、terminal、owner与剩余时间，request/ack绑guardian与request SHA。outer实际wait owner、owner实际wait guard、guard实际wait watcher，全部见证链/发布SHA核验；中断丢receipt不凭进程消失编造exit0。阶段wall及chain区间不重复求和，所有无完整closure的PASS拒绝后续准入。握手不宣称消灭最终核验后的任意并发故障。
+- 限制/最终裁决：[逐项裁决](agent_logs/task9/task9.11/task9.11.8/FINAL-INDEPENDENT-VERDICT.json)给启动/实际见证链/封口合成PASS；outer自身发布/退出尾、预约前及历史完整成本UNKNOWN，真实Docker worker独立wait/尾时/成熟训练性能UNKNOWN。原C整门FAIL不变，overall NOT_READY，不新增CLOSED验收格式，不放宽合同/预算/截止或签训练许可。
+
+<a id="src-1405"></a>
+## SRC-1405 — task9.11 完整成本映射与续接候选合同
+- 类型：原件核查＋算术推导＋工程候选合同，核查人Codex，2026-11-03。以[父本轮日志](agent_logs/task9/task9.11/20261103-codex-lifecycle-repair.md)及父三文档本轮追加为事实入口；本轮准备及独立审核已交付，最终核算/候选及边界如下，不构成放行。
+- 不变输入：SRC1397–1402原STOP/4000消费/980评估、正式0/test0；余10788=196 L ON+9408正式+1184最终；原T0=11-03 17:18:20、deadline=11-06 03:18:20+08，58h/2TiB/8GiB不重置。发布前stage wall只能作下界；UNKNOWN不当0，也不作为可释放余额。
+- 候选限制：新身份、继承原账与科学原件复用必须显式封存；旧C完整性FAIL不改，旧PASS/release不搬入新活动账。若需用“旧C科学证据＋新生命周期门”替代原整门，属于待用户决定的明确验收差异，当前不实施；若坚持原整门须重测C ON则无额外196预算，继续NOT_READY，不挪用评估。
+
+- 本轮续接实现与候选原件：prepare.py SHA695dc01fbf045301d971a709db8c6c103be48af6ef086ceb94f92e4cdf14da70；[候选](agent_logs/task9/task9.11/continuation-proposal-20261103T213737+0800.json)/[160文件冻结](agent_logs/task9/task9.11/candidate-freeze-20261103T213737+0800/source-inventory.json)/[实际纯准备命令](agent_logs/task9/task9.11/lifecycle-candidate-freeze-command.json)，rc0/wall.0609502792s。只有review日志中新包，execution_allowed:false、releases空；提议新结果/日志namespace均未创建，execution parser拒该schema，不能冒充已适配的执行protocol。
+- 候选验证：父直跑test_continuation_proposal.py先审11项rc0；另一sol独立11项rc0，加自身5项多subcase rc0，原命令在.8 candidate-suite-independent/candidate-own-independent；真实原件CLI由独立人另在自身review目录运行rc0并核同artifact。检查原T0/limits/分配/SHA/隔离/UNKNOWN、禁止执行true/旧PASS迁移/伪APPROVED/额外C196。父[最小diff与baseline来源](agent_logs/task9/task9.11/lifecycle-prepare-baseline-provenance.json)明确原字节派生重建后与本轮740清单SHA一致。
+- 本轮末实时核算：[lifecycle_budget_audit.py](agent_logs/task9/task9.11/lifecycle_budget_audit.py)经独立纯stdlib静态审查并独立运行；[21:55:50原stdout](agent_logs/task9/task9.11/lifecycle-budget-final.stdout.json)/[命令](agent_logs/task9/task9.11/lifecycle-budget-final-command.json)表明worker已知下界3639.8680825s、余仅上界205160.1319175s、精确余额null；旧terminal与外部命令均不冒称完整closed成本。ON只加outer→inner确认区间，下属inner不叠加；.4 launcher差额不再加.3整launcher；命令路径去重，已含.7/.8失败与复验，UNKNOWN不按0。
+- 预算推导/适用限制：原calendar截止不变，快照余192149.4759424s；4×43200s正式＋14400s最终=187200s（52h）的原阶段上限情景，余4949.4759424s给G1/LON/准备/审核/排队/退出及UNKNOWN，尚无证据保证完整可行，非断言实际必用满上限。GPU余上限201547.4698021s；逻辑33982680507B/唯一inode22906234419B/诊断849364607B，2TiB余2165040575045B、8GiB余7740569985B，原40GiB临时保存包络不减。快照之后继续扣减，历史未知与成熟profile/真实尾未测继续阻断。
+- 待决定差异已列候选pending_user_decisions（全部applied:false）：旧C科学证据与新完整性门的组合是否可替原C整门、完整外层证据或明确会计政策，以及前述问题合法处置后执行protocol/namespace适配与精确阶段令。坚持原C整门重测无额外196；当前不实施差异、不挪评估或扩大预算，不提供假可运行训练命令。事实协议及准确准备CLI见[父PROCEDURE L](tasks/task9/task9.11/PROCEDURE.md#l-本轮最终续接合同与准确命令2026-11-03不授权真实执行)。
+
+- 最终保护验收：[lifecycle-final-verification-v2.stdout.json](agent_logs/task9/task9.11/lifecycle-final-verification-v2.stdout.json)/[命令](agent_logs/task9/task9.11/lifecycle-final-verification-v2-command.json)rc0，740旧保护项仅4授权变化、160 artifact匹配、STOP7及独立裁决29证据SHA相符、原40/40/4/5/1/11/5结果核真、9三文档链接与git diff --check0、无所属worker/fixture；提议namespace均未创建。初次仅因rc/exit_code字段差异KeyError失败，失败原件与脚本副本保留，修只读解析后同原件通过，不重跑真实实验。
+- 交接最新预算时点22:04:05+08：[原stdout](agent_logs/task9/task9.11/lifecycle-budget-handoff.stdout.json)/[精确命令](agent_logs/task9/task9.11/lifecycle-budget-handoff-command.json)，包含前述父核查失败/成功已计成本：worker下界3641.8298273s、余仅上界205158.1701727s；calendar余191654.7692535s，按原正式+最终52h情景只余4454.7692535s（约74.25min）给其余门与所有UNKNOWN。逻辑33982738428B/唯一inode22906292340B/诊断849422528B；输出余2165040517124B、诊断余7740512064B。快照后文档/退出成本继续减少，精确余额仍null，NOT_READY不变。候选内部冻结21:47输入仅作review，不作当前release余额；任务参数/结果事实仍以父RESULTS §11为准。
+
+
+<a id="src-1406"></a>
+## SRC-1406 — task9.11 跨入口、生命周期与续接端到端审核
+- 类型：项目源码静态/AST核查、既有原始证据hash核验、纯字典反例及工程整改验收建议；作者/核查人Codex，2026-11-03，HEAD d198e5ca48f86071c05274f9da753f393ce058b4＋既有dirty。实际模型/强度未知；推荐GPT6.1sol/high、Sonnet5.5/high（跨模块并发/成本合同），本轮未委派。
+- 精确依据：scripts/task9_11/worker.py G1全目录pytest命令；src/task9_lr/tests/conftest.py显式torch/pytest导入、test_supervision_stdlib.py:test_no_forbidden_runtime_imports；supervise.py:outer_wait第249行wait位于异常收集之外、dispatch第405行无条件拒绝、main prepare拒绝；admission.py:activity_rows第120–122行所有PASS拒绝及protocol_read/evidence/prerequisites旧namespace依赖；prepare.py非执行候选；audit.py:paired/development路径。源码SHA/160保护项见[保护清单](agent_logs/task9/task9.11/end-to-end-review-protection.json)。
+- 原始结论：G1按实际目录收集会包含禁止pytest/torch的标准库测试，与conftest导入矛盾；outer_wait超时直接抛出，绕过该函数后续停止/封口；paired漏核右侧唯一性。本次隔离提取已读paired函数，用左1行/右2个同key纯字典输入得到both=1且无异常，证据[JSON](agent_logs/task9/task9.11/end-to-end-review-evidence.json)。前两项为静态确定路径，未运行真实G1/进程超时，不伪称实测。
+- 既有结果：.8裁决29项原件引用hash全部匹配，旧启动竞态的修复与40项替身证据接受于其覆盖范围，不称本次重新跑40项。正常闭账/续接仍被有意阻断，非执行候选不是execution adapter；此前已披露UNKNOWN/NOT_READY，不指控伪造完成。
+- 工程采用：先冻结有限生命周期与成本边界、旧C/历史UNKNOWN处置；必要范围覆盖worker G1入口、监督/准入/续接和审计。验收增加使用生产调用链、真实准入/计费的零模型零环境替身正常闭环及失败矩阵；不无限追加监督层、不删除拒绝门绕过缺证。建议是后续修复范围，当前不实施、不改变合同/科学/预算/截止，不自动接受旧C整门。
+- 限制/交付：只读审核与标准库AST/纯字典反例，未导入项目模块、加载模型、运行项目测试套件或真实Docker/环境/训练；没有全系统无缺陷保证。详细R1–R5、一次交付矩阵与顺序见[审核记录](agent_logs/task9/task9.11/20261103-codex-end-to-end-review.md)。
+
+<a id="src-1407"></a>
+## SRC-1407 — task9.11 R1–R5集成修复授权与冻结合同
+- 类型：用户本次明确指令及工程候选合同；核查Codex，2026-11-03T22:19:23.656939+08:00。原始指令为本chat的集成修复派发；本地证据[冻结日志](agent_logs/task9/task9.11/20261103-codex-integration-repair.md)，精确位置“冻结修复合同 v1”和需求矩阵。HEAD d198e5c加保留dirty。
+- 主张/采用：本轮允许必要代码与接口修复和生产链零模型/零环境/零真实Docker替身及独立sol/high审核，禁止真实实验；原4000/980/formal0/test0、10788评估分配、58h/2TiB及deadline保持。有限job实际wait边界/另计控制成本为待审候选，旧C整门与历史UNKNOWN处置仍待用户决定，不应用真实入口。
+- 限制：授权不是实验release；新验证尚未执行，不能称READY。相关事实以task9.11及.9/.10三文档结果为准。
+
+<a id="src-1408"></a>
+## SRC-1408 — task9.11 R1–R5集中修复及同版本生产链替身证据
+- 类型：项目源码/纯标准库进程与JSON替身实测、静态AST与工程选择；作者Codex，核查日期2026-11-03，HEAD d198e5ca48f86071c05274f9da753f393ce058b4+保留dirty；请求主设计/实施GPT6.1sol/high，实际UNKNOWN，兼容推荐Sonnet5.5/high（跨入口/并发/会计需高强度）。事实入口[.9三文档结果](tasks/task9/task9.11/task9.11.9/RESULTS.md)，[父最新结果§13](tasks/task9/task9.11/RESULTS.md#13-r1r5集中集成与独立验收最终交付2026-11-03)。
+- 精确版本/位置：最终164源artifact `1ba4e9891aa0aa53814fec9eee9064300da6f23a6240a56938d75e230c9105b1`，[清单](agent_logs/task9/task9.11/task9.11.9/final-source-freeze-v3.json)及frozen-source-v3逐字节副本，[diff索引](agent_logs/task9/task9.11/task9.11.9/integration-diff-index.json)。符号worker.g1_test_command/main、supervise.outer_wait/close_candidate/dispatch、prepare.freeze_candidate_protocol、admission.candidate_closure/check_resources/prerequisites、continuation.validate_protocol/validate_release/validate_external_costs/jobs、audit.expected_identities/validate_domain/paired。单文件SHA及精确行号还见独审正式JSON source_symbols。
+- 原始结果：同v3父40/14/15/12项全rc0（9.9280487/37.5664622/1.1159837/.6651582s），实际production prepare→dispatch→worker.main二次load/release/依赖/计费/ledger→owner/guard/watcher真实wait→候选CLOSED→合法后继/完整14stage；幂等零启动零重计。原命令/输出为.9/final-v3-supervision/lifecycle/continuation、entry-final-v3；父另复跑独审4+1及兼容11项rc0。科学G1仅AST静态预计14项，未实际GPU收集/运行；独立传递AST86本地文件，stdlib禁pytest/torch等断言保留。
+- 采用/主张：修R1白名单与stdlib隔离；R2有限CLOSED候选并保留真实拒绝；R3实际wait异常/最外层身份/精确停止回收/失败否决；R4统一新namespace候选、旧账/全准备成本清单、显式host/container路径、reviewer/code/protocol/evidence绑定、拒smoke/额外C ON；R5双侧唯一/固定域分母/独立expected/配置filename与身份验证。描述性audit仍非release。
+- 工程选择/适用限制：外部适配只替换Docker/模型/环境执行，生产协议/准入/依赖/计费/记录读取与worker入口真实跑；synthetic fixture为独立虚构账，不能冒真实旧UNKNOWN。fixture 30s控制收费包络及.1/.6/.7s、3/6s等注入/有界测试值只供stdlib故障实验，精确值以最终test_lifecycle_candidate_stdlib/旧test_supervision_stdlib符号为准，不是机器人时延、真实参数或获批预算。控制包络为未证明工程候选；极端全部监督/否决持久化与撤销都不可用仍UNKNOWN。未加载模型/环境、未真实Docker控制/GPU/回放/smoke/训练/test；不外推性能或真实READY。
+
+<a id="src-1409"></a>
+## SRC-1409 — task9.11集中修复累计成本快照与待决定会计/旧C承接
+- 类型：旧实测只读引用＋新命令实测下界＋算术推导＋未应用工程政策建议；核查Codex，2026-11-03。事实以[.9 RESULTS成本/待决定节](tasks/task9/task9.11/task9.11.9/RESULTS.md)与父RESULTS最新节为准，台账不另维协议。
+- 输入/精确位置：原协议及SRC1397/1405旧STOP、4000smoke/980评估；[integration_budget_audit.py](agent_logs/task9/task9.11/task9.11.9/integration_budget_audit.py)复用旧immutable lifecycle_budget_audit.py仅读JSON/hash/stat并递归补.9/.10命令、path去重。脚本经独审只读核查，[22:44:06原stdout](agent_logs/task9/task9.11/task9.11.9/budget-final-v3.stdout.txt)/[精确命令rc0](agent_logs/task9/task9.11/task9.11.9/budget-final-v3-command.json)；后续交接快照追加于.9 RESULTS。模型只stat，未读内部。
+- 原始快照/推导：worker已知下界4010.8964954s，其中本轮新增命令下界369.0022770s；208800−下界=剩余上界204789.1035046s，exact=null，未知不为0。calendar余189253.1403344s；4×43200+14400=187200s为原正式/最终阶段上限情景，差2053.1403344s（34.22min）仍需G1/LON/准备/审查/退出及UNKNOWN，不能证明可行，也非断言实际必耗满52h。旧GPU暴露7252.5301979s、余上限201547.4698021s，本轮GPU新消耗0。字节/所有组件逐项在原JSON，以所属RESULTS快照为准。后续准备/等待/写入继续扣，不是释放余额。
+- 采用/限制：原58h/2TiB/8GiB、40GiB保存包络及2026-11-06 03:18:20+08截止不重置；smoke余0、10788=196 L ON+9408正式+1184最终、额外C ON0保持。新命令全部计下界；无完整准备/审查会话封口和当前发布尾仍UNKNOWN，calendar已包含等待，命令下界不能充全worker实耗。真实candidate依旧因unknown/pending拒准入；新审查/命令使冻结成本清单过期必须补全，不可拿review包执行。
+- 待用户决定（applied:false）：旧C科学原件+新完整性门是否替原整门（旧FAIL不改，拒额外196）；有限job launch→actual wait边界、另列控制session与真实包络取值/证据；历史缺失actual wait优先找原件，无法恢复时可建议按旧已释放cap1800s核销C失败尝试，替换已列625.185549736s下界一次（差1174.814450264s），依据旧activity.cap_s/launch.start/inner.finish，不称经证明actual wall上界/exit0，不吞并其他历史UNKNOWN，若有更高实证不得下调；之后另签获批execution protocol/namespace/独立release与真实profile可行性。以上均未应用，本轮不签真实实验许可，不缩步/跳评估/延时或开部分实验。
+
+<a id="src-1410"></a>
+## SRC-1410 — task9.11.10最终冻结v3独立集成审查
+- 类型：独立sol/high请求、纯stdlib/JSON/占位进程验证、原件hash及实际调用链审查；核查人独立Codex与父Codex，2026-11-03，实际后端/推理UNKNOWN。事实入口[.10 RESULTS](tasks/task9/task9.11/task9.11.10/RESULTS.md)，正式[裁决JSON](agent_logs/task9/task9.11/task9.11.10/FINAL-INDEPENDENT-VERDICT.json) SHA `e284186e65fd231ed32ed44bf1d4f4b9169f4fcdc654b983058779a0c14b3547`；[父原件接受](agent_logs/task9/task9.11/task9.11.9/parent-independent-acceptance-v3.json)。
+- 精确版本/实测：同SRC1408最终artifact/164文件，独立81回归+自写identity4/compound1=86项全rc0，before/after源SHA一致。40/14/15/12/4/1项分别wall9.8542509/37.5251711/1.0914990/.6257872/2.6403099/1.7158539s，原命令/stdout/stderr/测试脚本副本见正式JSON tests/evidence。同源实际纯prepare CLI rc0/.161394s，host/worker真实CLI均预期NOT_READY/rc1，未达外部执行。父直接核54引用hash及原输出/退出码，不以自报代通过。
+- 保留原失败：v1配置内容重定向核hash、末unlink超包络、无adapter幂等提前返回3缺口；v2复合盘错rejected已持久但reader忽略。原反例FAIL全部留存，v3同断言修后PASS；早期版本PASS不拼接迁移。
+- 原始裁决/采用：R1静态隔离、R2正常闭环/幂等、R3已测故障、R4统一候选累计账、R5纯JSON配对均PASS于明确范围；总体NOT_READY_FOR_REAL_EXECUTION。旧C完整门FAIL/历史完整成本UNKNOWN、有限会计与C组合待决定，成熟profile/真实GPU/Docker未测。不含所有监督/持久化同时故障的终态保证；无真实release/旧run恢复。独审只写自身文档/日志，未改实现，推荐Sonnet5.5/high仅兼容推荐。
+
+SRC-1409追加交接快照（不覆盖上方历史时点）：[22:49:17原stdout](agent_logs/task9/task9.11/task9.11.9/budget-handoff-v3.stdout.txt)/[命令rc0](agent_logs/task9/task9.11/task9.11.9/budget-handoff-v3-command.json)，worker下界4011.0108699s、余上界204788.9891301s/exactnull，calendar余188942.4413650s、52h情景后1742.4413650s。全部UNKNOWN/原分配/禁止真实执行不变，实际参数与结果仍以.9 RESULTS为事实入口。
+
+
+<a id="src-1411"></a>
+## SRC-1411 — task9.11 v3集成的跨阶段有效期与动态成本审核
+- 类型：项目源码静态控制流推导及既有原始证据核验；作者/核查人Codex，2026-11-03，HEAD d198e5ca48f86071c05274f9da753f393ce058b4＋dirty。实际模型/强度未知，未委派；推荐GPT6.1sol/high、Sonnet5.5/high因跨阶段时钟/账本一致性。
+- 精确依据：admission.py:candidate_closure第111–118行、activity_rows/check_resources/read_release；continuation.py:validate_release当前clock与expires_at、validate_external_costs第184–200行及prerequisites。测试test_continuation_stdlib.py:fixture_release统一到期2026-11-06T02:18:20+08；test_lifecycle_candidate_stdlib.py完整DAG不追加外部审计command。源码版本沿v3 artifact 1ba4e9891aa0aa53814fec9eee9064300da6f23a6240a56938d75e230c9105b1，164文件本次重新hash一致。
+- 静态结论F1：历史CLOSED读取时按now重验旧release，旧阶段令在总deadline前过期会阻断后继/运行资源检查；应区分新启动有效期与历史当时有效证明，不能改旧令或hash补救。F2：审查新增command使external库存失配，重新冻结protocol又使旧closure绑定失配；需不可变静态协议与可追加、受审动态预算快照分离。两者均为静态可达路径，未执行真实反例/训练，不称已实际造成新失败。
+- 核验：独审54引用及164源码hash一致，直接读取六套40/14/15/12/4/1原stderr与rc0；共86为既有独立测试，不是本轮新运行。R1/R3/R5修复与候选正常闭环接受于已测范围；旧C/历史UNKNOWN/控制包络/真实执行仍待决。
+- 采用/限制：保持NOT_READY，仅记录审核，不改代码或合同。建议在同一修复中补时钟推进与新审查成本联合闭环，不重做已通过局部功能；下一次真实派发须另核实时余额，原窗口不重置。详[审核](agent_logs/task9/task9.11/20261103-codex-integration-review.md)及[原件hash核验](agent_logs/task9/task9.11/integration-review-verification.json)。
+
+<a id="src-1412"></a>
+## SRC-1412 — task9.11 F1/F2跨阶段联合修复授权与冻结合同
+- 类型：用户本轮明确授权、工程修复合同；核查Codex，2026-11-03T23:11:10.673033+08:00。原始来源本chat最新跨阶段修复请求；本地[冻结日志](agent_logs/task9/task9.11/20261103-codex-cross-stage-repair.md)与[不可变v1](agent_logs/task9/task9.11/task9.11.11/frozen-contract-v1.md)，精确位置F1/F2/联合验收/矩阵。HEAD d198e5c+保留dirty，基线沿SRC1408–1411 artifact1ba4e989/164文件。
+- 主张/采用：必要core接口/stdlib替身/独审，分新启动授权与历史完成、静态协议与追加受审动态成本；用fixture clock推进完成联合生产链，不能mock准入/时钟判定/计费。已过R1/R3/R5保留，全部历史失败/旧STOP只读。模型请求主实施/独审sol/high，实际UNKNOWN，兼容推荐Sonnet5.5/high用于跨时间身份与账本因果核验。
+- 限制：所有新验证尚未执行，不构成真实许可；旧C/会计/历史UNKNOWN/真实execution仍待决，预算科学原分配及截止不重置，准备审核等待继续计。参数/实际结果仍由task9.11.11/.12三文档记录，台账不另维护协议。
+
+<a id="src-1413"></a>
+## SRC-1413 — F1/F2跨阶段集中修复、同版本生产替身闭环
+- 类型：项目源码、纯stdlib实际进程/JSON实测、工程候选选择，作者/核查Codex，2026-11-03；HEAD d198e5ca48f86071c05274f9da753f393ce058b4＋保留dirty。主实施请求GPT6.1sol/high，实际后端/强度UNKNOWN；兼容推荐Claude Sonnet5.5/high（跨时钟/身份/并发费用因果）。事实主文档[.11 RESULTS](tasks/task9/task9.11/task9.11.11/RESULTS.md)、[父§15](tasks/task9/task9.11/RESULTS.md#15-f1f2跨阶段联合修复与独立交付2026-11-03)。
+- 精确版本：最终168文件artifact `c8523c9aecc314ce7ae0e71fd16e41ad9531aaf4e3e1315576ecd4d7411ef177`，[source-freeze-v2](agent_logs/task9/task9.11/task9.11.11/source-freeze-v2.json)及frozen-source-v2逐字节副本；[最小diff](agent_logs/task9/task9.11/task9.11.11/minimal-v2.patch) SHA `e2d01b589b51c3776bc713aa5d44427d89bd62ef83065426b749299fb6b37f41`。5原文件admission/continuation/prepare/supervise/test_contract必要clock接口，4新stdlib clock/costs/cost_control/test_cross_stage_stdlib，原159文件（含worker/audit/算法/科学配置）不变。精确符号/行号及单文件SHA见独审正式裁决source_symbols/source_files。
+- 原始证据/主张：.11/final-v2-cross/supervision/lifecycle/continuation/entry-audit-command.json逐条记录实际argv/cwd/raw/rc0/wall和完整source_before/after；35+40+14+15+12=116项同最终SHA。prepare→dispatch→实际worker.main二次准入→actualwait/CLOSED→fixture时钟推进3600s越旧令/旧snapshot到期→实际stdlib审核子进程wall→source/event→独立snapshot/下一令→下一stage成功；原protocol/release/closure/snapshot字节不变、幂等无新worker/费用。详[父直接接受清单](agent_logs/task9/task9.11/task9.11.11/parent-independent-acceptance-v2.json)、独审101原件归档。
+- 采用：F1可信启动/实际wait完成捕获与历史原SHA/时间限额验证，当前启动仍严核时效；自然到期不抹合法历史、显撤否决资格但保费。F2首次prepare冻结静态policy，动态唯一source/event/journal、独审version/前序快照、最新release绑定；共锁覆盖追加及最后实际Popen重核；拒未审/缺费/UNKNOWN/篡改/越界/并发陈旧快照/超额/截止。
+- 工程选择和限制：source-publish/event-append/snapshot-review三类控制session各沿既有非执行候选30s全额收费一次，payload实测另列；当前snapshot含自身，pending/超包络/盘错拒绝。30s是`engineering-upper-bound-pending-approval`、applied:false，**不是实测上界、不是用户批准真实合同**。v1独审审核漏费FAIL与全部开发失败保留，最终只认v2同源证据；真实CLI/worker仍拒候选。fixture钟仅临时synthetic，不改真实deadline；未运行模型/GPU/Docker控制/环境/科学实验，不能外推真实成本/性能或核销历史UNKNOWN。
+
+<a id="src-1414"></a>
+## SRC-1414 — F1/F2独立联合反例、审核自身费用与原件核验
+- 类型：另一位Codex独立读稳定源码、自写stdlib反例、实际进程wait/文件故障及原始证据hash核验；请求GPT6.1sol/high，实际后端/强度UNKNOWN，Claude兼容Sonnet5.5/high，2026-11-03。审核者只写.12三文档/日志，不改实现；事实入口[.12 RESULTS](tasks/task9/task9.11/task9.11.12/RESULTS.md)。
+- 原始结论：v1 artifact ae070d…3e8068的106回归/8联合虽PASS，未改断言[费用反例](agent_logs/task9/task9.11/task9.11.12/independent-review-cost-v1-command.json) rc1，实测审核区间0.004763616s但总worker103→103、无stage控制覆盖；整体F2 FAIL保留。集中修复v2后原同脚本rc0，worker133→163新增独立审核session30s（候选占额、非实际耗时）；未删断言/改旧件。
+- 最终精确版本：同SRC1413的c8523c…11ef177/168文件；[正式裁决](agent_logs/task9/task9.11/task9.11.12/FINAL-INDEPENDENT-VERDICT.json) SHA `e93698b5e58752829e2066a0990e077f5904f7b1f9870a93f9f426f0ce32636c`，158原件引用SHA全部匹配；tests字段逐项列argv元数据/raw/rc0/wall/源before-after。独立116必要回归＋8跨时钟/费用反例＋1原漏费反例＋5控制发布故障=130项，另一次原件留存联合执行，合131方法执行；非131不同测试，不拼不同源PASS。
+- 联合与反例：真实生产prepare/dispatch/worker二次准入/activity_rows/check_resources/read_release/CLOSED，fixture+3700超旧令/快照但总deadline前，实际审核source/event/独立snapshot/下一有效令，next stage成功；历史、运行中资源读取及幂等不受自然到期误拒。显撤/错误时间域或映射/超原cap或deadline/身份SHA/缺失重复额外或未知费/current stale/预算不足、真实线程进程追加和实际Popen前新费/持锁跨deadline均拒。自身os.link发布/commit后故障/最后pending unlink真实elapsed超预冻结小包络均保UNKNOWN/current拒，历史前序费保留。
+- 证据保留：[101原件manifest](agent_logs/task9/task9.11/task9.11.12/independent-joint-v2-artifact-manifest.json)将原临时路径映射到独立只读归档，全部原字节；不是新的执行namespace/PASS。独审878旧项/父59项hash及688原输出stat不变；父再核正式158refs与全部源码/归档。限制：候选工程PASS，真实NOT_READY，完整历史成本与全部监督/持久化同时死亡仍不能保证终态；真实G1/Docker/成熟profile未执行，旧C/会计/UNKNOWN/许可待决。
+
+<a id="src-1415"></a>
+## SRC-1415 — F1/F2交接时实际累计成本下界、不可重置窗口与待决合同
+- 类型：原预算/旧账只读继承、实际command有限wall累计下界、JSON/hash/stat库存与规划推导；核查Codex及独立.12，2026-11-03。事实主文档[父RESULTS §15](tasks/task9/task9.11/RESULTS.md#15-f1f2跨阶段联合修复与独立交付2026-11-03)，不以本台账另维护协议。
+- 精确方法/原件：[cross_stage_budget_audit.py](agent_logs/task9/task9.11/task9.11.11/cross_stage_budget_audit.py)读原lifecycle/integration预算脚本和.11/.12全部实际runner（失败亦计），path去重、保原SHA/有限wall，缺实测保持UNKNOWN/exact=null。最终交接命令[budget-handoff-v2-command.json](agent_logs/task9/task9.11/task9.11.11/budget-handoff-v2-command.json)、[原输出](agent_logs/task9/task9.11/task9.11.11/budget-handoff-v2.stdout.txt)；先前时点[23:45输出](agent_logs/task9/task9.11/task9.11.11/budget-final-v2.stdout.txt)及[独立方法核验](agent_logs/task9/task9.11/task9.11.12/budget-final-v2-independent-review.json)保留。后续成本不得套用旧快照余额。
+- 嵌套/虚构区分：3个归档command有101原字节manifest、synthetic_fixture标签及实际outer independent-joint-artifacts-v2测量3.5188523s覆盖，归档不二次收费、虚构旧ledger2s/3s不混为真实账；任何无法证明包围关系的nested仍UNKNOWN。候选source/event/review各30s逻辑收费与本项目实际runnerwall账分开，不用前者核销后者/历史。
+- 推导：worker已知下界=原可靠非重叠区间＋逐个新实际命令wall；worker余额至多208800s−已知下界，完整历史尾/父与实施独审会话/文档/等待等缺闭账，真实exact未知，GPU仅沿旧7252.53019785881s曝光及原上限余量而无新增GPU。日历余额=原2026-11-06 03:18:20+08−快照当前时间；原正式+最终52h规划上限187200s与此相减为上限占额情景缺口，不是实际运行必需52h结论。当前不足容纳该上限包络，且G1/LON/准备审核/关闭/UNKNOWN另需时间；**未证全方案可行**，不缩步、跳评估、延时或启动部分实验。
+- 原条件不变：T0 2026-11-03 17:18:20+08、58h/2TiB/诊断8GiB/保存临时40GiB；旧4000 smoke/980评估/formal0/test0，smoke余额0，余10788=196LON+9408正式+1184最终、额外CON0；B1/B1-L同期两seed各从头3M、唯一actor/critic LR日程变量。新真实准备/审核/等待持续计，未知绝不按0。
+- 待决及限制：旧C科学非干扰＋新执行完整性组合、有限job/control边界及取值、历史UNKNOWN处置、真实execution协议/release/许可均未自行批准；真实阶段成熟profile/保存恢复/真实Docker退出成本与预算可行性待后续获批证据。继续原完整C重测要求却无额外196额度将阻断。当前脚本只读JSON/hash/stat，不读模型内容/运行Docker，快照后的本命令与验证/发布尾尚未返回，留UNKNOWN，不以无穷监督追求精确零尾。
+- 交接补充原件：[独立handoff预算审核](agent_logs/task9/task9.11/task9.11.12/budget-handoff-v2-independent-review.json) SHA `008575c306b072ddc7959751645e1c2c09bac13d60604f198b35736ea8ec2eb6`，21项PASS；首轮仅ISO六位微秒舍入误判FAIL原件保留，时间复算1µs容差，不放宽SHA/费用检查。[父最终完整性](agent_logs/task9/task9.11/task9.11.11/final-handoff-integrity-v2.json)直接核90链接、168源/158正式引用/59及878旧证据/688输出stat、无本轮替身进程。23:53快照之后闭合命令另有0.392825851s，使已知worker下界4441.465170844s；该次最终检查自身0.164532706s另列原command，完整会话和发布/退出尾仍UNKNOWN。时点库存之后文件继续增加，不当精确当前余额。
+
+<a id="src-1416"></a>
+## SRC-1416 — 2026-11-04 task9训练现场与最新交付状态核查
+- 类型：项目现场只读核查＋既有原任务结果引用＋日历推导；核查人Codex，2026-11-04 09:17前后+08。实际模型/强度未知。
+- 支撑主张：当前task9无训练运行；9.11四smoke共4000转移/300updates，正式训练及独立test尚0；最新交付为监督修复及独审，真实NOT_READY；旧训练科学结果未被替换。
+- 原始证据与精确位置：[本轮记录](agent_logs/task9/20261104-codex-training-status.md)、[机器快照](agent_logs/task9/20261104-codex-training-status-snapshot.json)的time/commands/smoke/workers；smoke来源逐项path保存，对应summary.state.steps/last_diagnostic.updates和smoke1000-worker.status/result。进程/容器/GPU命令argv及exit_code和stdout均保存。
+- 既有结论引用：980评估及监督STOP采用[SRC-1397](#src-1397)父原件审核；最新修复与独审采用[SRC-1413](#src-1413)/[SRC-1414](#src-1414)，历史完整成本UNKNOWN与原截止采用[SRC-1415](#src-1415)。旧B3随机/语义、B1/B3及优化阴性沿[SRC-1355](#src-1355)/[SRC-1359](#src-1359)/[SRC-1360](#src-1360)，一次动作替换阴性沿[SRC-1384](#src-1384)。本轮未重跑科学试验或完整旧独审。
+- 推导：日历余量h=(2026-11-06T03:18:20+08:00−snapshot.time)/3600；约42h，低于旧52h规划上限占额情景，不等于证明实际必需52h或绝不可能完成，亦不证明全方案可行。实际worker余额仍UNKNOWN，不重置窗口/预算。
+- 采用与限制：用于本轮状态报告和交接。现场仅该时点；容器保活不等于训练，smoke PASS不撤销STOP，合成工程PASS不代表正式训练完成/策略改善。run根没有STOP文件不改变独立裁决。无新实验或续训授权。
+
+<a id="src-1417"></a>
+## SRC-1417 — 跨阶段候选的worker与GPU成本复核
+2026-11-04 Codex。项目原始JSON、源码静态审查与差值推导。版本c8523c9a…11ef177。精确位置为costs.py:inventory和admission.py:_check_resources，独立归档independent-joint-v2-artifacts内snapshots/00000001.json与00000002.json。后者减前者，累计GPU 233.078001564−143＝90.078001564秒，与CPU审核payload及三个控制包络的增加相同。归档为替身输入，不能解释成真实GPU实测。工程采用为区分CPU费用、实际GPU曝光与候选预留。F1/F2联合原件及hash复核见[记录](agent_logs/task9/task9.11/20261104-codex-cross-stage-review.md)。
+
+<a id="src-1418"></a>
+## SRC-1418 — 冻结B3-5M、B1-L与同期B1配置差异
+- 类型：项目原配置只读核查及既有协议解释；核查Codex，2026-11-04。[比较记录](agent_logs/task9/20261104-codex-sac-comparison.md)、[逐字段原配置快照](agent_logs/task9/20261104-codex-sac-comparison-configs.json)。rows.path保存历史B3_5M-seed4718/config.json和本树C/L_seed4718.json绝对路径，values保存精确配置字段。
+- 原始结论：B3-5M与L的actor/critic均linear_transfers、1e-4→1e-6，归一化总转移5M→3M；alpha_rule rllib→capped，alpha LR由1e-4→1e-6改固定1e-6；更新间隔10/batch256/replay100k/环境256相同。C/L除group身份外仅lr_schedule不同（exp_updates→linear_transfers），alpha_lr_schedule相同。capped为代码规则名，不证明严格上界。
+- 采用及来源：冻结身份沿[SRC-1356](#src-1356)，日程与混杂沿[SRC-1359](#src-1359)，新诊断/唯一主实验/独立任务测试沿[SRC-1387](#src-1387)/[SRC-1388](#src-1388)/[SRC-1390](#src-1390)，监督修复沿[SRC-1413](#src-1413)/[SRC-1414](#src-1414)，尚无正式训练沿[SRC-1416](#src-1416)。相对历史冻结基线和相对同期对照分别解释，不把B1-L说成已证更优。
+- 限制：未运行新模型/训练/评估，3M对5M不是同预算因果比较；工程检查/诊断完整不等于策略能力提高。网络与任务语义沿9.11合同，无世界模型/策略恢复包装。
+
+<a id="src-1419"></a>
+## SRC-1419 — GPU预算两账修复授权与旧反例复算
+- 类型：用户明确授权、项目原始JSON及公式推导；Codex核查2026-11-04T09:23:00.481592+08:00。原始来源本chat本轮P1要求，精确适用范围见[.13 TASK](tasks/task9/task9.11/task9.11.13/TASK.md)、[.14 TASK](tasks/task9/task9.11/task9.11.14/TASK.md)。
+- 原始证据：[复算JSON](agent_logs/task9/task9.11/task9.11.13/old-counterexample-recalculation.json)保存两份原快照全部字段/path/SHA；101原件重新hash一致。输入沿SRC-1417，累计GPU143→233.078001564，差90.078001564=CPU payload0.078001564+3×30候选控制。来源为旧替身用例，非真实卡时/生产参数。旧168源码before逐项保存，不修改旧原件。
+- 采用：仅必要计费实现、专用标准库联合测试和独立审查；CPU有证据才GPU0，未知阻断，GPU按认可卡和区间去重，已用/预留分列；保F1/F2/R1/R3/R5，不扩大科学合同。推荐sol/high，Claude兼容Sonnet5.5/high，执行仅sol/terra/luna且luna仅重复统计；实际模型另记录。
+- 限制：不控制真实Docker/加载模型/运行GPU或任何科学实验；旧STOP/C FAIL/历史UNKNOWN保留，58h/2TiB和2026-11-06 03:18:20+08不重置，交付不签真实许可。新实现和裁决尚未形成。
+
+<a id="src-1420"></a>
+## SRC-1420 — GPU与worker分账修复及同冻结源替身核验
+- 类型：项目源码、标准库占位进程实测、工程选择；核查Codex，2026-11-04；事实入口[.13 RESULTS](tasks/task9/task9.11/task9.11.13/RESULTS.md)，授权沿SRC-1419。
+- 精确位置：costs.inventory/review、continuation.inherited_accounting/validate_external_costs、admission._check_resources、supervise.dispatch、gpu_costs设备证据/区间union；从动态/静态外部命令、继承账、容器持卡区间到snapshot剩余额度和read_release/实际worker二次准入。worker保原payload/控制收费；GPU按认可UUID的分配区间并集，含空闲持卡；已用与新申请预留分列，不用worker墙钟代填GPU。
+- 输入/工程口径：fixture设备/区间complete声明只限synthetic且execution_allowed:false；真实external命令API没有可核设备分配收据，纯CPU或GPU自称均不能通过、保持UNKNOWN，未扩监控。缺设备/区间、聚合不一致、继承source区间未被历史覆盖、篡改/未知阻断。候选worker控制30s沿SRC-1413，未批准且非实测上界；新增余额边界、部分/离散区间长度均只是测试输入，不是生产参数或实际卡时。
+- 开发历史：第一冻结db02314ef8bb6e92e31755db9ece7a7db1d0b328d56df60111ec2d9f91175b7a/170源，父128项通过，精确argv/raw/rc/wall/source-before-after在.13/parent-final-*-command.json；独审继而发现已审容器区间可被改写/删除降低GPU费用，原FAIL保留，**该版本不能作为最终验收**。新冻结及最终核验待补，不能移用旧SHA通过。
+- 采用与限制：只做P1必要实现及标准库替身，不改科学/模型/真实环境或旧STOP/C FAIL/UNKNOWN；源SHA与最终结果以.13结果后续记录为准，真实NOT_READY，不签许可。请求sol/high；推荐GPT6.1sol/high、Sonnet5.5/high因区间与两账因果；实际后端UNKNOWN。
+
+<a id="src-1421"></a>
+## SRC-1421 — GPU两账独立原事件复算与容器证据反例
+- 类型：独立Codex原始事件/receipt/设备区间核算与生产路径标准库反例；核查2026-11-04；事实入口[.14 RESULTS](tasks/task9/task9.11/task9.11.14/RESULTS.md)。只写自身审查文件，生产实现只读；请求sol/high，实际后端UNKNOWN，兼容推荐Sonnet5.5/high。
+- 精确原始失败：[container-tamper-v1-command.json](agent_logs/task9/task9.11/task9.11.14/container-tamper-v1-command.json)与stderr/raw-fixtures manifest：冻结db02314e已审stopped容器10s，累计GPU119.99999976158142；同Id把start改晚5s后准入接受114.99999976158142，原expected-reject断言FAIL。另短改stop、删除container记录、sealed与stop同时改CPU设备的三个原FAIL保留在.14。反例来自synthetic，非真实容器/GPU；证明准入公式可达缺口，未运行真实Docker。
+- 方法：自写raw_oracle按原command wall、控制reservation、lifecycle原monotonic起讫独算worker；GPU用独立端点扫描并集算法，自原始device和区间推导，不调用生产公式算期望。完整链含prepare/dispatch/实际worker.main/release/resources/ledger、clock推进、动态source/event、独立snapshot、新令和后继；近余额必须保真实语义的持GPU容器替身，不能通过删分配制造通过。
+- 后续：必要容器历史证据绑定集中回派.13，新SHA后同原反例及相关检查重跑，最终独立裁决尚未形成。先前fixture输入错误的失败另留原始输出，不包装成实现失败；旧F1/F2/控制/审核费用反例须在最终同SHA复验。无真实训练许可。
+
+<a id="src-1422"></a>
+## SRC-1422 — P1交付父核验、实际命令成本下界与不可重置余额
+- 类型：原账只读继承、原始命令wall下界累加、SHA/stat核验与日历推导；Codex核查2026-11-04；[父过程记录](agent_logs/task9/task9.11/task9.11.13/20261104-codex-parent-gpu-accounting.md)、[预算脚本](agent_logs/task9/task9.11/task9.11.13/parent_budget_audit.py)。
+- 精确方法：继承SRC-1415 cross_stage_budget_audit，再纳.13/.14已闭合实际外包runner command的有限wall（失败亦计），按path去重；内嵌synthetic账本/归档命令非真实新增成本，有outer runner归属才不二次累加，否则UNKNOWN。控制逻辑收费与本项目实际命令成本区分；不把CPU外包wall转GPU。完整会话、准备、文档、等待及退出发布尾没有闭账证据，精确worker余额仍UNKNOWN。
+- 已核原件：开工旧168源匹配c8523c9a…11ef177，旧101联合归档、878保护原件SHA一致；最终新SHA/旧59父引用/158旧裁决引用/688旧输出stat及新独立裁决/原始输出待最终直接核验，不能提前声称通过。
+- 日历公式：remaining_s=2026-11-06T03:18:20+08:00−当前核查时点；原T0/58h/2TiB/科学预算不重置。09:25:48初始快照余150751.564652s，低于原正式+最终187200s规划上限占额情景，不说明实际必需52h，亦不证明可行。精确当前交接余额待最终快照；未计尾保持UNKNOWN。旧4000smoke/980评估/正式0/test0/旧C FAIL及STOP保留；真实NOT_READY，不签release。
+
+### SRC-1420 最终v3补记（2026-11-04）
+最终源0bbda355c9eaf3018b7f73a27fc033e346dc06d7c0b2b940d1334fce7476c1a9/170，.13/source-freeze-v3与final-source-v3逐字节核真；8原文件必要修改、2新、160不变，科学/worker/audit/runtime未改。父132项同SHA rc0，精确命令/原输出/source-before-after在.13/parent-final-v3-*-command.json；父独算最小diff SHA f755954925c8f402d0af815ad4ab63ebc6b9b007cd34e8a2c727ab2b1e438f4d。v1已审容器可缩短/删除/重标、v2首basis三方身份矛盾原FAIL保留；v3绑定已审record/sealed与窗口、首ID三方相同/非空，静态无basis容器UNKNOWN。旧5s无锚点正例收紧，等价已审5s idle正例保原曝光；不声称旧所有断言不变。
+
+### SRC-1421 最终独裁与数值适用性补记（2026-11-04）
+正式.14/FINAL-INDEPENDENT-VERDICT.json SHA0c59ce7b0cde665349731c099c9e5946c6bcc7f79117b3498a054fae4c1e4856，同最终0bb…/170；53项+拒绝receipt补核1=54，父直接核原metadata/raw和5689引用SHA。最终自写23份manifest/1091 raw、7正向closure绑定核真。CPU联合worker163.916344944→253.929333551→284.945996674，GPU110不变；区间重复GPU115不增，新2s才117；余额旧式费前208768.197382212、费后208858.441373557，对208800上限从可到拒，修后GPU206801.428753376＋申请4可过、实际后继PASS（worker拟申请34，差30沿原候选control）。这些是显式synthetic工程输入/进程wall，非生产参数或真实GPU实测。
+另独立500s已发生GPU区间导致cumulative GPU cap拒绝，使用显式虚构的原T0前历史区间；仅算术压力样例，不构成真实历史已核清，因单GPU58h窗口的物理并集不能在期限前超过58h。拒绝前worker875.096860116，拒绝审核自身control30闭合后905.096860116恰一次；生产inventory external743.012717912与原始receipt独算相同，GPU事件仍500，持卡时间推进另计。详正式summary.denial_reconciliation及.14/denial-reconciliation-final-v3-command.json。首basis身份矛盾原FAIL见first-identity-v2-command.json；所有原件只读。
+
+### SRC-1422 最终父接收及实际预算补记（2026-11-04）
+父.13/parent-final-v3-acceptance-command.json与stdout rc0，核170当前/冻结源、5689新独审引用、878旧保护/59父/158旧裁决/101旧归档及688原输出stat不变；parent-independent-raw-check-command.json rc0逐项核54实际argv/source-before-after/raw/rc0。实际parent-budget-handoff-command.json/stdout时点2026-11-04T09:49:08.631453+08：新已闭合外包命令449.494621765s（失败亦计），worker下界4891.124325315s、余额上界203908.875674685s/exact=null；该命令自身随后0.514912495s另计，完整会话/文档/等待/退出尾UNKNOWN。嵌套fixture与归档由outer runner证据涵盖，不把虚构control/GPU账叠加到真实准备成本。原GPU7252.530197859s曝光仅沿旧证据，上界余额201547.469802141s非精确真实余额。
+日历余149351.368547s=41.486491h，原187200s正式+最终规划上限情景缺37848.631453s；不代表证明必需52h，也不证明全方案可行。逻辑stat34,037,469,936B、诊断904,154,036B，原2TiB/8GiB/40GiB临时保存预留不重置；末检另重算日历。真实NOT_READY/旧C FAIL/历史UNKNOWN与全部原科学预算保留，未签任何训练许可。事实三文档见[父§17](tasks/task9/task9.11/RESULTS.md#17-src-1417-p1-gpu两账修复最终交付2026-11-04)。
+
+SRC-1422末检补记：.13/parent-final-integrity-v2-command.json/stdout rc0，2026-11-04T09:53:14.898777+08:00日历余149105.101223s/41.418084h，351新父联合归档SHA与99链接、170源/5689引用及全部旧保护再次核真，无本轮残留fixture进程。预算后已闭合命令0.779585289s＋本次0.314724835s，使worker已知下界至少4892.218635438s，实际完整余额UNKNOWN。首轮checker rc1因截断链接造成虚假拼接，仅修checker完整段落输入，原FAIL及成本保留；没有实现变化或取消断言。最终文档发布/退出尾仍未知，不无限追逐自计费封口。
+
+<a id="src-1423"></a>
+## SRC-1423 — GPU两账修复复核与首次无卡冲突反例
+2026-11-04 Codex，项目原件hash与标准库替身实测。版本0bbda355…7476c1a9，具体位置admission._check_resources第326行、supervise.create_container写入gpu_uuid处。170源码/5689引用核真，归档复算支持CPU费用隔离与区间并集。首次record指定卡而两份inspect均无卡，5秒替身窗口被接受且两次读数仅继承110秒。应拒绝矛盾证据，真实设备归属未知。输入、复现步骤、限制与整改条件见[审核](agent_logs/task9/task9.11/20261104-codex-gpu-accounting-review.md)。
+
+<a id="src-1424"></a>
+## SRC-1424 — 首次GPU归属P1修复授权
+- 类型：用户2026-11-04本chat直接指令；核查人Codex，核查日期2026-11-04。原始要求及本地工作范围见[父日志](agent_logs/task9/task9.11/20261104-codex-first-gpu-repair.md)。
+- 具体主张/采用：在首次预算快照前比对启动记录、封存inspect、当前inspect；一致沿原计费，矛盾首审与读取拒绝/UNKNOWN。缺失字段沿原协议，不补造5秒；失败费用保留。必要实现、零模型/环境/真实Docker的stdlib替身与另一审查者独立复核获授权。
+- 限制：无真实GPU/容器控制、smoke/回放/训练/最终科学测试；不得改旧账/STOP/科学条件/58h预算/截止，不签真实许可。不是外部文献或新实验授权。
+
+<a id="src-1425"></a>
+## SRC-1425 — 首次设备归属实施与同输入反例
+- 类型：项目源码审计、stdlib替身实测、工程选择；Codex核查2026-11-04。事实见[.15 RESULTS](tasks/task9/task9.11/task9.11.15/RESULTS.md)及[源冻结](agent_logs/task9/task9.11/task9.11.15/freeze-v2.json)。
+- 精确位置：admission._check_resources调用gpu_costs.container_allocation，后者复用allocation对sealed/current双向集合核验并与record声明比较；costs.review调用同一_check_resources。supervise.create_container第431行写gpu_uuid，未修改启动器。
+- 原始输入/结论：修前[before/result.json](agent_logs/task9/task9.11/task9.11.15/before/result.json)SHA源0bbda355…7476c1a9/170；同Id、record.gpu_uuid为preferred UUID、两inspect DeviceRequests=[]，固定5秒窗口，两路径均接受GPU110。相同三份原始JSON及expected-reject断言，修后[after-v2/result.json](agent_logs/task9/task9.11/task9.11.15/after-v2/result.json)首审UNKNOWN拒绝，资源读取无有效快照拒绝，退出码由1变0。仅fixture新namespace/时钟anchor/绑定源码的协议引用因每轮构造而不同，三份设备输入逐字节相同；不称整个临时目录完全相同。
+- 工程解释：缺失gpu_uuid沿原record.get(key,preferred_gpu_uuid)默认；显式null是可表达的空设备声明，必须同时有两份显式空DeviceRequests且仍满足既有synthetic-only无卡协议，不能放宽真实CPU归属。空字符串、其他卡、缺失inspect DeviceRequests不证明无卡，仍拒绝。三方矛盾不判定谁错、不补卡时。
+- 最终源3ae8183a93e2acf80f3aec23c79357cb96df91faecf2f3b355261d28197d3ad2/171，修改2生产文件及新增1专用测试，其他168旧源不变；准确diff见[patch](agent_logs/task9/task9.11/task9.11.15/minimal-v2.patch)。最终同SHA回归与独裁待本条后续补记；中间脚本断言错误及原失败保留，不以其作验收。全部数值为替身输入/逻辑账，不是真实GPU实测或新增生产参数。
+
+<a id="src-1426"></a>
+## SRC-1426 — 首次设备归属独立复核
+- 类型：另一Codex从冻结源码与原始输入独立复核；请求gpt-6.1-sol/high，实际后端/强度UNKNOWN。推荐GPT6.1sol/high、Sonnet5.5/high，因为首次与历史设备归属及两账合同核验。
+- 入口：[.16三文档](tasks/task9/task9.11/task9.11.16/RESULTS.md)。仅自身文档/日志可写，源码及父共享文档只读。核查日期2026-11-04，核查人为独立Codex与父直接核原件。
+- 最终状态尚待原始输出与父核验补记，不能预记通过；无真实许可、历史UNKNOWN保留。
+
+### SRC-1425 同最终SHA回归与父直接核验补记
+171源3ae8183a…97d3ad2，父143项与同字节设备输入反例全部rc0，精确argv/source-before-after/outer wall在.15根`*-command.json`；[validation-summary](agent_logs/task9/task9.11/task9.11.15/validation-summary.json)。父[parent_integrity](agent_logs/task9/task9.11/task9.11.15/parent_integrity.py)直接核当前/冻结171、原168源不变、旧.14 5689引用全符、11矩阵raw SHA及修前修后输入字节相同，初验输出[parent-integrity-preliminary](agent_logs/task9/task9.11/task9.11.15/parent-integrity-preliminary.json)。具体矩阵/费用/适用限制见[父§19](tasks/task9/task9.11/RESULTS.md#19-src-1423首次gpu设备归属最小修复2026-11-04)。8负例control30保留，原CPU3分列，GPU未知不补5；同卡区间与CPU/F1/F2回归通过不等于真实应用合同已接受。
+
+### SRC-1423 关闭补记（2026-11-04）
+仅关闭冻结候选替身工程P1，源码3ae8183a…97d3ad2；修前修后同三份设备JSON及同拒绝断言、首次无历史快照，两路径从接受变拒绝。首审UNKNOWN不补卡时，读取缺snapshot拒绝；合法snapshot后共同设备/历史校验另有8项独立反例通过。实施SRC-1425、另一审查者SRC-1426，真实历史缺证保持UNKNOWN，旧GPU两账修复保留，真实NOT_READY。
+
+### SRC-1426 最终原件及父接收补记
+独审20自写（12首审/8有效snapshot后读取重审）+4GPU+8F1/F2=32项同SHA通过；[正式裁决](agent_logs/task9/task9.11/task9.11.16/FINAL-INDEPENDENT-VERDICT.json) SHAa710ce64e6356a3e3c4601dc3304f2af7236f3287df17990cf9299137407b43d，事实原件/限制见[.16 RESULTS](tasks/task9/task9.11/task9.11.16/RESULTS.md)。父[最终原始接收](agent_logs/task9/task9.11/task9.11.15/parent-independent-all-final.stdout.txt) rc0，核8实际命令及其输出/source-before-after、20矩阵658原始文件、2313稳定引用。初独审费用检查器9个FAIL因已继承2秒误加，原失败/脚本/raw/wall2.432141604保留；修检查器不改生产。父初接收未识别references字段仅作局部检查，补强非空2313并逐项hash最终通过，初输出保留。裁决保留已有worker/GPU两账、F1/F2及旧STOP/UNKNOWN，不签真实release。
+
+### SRC-1425 实际预算交接及限制补记
+[预算脚本](agent_logs/task9/task9.11/task9.11.15/budget_handoff.py)只继承SRC-1422原账并按path去重加.15/.16根已闭合outer command wall（失败亦计），排除内嵌synthetic逻辑账；完整会话、未封口迭代/文档等待/发布退出尾UNKNOWN。
+[原预算输出](agent_logs/task9/task9.11/task9.11.15/budget-final.stdout.txt)时点2026-11-04T10:11:24.939615+08:00，新登记outer下界98.656246146s，worker已知下界4990.874881584s、余额上界203809.125118416s；后续预算命令及最终接收另闭合0.815000834s，当前下界至少4991.689882418s。独审8命令合23.591092700s已包含（含失败2.432141604s），不重复叠加。原deadline差值公式不变，日历余148015.060385s，对187200s规划上限情景差-39184.939615s，不证明实际必需52h或全方案可行。新真实GPU调用0，旧7252.530197859s仅继承原曝光证据；精确GPU余额与完整历史UNKNOWN，不将CPU wall/替身control或GPU账写真实GPU。完整交付/待决见[父§19](tasks/task9/task9.11/RESULTS.md#19-src-1423首次gpu设备归属最小修复2026-11-04)。
+
+<a id="src-1427"></a>
+## SRC-1427 — SRC-1423关闭复核
+2026-11-04 Codex，项目原件与源码核验，版本3ae8183a…97d3ad2。核task9.11.16/original-replayed.json、post-both-empty.json、first-same.json、first-none.json及FINAL-INDEPENDENT-VERDICT.json，源码gpu_costs.container_allocation与admission._check_resources。171源、2313引用及修前三JSON哈希匹配。首次冲突拒绝且无可用令，合法快照后发生同类冲突也拒绝读取/重审；正常区间计费成立。采用范围限冻结候选，真实放行仍缺证。[审核记录](agent_logs/task9/task9.11/20261104-codex-first-gpu-final-review.md)。
+
+<a id="src-1428"></a>
+## SRC-1428 — task9.11正式实验放行评审：实时窗口、历史参照与待决合同
+
+- 支撑主张：SRC-1423沿用冻结候选工程通过，完整实验真实NOT_READY；原窗口下历史参照不利且缺完整性能/会计证据，不能以52h上限证明最低耗时超窗；旧C仅本次轨迹科学证据可承接但完整门FAIL永久保留，重测须额外196；历史局部核销/有限会计/真实入口及延时都须独立决定。
+- 类型：**项目原始实测/归档原件核查＋推导＋待决定工程选择**。作者FoReM/Codex，核查2026-11-04 Codex，实际模型/强度未知，推荐GPT6.1sol/high与Sonnet5.5/high（研究合同/累计成本/设备准入审查）；用户本轮明确只读评审，不授权实施或实测。
+- 原件与精确位置：[只读现场证据](agent_logs/task9/task9.11/release-review-evidence-20261104.json)的queries/budget/history_B1/history_evaluate/old_container/old_C/original_evidence_hashes；[采集器](agent_logs/task9/task9.11/release_review_readonly.py)，本次执行无模型/环境/替身测试/Docker控制；原[execution-window](agent_logs/task9/task9.11/execution-window.json)，[旧STOP](agent_logs/task9/task9.11/task9.11.4/gate-evaluate-C-4718-FAIL-STOP.json)及raw-evidence（4807 parity/196行/522窗口；host字段null）、[C原launch](agent_logs/task9/task9.11/task9.11.3/C4718-recording-on-launch-command.json)、[归档停止before/after](agent_logs/task9/task9.11/task9.11.3/final-stop-container-command.json)、[最新旧预算](agent_logs/task9/task9.11/task9.11.15/budget-final.stdout.txt)。冻结171源3ae8183a…97d3ad2重核一致；SRC-1427/.16独审结论沿用，未重复测试。
+- 历史成本直接原件：`/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B1-seed{4718,4719}/summary.json:wall_s,state.steps,updates,timings`，各12份`validation-*.json`及`runtime.json`；完整wall36580.254654573/36953.448007062s含12×196评价/13次保存，GPU分别0/1；本次JSON列逐项SHA。9.10六`status.json`均done/exit0/196，合6355.128381967545s；位置`forem/results/task9/t9.10-paired-20261103T144811+0800/{C,T}-{4718,4719,4720}/status.json`。沿SRC-1360/1389科学与预算含义，不复跑。
+- 现场原结论：2026-11-04T10:27:45.200388+08:00日历余147034.799612s=40.842999892h；worker下界4992.338904107s（含本次已返回reader0.649021689s），余额仅上界203807.661095893s；其它本次/历史完整会话费用UNKNOWN。GPU0空闲，task10 GPU1/PID970022运行。旧GPU scalar7252.530197859s；同Id/UUID归档StartedAt→FinishedAt实际端点差7252.448673015s，二者不混为精确同值，不宣称完整历史归属已闭合。stat写快照前logical34055533931B、诊断922218031B，后续文档继续扣。现场后日历继续减少，最终补记以所属记录为准。
+- 推导：四run历史参照`4×min/max(B1 wall)`=40.644727394–41.059386675h；L ON+final外推`(6355.128382/6)×(1+1184/196)/3600`=2.071541281h，主体42.716268675–43.130927955h，未含新增Q，比现场窗口多1.873268783–2.287928063h。原占额`4×12+4=52h`，加G1/L ON各0.5h占额代理为53h，再加未包围Q；均不是必需下界。旧评估/保存已含完整run，不重复加。历史硬件/并发/轨迹和新版诊断不等价，无工期保证。
+- 工程选择（**未批准/未实施**）：C旧科学＋新版本完整性组合；C host以旧1800s阶段cap政策计费替换618.796192884s下界，保prelaunch6.389356852s、增加1181.203807116s，仍不补exit0/消其它UNKNOWN；真实job wait/CPU control/GPU union/拟预留分账、真实收据API/续接执行协议必要适配；延期须另决定。候选30s不是真实已测上界。严格重测C须额外196，不挪现10788分配。
+- 采用方式与限制：[父RESULTS §20一页决策表](tasks/task9/task9.11/RESULTS.md#20-2026-11-04正式实验放行评审一页决策表)为本次主交付；[详细计算/最小收据/下一派发及停止条件](agent_logs/task9/task9.11/20261104-codex-release-review.md)。原58h/2TiB/8GiB及11-06 03:18:20截止继续，formal0/test0。本条不构成新实验授权、不虚构历史终态、不改旧原件/签字或既有会计实现。
+
+SRC-1428末检补记：2026-11-04T10:34:26.862280+08:00，[原始末检收据](agent_logs/task9/task9.11/release-review-final-check-20261104.json)；日历余146633.137720s=40.731427144h，worker下界4992.992612407s、余额仅上界203807.007387593s（56.613057608h），新增仅两次不重叠budget reader已返回wall，其他会话/核查/文档尾UNKNOWN。原阶段53h占额超44166.862280s=12.268572856h，历史主体参照超7145.429509824–8638.202919779s=1.984841531–2.399500811h；logical34056054941B、诊断922739041B，余额2164967200611/7667195551B，后续仍扣。GPU compute仅task10 GPU1/PID970022、7750MiB；源171项无变化，本次新增文档链接均有效，git diff --check rc0；未复跑替身或实验。
+
+<a id="src-1429"></a>
+## SRC-1429 — 用户采纳task9.11放行评审推荐并授权准备适配
+
+- 来源类型：用户本会话明确指令“全部按照你的推荐运行”，2026-11-04 Codex登记；[原话与边界记录](agent_logs/task9/task9.11/task9.11.17/user-approval.json)。具体推荐为SRC-1428/父RESULTS §20，非开放式扩大科学范围。
+- 已批准：旧C科学原件＋新版本完整性门限定承接且旧FAIL保留；旧C host以原1800s cap作政策核销、替换618.796192884s下界，prelaunch保留；有限job wait/CPU control/GPU区间/预留分账原则；下一项task9.11.17必要真实收据与续接入口适配/草案、独立责任另指派审核和可行性复审。
+- 限制：采纳的是“当前继续不放行，先补账/入口证据”；未批准延期具体截止/增加累计预算或额外196；30s控制包络未当真实上界。原58h/2TiB/8GiB及11-06 03:18:20截止继续；本准备节点无真实G1/模型/环境/正式前缀/最终测试/执行令。其余历史UNKNOWN须逐项恢复或另交政策决定，不因局部核销消失。
+- 应用：落实在[task9.11.17](tasks/task9/task9.11/task9.11.17/TASK.md)及其独审.17.1，父原件验收后再议真实验证，模型推荐GPT6.1sol/high与Sonnet5.5/high（跨设备/成本/准入审查），实际未知。
+
+<a id="src-1430"></a>
+## SRC-1430 — task9.11.17真实root-wait/设备收据读取与不可执行正式协议草案
+
+- 支撑主张：落实SRC-1429授权，旧C1800s局部政策核销与限定科学承接已写入新覆盖账/草案；真实root wait不自证设备/控制尾；新增设备证据reader和生产草案读取通过限定准备验收，完整真实执行仍NOT_READY。
+- 类型/作者/版本/核查：项目实现、标准库必要验证、原件核查与工程选择；FoReM/Codex，2026-11-04；最终175源SHA`46218cc54e5f88ae0b38953ddcb5d6d80625161e13264b80b34c8dd0c423f587`。[freeze-v2](agent_logs/task9/task9.11/task9.11.17/freeze-v2.json)，[必要变更冻结副本](agent_logs/task9/task9.11/task9.11.17/frozen-source-v2)。相对原171仅3改4增，168原源不变，科学四配置/worker/训练/记录器/环境未改。
+- 精确符号：`forem/src/task9_lr/real_receipts.py:wait_command/validate_wait/reviewed_intervals/cost_source`、`execution_draft.py:policy_accounting/build/validate/write`；生产`admission.protocol_read/read_release/check_resources`及`gpu_costs.evidence/command`接入；`scripts/task9_11/prepare.py --execution-draft`与`receipts.py`纯准备CLI。真实device reader需独立前后原inspect/实际wait绑定，CPU空集也需严格无卡分配/无危险挂载证明；CPU标签、环境变量、无采样进程不接受。
+- 实测原件：当前父22项rc0，[外包真实wait](agent_logs/task9/task9.11/task9.11.17/commands/incremental-tests-v3/wait-receipt.json)含原argv/cwd/rc/wall/source快照与stdout/stderr；先前20/21项及独审两失败全保留，均非科学回合。root.wait用regular输出文件，超时精确自身进程组后额外root wait≤1s是准备工具工程退出等待选择，无法返回保UNKNOWN；不是OS硬上界/科学预算依据。没有复跑SRC-1423矩阵。
+- 父直接核验：[parent-acceptance-v2](agent_logs/task9/task9.11/task9.11.17/parent-acceptance-v2.json)及[真实外包收据](agent_logs/task9/task9.11/task9.11.17/commands/parent-acceptance-v2/wait-receipt.json)，175当前/冻结源、168旧源、独审518引用、28原stderr、5旧反例manifest、实际命令费用与所有拒执行边界核真，不用子自报代验收。
+- 账/草案：[execution-protocol-draft-v2](agent_logs/task9/task9.11/task9.11.17/execution-protocol-draft-v2.json)、[11:02:36现场/预算](agent_logs/task9/task9.11/task9.11.17/readiness-and-budget-v2.json)。C政策只加1181.203807116s，保prelaunch6.389356852s，旧FAIL/host exit null与所有其它UNKNOWN保留；后续root wait只取并集安全下界并另列sum，不伪造完整累计worker。新增175源草案可读取但execution_allowed=false、stage release空、control数字null、新namespace不创建；输入/配置/SHA及11节点DAG冻结，250k属于各3M。
+- 原结论/采用限制：独审[SRC-1431](#src-1431)与父均只接受准备原语/草案。真实costs.inherited/动态控制及实际dispatcher/容器生命周期完整链没有获准运行或完成真实验收，不能把GPU schema正例当物理设备实测；当前host CPU外包收据GPU仍UNKNOWN。历史完整成本、控制尾、旧allocation时序basis、新G1/LON/成熟profile/save/restore/真实Docker尾和原窗可行性仍阻断。下一步必须针对这些具体缺口另行授权/验收，不翻flag。原58h/2TiB/8GiB/11-06 03:18:20及4000smoke/980评估/formal0/test0不变。
+- 所属事实来源：[task9.11.17 RESULTS](tasks/task9/task9.11/task9.11.17/RESULTS.md)，详细操作/失败/预算/交接[日志](agent_logs/task9/task9.11/task9.11.17/20261104-codex-real-receipts.md)。推荐GPT6.1sol/high与Sonnet5.5/high（进程/设备/旧账准入），实际未知；本次未加载模型/控制Docker/运行科学实验/签令。
+
+<a id="src-1431"></a>
+## SRC-1431 — task9.11.17.1独立审核：真实准备原语/草案限定通过
+
+- 支撑主张：新增真实wait、source/cost时钟绑定、真实设备schema production reader与不可执行草案独立28项通过；3种shell越出作用域和CPU缺/未来StartedAt共5反例关闭，原失败及输入保留；真实NOT_READY。
+- 类型/作者/版本/核查：项目独立标准库核验与归档证据，Codex独审2026-11-04，最终同175源46218cc5…c423f587，实际模型/强度未知，推荐GPT6.1sol/high与Sonnet5.5/high。
+- 原件：[正式独裁](agent_logs/task9/task9.11/task9.11.17/task9.11.17.1/FINAL-INDEPENDENT-VERDICT.json) SHA`472909aa2a414b3cd1565b69f8814415d90822d56d563424318a0cd0b98234d4`，28项原输出/518稳定引用/source-after及[5旧输入同字节manifest](agent_logs/task9/task9.11/task9.11.17/task9.11.17.1/raw-v2/test_26_original_v1_five_counterexample_inputs_now_reject/same-original-input-manifest.json)。[独审三文档结果](tasks/task9/task9.11/task9.11.17/task9.11.17.1/RESULTS.md)、[独立过程](agent_logs/task9/task9.11/task9.11.17/task9.11.17.1/20261104-codex-independent-real-receipts.md)、[真实草案/预算追加独核](agent_logs/task9/task9.11/task9.11.17/task9.11.17.1/parent-handoff-independent-check.json)。
+- 失败/费用：v1主22项19过3FAIL，修复期额外2项也FAIL；父必要修复后同五输入重审拒绝，未改期望以放过。正式独裁3外包wait合7.353106319904s，另finalizer与两次父交接checker（初版sealed字典误断言rc1，修checker rc0）使独审6次top wait共8.798099545762s；均保存实际receipt/source快照，父最终账追加且不叠内嵌惰性wait或GPU逻辑计时。完整会话/发布退出尾仍UNKNOWN。
+- 适用限制：CPU/GPU allocation正例与shell/time反例都是惰性JSON schema输入，不执行其Docker/shell/GPU argv；实际CPU命令仅标准库收据/自写检查。没有模型/环境/科学回合/真实Docker控制/新GPU调用或阶段令。原科学/预算/截止和旧STOP不变；通过只限准备工程，不补历史终态，不证明完整可运行costs/inherited/控制链、真实设备或全案工期。
+
+SRC-1430最终账补记：[v3现场/费用](agent_logs/task9/task9.11/task9.11.17/readiness-and-budget-v3.json)与[当前v3不可执行草案](agent_logs/task9/task9.11/task9.11.17/execution-protocol-draft-v3.json)，2026-11-04T11:07:27.765359+08:00；政策下界6204.463643357s、余额上界202595.536356643s，含C政策1181.203807116s，实际测下界仅5023.259836242s；新10份top wait union下界30.267223835s，所有失败与独审6命令均入，完整会话/设备/控制尾UNKNOWN。日历144652.234641s；53h占额超46147.765359s（12.818823711h）＋Q，历史参照超2.535092386–2.949751667h＋Q；仍无必需下界证明。logical34057978835B/诊断924662935B，余2164965276717/7665271657B，40GiB预留保留。快照外包随后实测1.417020384222s，政策下界至少6205.880663741643s，之后尾不补0。v3只更新返回费用、同175源/同validator；独审模板v2而非新阶段许可。
+
+SRC-1430最终完整性补记：[只读原件](agent_logs/task9/task9.11/task9.11.17/final-integrity-v2.json)，175源/74本地链接/HEAD/无新namespace/git diff --check均通过；[该已返回wait](agent_logs/task9/task9.11/task9.11.17/commands/final-integrity-v2/wait-receipt.json)另0.464768260717s，政策已计下界至少6206.345432002360s。非完整会话封口，当前尾UNKNOWN，真实NOT_READY。
+
+<a id="src-1432"></a>
+## SRC-1432 — 启动延误复核与单次条件派发建议
+2026-11-04 Codex，只读核.17 freeze-v2 的175源及.17.1独裁518引用SHA、宿主task9.11进程和原截止。历史主体42.716–43.131h沿SRC-1428，剩余日历按原截止减当前时间。顺延24h及整批条件派发是待用户决定的工程选择，仅改日历窗口、不增累计worker/GPU或科学预算。依赖、取值及限制见[记录](agent_logs/task9/task9.11/task9.11.17/20261104-codex-startup-decision.md)。
+
+<a id="src-1433"></a>
+## SRC-1433 — 延期与整批真实执行授权
+2026-11-04 用户在SRC-1432具体提案后回复“全部批准”，Codex核查。原T0不改，日历截止2026-11-07T03:18:20+08:00（日历82h）；worker/GPU各58h、2TiB和全部科学预算不变。真实阶段逐门独立核验后自动续行。仍未知的旧费需有证据上界，否则报具体缺口。 不覆盖旧FAIL、UNKNOWN或独立准入。授权对象与阶段见[任务](tasks/task9/task9.11/task9.11.18/TASK.md)。
+
+<a id="src-1434"></a>
+## SRC-1434 — .18宿主会话包围与分阶段预算初审
+2026-11-04 Codex父及.18.2独立审核，基于state_5.sqlite的task9工作树线程及子关系、rollout任务起止事件、原命令/容器封口；仅提取生命周期元数据。完整输入口径见[父提取器](agent_logs/task9/task9.11/task9.11.18/host_turn_audit.py)及[独审v3](agent_logs/task9/task9.11/task9.11.18/task9.11.18.2/independent-budget-precheck-v3.json)。截至v2快照全取40线程的69活动时段共47519s，另保守计未定位命令62.853659s与已批准C局部政策增额1181.203807s，历史已耗候选包围48763.057466s，余160036.942534s。旧容器完整保守7252.530198s落在实施者turn内；不把宿主会话求和当精确实际耗时。当前增量/尾、额外未覆盖活动须另计，真实设备归属和控制费用仍需准入核实。按该快照有界G1与L ON各1800s预算数值可容纳；正式主体42.716–43.131h＋Q，不能自动释放正式训练。日期延期/资源原限见SRC-1433。
+
+SRC-1434 GPU补证：见[独立保守预留](agent_logs/task9/task9.11/task9.11.18/task9.11.18.2/conservative-pregate-budget-review-v1.json)。截至对应快照，按实查4张卡×已覆盖活动区间并集25842s，另含未定位命令与政策项的保守占额共108344.229863540s，其中7252.530197859s为已证旧曝光，101091.699665682s仅为不明归属的最坏准入预留。新活动与范围外后台另扣；此预留仅数值支持新G1和随后L ON，不将预留报为实际GPU费或直接放行正式训练。
+
+2026-11-04T11:32:34.885431+08:00 · SRC-1433授权更正。用户澄清本聊天仅提供提示词，由用户自行派发。此前本聊天对“全部批准”的直接开工解释有误，本聊天派工已撤回，.18/.18.1/.18.2停止，等用户另行派发。 原准备产物保留；不得用更正前的授权文件或快照启动。
+
+<a id="src-1435"></a>
+## SRC-1435 — task9.11整批执行新的正式派发
+
+- 来源：2026-11-04本会话用户直接正式派发；Codex同日登记，[授权原件](agent_logs/task9/task9.11/task9.11.18/direct-dispatch-authorization-20261104.json)，精确范围见scope/limits/remaining。旧SRC-1433撤回不恢复。
+- 采用：只延日历至北京时间2026-11-07 03:18:20，原T0及worker/GPU各58h、2TiB/8GiB不变，全部旧成本继续计。先真实链独审与G1/L ON分别预算，门通过后G1、L ON196、全案预算、C4718→L4718→C4719→L4719各从头3M/各250k审核，开发通过才一次final1184。唯一科学变量actor/critic学习率日程；严格成功主指标，随机/语义分报。
+- 限制：旧C科学组合＋新完整性限定承接，旧FAIL保留，C1800s仅局部政策，其余UNKNOWN逐项处理；不增加smoke/评估/资源，不影响task10，真实失败或全案不容纳停止相应阶段并集中交回。
+
+<a id="src-1436"></a>
+## SRC-1436 — 新派发前置预算独审及父复用核查
+
+- 类型：项目原件只读核查、独立预算推导与工程保守准入预留；Codex父/.18.2，核查2026-11-04，非精确历史实测总账。依据新授权SRC-1435。
+- 原件/位置：[父复用核查](agent_logs/task9/task9.11/task9.11.18/parent-initial-reuse-check.json)的queries/source_manifest/legacy_L_checks，核当前科学matrix和封存runtime及旧L checkpoint/OFF/parity/config/summary哈希全部匹配；无加载模型。首次host Python无hashlib.file_digest失败见同目录attempt1，流式SHA重核通过，耗时进入本次会话包围。
+- 独审：[当前预算v1](agent_logs/task9/task9.11/task9.11.18/task9.11.18.2/current-pregate-budget-review-v1.json)、同目录refresh_budget_review.py及host-turn-envelope-direct-v1.json。43线程73时段、3open身份，旧spans不缩短，全部旧引用哈希核对；worker包围50225s＋无定位实测62.853658770s＋C已批局部政策增额1181.203807116s＝51469.057465885s，较旧快照增2706s；GPU按4卡×活动union26851s及无定位/政策保守预留112380.229863540s，内含原已证容器曝光7252.530197859s，余为UNKNOWN归属最坏占额。二者均非精确实际历史使用量，旧UNKNOWN/FAIL保留。
+- 采用/限制：仅数值允许G1/L ON分别有界最多1800s；合3600s后worker余153730.942534115s、GPU余92819.770136460s，当前快照之后准备/审核/真实控制/退出继续扣。实际完整入口/授权/源/命令/精确CID/设备/独立令未通过前不得执行，不释放正式四run；不得用待实测成熟训练反阻前两门。父尚须核独审关键输入；限定旧C组合、阶段限额不变。
+
+<a id="src-1437"></a>
+## SRC-1437 — task9.11.18.1新授权G1入口稳定候选与父核
+
+- 类型：必要实现/stdlib工程验证/原件核查，Codex实施与父，2026-11-04；推荐GPT6.1sol/high、Sonnet5.5/high（实际wait/跨域引用/租约/预算），委派sol/high，实际后端强度未独立核实。授权SRC-1435。
+- 版本：[freeze-direct-v2](agent_logs/task9/task9.11/task9.11.18/task9.11.18.1/freeze-direct-v2.json)，180源SHA4b69383c0f96ed2951248c7fc27648a0de00d11b7e2dd48355526beaf253ad93；[真实协议](agent_logs/task9/task9.11/task9.11.18/task9.11.18.1/real-contract-direct-v2.json) SHA d1ba6388149ac7a39dc5479ae0ca60f1bc1cc0f2f374922f8638ef8bd8d3efdf；精确变更/5次wait及待办见[交接](agent_logs/task9/task9.11/task9.11.18/task9.11.18.1/implementation-handoff-direct-v2.json)。
+- 具体：real_batch绑定新直接派发原件，real_g1绑定独审原件和完整infra allocation租约/G1剩余租约/精确ID cleanup；admission/supervise/worker必要G1路由，原科学矩阵/训练/环境/诊断字节不变。父[151科学文件字节核查](agent_logs/task9/task9.11/task9.11.18/parent-science-byte-acceptance.json)全部匹配；这不是全部执行路径审查替代。
+- 实际验证：commands/direct-incremental-v1首次授权字段形状不匹配rc1，保留；v2–v5各增量修订后rc0，最后v5原stderr为50项/10.993s。5次外包actual root wait合50.492596093565s，含首次失败；已纳会话包围，不重复再加。真实Docker/GPU/模型环境调用0。独审指出host/container allocation_lease ref跨域不匹配并在v2修复，同阶段门不可用仅host单域正例代验。
+- 父接收：[parent-G1-implementation-acceptance-v2](agent_logs/task9/task9.11/task9.11.18/parent-G1-implementation-acceptance-v2.json)核当前180源digest、冻结manifest/protocol、5原wait/exit与stdout/stderr哈希；不冒充独审或真实G1通过。
+- 限制：当前只为G1稳定候选。真实source/budget/infra/G1独立令仍待；L ON196、四个250k/remaining与final入口尚未接通，不能称整批实现或实验交付。旧F1/F2/GPU两账/SRC1423结论保留、不重做；所有原科学/额度不变。
+
+<a id="src-1439"></a>
+## SRC-1439 — G1基础设施实际准入发现及精确停止（无G1/回合消费）
+
+- 类型：独立源审/真实Docker分配与actual wait/原始inspect核查/工程修复；Codex实施、父与独审，2026-11-04；授权SRC1435，既过F1/F2/GPU两账/SRC1423不重做。
+- 独审180源4b69383c…253ad93及10项新边界通过，仅签[基础设施单门令](agent_logs/task9/task9.11/task9.11.18/task9.11.18.2/releases/infrastructure-direct-v2.json)，SHA76ac96a1ae6f1fc4ee4b667ef2c078e8ead62f052f5d9cb0814e0adf6c1c10ff；父核source/budget引用及生产release准入，[父接收](agent_logs/task9/task9.11/task9.11.18/parent-infrastructure-release-acceptance.json)。真实prepare-g1 rc0，精确launch wait/inspect在.18.1/commands/infrastructure-launch与infrastructure-inspect；不是G1令/训练。
+- 真实发现：Docker同CID多次Mounts数组排序变化，原list比较会误拒inner/cleanup。独审保首次审核FAIL及第二实际query，未签G1。父选择先精确停本次CID而非新增同allocation协议迁移机制。
+- 真实停止：[父raw stop/wait/inspect](agent_logs/task9/task9.11/task9.11.18/parent-infrastructure-exact-stop.json)，完整CID ca9a26c96080722913bc92a7424f6ecddeac9e5be33169d819e95af47981fc74，image/每项Mount字段/用户/UUID/StartedAt/RestartCount按语义核全一致后，只对此CID执行stop --time5、wait、inspect，rc0，wait退出137；[独立fresh复查](agent_logs/task9/task9.11/task9.11.18/task9.11.18.2/infrastructure-stop-cost-review-v1.json)。StartedAt2026-11-04T03:45:26.209192334Z至FinishedAt03:47:38.931581968Z，实际GPU132.722388983s。1920s原准入预留保历史，因精确Stopped封口才有未用1787.277611s；不得重复加到已含该区间的4卡turn union。所有control/准备/审核成本继续扣。
+- 修复：v3 180源71478d445f2c8e8f06ffa43e95d7f46d8eb46127020a6280f388f245487cefc0，[freeze-direct-v3](agent_logs/task9/task9.11/task9.11.18/task9.11.18.1/freeze-direct-v3.json)及同目录frozen-source-direct-v3；相对v2只real_g1.py和专用stdlib测试2文件改，178不变。完整挂载字典按canonical JSON排序，所有字段/重复项保持参与比较。14项回归rc0，实际wait1.666425498s，commands/mount-order-fix-v1原件；独审待定点重核。
+- 限制：旧协议/阶段令不迁到修后源码；没有新namespace/再次分配/G1/模型/环境/新增转移或评估，旧980/4000保持。历史3PTY根退出缺证正在.18.3核实，可能影响预算包围，未补证前暂停新令；不将缺receipt直接说成实际四卡长期使用。task10未触碰。
+
+<a id="src-1438"></a>
+## SRC-1438 — task9.11.18.3历史工具/PTY根及源码证据库存
+
+- 类型：项目原始tool输入输出生命周期核查、原源码重建/哈希与可达路径调查；Codex独立证据子任务，2026-11-04，授权SRC1435，推荐GPT6.1sol/high、Sonnet5.5/high，实际后端强度未核实。
+- 原件：[FINAL-INVENTORY-v1](agent_logs/task9/task9.11/task9.11.18/task9.11.18.3/FINAL-INVENTORY-v1.json)及同目录ARTIFACT-MANIFEST-v1.json、tool-only输入/输出/逐line SHA、session-closure-v1、command-source-analysis-v1、three-historical-roots-v1/three-root-source-reachability-v1，可重核脚本均封manifest。父[固定证据接收](agent_logs/task9/task9.11/task9.11.18/parent-historical-inventory-acceptance-v1.json)逐文件hash/bytes与135计数核过，未伪称全图证明。
+- 固定快照截至北京时间11:41:22.388873，44线程、2113 tool calls、配对解析/映射问题0；135真实PTY，其中131原tool根终态、4快照缺终态，3旧为83240/16223/90732，同原call938c495…，另22434为本次准备快照仍开。此前128漏7种嵌套返回已纠正，初始中间报告保留。调用区间union547.928999s不是GPU上界，禁止直接用以释放余量。
+- 3旧child receipt exit0/wall9.928461753、37.566982770、1.115702841s，原159项manifest各核对snapshot，wrapper由原创建+修改事件重建，subprocess.run(timeout90)后写record/print/return/sys.exit。tests可达后代为fixture/stdlb sleep/signal，实际worker adapter在nvidia/activate/torch分支前return；具体位置在source-reachability原件，不以文案CPU标签判0。outer根退出时间仍UNKNOWN；3旧只读poll均Unknown process id，不当原退出证据，当前同UID/proc与独立排GPU裁决另见.18.2。
+- 采用与限制：该子任务交可核证据，不签stage令、不授policy、不给global worker/GPU upper；detached全图未闭合，不能据135根统计宣称后台全无。未poll不等于实际四卡长期占用。预算保原4卡turn并集＋独立确认的3旧CPU外根起点至现场保守worker窗口，是否能准入由.18.2按完整资源重裁。快照后所有准备/审核成本仍计。
+
+
+SRC-1438实际终态补证与范围更正（2026-11-04）：原session解析器只读response_item/poll，漏了event_msg.item_completed内CommandExecution终态；“缺原outer终态”属于扫描覆盖缺陷，不能继续当证据不存在。父与独审各自直接读原rollout，三根原server终态已找回：[父原始三行及精确line/hash/start_ms/completed_ms/argv](agent_logs/task9/task9.11/task9.11.18/three-old-roots-server-terminal-recovery.json)、同目录raw.jsonl；[独审独立恢复](agent_logs/task9/task9.11/task9.11.18/task9.11.18.2/three-old-root-actual-terminal-recovery-v1.json)。旧thread01a1a1c4…原line572/574/587分别process90732/83240/16223、status completed/exit0，原server区间1.007/9.820/37.458s，均处既有task9.11.9 turn内。与child单调时钟wait分开，不叠加扣费；之前142767.452714s全窗只为缺证候选保守预留，真实终点核真后可替代，不是擅自政策核销，不消其它UNKNOWN。当前准备22434也有原server与成功poll双证据：[恢复原件](agent_logs/task9/task9.11/task9.11.18/task9.11.18.1/terminal-recovery-22434/terminal-recovery.json)。
+
+SRC-1438归档更正：子Agent在称冻结后同名补写FINAL/manifest，导致早期引用SHA不匹配。旧独审/父接收检查结果保留为当时记录，不能冒充当前引用仍有效；子已反向恢复最早v1并按旧hash验真，最新覆盖版单独存v2，具体v1-recovery-status-v1.json记覆盖事实、恢复过程和适用限制。后续只引用独审稳定原始输入副本/独立server三行，不依赖会改的汇总。父后续接收必须按目标版本重核；该归档错误不涉及科学/容器原件被改写。
+
+SRC-1439修复独审补证：[mount-canonical-independent-review-v2](agent_logs/task9/task9.11/task9.11.18/task9.11.18.2/mount-canonical-independent-review-v2.json)，180源71478d44…7cefc0一致；实际4挂载24排列等价、每项6字段共24个变异均不同、重复项不丢、旧协议源漂移拒绝。v1文字将24误写28，v1原字节保留、v2只更正计数。父[parent-mount-fix-source-acceptance-v3](agent_logs/task9/task9.11/task9.11.18/parent-mount-fix-source-acceptance-v3.json)核当前/冻结180及仅2改178同，不是新执行令。
+
+SRC-1438父归档接收补记：[parent-historical-inventory-acceptance-v2](agent_logs/task9/task9.11/task9.11.18/parent-historical-inventory-acceptance-v2.json)直接核[EVIDENCE-CORRECTION-v1](agent_logs/task9/task9.11/task9.11.18/task9.11.18.3/EVIDENCE-CORRECTION-v1.json)两版本manifest及33个明确归档别名的hash/bytes。最早v1 f687caf9…16项已恢复，最新归档v2 ec96525a…17项原字节保留；父早期acceptance-v1实际核的是归档v2，在最早v1恢复后旧path/hash引用不再有效，v2接收明确更正引用，不删除历史。独审后续实际server终态和源码裁决不绑定可改汇总。
+
+<a id="src-1440"></a>
+## SRC-1440 — 实际r2收据目录冲突与run-id隔离必要修复
+
+- 类型/核查：真实准备入口失败、必要工程修复/stdlib验证/父原件核查，Codex父/实施/.18.2独审，2026-11-04，授权SRC1435；推荐GPT6.1sol/high、Sonnet5.5/high，跨实例收据身份与准入因果。
+- 真实FAIL：[父r2实际prepare失败](agent_logs/task9/task9.11/task9.11.18/parent-r2-prepare-failure.json)，r2协议1b88c858…32a591及infra令0c2efda5…0cf82均保留；实际rc1/FileExistsError，固定.18.1/commands/infrastructure-launch已由r1占用。real_receipts.py line89 mkdir(exist_ok=False)在line110Popen前，故本次docker-run未发生。r2只有RESERVED/lease/4config/protocol，无cid/container.json。[独审因果核查](agent_logs/task9/task9.11/task9.11.18/task9.11.18.2/r2-prelaunch-failure-review-v1.json)。不是G1/科学重试，新增转移/评估0；只本次allocation区间0，host准备与失败完整会话仍计预算，不把全部GPU未知归0。
+- 修复候选：180源fda8ddf6109b587b91b2d423dad39a54b9d104767d9f17a0c4ec451307af8a37，[freeze-direct-v4](agent_logs/task9/task9.11/task9.11.18/task9.11.18.1/freeze-direct-v4.json)。相对v3 5必要源改/175同，b.receipt_root(value)=RECEIPT_ROOT/run_id，infra launch/inspect、CLI G1 rootwait及control/probe/读收据统一限同run子树，不覆盖旧原件；独立真实生产mock验证2不同run不冲突、同run重复拒、跨run与逃逸拒。
+- 实测：commands/receipt-run-isolation-v1/wait-receipt.json actual rootwait11.580307033s/rc0，原stderr55项通过，已poll真实终态，源前后快照保留；无Docker/GPU/模型/环境实际调用。[父核](agent_logs/task9/task9.11/task9.11.18/parent-receipt-run-isolation-source-acceptance-v4.json)直接核当前/冻结180源与实际rc0原stderr，独审与新令仍待。
+- 身份：fresh-r3协议real-contract-direct-v4-r3.json SHA2f6b83b2c810212f2dc48ddbd67b26ad49f2d933a77f6fc87d9cd84e7cbeb19b，只doc协议，无新results/log namespace或分配；旧r1已停，r2身份不复用。L ON/正式/final尚待适配；不称G1/训练已启动或整批已交付。
+
+<a id="src-1441"></a>
+## SRC-1441 — r3真实G1完整独立通过及父接收
+
+- 类型：项目真实GPU科学白名单测试/生命周期与设备/预算原件独审，Codex父/独审，2026-11-04；授权SRC1435，180源fda8ddf6…af8a37，r3协议2f6b83b2…cbeb19b。推荐GPT6.1sol/high、Sonnet5.5/high（真实链/实际设备/成本），实际后端强度未独立核实。
+- 原件：[完整独裁](agent_logs/task9/task9.11/task9.11.18/task9.11.18.2/REAL-G1-r3-INDEPENDENT-VERDICT-v1.json)，SHA75347054af33b3d10cbd4a66d83f2ef0209cf90d985b7bbc8c7fa4a0b23ce2f5；actual root wait在.18.1/commands/t9.11-real-direct-20261104-r3/real-G1-root-wait/wait-receipt.json，SHAa023842f5dd5d939015087dcbb819486dd3e5672bcdb424b511634f84eec6de3。run=t9.11-real-direct-20261104-r3，exactCIDaceae3f432a99e77337774de9248d362acf60db559bef407a141fb6fc97d77d2，GPU-e2eab186-4b18-f63f-2ada-c61aa98ed587。
+- 实测：唯一已审test_contract.py白名单14项pytest通过/6.19s，policy/replay/actor/critic/α优化器全部cuda:0，torch2.7.1+cu128/CUDA12.8，0真实环境/转移/回合；worker8.471122546s、owner actual wait9.778316379s、外包wait10.329140872s嵌套不相加。actual owner/guardian/watcher/client均exit0且身份已退出；原父server CommandExecution --execute-g1也completed/exit0（独审封raw原line1069）。
+- allocation：StartedAt2026-11-04T04:03:38.069836912Z→FinishedAt04:05:10.925243486Z，实际GPU92.855407s，fresh exact stopped inspect核过；1920s原拟租约保历史，实际区间处4卡turn包围内不得重复叠。全会话发布尾仍按metadata保守计，不把内部UNKNOWN补0。
+- 验证与采用：[父raw核查](agent_logs/task9/task9.11/task9.11.18/parent-G1-r3-actual-evidence-check.json)及[父独裁接收](agent_logs/task9/task9.11/task9.11.18/parent-G1-r3-independent-acceptance.json)直接核独裁所有direct原件hash、181源前后快照、完整实际wait与原server终态；不是仅引用子自报。
+- 限制：通过仅G1。原只读根torch kernel cache目录不可写警告保留，未CPU回退，不称成熟吞吐/保存恢复实测。旧C完整门FAIL永久保留；旧C科学组合还须L ON196完整门非干扰核验。L ON/正式/final未运行、未签对应令；新增真实转移/评估0，累计4000/980保持。
+
+<a id="src-1442"></a>
+## SRC-1442 — L4718 ON196入口限定适配、旧合同先验和独审基础设施门
+
+- 类型：必要真实入口实现/stdlib工程验证/旧输入流式哈希与科学合同独审，Codex实施/父/独审，2026-11-04；授权SRC1435、前置真实G1依据SRC1441。推荐GPT6.1sol/high、Sonnet5.5/high，因旧合同加载与非干扰/设备/196额度/历史字节联审。
+- 原件：[freeze-l-on-v2](agent_logs/task9/task9.11/task9.11.18/task9.11.18.1/freeze-l-on-v2.json)，182源26308d91fd299ff55d2cdc84b21172210e5df59826aa870aaafb7bd93d87dd0d；[协议](agent_logs/task9/task9.11/task9.11.18/task9.11.18.1/real-contract-l-on-v2.json) SHA3ef796fd5ec3ae91fb9194e78d0d50c2758fba8e0d03c7a11a99b261aaf867cb。相对G1源180为6必要改/2增/174同，151科学/记录器/runtime字节不动。v1与v2均保留，v2只增加既有加载结果的只读actual设备观测，不重做G1。
+- 具体实现：real_lon.py严格固定旧L4718 step1000检查点/config/summary/OFF/parity与原完整source549b98…；先完整hash再activate/加载，types.FunctionType复用原load_checkpoint同一code对象及除私有_contract外相同globals副本，令原loader继续严格比精确旧合同/格式/池hash/unsafe/恢复/RNG，不修改原模块globals、不通用忽略合同或重签旧模型。actual network/replay/optimizer各field设备记录；原loader非capturable/nonfused CPU step标量按实际保留，参数/moment必须cuda0。
+- 完整同链：exactCID/UUID/租约/owner-guardian-watcher/root实际wait沿SRC1441必要路由泛化，仅允许L/4718/gate-evaluate；预检旧980，单门写前额度196，resource view扣旧storage/diag并含diagnostics目录.pt/日志/agent证据，原封科学和总额度不变。无smoke/新训练分支或额外C ON。
+- 实际验证：5轮l-on-adapter原wait合67.415492464s，最后完整69项rc0及跨域15项rc0；增加actual device16项rc0/wait4.671107085s，总72.086599549s，均原source前后/真实终态保留，无模型/环境/GPU实测。[父v1核](agent_logs/task9/task9.11/task9.11.18/parent-LON-source-acceptance-v1.json)与[父v2核](agent_logs/task9/task9.11/task9.11.18/parent-LON-source-acceptance-v2.json)核当前/冻结182、diff与原stderr。
+- 独审旧输入：[LON-legacy-input-science-independent-v1](agent_logs/task9/task9.11/task9.11.18/task9.11.18.2/LON-legacy-input-science-independent-v1.json)实际流式核五旧输入/151科学及旧OFF545.795874s/step1000/parity4568/75updates；仅输入先验，不是LON实验通过。独审新源另自写8边界rc0/3.510s，原源码/模型环境零调用。
+- 基础设施门：[唯一infra令](agent_logs/task9/task9.11/task9.11.18/task9.11.18.2/releases/infrastructure-LON-v2.json)，SHAb394e8eca3fd7189aef0c3290af81924bc082c3a0b0e3bd792500d733ed46550；[父原件准入核](agent_logs/task9/task9.11/task9.11.18/parent-LON-infrastructure-release-acceptance-v2.json)。infra cap1800/control420/完整lease2220s，420仅工程保守占额（参考前两真实132.7/92.9s准入，含CID审查预留），不是测得OS硬上界；LON自身cap1800/control120/save120，科学196不变。
+- 实际prepare-l-on rc0，CID22068d0d9d1c037ef715d5e414216cb86ef3f80ec4c187613a2f9707b66ccf9d，GPU-e2eab186…d587，hostPID1081429，2026-11-04T04:23:57.628523273Z启动；actual launch/inspect在.18.1/commands/t9.11-real-l-on-20261104-r1/。只是基础设施，精确CID LON阶段令/真实模型与196回合仍待独裁，不称训练启动或实验交付。所有旧费用/UNKNOWN/FAIL与原58h/2TiB/8GiB保留。
+
+<a id="src-1443"></a>
+## SRC-1443 — 历史实际根/源码分层预算补证（尚未整体采用）
+
+- 类型：只读生命周期/server命令元数据、原源码字节恢复/静态可达性与保守预算推导；Codex父/.18.3调查/.18.2独审，2026-11-04，授权SRC1435。推荐GPT6.1sol/high、Sonnet5.5/high，因异步后代/设备/多版本源码因果；非实验、不授新policy或资源。
+- .18.3第二轮原件在agent_logs/task9/task9.11/task9.11.18/task9.11.18.3/stage2-v1/：COMMAND-METADATA-v1.json与原CommandExecution行，固定初始44线程1824个已终态根（2760内部item_completed事件去重），outer最早call至server最晚terminal根区间向外整秒并集6060s/worker根时长和6866s。此数不包当前live/越根后代，不能直接作为最终GPU/worker账；LAYERED候选各版本明确unknown turn/越根尾，未经独审不可采用。
+- 父两项原SHA源码恢复：[supervise-cacb](agent_logs/task9/task9.11/task9.11.18/parent-supervise-cacb-recovery-v1.json)从原01a1a1f7 thread line227/call_d9066…的真实patch提取old/new字面量，反向唯一costs.locked block，3份原e14c0b9f备份均复得完整SHA cacb082dfba2ebc27a78d45112eed03f6d534f89b6049bfd2b60d04cc389d01f；[cross_stage-3378](agent_logs/task9/task9.11/task9.11.18/parent-cross-stage-3378-recovery-v1.json)从原line103/call_330908…完整cat heredoc字节直接复得SHA3378aedf7d28b9a4b9ef8b847e21bf5c7ec70d88e200c1d23aa2255373552d53。只提取文本/hash，不执行旧模块或改生产。
+- 父[三原审查helper创建体](agent_logs/task9/task9.11/task9.11.18/parent-original-review-helper-sources-v1.json)原line692/759/1001与root terminal原行/SHA完整，check_smoke512/check_smoke1000是纯stdlib import/FS/math，issue_smoke_release另import archive_small；只是原create版本AST筛查，不代表后续每次实际argv对应版本已核或整个custom import图无越根后代。
+- 独审局部：[old-implementation-35-source-review-v1](agent_logs/task9/task9.11/task9.11.18/task9.11.18.2/old-implementation-35-source-review-v1.json)核旧最大9848s turn的35实际疑点根/70原行+源组；仅原readonly/metadata、精确旧CID路径或foreground正常退出/明确parse错误，仍保4GPU root窗口与实际旧CID并集，不拿无--gpus标签判0。只有整turn其它根也覆盖才可去其fallback；不是全局设备账/正式令。
+- 重复fork回放：[fork-lifecycle-replay-duplicate-review-v1](agent_logs/task9/task9.11/task9.11.18/task9.11.18.2/fork-lifecycle-replay-duplicate-review-v1.json)原DB created_at与生命周期原行证明2继承turnID在子创建前重放，实际父turn已计；可去1303s重复worker上界，子真实独审1253s保留。旧turn模型并集减少382s（4卡1528s），不能再从未来分层模型重复减。原metadata与签字保留，后新派生账另列；不以去保守重数伪造精确历史实测。
+- 适用限制：所有旧FAIL/UNKNOWN保留，分别列实测/已批C1800局部policy/有证上界与最坏预留。是否形成完整可容纳全案的预算由.18.2在G1/LON实测后裁决；未闭合源/后代继续保turn或明确缺口，不以CPU标签/空GPU样本填0，不恢复或重跑原已验门。
+
+
+<a id="src-1444"></a>
+## SRC-1444 — 真实 L4718 ON196 完整独审通过与父接收
+
+- 类型：项目实测、原始OFF/ON逐行非干扰与生命周期独审；Codex实施/独审/父，核查2026-11-04。授权SRC-1435；推荐GPT6.1sol/high、Sonnet5.5/high，因旧合同/设备/原始行/实际退出因果核验；委派sol/high，实际后端强度未独立核实。
+- 原件：[独裁](agent_logs/task9/task9.11/task9.11.18/task9.11.18.2/REAL-LON-INDEPENDENT-VERDICT-v1.json) SHA71bdb0802f747daf863cb5c0adf69ee202deef434fff24ee4f8af13edb40d06e；[父原始对比](agent_logs/task9/task9.11/task9.11.18/parent-LON-actual-raw-check-v1.json)、[父接收](agent_logs/task9/task9.11/task9.11.18/parent-LON-independent-acceptance-v1.json)，父直接核15引用hash、183当前/前后源与快照、exit0；source26308d91…dd0d，protocol3ef796fd…67cb，run t9.11-real-l-on-20261104-r1，exactCID22068d0d…cf9d，GPU-e2eab186-4b18-f63f-2ada-c61aa98ed587。
+- 实测：原1000转移旧L检查点，随机地图严格8/100、语义10/96；196有序回合全部旧公共字段与OFF相等，4568条parity字节同SHAf5eb5f4f…12b5。网络/alpha/replay/optimizer参数及moments均cuda0；原非capturable/nonfused step标量CPU行为保留。不是成熟策略成功率或LR优劣结论。
+- ON评估606.979549948s，OFF545.795874471s，差61.183675477s，仅一对实测非通用上界；outer实际wait622.152837617s、owner621.588849258s、server622.378122078s嵌套不相加。owner/guardian/watcher/client均exit0；exact容器主动收回后exited137、实际GPU allocation728.174335957s（04:23:57.628523273Z至04:36:05.802859425Z），137不伪记worker失败或exit0。租约2220s保历史，费用与turn包围取并集不叠。
+- diagnostics目录252740358B，519个.pt窗口243320061B，173次首拒绝，events9940动作/242片段；新增output254152959B、log482B（点时）。累计4000smoke转移、1176评估；仅余10592=9408周期+1184独立final。无新训练/额外smoke/C ON；旧C完整性FAIL保留，旧科学+本次新完整性限定组合通过，formal/final须另门。
+
+<a id="src-1445"></a>
+## SRC-1445 — 实测后全案资源门 NOT_READY 与集中交回
+
+- 类型：项目实测字节/历史原始B1统计+工程外推及独立预算审计；2026-11-04，Codex父/.18.2/.18.3。授权SRC1435，58h worker/GPU、8GiB诊断日志、2TiB与日历截止均未改。推荐GPT6.1sol/high、Sonnet5.5/high，理由为多来源预算与越根后代因果核查；实际后端强度未知。
+- 原件：[诊断独裁](agent_logs/task9/task9.11/task9.11.18/task9.11.18.2/FORMAL-DIAGNOSTIC-BUDGET-REVIEW-v1.json) SHA4902ba44df1471da2e19b4293947f43839912655ee7e36ff6896af6e03fec3ba；[全资源独裁](agent_logs/task9/task9.11/task9.11.18/task9.11.18.2/FORMAL-RESOURCE-EVIDENCE-REVIEW-v1.json) SHA2891d37534ee4feba48783fb70226979eb20b352a68551bffae8f0dee9cd30d2；[父接收](agent_logs/task9/task9.11/task9.11.18/parent-formal-resource-NOT-READY-acceptance-v1.json)核31+4直接引用hash。[颗粒化外推v2](agent_logs/task9/task9.11/task9.11.18/full-program-history-LON-diagnostic-proxy-v2.json)列24历史周期文件/2summary及公式。
+- 工程参考：两个arm均沿每seed旧B1轨迹计数（不假定L改善），剩余周期9408+final1184，final随机200按旧100×2、语义96×1；未来1969852动作/20616片段/4774拒绝。用LON逐类event均字节×对应数量，窗口243320061/173 B每拒绝×4774，得未来窗口6714508504.127B、events1528468827.992B、评估JSON61531413.878B、训练非评估日志25281444B，合8329790189.997B=7.757721646GiB。LON已消费196不重复计、未来普通评估parityFalse不重复投射；250k评估/13保存已含历史整run，不双算，额外profile完整保存/恢复待正式可行性单列。
+- 过去字节纠错：按路径去重stat保守归类1415215541B（全task9.11证据、日志及diagnostics所有后缀），旧scanner漏diagnostics/*.pt共488048139B，旧927167402B与既有前门签字保留但不再称完整全案上界。当前实际仍低8GiB，不重做已过前门。全logical34663734565B，非存储瓶颈。未来参考+过去+原256MiB控制预留=10013441186.997B=9.325743827GiB，较8GiB名义缺1423506594.997B=1.325743827GiB；后续控制增长、预测不确定性另计。是可行性缺证，非未来实耗或必溢出的硬下界。
+- 历史账：SRC1443已证35+98局部根、实际CID/三旧server终态/fork重复修正；当前旧turn保额模型worker66762.057s、四卡GPU130640.230s，非实际使用。局部混合候选GPU114995.760s/条件余93804.240s，尚252根尾未闭；即假采另52helper仍200根、条件余102378.240s，均非可用余额。相对历史42.7h=153720s规划参考分别欠59915.760/51341.760s可行性空间，参考不是未来硬下界。未核尾不能按0或自行核销，C1800s仅原批准局部政策保留。
+- 阶段view附加保守重复：既扣past，又扫描旧.3/.4 externalroots589516469B（读时点）；全局past已含一次。正式入口须明确去重证明或保留额外占额，不得把阶段余额当全局余额。此次未改151科学/记录器，也未改8GiB。
+- 裁决：NOT_READY_NO_FORMAL_OR_FINAL_RELEASE，已停正式阶段，不跑250k绕门。最小合同选择是诊断日志是否从8GiB改10GiB（仅工程建议、非已批准/保证足够）；历史全局尾段/未来GPU可行性仍须证据闭合或明确逐项政策，不笼统请求UNKNOWN核销或额外58h。正式/final最小适配仅有草案、未实施，重新执行前必须全源冻结并独审，不能将额度调整等同立即可开训。所有原件/FAIL/UNKNOWN保留。
+
+<a id="src-1446"></a>
+## SRC-1446 — task9.11.18 当前续接与10GiB正式授权
+
+- 类型：用户直接授权，2026-11-04本会话；登记Codex，非实测。沿SRC1435，原件[续接授权](agent_logs/task9/task9.11/task9.11.18/resume-authorization-20261104-v1.json)。10GiB诊断日志计入原2TiB；原T0、北京时间2026-11-07 03:18:20、worker/GPU各58h、全部历史消费继续。
+- 同时实施并独审含final完整入口及全资源裁决；复用已过G1/LON，4000smoke/1176eval，余9408周期+1184final。资源门通过自动C4718→L4718→C4719→L4719，各250k包含各3M。无法容纳则一次决策表区分预算不足与缺证，不核销UNKNOWN，不自行增预算。
+
+<a id="src-1447"></a>
+## SRC-1447 — task9.11.18 续接全资源独审（进行中）
+
+- 类型：项目原始B1/G1/LON实测重核、工程参考推导及保守历史上界审查；2026-11-04，Codex .18.2与父。授权SRC1446；当前未签formal/final令，UNKNOWN保留。
+- 初步证据：[全资源中性代理v1](agent_logs/task9/task9.11/task9.11.18/task9.11.18.2/resume-v1/full-resource-neutral-proxy-v1.json)及同目录review_resource_resume_v1.py、current-past-byte-manifest-v1.json。两B1 summary原件SHA/位置、13次保存和12周期各自统计在history，完整wall36580.254655/36953.448007s；四完整run参考147067.405323s含52次普通保存与9408周期，不重复拆加。
+- 工程选择非未来上下界：两臂皆诊断ON，把单对LON额外61.183675477s按10592/196外推3306.415769s；final1184按历史单196回合最大1637.608339s×1184/196=9892.491193s；四额外profile保存按历史最大324.183344s×4=1296.733376s，合161563.045661s=44.878624h。完整额外恢复/后续控制尚UNKNOWN，不包含于上述数值；不是必超或必够结论。
+- 点时扫描past1424302977B，旧future诊断中性代理8329790189.996621B、控制预留268435456B，10GiB下剩714889617.003379B≈0.666GiB；逐路径去重清单与精确时点见原件，后续日志增长继续入账，不是未来硬上界。
+- 原lifecycle证据：[新fork重放核查](agent_logs/task9/task9.11/task9.11.18/task9.11.18.2/resume-v1/new-fork-lifecycle-v1.json)，只剔本次三个child创建前继承父turn重放55/66/75s共196s，真实子turn和父不删；旧三open参与者实际task_complete已回原rollout核，不能把两派发间空档延长计为实际消费。
+- 当前限制：上述为独审中间证据；全局历史可采用上界、阶段view旧证据去重、后续恢复/控制预留及完整source独审仍待最终裁决。父已读中间原件但未把条件余额当准入余额；最终原件到齐后追加核验。
+
+<a id="src-1448"></a>
+## SRC-1448 — task9.11.18 formal/final 同冻结必要入口（实施中）
+
+- 类型：必要工程实现与计划验收，2026-11-04，Codex .18.1；授权SRC1446。输入为旧最小patch草案、已过G1/LON及原151科学源。当前尚无源码冻结/独审PASS/正式启动结论，后续补实际文件/测试/退出原件及版本；不能据本占号条目声称已完成。
+
+<a id="src-1449"></a>
+## SRC-1449 — task9.11.18 续接关键历史尾段证据（审查中）
+
+- 类型：原命令/源码/实际终态的必要只读调查，2026-11-04，Codex .18.3；授权SRC1446。优先影响开训决定的尾段，可靠保守上界可接受，UNKNOWN不核销。当前未交最终可采用上界；原件与适用限制后续补充，不能据此占号条目将旧条件候选改成可用余额。
+
+
+SRC-1447 中间独裁/存储代理补记：新增[资源独裁v2](agent_logs/task9/task9.11/task9.11.18/task9.11.18.2/resume-v1/FORMAL-RESOURCE-VERDICT-resume-v2.json)，v1原件保留。父[直接接收](agent_logs/task9/task9.11/task9.11.18/parent-resume-resource-tail-acceptance-v1.json)核新授权与6直接ref哈希，不代表完整source审查或全球账通过。历史worker已证旧分项下界4891.124325s、已证四CID实际allocation8206.282330s均只局部；原保额模型66762.057466/130640.229864s非实耗，完整上界仍UNKNOWN。不能拿条件reference差额67758.805785s冒称需追加预算。存储按[原stat](agent_logs/task9/task9.11/checkpoint-storage-stat.json)重新逐文件stat匹配，四run pt参考1657897619984B＋四额外profile按旧最大34727857051B×4＋诊断future8329790190B，预计新增1805138838378B；加past34672822001B与40GiB临时预留后2TiB名义余316261922213B。非pt/控制增长及新序列化实际尺寸待实测，不是硬上界。
+
+SRC-1449 有界交付：原件[FINAL-HANDOFF-v1](agent_logs/task9/task9.11/task9.11.18/task9.11.18.3/resume-v1/FINAL-HANDOFF-v1.json)、同目录ARTIFACT-MANIFEST-v1.json（SHA81f9376e…54df78）封9文件；父parent-resume-resource-tail-acceptance-v1逐文件hash/bytes核真。六reader源码和九wrapper调用由.18.2局部独核；最大2849s turn并非可直接减4×2849，固定旧快照净边际仅4076 GPU秒且须另4helper也通过。条件110919.760125GPU秒/55731.504877worker秒仍239根未闭，不是可用余额；全部未证尾假删情形45153.677s只用来分析审查收益、禁止作为账本采用。2112s G1组文本回放driver SHA与实际冻结不符，缺实际sourceguard/后代生命周期证据，保UNKNOWN。结论是停止扩展收益不足的helper逐项恢复，不构成预算必超证明或核销授权。
+
+SRC-1447阶段重复独核：[storage-duplicate-independent-v1](agent_logs/task9/task9.11/task9.11.18/task9.11.18.2/resume-v1/storage-duplicate-independent-v1.json)逐路径核旧task9.11.3/.4全部由past清单覆盖，573864852＋15651617＝589516469B，无未覆盖路径。正式阶段view可不重复扫描这两根，但全局reader须继续收全证据树正增长且缩小不退款；这是去重复预留，不是新预算/删除消费或全局准入PASS。
+
+<a id="src-1450"></a>
+## SRC-1450 — task9.11.18 用户批准单卡使用
+
+- 类型：用户直接授权，2026-11-04本会话，原文“批准一张卡的使用”；Codex登记[单卡授权](agent_logs/task9/task9.11/task9.11.18/single-gpu-authorization-20261104-v1.json)。后续本批一次分配单张物理GPU，优先既定UUID e2eab186…d587；原累计GPU/worker各58h、T0/截止/存储/科学不因此改变。没有推导为历史UNKNOWN归属豁免或追加卡时。
+
+<a id="src-1451"></a>
+## SRC-1451 — 用户批准合理完整训练所需全部预算并要求尽快开训
+
+- 类型：用户直接授权，2026-11-04当前会话，原文“尽快解决问题启动，所有预算我都批准，只要在训练合理的情况下批准一切预算”；Codex登记[新授权原件](agent_logs/task9/task9.11/task9.11.18/all-necessary-budget-authorization-20261104-v1.json)。
+- 采用：不再以原58h本身作为硬阻断，立即由独审制定具体有限、合理且有据的全案resource envelope，单卡依SRC1450，四run各3M含250k及final1184不改。保T0、全部历史消费、原FAIL/UNKNOWN，不核销旧费；可用物理完整历史上界和工程未来预留，避免逐根返工。资源量值/适用限制另由SRC1447裁决记录；原截止若能容纳仍沿用，不新增科学重试、不缩规模。合理必要预算扩充不再逐项向用户请示。
+
+<a id="src-1452"></a>
+## SRC-1452 — SRC1451下合理有限预算及历史UNKNOWN专项占额政策
+
+- 类型：用户已批必要预算范围内的明确工程政策选择，非历史实测/任意CPU后代物理上界。2026-11-04，独审建议、Codex父采用；精确字段见[policy-adoption](agent_logs/task9/task9.11/task9.11.18/budget-policy-adoption-20261104-v1.json)，上接SRC1451授权。
+- 明确新上限：worker/GPU各160h，诊断日志16GiB计入原2TiB；原T0与原截止优先保持，科学3M×4及final1184不改、后续单卡。worker历史未知专项96h政策储备、未来执行64h硬cap；旧已证消费在历史96h内一次计，不将UNKNOWN填0/删除/伪称精确upper，也不授权追加历史执行。96h是合理工程占额而非已证历史时长。
+- GPU历史用4张物理GPU从T0到独审asof的全窗口保守包围（包括可能非本任务曝光，宁多扣），不为还原每根继续返工；未来单卡四run各12h原cap＋全部final4h及有界恢复/控制预留。未来中性实测参考44.879h，实际各250k刷新；资源门须核当前calendar和具体stagecap，不能将160h累计预算当可延原deadline。
+- 诊断16GiB理由：此前past+future中性参考约9.34GiB，另给完整控制/增长不确定性空间，仍在2TiB内，不能删科学记录节省。未来开销估计不是硬保证；新protocol须绑定独审有限envelope/source/release后启动。父政策文件本身不是独审执行令。
+
+SRC-1452有限方案独裁：[FINITE-RESOURCE-POLICY-REVIEW-v1](agent_logs/task9/task9.11/task9.11.18/task9.11.18.2/resume-v1/FINITE-RESOURCE-POLICY-REVIEW-v1.json)与同目录resource-envelope-v1.json（SHA8282b07b…43abd），父parent-finite-resource-acceptance-v1核4个直接ref并重算4物理卡全窗公式。asof1793776190.997113，GPU历史完整物理保留314763.988452s（非实际本任务），worker历史政策345600s；后续worker/GPU/日历各208800s工程预留=4×43200＋14400＋21600控制恢复，原普通保存/周期不重复收费。160h名义余额worker21600s、GPU52436.011548s，原日历扣58h后余7709.002887s。外部控制/审核已在未来6h预留内，不再四slot/四卡等待重复计；新增实际任务须有界续账。当前只有限资源方案PASS，不替代完整源码/阶段执行令。
+
+
+<a id="src-budget-review-20261104"></a>
+## SRC-BUDGET-REVIEW-20261104 — 合理训练自主执行与精简审核
+
+- 类型：用户明确决定、项目工程执行规则；作者用户，2026-11-04；核查日期2026-11-04，核查人Codex。不是外部文献或效果实测。
+- 原始指令（当前聊天，精确位置为预算审核讨论后用户执行指令）：“请你按照情况，修改，只要训练合理，即可放心，然后审核的力度也要放松，保证无bug，不要做重复冗余的审核浪费token”。前文用户指出预算审核过于严苛、多处卡住。
+- 支撑主张：在已授权研究目标内允许执行者按成本和结果自主调整合理训练预算、完成必要排错与重跑，取消重复预算审批与无新增理由的重复审核。
+- 项目采用：见[共同约定预算与审核原则](../../AGENTS.md#budget-review)。端到端成本可复用既有证据，未知成本先试跑；工程耗时为可调整预估，排错/等待与训练有效运行分别记录；保留累计实际成本。审核聚焦变更及受影响路径，已有适用证据引用一次，修复后定向复验即可推进。
+- 适用限制：不授权新研究方向/功能或无限制盲目重试；用户明确的资源限制、交付截止与暂停继续遵守。科学条件变更事先登记并保持对照可比；有效教师/数据/恢复等正确性依赖仍须满足。“保证无bug”采用必要检查、修复和定向回归落实，不作绝对无bug承诺。历史失败及预算事实不重写，运行中超时器不因文档更新自动改变。当前聊天原文为直接核验来源，无外部URL；执行修改见各工作树PROGRESS/DECISIONS和主工作区过程记录。
+
+SRC-T12-006 最终核查（Codex，2026-11-04）：
+
+- 本项目原始实测，标题“单训练状态冻结B3教师配对及有界制数”，run `t12-abc-20261104-r1`。精确原件：[handoff.json](../results/task12/t12-abc-20261104-r1/handoff.json)（counts/phases/A/B/C）、[report.json](../results/task12/t12-abc-20261104-r1/report.json)、[ledger.json](../results/task12/t12-abc-20261104-r1/ledger.json)（original start/deadline/actual argv/598.259314s）、[A CPU复算](../results/task12/t12-abc-20261104-r1/A-cpu-verification.json)（11项checks）、[版本清单](../results/task12/t12-abc-20261104-r1/final-code-sha256.json)、[原件哈希](../results/task12/t12-abc-20261104-r1/artifacts-sha256.json)。task10参考HEAD `91f538cf2ee10bebffd6b643d5c908fa0d419ced`，未提交工作文件另以只读快照/hash固定，不以HEAD冒充全部实际代码版本。
+- 原始结论：A在`sparse_train_00000`初始边界、完全已知派生输入、真实机器人几何下，152调用/303尝试的网络输入、raw动作、逐尝试状态、碰撞返回、提交轨迹及终态一致；失败0，未覆盖真实失败路径。完整观测第一差异为第2调用scan_timestamp（预测0、执行0.10000000149秒），该字段按冻结源码不进入B3网络。部分观测下改变一个全处于未观测XY格内的原语z角点+0.1m，两个推演原件一致；源对象/队列/计数/栅格/路线及完整global/private RNG检查相同。扰动是隔离对照工程选值，不是误差建模结论。
+- B预先冻结36候选，完成24格心标签（1正23负），12规则参照预算中断、重放0；C更新0，梯度、坐标往返和解码均未验证。正例定义为段到达且零失败；其他已完成推演为负，预算中断不作为负例。格心及规则点参数属父协议内工程选值（.5/1.5米两格心及1米规则参照），U-Net准备代码8/16/32通道和Adam lr1e-3未实际运行，不能声称有效。
+- 原始数值：[冻结清单](../results/task12/t12-abc-20261104-r1/B-frozen-candidates.json)、[24标签/特征](../results/task12/t12-abc-20261104-r1/B-labels-partial.json)、[标签图](../results/task12/t12-abc-20261104-r1/B-partial-labels.png)、[128²原数组](../results/task12/t12-abc-20261104-r1/B-partial-label-grid.npy)；A/B原始tensor在同目录`.pt`，精确符号为calls/attempts/trace/terminal/diagnostics，actor_call索引可定位多尝试。12中断参照点的在途内存记录未排空，缺完整轨迹，明确不验收B。两个脚本异常（dtype缺参、取证global super递归）与修复间隔均计入总预算；没有通过重新reset增加第二状态。
+- 推导及适用限制：阶段A约194.545秒、B约403.714秒、C0，A/B分界据候选冻结文件mtime，整体时长据同一monotonic账本；包含并行CPU原件复算/作图与写盘，不是GPU微基准或32状态正式profile。仅可支持该夹具的一致性和部分制数事实，不能证明教师普遍可靠、标签可重放、网络可训/可合法解码、成功率提升或进入32状态成本核查。采用方式为本轮review交接，后续执行另由当前决策者审核。
+
+<a id="src-task9-budget-review-20261104"></a>
+## SRC-TASK9-BUDGET-REVIEW-20261104 — 下层SAC同步精简预算与审核
+
+- 类型：用户明确授权与工程执行规则，用户/Codex，2026-11-04，核查人Codex。当前聊天原文“帮助下层SAC更新那边也修正一下”，承接SRC-BUDGET-REVIEW-20261104原始指令；非训练实测或方法有效性证据。
+- 采用：下层独立工作树同步[根预算与审核原则](../../AGENTS.md#budget-review)，已通知当前9.11.18执行者落实。复用已有G1/LON等适用证据，只对新增变更/失败做定向核查；合理完整训练预算自主安排，不因旧任意上限反复请批或审核政策本身。
+- 限制：实际成本与历史UNKNOWN照实保留，不把缺账填零；仅当问题影响当前安全运行/科学结论时阻塞相应阶段。单卡/隔离和用户明确交付截止继续遵守；不改科学合同、不隐去失败，不宣称消息送达等于已开训。当前任务科学配置和实际状态以9.11.18最新三文档/原件为准。
+- 证据与精确位置：[独立规则同步记录](agent_logs/task9/20261104-codex-budget-review-policy.md)；通知目标聊天“接续 task9.11.18 预算与训练”，thread 01a1a551-dbfd-7cd1-8bc7-66abe505f26d，本轮send_message工具成功返回。
+
+SRC-1448正式交付v2：[freeze-program-v2](agent_logs/task9/task9.11/task9.11.18/task9.11.18.1/resume-v1/freeze-program-v2.json)封184源4dc31e31ccf695c217a24f11beaab13da214e250ed0f1652bf0501c395b9e93f；real-contract-program-v2协议SHA57c81cc7e6c89dea26f8c8ab61c1091a435d5d0926a1a592d1c92eeed4c74a48，父parent-program-source-acceptance-v2直接核184当前/冻结/manifest与151科学同、原wait/82→89项rc0。v1冻结5a157476…保持，独审PROGRAM-SOURCE-REVIEW-v1明确active全cap重复到期误拒，未通过；v2按已封reservation剩余时长核，真实resources受控midstage通过/cap耗尽/nonce/CID拒，修复只影响必要入口，不动151科学。
+
+SRC-1448独审：[PROGRAM-SOURCE-PASS-v2](agent_logs/task9/task9.11/task9.11.18/task9.11.18.2/resume-v1/PROGRAM-SOURCE-PASS-v2.json)已PASS，含final原生full恢复/manifest碰撞/固定12stage/160h有限envelope及显式政策分类。定点复用/独写13边界与2新增受控实际resources，真实wait0.765721s，不重跑G1/LON科学门。新程序fixed 12M转移/9408周期/1184final，写前剩余数及阶段quota；past只扣一次，正增长续费、缩小不退款，single exactUUID。交接IMPLEMENTATION-HANDOFF-v2.md列CLI和原件schema。源码PASS非训练结果。
+
+SRC-1448真实入口局部失败补记：r1实际execute在worker模型加载及formal输出目录创建前因host与/output的allocation lease ref不一致误拒，日志logs/task9/t9.11-real-program-20261104-r1/profile-C-4718.txt；父[parent-program-r1-pre-model-failure-v1](agent_logs/task9/task9.11/task9.11.18/parent-program-r1-pre-model-failure-v1.json)和原rootwait/owner/guardian/watcher终态保留，formal转移0/新评估0。exactCID837299…a3c57在2026-11-04T07:14:02.511489331Z→07:16:10.622691982Z分配128.111202651s，已exited137/PID0，不伪记为训练成功或漏成本。仅修跨域canonical引用并定向验证后新namespace启动，不重新审核政策/前门；依据新AGENTS#budget-review。
+
+<a id="src-1453"></a>
+## SRC-1453 — 用户提供第二张GPU可用授权
+
+- 类型：用户直接授权/资源偏好，2026-11-04本会话，原文“现在只批了一张卡的预算吗，你需要加预算吗，还可以加一张卡”；Codex登记[原件](agent_logs/task9/task9.11/task9.11.18/optional-second-gpu-authorization-20261104-v1.json)。当前单卡累计160卡时，无证据要求追加额度。第二张卡可在实测证明有益并保持独立run可比性、设备/输出隔离与检查点source合同前提下启用；当前不盲目占用，先取得C4718首250k实测。实际启用前登记明确分配/资源与顺序影响，不借授权新增科学实验。
+
+<a id="src-1454"></a>
+## SRC-1454 — C4718 r2首次正式训练实际启动
+
+- 类型：项目真实运行与落盘计数，2026-11-04，Codex父；[first-formal-start-v1](agent_logs/task9/task9.11/task9.11.18/first-formal-start-v1.json)记录精确时点/步数/worker与日志。run t9.11-real-program-20261104-r2，activity profile-C-4718，exactCID3d6967fcf4f113a8e2bb35b149f7ff84a0001edd589291f3eae12c4962324fea，GPU-e2eab186-4b18-f63f-2ada-c61aa98ed587，hostworker1186191，真实execsession94050。已读learning.jsonl记录有真实loss/update并GPU计算PID匹配，不以容器保活替代训练启动。
+- 源93349324…c9d3b含final全入口；protocol038814a1…e389c；仅修r1跨域lease引用逻辑及测试2文件/182同，定向4项rc0与PROGRAM-SOURCE-PASS-v3通过。G1/LON/151科学原证据复用，r1零科学消费失败/实际128.111s保留。首250k含3M，实际性能/保存恢复/诊断全段尚待；此条不声称profile通过或策略有效。
+
+<a id="src-1455"></a>
+## SRC-1455 — 必要外部后台续行与按用户要求退出监督
+
+- 类型：必要工程编排/定向验证/实际后台进程；2026-11-04，Codex .18.1 driver、.18.2独立validator、父启动。用户要求“如果提交长训练没啥问题就退出监督吧，好了我找你”，父不停止训练。
+- driver `forem/scripts/task9_11_program_drive.py` SHA4df85fac32b9adfe4a2fc61101ab6ab4b42042408997344e03866535a837e99a；reviewer同目录task9_11_program_review.py SHA0d77d3feec887ff5af79e7f8b1b0d3e2a516bc8c7b952ca195695d42dd16a06f，独立授权在.18.2/resume-v1/external-reviewer-authorization-v1.json。两文件在native artifact glob外，模型源码93349324不动。
+- 证据：[后台交接快照](agent_logs/task9/task9.11/task9.11.18/background-handoff-v1.json)、[集中交接](agent_logs/task9/task9.11/task9.11.18/FINAL-PARENT-HANDOFF-resume-v1.md)，实施EXTERNAL-DRIVER-HANDOFF-v1与独审自动validator记录/4定向fixture原件；driver4项mock覆盖采用不重复派发、恢复/失败停止/lock/身份/STOP；reviewer4项覆盖原生前序读取、JSONL不可变前缀、issuer路径，不重做科学门/全套测试。
+- 实际driver PID1201603 PPID1，状态OBSERVING_EXISTING_STAGE，采用原outer1186006/start898563583，worker1186191仍训练。本次八训练stage按原顺序自动推进；异常保留并停派发。四run后STOP_NEEDS_FINAL_SCIENTIFIC_ACCEPTANCE，原开发B–E门与最终1184仍待实际验收，不伪通过，不自动跳final。此为当前后台接管通过，不是250k/四run/最终科学验收完成。
+- 后续结果audit依赖freeze/inventory.json，父从原协议source_manifest/input_manifest直接派生该索引，未改输入值/模型合同；实际原audit.expected_identities成功返回100validation/96transfer。
+
+SRC-1454时间预估补记（2026-11-04 15:41北京时间）：一次性只读当前C4718已落盘198000转移/训练elapsed1170.135097s，尚未含首250k保存/评估/恢复。沿SRC1447两完整B1约10.16/10.26h及记录增量，单run工程范围10–12h、从当前四run余约40–48h，约11月6日上午至下午；开发验收通过后的final另预留2–4h。原件[runtime-estimate-v1](agent_logs/task9/task9.11/task9.11.18/runtime-estimate-20261104-v1.json)。此是单卡工程排期非保证，未恢复持续监督，不把198k纯训练速度当完整run吞吐。
+
+<a id="src-1456"></a>
+## SRC-1456 — r2 250k大文件检查点短档、必要I/O修复与如实重跑
+
+- 类型：项目原始失败、只读ZIP64目录/字节核查、必要工程修复进行中。2026-11-04，Codex父/.18.1/.18.2，沿用户原完整训练授权和AGENTS#budget-review；不是预算耗尽或修改学习算法。
+- 原件：[父失败快照](agent_logs/task9/task9.11/task9.11.18/checkpoint-write-failure-v1.json)、[独立恢复性核查](agent_logs/task9/task9.11/task9.11.18/task9.11.18.2/resume-v1/r2-checkpoint-recoverability-v1.json)，实际worker日志logs/task9/t9.11-real-program-20261104-r2/profile-C-4718.txt及worker-terminal.json。r2原生恢复profile.pt报PytorchStreamReader not ZIP，driver按设计停后续。
+- 实际：250000消费转移、24975updates、env_actions250213/pending213；validation-0250000 complete/随机100+语义96/写前196。profile.pt物理13523140378B、checkpoint-0250000.pt物理13523140374B，两者ZIP64 central offset21608747456B；32438无压缩条目声明payload约21605009708/704B，至少缺8081869334/326B实际数据。两单tensor各4915200000B，data.pkl约4.700GB，不能靠修目录找回缺失tensor；actor不能冒充full恢复。未加载或改写坏文件。
+- 活跃路径：runtime training.save_checkpoint使用src/task9_lr/diagnostics.py的BudgetFile，而其write只调用一次无缓冲file.write；正在核查/修复大buffer短写必须write-all，预留只计一次，验证真实CPU torch.save/load>2GiB边界，不重跑整套GPU前门。修复仅I/O语义；原151科学锁中该1文件变化须明确有限兼容记录，其余150沿用，不伪称151仍同。模型/优化器/环境/奖励/种子配方不改。
+- 可恢复性与计费：当前无可证有效full恢复点；必要r3同seed从头重跑，失败r2的250k/196及全部wall/128s前次r1成本保留，不当有效r3进度。原历史评估1176+196=1372，新的四有效run未来9408+1184=10592，累计准入需11964并明确必要失败重跑来源，不能悄删消费或把坏actor当续训。
+- 实测性能限度：成熟50k非周期(1927.6765337791294−241.68011997826397−1417.3713216930628)=268.625092s，约186.13消费转移/s；坏文件save时间不是修复后完整写盘上界。后续真实全字节保存/恢复须验证。当前修复尚未通过、r3尚未启动。
+
+SRC-1456根因坐实与定向修复：独审ZIP64逻辑central offset减物理central offset=8088061413B（profile），恰等(data.pkl4700100069−2147479552)+2×(4915200000−2147479552)；周期对应pickle多4B亦精确相等。实施[真实CPU边界结果](../results/task9/t9.11-CPU-large-write-20261104-v1/io-boundary-result.json)在torch2.7.1+cu128、CUDA不可用/无nvidia设备新CPU容器，用2147549184B实tensor：旧单次请求只返回2147479552B，torch.load复现notZIP；active BudgetFile循环写全后完整档2147550825B、原生torch.load与torch.equal全字节通过，真实wall29.649104s。此为实际单次写入边界测量，不仅zipfile启发式（旧zip_valid亦可能true但torch.load失败），不替代完整模型恢复验收。4项短写/异常/字节计数定向通过，未重跑G1/LON。写全预算仅预留一次，None/0/负/非整数/超长返回明确失败，不把部分写当完整。
+
+<a id="src-1457"></a>
+## SRC-1457 — I/O修复后r3同种子必要重跑实际启动及后台接管
+
+- 类型：项目实际启动/有限I/O兼容/失败消费入账，2026-11-04 Codex父/.18.1/.18.2。沿SRC1456与用户必要恢复授权，不新增方法或选种子；原r2坏full、250k/196/实际资源保留。
+- 原件：[新后台快照](agent_logs/task9/task9.11/task9.11.18/r3-background-restart-v1.json)、[最新交接](agent_logs/task9/task9.11/task9.11.18/FINAL-PARENT-HANDOFF-r3-v1.md)。r3宿主worker1241380/daemon1242328，singleGPU-e2eab186-4b18-f63f-2ada-c61aa98ed587；16:32真实落盘13000转移/1275updates、Q保护未触发、GPU PID匹配，daemon已采用原outer。首250k完整保存恢复尚待本次执行，不把CPU边界回环当作全模型验收。
+- 源b8f3d63b4fb0846156fcfc72663008763a5346d85020daef9025d7f790154c05，协议0bdcbda6c1b00e2b165653248925e1e2fc86d88938ee441045db2a7dceab3691，含final完整路由。IO-WRITE-REPAIR-PASS-v1与PROGRAM-SOURCE-PASS-r3-v1、resource-envelope-v2-r3精确锁三必要源delta/181同、150原科学字节+1诊断I/O有限例外；父parent-r3-IO-delta-acceptance-v1只核3差异和明确计数，不全资产重审。
+- 历史eval1372、未来有效10592、累计max11964；失败formal250k/physical250213/pending213/up24975单列。r2最终实账r2-failed-profile-final-accounting-v1：GPU allocation3194.144386337s、rootwait3150.660100661s/exit1、profilewall3110.388251087s为嵌套，不能相加；已含历史物理全窗不重复加。四有效run各3M保持，从头重跑而非假续训。
+- 初始54h工程forecast由原完整参考44.879h+约3h完整I/O裕量+6h控制恢复取整，非实际或硬保证，deadline/实际stage守卫不变，不以过时58h预测机械拒恢复。
+- 外部reviewer SHA497f8277d7f916b4c7198df7ee2a58fbfe17753d531cae8ec1e4346e6aa51d2d已用真实CLI核CID签r3首令；run-specific context绑定新source/budget。driver按sealed r3协议锁source，原r2脚本字节归档。后台自动八训练stage、开发B–E仍显式验收后才final1184；父恢复后台后退出主动监督。
+
+<a id="src-1458"></a>
+## SRC-1458 — r3有效250k保存恢复通过、缺外层等待收据的后台恢复
+
+- 类型：项目原始运行/控制层故障、必要恢复与外部编排定向修复。2026-11-04 Codex父/.18.1/.18.2；授权沿原完整训练与AGENTS#budget-review，不重训/不新增回合，不改模型源码b8f3d63b…154c05、原protocol或已有full checkpoint。
+- 原件：[初始缺外等待快照](agent_logs/task9/task9.11/task9.11.18/r3-outer-wait-missing-initial-v1.json)、r3实际supervision/profile-C-4718/{lifecycle,worker-result,terminal}.json、formal-C-seed4718/{profile-summary,profile-restore,profile-worker,validation-0250000}.json和allocations/profile-C-4718/container-stopped.json。driver于16:47记录writer不再存活/原rootwait收据缺失后提前退出；native随后17:20正常完成，三owner/guardian/watcher退出0、chainPASS、worker PASS/exactStopped。外writer为何退出仍未证，不把推测的工具超时写成已证事实，也不制造旧rootwait exit0。
+- 训练事实：250000消费、24975updates、env_actions250206/pending206，完整196周期评估；profile.pt21553028319B，原生load恢复27.581371011s，完整配置/源合同、replay100k与实际网络/replay/optimizer moments CUDA通过，CPU step标量依原loader。大写入修复已经过实际全模型保存恢复，不是前次坏full再次失败。
+- 性能与成本：两完整保存合330.052532876s、最大166.482570300s；profile总3011.897483543s含validation1230.460538290s。成熟50k非周期1836.091338368−330.052532876−1230.460538290=275.578267202s，即181.436659转移/s；remaining代理275.578267202/50000×2750000＋11×(166.482570300＋1230.460538290)＋166.482570300=30689.661461s。条件/单位：同一C4718成熟窗口，后续工程外推非保证。worker实际3046.962831734s，owner实际wait3075.716873841s，GPUallocation3138.495393795s为嵌套不相加；缺外层时长保UNKNOWN。
+- 独审恢复：[profile阶段恢复裁决](agent_logs/task9/task9.11/task9.11.18/task9.11.18.2/resume-v1/automation-r3/profile-C-4718/review-stage/profile-C-4718-verdict.json)已签PASS_COMPLETE并写原out/reviews指针，依据完整native证据，不声称缺失外层原件已存在。5520s仅原cap+tail工程政策占额，非实际效率；保留原MISSING_KEEP_UNKNOWN。剩余工程forecast按实测及3个同类full、5%差异/最终4h/控制6h约48.5h刷新，不被过时54h预测机械阻塞，原真实deadline不改。
+- 外部修复范围：driver/reviewer位于native artifact glob外；worker writer死亡时在原有限cap内等native闭合并交有明确授权的恢复审查，真实FAIL/超时拒绝，未来CLI在PPID1独立runner持有并写真实终态。4项定向验证含实际PPID1/CLI退出0持久终态，不全套重验。旧脚本字节归档，原模型检查点契约保持。恢复启动状态后续补记。
+
+SRC-1458实际恢复启动补记：[valid250k-resumed-v1](agent_logs/task9/task9.11/task9.11.18/valid250k-resumed-v1.json)与[最新r3-v2交接](agent_logs/task9/task9.11/task9.11.18/FINAL-PARENT-HANDOFF-r3-v2.md)，2026-11-04 22:35:52已从原250000推进到256000转移/25575updates，Q保护未触发。worker1439435，driver1437772/runner1438807均PPID1、nativeCLI1438808由独立runner持有；reviewer新SHAed764a7d57d552897087e7af89aa44b24338976bfc8c68f133e274a7b4fa47aa、driver b07e1d1c5db968c8eaf61e979755880010efab46b158c685b7de0461534a9423，旧字节归档。原native b8f3未改，实际复用完整profile状态及剩余pending，没有重跑250k或196，base1372+自身196=累计1568eval/余10396/max11964保持。最终科学成本以实际worker/lifecycle相加，额外profile写盘/恢复不能靠learning.previous_wall_s遗漏，5520政策不当实耗。剩余工程174586s≈48.496h非保证，原deadline仍守。
+
+<a id="src-1459"></a>
+## SRC-1459 — 2026-11-05 r3运行中断只读审核
+
+- 类型：项目原件核查；Codex，2026-11-05。精确证据及限制见[审核记录](agent_logs/task9/task9.11/task9.11.18/20261105-codex-readonly-runtime-review.md)。
+- C4718最后2250000转移/224975updates；225万meta标resume_safe但未加载验证，完整周期JSON到200万。guardian FileNotFoundError、原rootwait exit1、容器退出137/OOMKilled=false、相关PID不存在；缺失路径及根因未知。driver事件FAILED_NO_RETRY与status.json旧RUNNING不一致。不能认定SAC发散或声称训练仍在运行。
+- 采用：仅要求受影响的控制故障排错、终态一致性及恢复/未完成评估核查；本聊天未启动任务或改变科学条件。
+
+
+<a id="src-1460"></a>
+## SRC-1460 — 2250k资源扫描故障的必要恢复（执行中）
+
+- 类型：项目原始失败、恢复核查和有限工程修复；2026-11-05，Codex父/.18.1/.18.2。[父记录](agent_logs/task9/task9.11/task9.11.18/20261105-codex-atomic-rename-recovery.md)。沿原授权与AGENTS预算/审核原则；不增加实验方法/规模。
+- 原件：r3 `formal-C-seed4718/checkpoint-2250000.{pt,meta.json}`、`checkpoint-costs.jsonl`最后记录及 `.18.1/commands/t9.11-real-program-20261104-r3/remaining-C-4718/real-program-root-wait/wait-receipt.json`。完整档34320968995B、save346.029552383s；原outer exit1、实际22789.560684426s，非超时。guardian仅保存FileNotFoundError repr，实际缺失文件名仍UNKNOWN。原scan_growth枚举后stat未处理rename竞争，是待定向复现的故障路径，不能凭时间相关性声称原事故文件已坐实。
+- 恢复界限：已核原native safe_to_resume为true，2250k env_actions2250192/pending192覆盖最后实际交互；ZIP索引有效不代替实际完整加载。已完成8×196=1568周期回合，2250k空诊断目录只有0B events，无写前启动回合。须原样归档空目录后从2250k完整恢复，补该点唯一196，再到原3M；原历史1372+1568=2940，余9024，累计上限11964不变。实际加载/重新启动尚待验证，不将此条写成已恢复。
+- 工程选择：仅外部有界重扫桥与恢复控制；模型源码b8f3、原协议和已有检查点保持。所有失败成本保留；原资源上限/真实截止不变，阶段工程cap可按新AGENTS调整，须留独立裁决及真实后续账。
+
+
+SRC-1460实际交付与恢复补记（2026-11-05 10:24 +08）：[真实恢复快照](agent_logs/task9/task9.11/task9.11.18/valid2250k-resumed-v1.json)、[最新集中交接](agent_logs/task9/task9.11/task9.11.18/FINAL-PARENT-HANDOFF-r3-v3.md)。原scan_growth受控枚举→os.replace→stat确实复现ENOENT，3项定向通过：整轮最多3重扫仍计完整7B，40GiB预留拒超额/其他异常不吞；实际历史缺失路径仍UNKNOWN，不能证明具体文件。外部桥仅包三资源读取函数，显式授权env/argv/每PID安装与异常filename/traceback，后续native CLI/guardian/worker传播；模型b8f3及原协议/full字节不改，不声称没有运行期适配。实施证据见.18.1/rename-recovery-v1/IMPLEMENTATION-HANDOFF-v1.md与test_monitor_rescan_v1.py，独审.18.2/recovery-2250-v1/test_aggregate_v1.py验证oldFAIL+newPASS逻辑前序可供原下一L读取，复用G1/LON/旧保存恢复，不全量重审。
+
+最终独审resume-authorization-v3.json SHA4241c0fb41b6168608e33ae7f79238dd7647dcd270e4de9f7169a2a3837cb566，pin外部recover f95600c4…73ef38、driver828802df…1be36e、reviewer5095f06f…85c243，bridge5e9b5d5e…ef88d5/ba2cca30…7f390。新attempt2实际原生完整load64.117379364s，steps2250000/up224975/env2250192/pending192/valpending2250/config相同，原RNG恢复；网络/replay/优化器参数与动量CUDA0，原noncapturable step CPU保持。worker1760315/control1760146/PPID1runner1760145，CIDe91d6d1cbe46026130f89151d9d79155228758e9c2e0a032835f1f790ec81a5b/GPU-e2eab186-4b18-f63f-2ada-c61aa98ed587，10:24真实运行，新2250评估已写前32回合/尚未完整，events3563277B；不能把32 started写成32 complete。旧1568不重评；预留剩余784仍包含当前196，总规模不增。
+
+签字竞态失败也保留：[父原件](agent_logs/task9/task9.11/task9.11.18/parent-recovery-adapter-mismatch-v1.json)。control读旧适配通过后实施补日志计费映射，容器worker新字节被旧令拒，activate/model前失败，0新转移/0评估；exactStopped，实GPU18.686824137s/外层24.618894577s嵌套不相加，own STOP和空诊断均原样归档。v1/v2授权/attempt1/全部成本保留，v3新budget/composite old evidence计入一次。无须再次预算请示。
+
+本次worker14400s含save1800/control120、lease14640，160h各worker/GPU、16GiB诊断计原2TiB、原截止保持。剩余工程参考139386s≈38.718h含三run/final/控制恢复，非硬上界；实际2250load64.1s在预留内。后台完成后仅在3M/299975/12完整周期/2352 own及真实新终态全满足时独审聚合oldFAIL+newPASS，再driver --resume自动L4718/C4719/L4719；最终B–E/final原门仍需实际科学验收。父按用户要求退出主动监督，不停止后台，不声称四run/final已完成。
+
+
+<a id="src-1461"></a>
+## SRC-1461 — 恢复入口同步全局扫描回归、2969467中断与整批统一执行决策
+
+- 类型：项目源码/现场原件、一次只读计时、用户继续授权及工程排期选择；2026-11-05 Codex父，实际模型/强度未知，推荐GPT6.1sol medium、Sonnet5.5 medium（恢复/性能/多GPU隔离）。[审查日志](agent_logs/task9/task9.11/task9.11.18/20261105-codex-recovery-review.md)。用户最新要求“能不能一次决定好，之前的长训也没什么问题”，沿[SRC-1451](#src-1451)、[SRC-1453](#src-1453)合理全批预算/第二卡授权与AGENTS预算审核原则执行必要修复，不再请求同预算。
+- 实际失败：r3/recovery/rename-2250k-attempt2/{worker-terminal,status}.json；worker墙钟12851.731552763s，SamplingIncomplete(sampling deadline; incomplete)；`formal-C-seed4718/interrupted.meta.json`真实steps2969467/env2969467/actioncalls11605、resume_safe true，完整interrupted.pt34626266463B、实际保存251.104336618s。原safe_to_resume只读核True，实际加载尚待；前三新周期2250/2500/2750 complete，因此11×196=2156，末3M周期未开始。最后learning行2969000只是日志粒度，不是最新完整步数。原FAIL与实耗保留。
+- 性能审查：外部task9_11_program_recover.py resource_guard第99行每次调用resource_check全局扫描，原训练check_stop约每5s触发；同时host control已重复执行同全局扫描。原worker只做本地guarded_size。父[一次原函数只读实测](agent_logs/task9/task9.11/task9.11.18/review-resource-check-timing-v1.json)单次resource_check耗3.116622768s（停止后测量，不是运行时分布）；它在训练线程同步阻塞，不能把先前没有此开销的成熟吞吐直接用于新入口。原12851.344438s worker_body中不重叠常规timings合9083.351232s、差3767.993206s含异常保存251.104337s及其他未计时成本；不能全部声称精确归因扫描。新入口active12600s硬截止确已触发退出，非SAC发散/用户总预算耗尽。修复应移除训练线程新增全局扫描，保本地写前/40GiB等守卫及host全局监护，不以放宽正确性换吞吐。
+- 统一工程决策：先以native b8f3完整恢复interrupted到原3M（余30533/末196），不重做11完整周期；须定向核reset中断后的统计口径。新外部v2另文件/版本化令，旧源、旧令、FAIL/UNKNOWN/成本保持；方案与独审schema先一次对齐再freeze，禁止签后补码。整批依已批worker/GPU各160h、diag16GiB计2TiB、原真实截止，执行上限按可用全局额度，不再让短工程预测窗口反复停止健康训练。
+- 排期选择及依据：独审初核单卡后三B1约30.795h+final约2.748h+C尾约0.8h+控制2h≈36.34h，对15时左右剩余日历几无裕量。GPU0/2/3空闲、GPU1 task10在用；采用已授权第二卡GPU2 UUID656ca5c1-681f-48a2-7d1f-a00824723f68，仅并行独立原run。C4718先收尾，L4718先GPU0启动，C4719后GPU2启动并行，L4719在空闲卡继续；成果/原科学验收仍按C4718→L4718→C4719→L4719汇总。各方法/seed/3M/周期和final规模不变；第二卡尚未启动，隔离/计费/实际设备与新入口必须先必要核查，不能把理论双卡速度当实测承诺。预计约26h为条件工程外推，非硬上界。原最终开发B–E验收门保持。
+
+
+SRC-1461局部对照补记：同一停止后的输出文件系统，原local guarded_size一次只读0.041496268s，对照新global resource_check一次3.116622768s；只是单次路径开销对照，非时延分布/GPU吞吐保证。原始计时文件追加两个值，未加载GPU模型。另末条sampling-started为ended_reset/count1/steps2969467，原train在reset前已累加episode_end/episodes/strict_success，reset抛期限异常而core ended标志尚未提交；从此full恢复需核一次统计重复累计，并登记必要一次性统计兼容，保持模型/环境/奖励/动作/梯度/RNG不改，不把journal安全检查等同于所有统计口径自动正确。
+
+
+SRC-1461统一政策正式落地：独立[unified-resource-policy-v1](agent_logs/task9/task9.11/task9.11.18/task9.11.18.2/recovery-2969-v1/unified-resource-policy-v1.json)及budget-review-v1/checkpoint-admission-v1/failed-attempts-composite-v1共同支撑。worker已占额386790.857310s，其中345600s是历史96h政策预留、5520s是缺外等待的profile政策占额，22789.560684/12881.296625s为两个互不重叠实际outer；GPU372381.065793s含旧333499.377910s物理上界而非实耗，另3138.495394/22843.423784/18.686824/12881.081881s为逐段实际allocation（嵌套worker不得相加）。未来唯一分配187200s=52h：C收尾10800含save1800，三个原run各50400，final全部14400，共用工程恢复10800。保守总额下worker余2009.142690s/GPU余16418.934207s，原160h不增；预模型工程24.618895s记公共池engineering-cost-ledger-v1，旧GPU18.686824已计历史不再扣。两卡科学规模不变，calendar93600s≈26h只是工程预测不是短时终止门。
+
+新C入口task9_11_program_recover_v2.py SHA2d16f6755479cc5824640c88618040fc8e8570377eae8f49aab35e26b4d1b1d5，旧已签文件未改。3定向验证原localguard/全局扫描tripwire、截止与STOP拒绝分支、一次统计回退/原native再加恢复原值通过。独审resume-authorization-v1 SHA6b67a83d5f66f74062977497b0b793e322ef7bedf6fd41a79ce0afff36f73b64；新interrupted输入只作一次SHA c85693586f4860dc175086edcabc8daf2ab51ef193f62ea0e520c4bb21b7cc7a，原safe检查通过，实际native load尚待后补。15:13已起PPID1runner1870639/control1870640/CID2861f1d2ddc44c3e95f6612a9c78f70e87702900a343fd3232bb1a0537a40a57，独立attempt continue-2969467-attempt1；旧自生STOP原样归档而非用户暂停。新worker移除同步全局扫描、host监护保持；完成C后等待已签双卡dispatch，绝不误走旧单卡driver。
+
+
+SRC-1461真实恢复补记：[valid2969467-resumed-v1](agent_logs/task9/task9.11/task9.11.18/valid2969467-resumed-v1.json)。新入口原生load52.901456980s，steps/env2969467/up296921/pending0；原config/RNG，实际网络/replay/优化器动量CUDA0/CPU step原语义保持。末reset已预记的episode1/fail_limit1显式一次性统计回退，原train随后正常计入；不是改reward/action/模型/RNG，不声称所有state字段完全原样。15:16实际学习已推进298万（非只启动容器），Q守卫未触发，hostworker1870826/control1870640/PPID1runner1870639。当前C继续最后训练/末196/两full保存；双卡dispatch准备中，第二卡尚未实际启动，不将授权/配置当实际并行性能结果。
+
+
+SRC-1461整批部署完成补记（15:34 +08）：[真实部署快照](agent_logs/task9/task9.11/task9.11.18/unified-background-deployment-v1.json)。C现3000000/up299975/env3000000，checkpoint-3000000 full/meta已实际落盘，末196评估started100/尚未complete，进程1870826/1870640/PPID1runner1870639仍活；不是四run或final完成。原native stop_reason在恢复后保留旧采样截止字符串，是历史字段，当前终态依实际worker-terminal/status/complete评估，不能凭该旧字符串误报再次中断。
+
+必要新外部shard入口SHA3bf240b99b35c680a19f892f36698b1b2a2d302365ea0899220a2bb70c000e42，独立validator SHA691dacfe042a3ccf17a711075c203273286afb9b36794e8605294ad2ba88aede；旧源/原native b8f3不改。单次受影响路径核查3实施fixture覆盖container→HOST canonical refs、两UUID调度/同run14h共享、Popen失败后owned exact cleanup及费用；独审fixture覆盖原validate_profile/3M12周期2352/拒错UUID与闭合漂移/按原顺序发布。冻结前修复stage目录跨端不一致、container refs不可读、异常仅STOP不关lease等控制缺口，SIGTERM/INT走有界排空后精确关闭本批CID，失败原件/费用保留。未跑新GPU科学smoke/未重复G1、LON或全量测试。
+
+[独立授权](agent_logs/task9/task9.11/task9.11.18/task9.11.18.2/parallel-run-v1/authorization-v1.json) SHAed862a67567636e054fd04a066ee45e019cd53b4e9154575aa4048b034e5a175；[自动dispatch](agent_logs/task9/task9.11/task9.11.18/task9.11.18.2/parallel-run-v1/dispatch-ready.json) SHA791f8ea43a811b78df31e92544b8dc7569729aa57748f476158b2e332d668bed，父已核对应5个外部文件SHA，实际load_context/独立check_authority/publish callback通过，callback诚实waiting_for remaining-C-4718，未伪C终态。argv通过env在Python启动前显式设置新host bridge授权，三个job各自桥event_root和arm/seed目录，物理卡UUID分别锁定GPU0/GPU2，容器内部仍cuda:0。
+
+并行budget-review-v1用已签C cap10800s可靠政策上界预扣一次（不是C实耗），baseline worker397590.857310/GPU383181.065793s，future176400s=49h；合总与统一52h分配相同，不再叠加C实耗。原m.checked_budget实际通过，不为追精确C尾段阻塞派发；未来C实际终态完整保留供结算。两并发full-save预留80GiB，全局guard在host、worker仅本地守卫，shared计量每job actualouter扣唯一14h余额，actualworker分列，工程24.618895s单列公共池。
+
+C完成真实末评估/最后full保存/精确停容器→已冻C独审聚合oldFAIL+recovery2FAIL+newPASS→读已部署dispatch→L4718 GPU0与C4719 GPU2并行，首250k包含各3M且按实际profile/保存恢复更新、剩余2.75M接原native完整状态；随后空闲卡L4719。原顺序汇总、每个原run科学条件/规模不改；三个run结束明确等待原开发科学验收，final1184尚未执行，不自动伪科学PASS。第二卡训练尚未实际启动，隔离fixture/授权不是双卡实测性能结果。父已把完整后台配置部署后退出主动监督，未暂停/停止后台。
+
+SRC-1461并行交付原件索引：[独立源码与控制授权](agent_logs/task9/task9.11/task9.11.18/task9.11.18.2/parallel-run-v1/independent-source-authorization-v1.json)、[实际上下文及回调验证](agent_logs/task9/task9.11/task9.11.18/task9.11.18.2/parallel-run-v1/actual-context-and-callback-v1.json)、[实施冻结](agent_logs/task9/task9.11/task9.11.18/task9.11.18.1/parallel-v1/freeze-v1.json)。最终shard3bf240b9/helper691dacfe，按其已核范围签发，不声称绝对无bug或已完成双卡训练。
+
+<a id="src-1462"></a>
+## SRC-1462 — 当前并行GPU等待故障及零步恢复修复
+
+- 类型：项目原始故障、源码核查、工程修复和定向测试；2026-11-05 Codex父。证据：[修复三文档结果](tasks/task9/task9.11/task9.11.18/task9.11.18.4/RESULTS.md)、[验证版本](agent_logs/task9/task9.11/task9.11.18/task9.11.18.4/verification.json)。
+- 原件：results/task9/t9.11-real-program-20261104-r3/parallel-shards/state.json、shards/L4718/profile/{result,worker-result,container-stopped}.json、formal-L-seed4718/interrupted.meta.json、reviews/remaining-C-4718.json（以上路径相对forem）。GPU占用异常导致整批清理；L零动作元数据，18.707820415496826秒控制实耗保留。C完成3M证书不撤回。
+- 工程选择：资源占用等待，沿用原全局截止/预算与卡绑定；查询超时15秒（工程有界选择，非实测性能），非零失败不自动重训，显式零步恢复及另尝试目录。原native保存采用replace，模型硬链接快照不会随下次原子发布被改写；小日志复制以避免追加污染。
+- 验证：12项新/适配控制测试与3项既有wiring测试通过，退出0；后者隔离真实GPU占用。未启动模型/GPU/仿真/训练、未实际加载零步检查点。新签名候选保PENDING_DELTA_REVIEW，未冒用指定独审结论；不把控制测试等同科学提升或真实恢复验收。
+
+SRC-1462验收补记：最终15项当前控制测试+3项既有wiring=18项通过；独审发现的copy/save失败半准备与同内容新STOP误清已修并独立故障注入复验。受影响路径检查未发现其他问题。[独审结论](agent_logs/task9/task9.11/task9.11.18/task9.11.18.2/shard-repair-v2/delta-verdict-v2.json)及[新授权](agent_logs/task9/task9.11/task9.11.18/task9.11.18.2/shard-repair-v2/authorization-v2.json)已通过，父核两个源码SHA/callback一致。旧候选和失败证据保留；实际准备、模型加载、训练均未执行。原项目科学验收与最终独立测试未放行。
+
+<a id="src-1463"></a>
+## SRC-1463 — task9.11.18 新授权实际零步恢复与后台学习
+
+- 类型：用户本轮明确执行授权、项目现场原始实测与受影响源码核查；核查日期2026-11-05T16:42:37.646985+08:00，核查人Codex。实际模型/强度未知；推荐GPT6.1sol/high、Sonnet5.5/high（完整恢复与控制/费用一致性）。
+- 支撑主张：authorization-v2实际prepare退出0、原生完整零步恢复成功并已真实学习，C4719指定卡忙时等待，不重跑C4718；不是SAC改善或四run验收。用户明确要求继续训练与周期评估、必要排错，复用既有18项回归/独审，按现行预算/截止执行。
+- 精确证据：[现场快照](agent_logs/task9/task9.11/task9.11.18/20261105-codex-shards-resume/actual-resume-proof.json)、[接手日志](agent_logs/task9/task9.11/task9.11.18/20261105-codex-shards-resume.md)、[两个变更文件SHA](agent_logs/task9/task9.11/task9.11.18/20261105-codex-shards-resume/adapter-check.json)；run-id t9.11-real-program-20261104-r3；results/.../shards/L4718/profile-retry1/zero-restore.json、formal-L-seed4718/learning.jsonl与runtime.json、parallel-shards/state.json、recovery/launch-shards-repair-v2/{command-spec,detached}.json（相对forem，...为task9/t9.11-real-program-20261104-r3）。
+- 原始观察：prepare显式检查并保存旧失败18.707820415496826s；zero-restore PASS_ZERO_STEP_RESTORE，steps0/updates0、原loader和RNG恢复。连续三条实测学习记录递增，最后11000转移/1075update、Q_bound_exceeded false。runtime CUDA12.8/device cuda，worker1924702实际占用授权物理GPU-e2eab186-4b18-f63f-2ada-c61aa98ed587；精确容器334fac20408083ee5ca8f73b47a6128d6117662eca94b127cc3cd16df593646e设备请求仅此UUID。runner1924512/PPID1、controller1924513/start_ticks已核；后台状态RUNNING并等待C4719/L4719。GPU2仍为其他task12进程1892130，不停止他人任务。
+- 采用与限制：继续原native b8f3源码/方法/seed/3M与周期规模、原50400秒单run分配扣旧失败、160h/16GiB/2TiB和11月7日03:18:20+08截止，依据SRC-1461/1462。当前CUDA执行证据来自runtime、原生loader路径、实际GPU进程和真实优化更新；未对运行进程做逐tensor窥探，细粒度网络/replay/optimizer设备证据沿既有250k profile恢复门生成，尚未完成该门。不将控制修复当科学收益；四run之后仍需原B–E验收才可独立测试。
+
+
+<a id="src-task9-bioik-20261105"></a>
+## SRC-TASK9-BIOIK-20261105 — 用户要求task9探索BioIK
+
+- 类型：用户授权；来源：2026-11-05当前聊天“解释 BioIK 及未采用原因”（01a1aafe-2b0d-7353-80bc-e05cb6ed8a45），用户原话：“这里是不是交给task9，那边探索也用bioik探索下”。核查人Codex，2026-11-05T17:21:57+08:00。
+- 采用：在task9新建[task9.12](tasks/task9/task9.12/TASK.md)，授权BioIK探索及其必要隔离实现/小规模配对验证，现有9.11训练保持既定条件。样本规模/预算仍待执行者按成本登记；未推定性能、成功率或生产替换。
+- 工程选择：先核同输入求解与接受差异，再决定是否继续，用以区分求解器贡献和碰撞/语义差异；这是本交接的方法选择，尚未运行验证。无新增固定数值。
+- 使用：task9.12三文档与[交接日志](agent_logs/task9/20261105-codex-bioik-handoff.md)。跨聊天发送工具不可用，仅落盘交接，未声称接收方已执行。
+
+
+<a id="src-task9-status-20261105"></a>
+### SRC-TASK9-STATUS-20261105 — 当前运行快照
+
+项目原始实测；Codex，2026-11-05T20:26:11+08:00核查。支持task9两路训练和task10一路训练正在运行、对应设备及进度的主张。精确命令、PID、run-id及原始证据路径见[核查记录](agent_logs/task9/20261105-codex-running-status.md)。原始结论：L4718约1.244M/3M、C4719约0.832M/3M；L4719等待；task10 8176/10000决策。仅用于本次状态答复，运行中数字持续变化，不构成完成或效果验收。
+
+<a id="src-status-20261106"></a>
+## SRC-STATUS-20261106 — 下层SAC后台进度现场核查
+
+- 类型：项目原件/现场实测；2026-11-06T09:09:29.165718+08:00，核查Codex；[记录](agent_logs/task9/task9.11/task9.11.18/20261106-codex-progress.md)、[快照](agent_logs/task9/task9.11/task9.11.18/20261106-codex-progress/snapshot.json)。
+- 精确位置：run t9.11-real-program-20261104-r3；forem/results/task9/该run下parallel-shards/state.json、formal-各arm-seed/{summary,remaining-restore}.json、learning.jsonl、validation-*.json及reviews/*.json；既有阶段证书复用，未重审。
+- 原始结论：C4718、L4718、C4719均3M/299975update且各12完整周期，L4718/C4719 profile与remaining均certified，C原聚合证书保留。L4719最新落盘1750000转移/174975updates，6完整周期，最新完整1500k；profile及原生恢复设备证据通过，网络/replay/优化器动量CUDA0。remaining GPU0 worker2338256/CIDb2f3049693ad2c82d7c7819ccda4fbbba96f76ae53031d392be6d80eac023225运行；runner1924512/PPID1、controller1924513存活，state RUNNING、waiting_jobs/cleanup_failures空。最新Q_bound_exceeded false。旧error/traceback为历史保留，无新失败证据。
+- 采用/限制：仅用于进度报告，日志步数是落盘下界；阶段认证不等于B–E科学验收或能力改善。未新增实验，不保证完成时间，最终独立测试尚待科学门。
+
+<a id="src-t9-explore-20261106"></a>
+## SRC-T9-EXPLORE-20261106 — BioIK与完整RLlib SAC隔离对照派发协议
+
+- 来源类型：用户授权、项目源码/瞬时资源核查、外部官方说明、工程选择与推导；核查人Codex，2026-11-06。本轮只规划，未启动Agent/安装/加载模型/求解/评估/训练。实际规划者平台型号与强度未核；推荐执行者GPT6.1sol/high、Claude Sonnet5.5/high，原因是跨接口语义、研究归因和恢复因果。
+- 用户主张：用户要求有余量时规划并派发子Agent测试换BioIK以及rlib对下层SAC的效果；本轮异步明确答“是，测试完整Ray RLlib SAC”。旧BioIK授权见SRC-TASK9-BIOIK-20261105。最新授权允许未来隔离实施/必要测试，当前聊天交付文档和提示词，不代表实验已执行。
+- 项目事实/精确位置：`forem/config/task9/task9_11/C_seed4718.json`及C_seed4719；`forem/src/task9_lr/runtime/src/task8_lower/sac.py::{LowerSAC,update_due,update_from_batch}`显示自写实现中的alpha_rule选项，不等于RLlib完整训练；`runtime/src/task7_sim/kinematics.py::{solve_world,solve_tcp_in_arm,_result}`、`runtime/src/task8_sim/env.py::PROFILES`为现有解析→DLS/碰撞语义入口。`task9.11/TASK.md`及SRC-1383/1384/1386保存严格成功194/300与132/288、恢复不等于严格成功、信息归因未明等历史依据；本轮只引用，不视为新测试结果。任务现状参见SRC-STATUS-20261106。
+- 硬件现场（2026-11-06约09:25–09:28 +08，nvidia-smi --query-gpu=index,uuid,memory.used,utilization.gpu与--query-compute-apps=gpu_uuid,pid）：GPU0 UUID e2eab186-4b18-f63f-2ada-c61aa98ed587有PID2338256；GPU3 UUID29fe1ea1-d4e9-c14b-64f2-cb875ae92a0a有PID2162484；GPU1 UUIDbaaca86e-0491-44bf-4294-e64ffe4934e9和GPU2 UUID656ca5c1-681f-48a2-7d1f-a00824723f68未列计算进程、各14MiB。只是瞬时观察，不证明长期可用/资源已预留。任务各单GPU/最多8CPU线程为保守工程起点，须执行前复核/隔离，忙等待，不抢别人的进程。
+- 外部官方资料：TAMS-Group `bio_ik` README，2026-11-06读取 https://github.com/TAMS-Group/bio_ik ，Basic Usage及How it works/Running the Self-Tests：MoveIt插件，含近似解/目标约束行为，可用FK→IK→FK检查。用于要求显式版本/近似解及FoReM最终判定；其示例1ms/0.001m不作为本项目参数依据，不据官方其他机器人结果预设FoReM收益。Ray官方RLlib Algorithms SAC节，2026-11-06读取 https://docs.ray.io/en/latest/rllib/algorithms.html#soft-actor-critic-sac （网页标题Ray2.60.0），含SAC训练/回放及SACConfig参数。只用于确认完整框架对象及核查项目，不代表本机已安装该版本/旧环境适配已验证；执行须锁实际版本并查对应源码。
+- BioIK工程选择：32独立校准请求、最多256分层诊断目标（四层各64目标，缺失/不适用如实缩减）、每域8回合接口smoke、两后端各随机300+语义288开发集，共2×588=1176回合。选择理由：先低成本语义/耗时核查，再可定位原因的配对诊断与自然分布闭环验证，避免定向集权重当总体提升。32与256不重用；零动作没有IK请求不造数据。主超时B取项目校准p95/插件粒度/动作周期的可执行映射后在主诊断前冻结，未知数值待实测；2B仅独立敏感性工程扫描，不替换主结果。成本公式见task9.12 PROCEDURE。主策略固定历史B3-5M，不按当前胜负挑模型。
+- RLlib工程选择：固定C/B1作参照，完整RLlib为另一实现栈，不掺BioIK；种子4718/4719沿用现有配对身份但新run从头；各3M来自本项目当前训练规模，4×3M=12M总有效转移；250k profile包括在3M中；两个框架各1000有效转移smoke另计。不做额外超参扫描。每250k评估196，3M终点评估588取代196，同期预算4×(11×196+588)=10976回合。依开发测试来裁方向，保留原独立测试集。需近似数学对齐时先列差异，不把实现栈差异称算法本身优越。
+- 成本推导：沿SRC-1458成熟50k训练275.578267202秒、单save166.482570300秒、E196=1230.460538290秒、restore27.581371011秒。仅作为C预估：3M/50k×275.578267202 + (11+3)×1230.460538290 +13×166.482570300 +27.581371011 ≈10小时/run。假设E588约3×E196、13次保存、成熟训练速率可外推；这些是假设，额外profile保存/控制需按实测加，不是上限/工期承诺、更不是RLlib已知成本。RLlib执行先profile代入自己的速度；整体墙钟与累计worker时长分别算，不把并行卡数当直接倍速。
+- 共同统计工程选择：95%区间与按地图簇配对重采样，逐训练种子另报；两种子只支持有限探索判断，不能证明总体稳定性。主严格成功、首次拒绝、停滞、最终到达、成本并列，恢复仅诊断。开发集反复使用必须披露，新任务不能拿task9.11保留测试集选方案。
+- 采用与限制：[task9.12](tasks/task9/task9.12/PROCEDURE.md)、[task9.13](tasks/task9/task9.13/PROCEDURE.md)为协议事实源；上述新规模/资源/统计/模型推荐为工程选择，未执行。旧协议性能/预算不能偷移为本轮实测或硬时限。已有授权内合理排错/规模调整按AGENTS记录，不增加重复审批；新方法/奖励/观察改动另行授权。
+
+2026-11-06T09:39:41+08:00 执行授权补充（用户直接指令，Codex核查）：用户本轮要求“执行task9的BioIK与完整Ray RLlib SAC两条探索任务”，指定两个GPT6.1sol/high优先子Agent、各自白名单、合理预算自主推进。此前“仅规划/待派发”是历史状态，本轮允许实际安装适配、校准、smoke、保存恢复、闭环测试及两臂两seed各3M训练；不含BioIK重训练/组合或改现役源码。瞬时GPU/内存/磁盘复查与实际派发见[父执行日志](agent_logs/task9/20261106-codex-bioik-rllib-execution.md)；尚无性能结果，不以资源可用作为预留保证。
+
+<a id="src-t9-exec-20261106"></a>
+## SRC-T9-EXEC-20261106 — 两支探索实际执行与父核验
+
+- 来源类型：用户直接执行授权、项目源码定向核查、资源瞬时观察及执行证据；核查人Codex父，日期2026-11-06。模型子Agent实际派发gpt-6.1-sol/high（工具返回已成功），父平台具体型号/强度未知。
+- 授权/协议：沿[SRC-T9-EXPLORE-20261106](#src-t9-explore-20261106)及本轮用户明确“执行”“派发两个子Agent”，允许两支实际实施测试及协议合理训练；不含更改动作/奖励/终止/候选、BioIK重训练或与RLlib合并。
+- 证据入口/精确位置：[父执行日志](agent_logs/task9/20261106-codex-bioik-rllib-execution.md)；A/B独立日志分别`agent_logs/task9/task9.12/20261106-codex-execution.md`、`task9.13/20261106-codex-execution.md`，任务三文档为配置/结果事实来源，后续增量核验追加。
+- 原始核查：GPU1/2起始无计算进程，但GPU1随后被task10 probe PID2507441占用；已核cgroup与命令，BioIK等待/先CPU，不停止他人。内存可用191GiB、磁盘7.0TiB均瞬时读数，不是资源预留或成本测量。
+- 训练语义推导：现役`forem/src/task9_lr/runtime/src/task8_lower/training.py::consume_transition`先更新再push；`sac.py::update_due`旧replay_size>256且t%10=0，所以首update t=260，1000转移更新(1000−260)/10+1=75，3M更新(3000000−260)/10+1=299975。条件为从空replay/0计数起且无异常中断、每转移顺序消费；不是本次训练实测。warmup1000只替换action，total_updates4999743为LR日程跨度。RLlib适配须核对真实时序/计数，差异显式披露，不冒称默认参数匹配。
+- 使用/限制：上述供本轮定向核验与资源协调；当前尚无新严格成功/框架收益结论，不拿旧结果当新实验结果。
+
+2026-11-06T09:44:09+08:00 SRC-T9-EXEC口径补充（项目核查）：`forem/scripts/task9_10/supervisor.py::PLAN`为C/T×seed4718/4719/4720，`replay.py::main`调用每策略`evaluation.evaluate`并断言100随机/96语义；现役`evaluation.py::evaluation_plan`同口径。因此历史300/288为跨3训练种子聚合，不能当单策略已有588个唯一episode。BioIK沿原3权重配对可完成两后端总1176；RLlib单训练种子终点数量需冻结新开发输入或用户澄清，不重复同196充数。源资产在主树`/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed{4718,4719,4720}`，本任务只读加载。
+
+2026-11-06T09:45:11+08:00 SRC-T9-EXEC授权补充：用户对异步澄清明确选择“沿用现有100/96开发回合，各训练种子分别报告（推荐）”。因此RLlib周期/终点均每run196，正式评估预算工程推导4run×12周期×196=9408（非实测）；旧10976和单run终点588被此口径取代。BioIK三固定历史训练权重各196×2后端=1176保持。每run3M、250k profile含预算、种子4718/4719和现有环境科学合同不变。
+
+2026-11-06T09:47:31+08:00 SRC-T9-EXEC首批原件核验：BioIK `results/task9/task9.12-20261106-r1/calibration.json`（32 rows与budget）父复算28/32现役、28/32 BioIK，nonfinite_rejected=true，FK float64矩阵最大元素差6.031309948001384e-10；B34ms来自现役单请求p95 33.860241994ms按1ms向上取整，桥接FK roundtrip p95 .096702296ms，控制周期100ms。纯接口校准样本，与后续诊断分离；不作为严格成功/收益证据，现役无强制timeout不称等求解预算。32 BioIK caller墙钟合计.403788628s、solver CPU .234356s，仅小批成本。RLlib setup/probe-native.log全零合成batch证实首update260及原生target计数1，尚非真实1000smoke或完整恢复/训练结果。
+
+2026-11-06T09:51:34+08:00 SRC-T9-EXEC定向核验增量：`results/task9/task9.13-setup/native-check.json`与`scripts/task9_13/check_native.py`支持合成1000/75原生更新、四Adam CUDA、下一update恢复差0及上述数值定向核对；使用限制是合成全零图观测/小批次，非真实环境smoke或训练收益。旧失败日志保留。`forem/src/task9_lr/runtime/src/task7_sim/core.py::Core._finish`原最终成功=route_s==route_length且终点位置残差<=.025m、cbl姿态残差<=.05；strict另需failures==0。仅route_complete/terminated不支持最终成功主张，已要求两支只读记录原success，阈值沿原代码而非本次新设。
+2026-11-06T09:54:23+08:00 SRC-T9-EXEC工程异常增量：09:51:53起B的`check_environment.py`因同目录`queue.py`遮蔽标准库触发递归worker，父实际ps/PPID及/proc核查支持；B清理自己的容器子树并改名program.py，09:54父scan活worker0。异常启动目录与原日志保留，动作/消费/CPU累计由实际可得原件核算，未证处保持未知。这是适配工程失败，不能当正常正式训练、用户追加预算或框架成功率证据；后续需针对性import回归再继续smoke。
+
+
+<a id="src-t9-bioik-exec-20261106"></a>
+## SRC-T9-BIOIK-EXEC-20261106 — BioIK隔离实现、校准与后台证据
+
+- 类型/核查：官方源码、项目原件、工程选择及有限实测；2026-11-06，执行Codex子Agent A（GPT6.1sol/high）、父Codex定向原件核验。主张/事实源为[task9.12 RESULTS](tasks/task9/task9.12/RESULTS.md)及[独立日志](agent_logs/task9/task9.12/20261106-codex-execution.md)，后续完整结果尚待。
+- 官方出处：TAMS-Group BioIK https://github.com/TAMS-Group/bio_ik/tree/1de267840678fc3237ee90c8788e835e1966fbf4 ，2026-11-06实际clone；精确`src/kinematics_plugin.cpp::load/searchPositionIK`（random_seed读取256行、mode/threads/rotation_scale/近似返回）、`src/ik_base.h::Random`及`include/bio_ik/bio_ik.h`。本地`forem/build/task9_12/upstream-bio-ik`，实施副本`forem/src/task9_bioik/vendor/bio_ik`，来源/文件差异`forem/config/task9/task9_12/bioik-origin.json`。实际实现文件上游相同；根项目commit不冒称BioIK commit。父只读核上述相关实现/桥接，源码全比较由A完成，未重复全资产hash。
+- 采用：MoveIt Noetic插件＋同一FoReM URDF与TCP变换，线程1/初始化seed471812/mode bio2_memetic为工程选择。近似解true与MinimalDisplacement/AvoidJointLimits权重1沿CBL `modulation_rl/src/robot_env.cpp::getBioIkOptions`，历史来源SRC-0406/SRC-0351；不称完整CBL所有goal重现。默认rotation_scale .5来自该版本插件，不是性能推荐。无BioIK内部碰撞回调，解析分支自碰/地面筛选与其不同，暴露为求解器包差异；FoReM最终残差、限位及碰撞终审不变。
+- 实测/位置：`results/task9/task9.12-20261106-r1/calibration.json`32独立合成请求（28 FK目标＋4目标平移2m），父逐行核两后端均28接受、非有限拒绝；FK矩阵最大元素差6.031309948001384e-10。`actual-request-interface-check.json`一真实请求同状态/目标/初始q两后端专项；实际接受不等于solver返回。B=.034s为现役p95 .033860241994s与stdio往返p95 .000096702296s取max、按1ms向上取整，控制周期.1s，冻结在诊断前`frozen-budget.json`；现役无同强制timeout，仅实际准确率/成本比较。
+- 规模/状态：三个固定历史B3_5M权重各100随机/96语义，两后端共1176正式回合，另32smoke；32校准独立不复用。现役正式588补采后冻最多256唯一分层请求，预登记3次固定初始化重复主repeat0，重复另计不挑最好，不是768独立请求。当前后台运行，不能据smoke/28接受称成功率改善。父已核首48个现役正式行与历史validation-5000000的strict/failures/transfers/terminated/truncated一致，非全批验收。
+- 运行证据/限制：`process-identity.json`核CID b6e11c2c…、GPU1 UUID baaca86e…4934e9、host driver2522044/start_ticks913872408，driver-state动态worker；挂载现役/历史RO，白名单写入。完整STOP/恢复与版本局限见任务RESULTS，BioIK内部RNG不能serialize，恢复初始化不声称精确solver续接。成本估计两后端约2.1h仅8回合smoke均耗外推＋诊断/记录，非实测总工期/上限；最终以stage-costs/逐batch为准。
+
+<a id="src-t9-rllib-exec-20261106"></a>
+## SRC-T9-RLLIB-EXEC-20261106 — 完整RLlib原生训练链与定向验证
+
+- 类型/核查：官方对应tag/本机安装源码、工程适配与有限实测；2026-11-06，执行Codex子Agent B（GPT6.1sol/high）、父Codex核受影响源码/原件。[task9.13 RESULTS](tasks/task9/task9.13/RESULTS.md)为实际配置/结果入口，[独立日志](agent_logs/task9/task9.13/20261106-codex-execution.md)列成本/异常；完整正式结果尚待。
+- 版本/官方来源：Ray/RLlib 2.40.0，Python3.10、Torch2.7.1+cu128、Gymnasium1.0.0、pyarrow17.0.0，隔离容器安装原件`forem/logs/task9/task9.13-setup/install.log`。对应原码 https://github.com/ray-project/ray/tree/ray-2.40.0/rllib/algorithms/sac ，`sac.py::SAC.training_step`、`sac_torch_policy.py::actor_critic_loss/optimizer_fn`、`dqn.py::_training_step_old_api_stack/calculate_rr_weights`及`utils/replay_buffers`；A/B已读对应tag，父读安装源码导出与适配，未把latest网页当安装版本。`forem/build/task9_13/native-{model,training,loss}-source.txt`为本机导出位置。
+- 采用/边界：实际完整SAC Algorithm的原生sample→uniform replay→train_one_step→RolloutWorker.learn_on_batch→SACTorchPolicy四Adam/target训练链；仅本地sample桥接GPU256环境的每10消费批，网络容量沿FoReM Actor/TwinQ，未重写SAC learner。原解析+DLS固定，不混BioIK。training_intensity25.6指256样本/10新消费转移，RR实测[1,1]，不是每转移25.6次optimizer更新。
+- 不能对齐的真实差异：C先旧replay update再插1，RLlib先插10再update；C均匀无放回GPU replay，RLlib原生均匀有放回CPU replay/样本搬GPU；C MSE/Adam eps1e-8/合并Q optimizer及critic先更新后actor，RLlib Huber/eps1e-7/独立Q optimizer与同时构图；C capped alpha首update从1到exp(logalpha)*.35、min .05停止，RLlib原生连续exp(logalpha)。配置/差异表须导出有效值，不能遗留无效继承字段冒称原生capped。结论只比较实现栈，不称单变量/算法优劣。
+- 定向证据：`results/task9/task9.13-setup/native-check.json`及`scripts/task9_13/check_native.py`支持合成1000消费75update、四模块参数改变/四Adam CUDA、原生target、磁盘replay/RNG/optimizer/counter恢复下一update参数差0，固定小batch logprob/4loss/critic梯度差0（预设atol1e-6/rtol1e-5）。这是合成数值/恢复测试，不能替代真实环境1000smoke或泛化/收益。早期CPU target模板引用适配问题已修并保留失败native-check.log，实际target为target_models[model]。
+- 初步真实证据：`task9.13-smoke-C/smoke1000-terminal.json`PASS1000/75；`environment-check.json`54字段/3显式动作合同差0与确定性重复动作一致，但512快照env pending为空，父要求补非空pending恢复专项。RLlib真实smoke进行中，尚不宣布训练准入或框架结论。
+- 用户修正评估：各新训练种子沿已有100随机/96语义，每250k含3M终点196，4×12×196=9408为工程计划；两臂各seed4718/4719各3M、250k含预算、horizon3M不变。旧单run588及10976预算已被用户明确修正。当前开发集反复使用，未读9.11保留独立test。
+- 工程失败：queue.py遮蔽stdlib递归worker，精确身份原件`task9.13-setup/queue-shadow-failure-processes.json`、误入口目录formal-r1保留；改program.py/main保护，只清本容器。无interactions写前intent的误入口不作为有效训练；精确CPU费用不足处留未知，不删失败。正式前其他具体设备/保存恢复/metadata问题均需定向修复再推进，不重复预算审批。
+
+2026-11-06T10:05:19+08:00 SRC-T9-RLLIB-EXEC恢复增量：共同合法CUBLAS/确定性配置下，`results/task9/task9.13-pending-C-r2/pending-check.json`支持steps513保存非空pending255、两分支各继续10消费后权重/optimizer误差0与replay/RNG/cursor精确一致（工程额外消费20、wall65.057997s）；父核原件通过。它只覆盖C此恢复路径，不能冒称RLlib同路径已验或正式12M完成。
+
+2026-11-06T10:11:57+08:00 SRC-T9-EXEC成本证据增量：父`agent_logs/task9/20261106-resource-monitor.py`与`20261106-exploration-resources.jsonl/-identity.json`只读固定两CID的cgroup生命周期CPU计数（usage/user/system usec）、内存峰值、块I/O和GPU采样，每60s；当前持活PID2538159/start_ticks913977610并已核2条无观察错误样本。CPU是该容器本生命周期累计实际CPU秒，非墙钟/CPU分配核时，不跨重启直接相减；Python batch cpu_s不含C++/ROS，不拿它当完整CPU。GPU利用率采样非准确GPU kernel累计时间，分配时长按worker生命周期/真实UUID另列。初次nohup未产样本/旧重启生命周期缺失均保留未知。
+
+2026-11-06T10:11:57+08:00 SRC-T9-RLLIB-EXEC最终版验证增量：`task9.13-smoke-{C,R}-r2/smoke1000-terminal.json`各1000/75 PASS；共同deterministic=True/benchmark=False/CUBLAS ':4096:8'，Ray种子辅助原代码错误格式改由共同trainer播种且Native cfg.seed=None，不改learner。`pending-{C,R}-r2/pending-check.json`各非空255保存恢复下一update权重/optimizer差0、RNG/replay/cursor精确一致；R还保3待插native队列。`smoke-R-r2/environment-check.json`3显式动作/54字段差0、原GPU环境与CPU native replay分开披露。证据限此次1000和定向恢复，不是3M/框架收益。
+
+
+2026-11-06T10:19:29+08:00 SRC-T9-RLLIB-EXEC正式启动/父核验：北京时间10:15:13，`results/task9/task9.13-formal-20261106-r2/queue-identity.json/queue-state.json/active-worker.json`支持实际启动封存四run矩阵；父10:18:37核`C-seed4718/learning.jsonl`最近21000消费/2075更新（非完整12M），3M horizon、实际Torch GPU2 UUID与docker DeviceRequests同值；host queue2541557/start_ticks914007182，首worker2541568/914007196，`/proc`命令/ cgroup一致。GPU2启动compute空/可用RAM221719273472bytes、磁盘7662154420224bytes为profile-resources瞬时证据，不是预留保证。当前未知250k成本及3M结果，框架收益未判。
+
+- 封存/版本：freeze/inventory.json列15小文件，生产导入路径由FROZEN_SRC/CONFIG/SCRIPTS固定；R有效元数据alpha_rule=rllib/critic_loss=huber/原生epsilon与replay明确，旧继承capped字段不代表实际R运行。当前CID72037a…仍inspect基底e674db49…c430加自身隔离安装层；已commit依赖锁快照cb40aa39d09dcf3031bcf952265307fba29b2b06626a902cdb8e7568df0b566f用于复现，不说当前由该snapshot创建。
+- 最终observer-r4各4回合parity PASS（C38.718007s/272自然IK，R35.599013s/245），pre_hold原求解残差与held_execution残差分列，原success作为最终到达，无拒绝停滞排除成功。report-fixture已明确actual=false/synthetic_inert，仅管线测试不算12M实训。工程误调默认评估实际请求累计C96/R32，均保留启动账/失败日志，不混正式开发统计，不能把最初32/32瞬时观察当最终工程总量。
+- 当前限制：UID1004下Torch默认kernel磁盘cache路径不可创建的一次warning保留，无GPU回退，未为此打断有效训练；正式总wall包含实际初始化开销。恢复/STOP详[task9.13 RESULTS](tasks/task9/task9.13/RESULTS.md)，父核仅此范围未发现继续执行的阻断问题，不保证绝对无bug。
+
+2026-11-06T10:19:29+08:00 SRC-T9-BIOIK-EXEC运行增量：父10:18:37按已complete formal-current batch result.json复算296/588，随后继续后台；1176完整/配对诊断尚待，无收益结论。CBL soft-goal权重1更精确历史来源为[SRC-0403](#src-0403)及主树`forem/src/modulation_rl/src/robot_env.cpp::getBioIkOptions`676–708、`scripts/modulation/utils.py`124–125默认；原引用0406只支撑训练/周期，不能单独当BioIK权重证据。本次主B34ms取项目校准，不沿CBL历史timeout10ms，不据历史配置证明本机时延。
+
+2026-11-06T10:19:29+08:00 SRC-T9-EXEC资源采集PID更新：父只将其monitor重启为PID2541972/start_ticks914011403以识别新queue终态DONE_PENDING_PARENT_JUDGEMENT，旧identity/停止理由存launch-history，采样JSONL连续追加，未改任何训练/评估进程。当前CPU/IO是cgroup实际生命周期累计，旧缺失分项仍unknown，正式GPU/CPU分配wall与利用率/CPU执行秒分列。

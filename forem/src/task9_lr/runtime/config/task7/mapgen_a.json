@@ -1,0 +1,8 @@
+{
+  "protocol_sources": ["SRC-0431", "SRC-0433", "SRC-0450"],
+  "counts": {"pilot": 100, "train": 5000, "validation": 50, "test": 100},
+  "seed_ranges": {
+    "sparse": {"train": [0, 49999], "validation": [100000, 100499], "test": [200000, 200999], "pilot": [2000000, 2000999]},
+    "standard": {"train": [1000000, 1049999], "validation": [1100000, 1100499], "test": [1200000, 1200999], "pilot": [2100000, 2100999]}
+  }
+}

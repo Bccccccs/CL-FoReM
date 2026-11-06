@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "checked_epoch": 1793696054.4295523,
+  "run_log_bytes": 14140579,
+  "external_actual_bytes": 2962563,
+  "external_reserved_bytes": 16777216,
+  "conservative_total_bytes": 30917795,
+  "full_wall_seconds": 7563.207491636276,
+  "max_bytes": 2147483648,
+  "episodes": 1176,
+  "gpu_seconds": 6885.213065624237
+}

@@ -1,0 +1,23 @@
+[
+  {
+    "runtime_file": "forem/results/task9/t9.10-paired-20261103T144811+0800/C-4718/instrumented-core-step.py",
+    "sha256": "800b0a72e154fc1edbff4166e7cedff669f7bcf9899bae21f8de4bf901c5f0df",
+    "original": "/home/ybc/projects/CL-FoReM/forem/src/task7_sim/core.py",
+    "original_function": "step",
+    "ast_equal_after_removing_only_observer_calls": true
+  },
+  {
+    "runtime_file": "forem/results/task9/t9.10-paired-20261103T144811+0800/C-4718/instrumented-core-finish.py",
+    "sha256": "9ddff3213d5251405e0c84b632f5821210ab8a2bb218428f4085676c39504075",
+    "original": "/home/ybc/projects/CL-FoReM/forem/src/task7_sim/core.py",
+    "original_function": "_finish",
+    "ast_equal_after_removing_only_observer_calls": true
+  },
+  {
+    "runtime_file": "forem/results/task9/t9.10-paired-20261103T144811+0800/C-4718/instrumented-choose-candidate.py",
+    "sha256": "ee014604313f772c6f524d88759bb9077574663b55449e5dea8efce5b52e9add",
+    "original": "/home/ybc/projects/CL-FoReM/forem/src/task7_lower/training.py",
+    "original_function": "choose_candidate",
+    "ast_equal_after_removing_only_observer_calls": true
+  }
+]

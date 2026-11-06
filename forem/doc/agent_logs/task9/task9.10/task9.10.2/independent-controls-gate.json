@@ -1,0 +1,30 @@
+{
+  "status": "PASS_CONTROLS_GATE",
+  "exact_historical_rows": 588,
+  "complete_control_episodes": 588,
+  "target_cases": 12,
+  "counts": {
+    "R": 1,
+    "N": 11
+  },
+  "unknown": 0,
+  "original_successes": 0,
+  "strict_successes": 0,
+  "per_seed": {
+    "4718": {
+      "R": 1,
+      "N": 4
+    },
+    "4719": {
+      "N": 4
+    },
+    "4720": {
+      "N": 3
+    }
+  },
+  "evidence": [
+    "independent-C-4718.json",
+    "independent-C-4719.json",
+    "independent-C-4720.json"
+  ]
+}

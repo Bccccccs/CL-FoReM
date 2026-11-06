@@ -1,0 +1,14 @@
+{
+  "sensor_policy": "ghost-v1",
+  "frame": "base_footprint",
+  "translation_m": [0, 0, 0.5],
+  "rotation_rpy_rad": [0, 0, 0],
+  "width": 360,
+  "height": 90,
+  "horizontal_fov_deg": 360,
+  "vertical_fov_deg": 90,
+  "max_range_m": 6,
+  "pixel_convention": "centre",
+  "ignore_self_occlusion": true,
+  "sensor_collision_exemptions": ["velodyne1_base_link", "velodyne2_base_link"]
+}

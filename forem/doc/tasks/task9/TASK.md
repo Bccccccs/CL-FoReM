@@ -50,3 +50,12 @@ smoke见[task9.1 TASK](task9.1/TASK.md)；长训按预注册判定报告，独�
 2026-11-02 14:14：[task9.6](task9.6/RESULTS.md) done，12:06三B3-5M语义复评完成、父逐case核验PASS，132/288=45.83%，与原成败全部一致；[SRC-1355](../../SOURCES.md#src-1355)。不替代9.4全批独立验收。
 
 2026-11-02 · task9.7 依赖既有 task9.4–9.6 证据，负责人待派发；按失败核查→配对比较→对照草案顺序，仅验收文档，尚未执行。[TASK](task9.7/TASK.md) · [PROCEDURE](task9.7/PROCEDURE.md) · [RESULTS](task9.7/RESULTS.md)。
+
+2026-11-03 · task9.10 下层能力/效率路线与单次动作机制对照，review（设计）。依赖9.8/9.9证据，监督Codex；准备→C三seed→T三seed→独立核验。训练对照仍沿9.7。[TASK](task9.10/TASK.md) · [PROCEDURE](task9.10/PROCEDURE.md) · [RESULTS](task9.10/RESULTS.md)。[SRC-1382](../../SOURCES.md#src-1382)。
+
+
+2026-11-03 · task9.11 严格成功与效率下一轮规划 **review，待正式派发**。依赖9.7–9.10及9.10独立核验，Codex父；.1 sol证据审计→父单变量B1-L方案→.2另一sol独立审查→父核验。只读/文档交付，不改实现、不加载模型、不启动仿真/回放/训练。唯一训练提案为同期B1对B1-L、两seed各3M；本方案细化接替9.7未来执行入口，不重复启动两批；补证/预算/停止/独立任务测试与派工见子协议。[TASK](task9.11/TASK.md) · [PROCEDURE](task9.11/PROCEDURE.md) · [RESULTS](task9.11/RESULTS.md)。[SRC-1385–1391入口](../../SOURCES.md#src-1385)。推荐GPT6.1sol/high、Sonnet5.5/high，因跨模块因果/预算审查；实际父模型/强度未知，本轮只委派sol。
+
+2026-11-06：用户授权隔离测试BioIK与完整Ray RLlib SAC，沿task9.12及新task9.13分别开展，不改变在跑9.11。计划/工程数值见[SRC-T9-EXPLORE-20261106](../../SOURCES.md#src-t9-explore-20261106)及两任务三文档；当前尚未执行。
+
+2026-11-06T10:02:40+08:00 当前两支探索已实际执行（active），不再仅规划。task9.12固定3历史权重逐seed100/96与两IK后端对照；task9.13实际完整RLlib SAC Algorithm与同期C、两seed各3M，用户确认每run开发100/96周期及终点评估。父Codex管理共享台账/资源/原件核验，两子Agent实际GPT6.1sol/high，推荐Codex GPT6.1sol/high、Claude Sonnet5.5/high（接口/恢复/因果核查）。当前A后台正式评估、B必要恢复smoke推进；未宣称严格成功改善或训练完成。[来源](../../SOURCES.md#src-t9-exec-20261106)。

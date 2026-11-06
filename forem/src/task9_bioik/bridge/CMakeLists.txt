@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.0.2)
+project(task9_bioik_bridge)
+add_compile_options(-std=c++14 -O3)
+find_package(catkin REQUIRED COMPONENTS bio_ik moveit_core moveit_ros_planning pluginlib roscpp urdf srdfdom)
+catkin_package()
+include_directories(${catkin_INCLUDE_DIRS})
+add_executable(task9_bioik_bridge bridge.cpp)
+target_link_libraries(task9_bioik_bridge ${catkin_LIBRARIES})

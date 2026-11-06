@@ -1,0 +1,1169 @@
+{
+  "checked_at": "2026-11-02T15:35:29.003266+08:00",
+  "details": [
+    {
+      "seed": 4718,
+      "full_eval_wall_s": 1107.2640428990126,
+      "full_eval_transfers": 21173,
+      "full_eval_bytes": 134841,
+      "semantic_wall_s": 476.39510141313076,
+      "semantic_status_wall_s": 580.7930602356791,
+      "semantic_transfers": 10170,
+      "semantic_bytes": 65862,
+      "load_and_outer_s": 104.39795882254839,
+      "selected_transfers": 898,
+      "batch_transfers": 5503
+    },
+    {
+      "seed": 4719,
+      "full_eval_wall_s": 1168.4231726117432,
+      "full_eval_transfers": 20884,
+      "full_eval_bytes": 134888,
+      "semantic_wall_s": 510.08384446799755,
+      "semantic_status_wall_s": 626.3108422551304,
+      "semantic_transfers": 9396,
+      "semantic_bytes": 65839,
+      "load_and_outer_s": 116.22699778713286,
+      "selected_transfers": 742,
+      "batch_transfers": 4973
+    },
+    {
+      "seed": 4720,
+      "full_eval_wall_s": 1190.8816214744002,
+      "full_eval_transfers": 22278,
+      "full_eval_bytes": 134840,
+      "semantic_wall_s": 518.0368870683014,
+      "semantic_status_wall_s": 655.3732119910419,
+      "semantic_transfers": 10470,
+      "semantic_bytes": 65825,
+      "load_and_outer_s": 137.33632492274046,
+      "selected_transfers": 1055,
+      "batch_transfers": 6382
+    }
+  ],
+  "selected_cases": [
+    {
+      "seed": 4718,
+      "random": [
+        {
+          "map_id": "standard_validation_00000",
+          "seed": 2396592471,
+          "stream_index": 0,
+          "role": "validation",
+          "source_split": "validation",
+          "proposal_seed": 1882287200219130464,
+          "difficulty": "standard",
+          "strict_success": false,
+          "terminated": true,
+          "truncated": false,
+          "failures": 20,
+          "time_s": 3.8999974727630615,
+          "transfers": 58,
+          "first_Q": [
+            -4.632089614868164,
+            -2.2088565826416016
+          ],
+          "discounted_MC_return": -27.97425316438106,
+          "Q_minus_MC": [
+            23.342163549512897,
+            25.76539658173946
+          ]
+        },
+        {
+          "map_id": "standard_validation_00003",
+          "seed": 3294758832,
+          "stream_index": 0,
+          "role": "validation",
+          "source_split": "validation",
+          "proposal_seed": 7707049123805970015,
+          "difficulty": "standard",
+          "strict_success": true,
+          "terminated": true,
+          "truncated": false,
+          "failures": 0,
+          "time_s": 10.650022506713867,
+          "transfers": 107,
+          "first_Q": [
+            -12.44450569152832,
+            -12.641546249389648
+          ],
+          "discounted_MC_return": -0.10191995182343404,
+          "Q_minus_MC": [
+            -12.342585739704885,
+            -12.539626297566214
+          ]
+        }
+      ],
+      "semantic": [
+        {
+          "map_id": "home_map_002",
+          "seed": 3570249233,
+          "stream_index": 0,
+          "role": "semantic_transfer",
+          "source_split": "smoke",
+          "proposal_seed": 3029584731548132938,
+          "difficulty": "home",
+          "strict_success": false,
+          "terminated": true,
+          "truncated": false,
+          "failures": 20,
+          "time_s": 6.400006294250488,
+          "transfers": 84,
+          "first_Q": [
+            -19.637191772460938,
+            -20.118375778198242
+          ],
+          "discounted_MC_return": -28.172021750980498,
+          "Q_minus_MC": [
+            8.53482997851956,
+            8.053645972782256
+          ]
+        },
+        {
+          "map_id": "home_map_002",
+          "seed": 4158490082,
+          "stream_index": 0,
+          "role": "semantic_transfer",
+          "source_split": "smoke",
+          "proposal_seed": 6076064104553683651,
+          "difficulty": "home",
+          "strict_success": false,
+          "terminated": true,
+          "truncated": false,
+          "failures": 20,
+          "time_s": 3.0499982833862305,
+          "transfers": 50,
+          "first_Q": [
+            -23.153797149658203,
+            -18.132068634033203
+          ],
+          "discounted_MC_return": -31.826782674782827,
+          "Q_minus_MC": [
+            8.672985525124624,
+            13.694714040749624
+          ]
+        },
+        {
+          "map_id": "home_map_002",
+          "seed": 2785914634,
+          "stream_index": 0,
+          "role": "semantic_transfer",
+          "source_split": "smoke",
+          "proposal_seed": 137547240365178703,
+          "difficulty": "home",
+          "strict_success": false,
+          "terminated": true,
+          "truncated": false,
+          "failures": 0,
+          "time_s": 2.399998903274536,
+          "transfers": 24,
+          "first_Q": [
+            -10.184576034545898,
+            -7.978782653808594
+          ],
+          "discounted_MC_return": -1.0224004447358777,
+          "Q_minus_MC": [
+            -9.16217558981002,
+            -6.956382209072716
+          ]
+        },
+        {
+          "map_id": "home_map_002",
+          "seed": 803250685,
+          "stream_index": 0,
+          "role": "semantic_transfer",
+          "source_split": "smoke",
+          "proposal_seed": 4363422522331977694,
+          "difficulty": "home",
+          "strict_success": false,
+          "terminated": true,
+          "truncated": false,
+          "failures": 20,
+          "time_s": 10.150020599365234,
+          "transfers": 121,
+          "first_Q": [
+            -18.220928192138672,
+            -19.64276123046875
+          ],
+          "discounted_MC_return": -21.635701041655597,
+          "Q_minus_MC": [
+            3.4147728495169254,
+            1.9929398111868473
+          ]
+        },
+        {
+          "map_id": "library_map_002",
+          "seed": 626209918,
+          "stream_index": 0,
+          "role": "semantic_transfer",
+          "source_split": "smoke",
+          "proposal_seed": 4788373355529194444,
+          "difficulty": "library",
+          "strict_success": true,
+          "terminated": true,
+          "truncated": false,
+          "failures": 0,
+          "time_s": 4.399998664855957,
+          "transfers": 44,
+          "first_Q": [
+            -10.339138984680176,
+            -9.725899696350098
+          ],
+          "discounted_MC_return": -0.8476990130039294,
+          "Q_minus_MC": [
+            -9.491439971676247,
+            -8.878200683346169
+          ]
+        },
+        {
+          "map_id": "library_map_002",
+          "seed": 2631242821,
+          "stream_index": 0,
+          "role": "semantic_transfer",
+          "source_split": "smoke",
+          "proposal_seed": 7546036176058750245,
+          "difficulty": "library",
+          "strict_success": true,
+          "terminated": true,
+          "truncated": false,
+          "failures": 0,
+          "time_s": 4.850000381469727,
+          "transfers": 49,
+          "first_Q": [
+            -3.9504833221435547,
+            -3.362030029296875
+          ],
+          "discounted_MC_return": 0.0675210836998219,
+          "Q_minus_MC": [
+            -4.018004405843376,
+            -3.429551112996697
+          ]
+        },
+        {
+          "map_id": "library_map_002",
+          "seed": 2407846046,
+          "stream_index": 0,
+          "role": "semantic_transfer",
+          "source_split": "smoke",
+          "proposal_seed": 2227190365323047312,
+          "difficulty": "library",
+          "strict_success": false,
+          "terminated": true,
+          "truncated": false,
+          "failures": 20,
+          "time_s": 18.200008392333984,
+          "transfers": 202,
+          "first_Q": [
+            -16.803203582763672,
+            -16.539152145385742
+          ],
+          "discounted_MC_return": -10.992705557513325,
+          "Q_minus_MC": [
+            -5.810498025250347,
+            -5.546446587872417
+          ]
+        },
+        {
+          "map_id": "library_map_002",
+          "seed": 3554729779,
+          "stream_index": 0,
+          "role": "semantic_transfer",
+          "source_split": "smoke",
+          "proposal_seed": 3867394086967155781,
+          "difficulty": "library",
+          "strict_success": true,
+          "terminated": true,
+          "truncated": false,
+          "failures": 0,
+          "time_s": 15.900042533874512,
+          "transfers": 159,
+          "first_Q": [
+            -1.7507237195968628,
+            -0.5739754438400269
+          ],
+          "discounted_MC_return": -5.112765244628529,
+          "Q_minus_MC": [
+            3.3620415250316666,
+            4.538789800788503
+          ]
+        }
+      ]
+    },
+    {
+      "seed": 4719,
+      "random": [
+        {
+          "map_id": "standard_validation_00000",
+          "seed": 2396592471,
+          "stream_index": 0,
+          "role": "validation",
+          "source_split": "validation",
+          "proposal_seed": 1882287200219130464,
+          "difficulty": "standard",
+          "strict_success": true,
+          "terminated": true,
+          "truncated": false,
+          "failures": 0,
+          "time_s": 6.100005149841309,
+          "transfers": 62,
+          "first_Q": [
+            -5.408815383911133,
+            -3.8688089847564697
+          ],
+          "discounted_MC_return": -3.1084525633740534,
+          "Q_minus_MC": [
+            -2.3003628205370794,
+            -0.7603564213824163
+          ]
+        },
+        {
+          "map_id": "standard_validation_00003",
+          "seed": 3294758832,
+          "stream_index": 0,
+          "role": "validation",
+          "source_split": "validation",
+          "proposal_seed": 7707049123805970015,
+          "difficulty": "standard",
+          "strict_success": true,
+          "terminated": true,
+          "truncated": false,
+          "failures": 0,
+          "time_s": 11.250024795532227,
+          "transfers": 113,
+          "first_Q": [
+            -12.52059555053711,
+            -11.407524108886719
+          ],
+          "discounted_MC_return": -0.2198108893187321,
+          "Q_minus_MC": [
+            -12.300784661218378,
+            -11.187713219567987
+          ]
+        }
+      ],
+      "semantic": [
+        {
+          "map_id": "home_map_002",
+          "seed": 3570249233,
+          "stream_index": 0,
+          "role": "semantic_transfer",
+          "source_split": "smoke",
+          "proposal_seed": 3029584731548132938,
+          "difficulty": "home",
+          "strict_success": false,
+          "terminated": true,
+          "truncated": false,
+          "failures": 20,
+          "time_s": 4.099997520446777,
+          "transfers": 61,
+          "first_Q": [
+            -21.028026580810547,
+            -23.05399513244629
+          ],
+          "discounted_MC_return": -33.70554339819571,
+          "Q_minus_MC": [
+            12.677516817385161,
+            10.651548265749419
+          ]
+        },
+        {
+          "map_id": "home_map_002",
+          "seed": 4158490082,
+          "stream_index": 0,
+          "role": "semantic_transfer",
+          "source_split": "smoke",
+          "proposal_seed": 6076064104553683651,
+          "difficulty": "home",
+          "strict_success": false,
+          "terminated": true,
+          "truncated": false,
+          "failures": 20,
+          "time_s": 0.40000003576278687,
+          "transfers": 24,
+          "first_Q": [
+            -19.534038543701172,
+            -19.73710060119629
+          ],
+          "discounted_MC_return": -78.17496869183901,
+          "Q_minus_MC": [
+            58.64093014813784,
+            58.43786809064272
+          ]
+        },
+        {
+          "map_id": "home_map_002",
+          "seed": 2785914634,
+          "stream_index": 0,
+          "role": "semantic_transfer",
+          "source_split": "smoke",
+          "proposal_seed": 137547240365178703,
+          "difficulty": "home",
+          "strict_success": false,
+          "terminated": true,
+          "truncated": false,
+          "failures": 0,
+          "time_s": 7.5000104904174805,
+          "transfers": 75,
+          "first_Q": [
+            -7.394244194030762,
+            -13.312287330627441
+          ],
+          "discounted_MC_return": -3.812506377041286,
+          "Q_minus_MC": [
+            -3.5817378169894756,
+            -9.499780953586155
+          ]
+        },
+        {
+          "map_id": "home_map_002",
+          "seed": 803250685,
+          "stream_index": 0,
+          "role": "semantic_transfer",
+          "source_split": "smoke",
+          "proposal_seed": 4363422522331977694,
+          "difficulty": "home",
+          "strict_success": false,
+          "terminated": true,
+          "truncated": false,
+          "failures": 20,
+          "time_s": 6.000004768371582,
+          "transfers": 80,
+          "first_Q": [
+            -19.11939239501953,
+            -18.50703239440918
+          ],
+          "discounted_MC_return": -27.902350575392898,
+          "Q_minus_MC": [
+            8.782958180373367,
+            9.395318180983718
+          ]
+        },
+        {
+          "map_id": "library_map_002",
+          "seed": 626209918,
+          "stream_index": 0,
+          "role": "semantic_transfer",
+          "source_split": "smoke",
+          "proposal_seed": 4788373355529194444,
+          "difficulty": "library",
+          "strict_success": true,
+          "terminated": true,
+          "truncated": false,
+          "failures": 0,
+          "time_s": 3.99999737739563,
+          "transfers": 40,
+          "first_Q": [
+            -7.581030368804932,
+            -7.694231986999512
+          ],
+          "discounted_MC_return": -0.2186284517224559,
+          "Q_minus_MC": [
+            -7.362401917082476,
+            -7.475603535277056
+          ]
+        },
+        {
+          "map_id": "library_map_002",
+          "seed": 2631242821,
+          "stream_index": 0,
+          "role": "semantic_transfer",
+          "source_split": "smoke",
+          "proposal_seed": 7546036176058750245,
+          "difficulty": "library",
+          "strict_success": true,
+          "terminated": true,
+          "truncated": false,
+          "failures": 0,
+          "time_s": 7.600010871887207,
+          "transfers": 76,
+          "first_Q": [
+            -4.409687042236328,
+            -3.3432233333587646
+          ],
+          "discounted_MC_return": -1.9705004736140694,
+          "Q_minus_MC": [
+            -2.439186568622259,
+            -1.3727228597446952
+          ]
+        },
+        {
+          "map_id": "library_map_002",
+          "seed": 2407846046,
+          "stream_index": 0,
+          "role": "semantic_transfer",
+          "source_split": "smoke",
+          "proposal_seed": 2227190365323047312,
+          "difficulty": "library",
+          "strict_success": false,
+          "terminated": true,
+          "truncated": false,
+          "failures": 20,
+          "time_s": 15.300040245056152,
+          "transfers": 173,
+          "first_Q": [
+            -19.025617599487305,
+            -17.879228591918945
+          ],
+          "discounted_MC_return": -12.172514228729085,
+          "Q_minus_MC": [
+            -6.85310337075822,
+            -5.70671436318986
+          ]
+        },
+        {
+          "map_id": "library_map_002",
+          "seed": 3554729779,
+          "stream_index": 0,
+          "role": "semantic_transfer",
+          "source_split": "smoke",
+          "proposal_seed": 3867394086967155781,
+          "difficulty": "library",
+          "strict_success": true,
+          "terminated": true,
+          "truncated": false,
+          "failures": 0,
+          "time_s": 3.5999977588653564,
+          "transfers": 38,
+          "first_Q": [
+            -1.55756413936615,
+            -1.592541217803955
+          ],
+          "discounted_MC_return": -1.1230894640781495,
+          "Q_minus_MC": [
+            -0.43447467528800043,
+            -0.4694517537258056
+          ]
+        }
+      ]
+    },
+    {
+      "seed": 4720,
+      "random": [
+        {
+          "map_id": "standard_validation_00000",
+          "seed": 2396592471,
+          "stream_index": 0,
+          "role": "validation",
+          "source_split": "validation",
+          "proposal_seed": 1882287200219130464,
+          "difficulty": "standard",
+          "strict_success": true,
+          "terminated": true,
+          "truncated": false,
+          "failures": 0,
+          "time_s": 3.2999980449676514,
+          "transfers": 34,
+          "first_Q": [
+            -1.5560779571533203,
+            -0.4975355267524719
+          ],
+          "discounted_MC_return": -3.1880469911679192,
+          "Q_minus_MC": [
+            1.631969034014599,
+            2.6905114644154473
+          ]
+        },
+        {
+          "map_id": "standard_validation_00003",
+          "seed": 3294758832,
+          "stream_index": 0,
+          "role": "validation",
+          "source_split": "validation",
+          "proposal_seed": 7707049123805970015,
+          "difficulty": "standard",
+          "strict_success": true,
+          "terminated": true,
+          "truncated": false,
+          "failures": 0,
+          "time_s": 10.950023651123047,
+          "transfers": 110,
+          "first_Q": [
+            -10.840118408203125,
+            -10.813316345214844
+          ],
+          "discounted_MC_return": -0.02816908392201325,
+          "Q_minus_MC": [
+            -10.811949324281112,
+            -10.785147261292831
+          ]
+        }
+      ],
+      "semantic": [
+        {
+          "map_id": "home_map_002",
+          "seed": 3570249233,
+          "stream_index": 0,
+          "role": "semantic_transfer",
+          "source_split": "smoke",
+          "proposal_seed": 3029584731548132938,
+          "difficulty": "home",
+          "strict_success": false,
+          "terminated": true,
+          "truncated": false,
+          "failures": 20,
+          "time_s": 7.1500091552734375,
+          "transfers": 91,
+          "first_Q": [
+            -18.82010841369629,
+            -21.245174407958984
+          ],
+          "discounted_MC_return": -25.719163276662606,
+          "Q_minus_MC": [
+            6.899054862966317,
+            4.473988868703621
+          ]
+        },
+        {
+          "map_id": "home_map_002",
+          "seed": 4158490082,
+          "stream_index": 0,
+          "role": "semantic_transfer",
+          "source_split": "smoke",
+          "proposal_seed": 6076064104553683651,
+          "difficulty": "home",
+          "strict_success": false,
+          "terminated": true,
+          "truncated": false,
+          "failures": 20,
+          "time_s": 7.400010108947754,
+          "transfers": 94,
+          "first_Q": [
+            -22.2055606842041,
+            -19.834917068481445
+          ],
+          "discounted_MC_return": -22.92700126322048,
+          "Q_minus_MC": [
+            0.7214405790163774,
+            3.0920841947390336
+          ]
+        },
+        {
+          "map_id": "home_map_002",
+          "seed": 2785914634,
+          "stream_index": 0,
+          "role": "semantic_transfer",
+          "source_split": "smoke",
+          "proposal_seed": 137547240365178703,
+          "difficulty": "home",
+          "strict_success": false,
+          "terminated": true,
+          "truncated": false,
+          "failures": 0,
+          "time_s": 18.050010681152344,
+          "transfers": 181,
+          "first_Q": [
+            -5.4088568687438965,
+            -6.609553337097168
+          ],
+          "discounted_MC_return": -7.568718786767747,
+          "Q_minus_MC": [
+            2.15986191802385,
+            0.9591654496705786
+          ]
+        },
+        {
+          "map_id": "home_map_002",
+          "seed": 803250685,
+          "stream_index": 0,
+          "role": "semantic_transfer",
+          "source_split": "smoke",
+          "proposal_seed": 4363422522331977694,
+          "difficulty": "home",
+          "strict_success": false,
+          "terminated": true,
+          "truncated": false,
+          "failures": 20,
+          "time_s": 4.699999809265137,
+          "transfers": 67,
+          "first_Q": [
+            -16.627668380737305,
+            -17.574459075927734
+          ],
+          "discounted_MC_return": -118.48479302191299,
+          "Q_minus_MC": [
+            101.85712464117569,
+            100.91033394598526
+          ]
+        },
+        {
+          "map_id": "library_map_002",
+          "seed": 626209918,
+          "stream_index": 0,
+          "role": "semantic_transfer",
+          "source_split": "smoke",
+          "proposal_seed": 4788373355529194444,
+          "difficulty": "library",
+          "strict_success": true,
+          "terminated": true,
+          "truncated": false,
+          "failures": 0,
+          "time_s": 4.2999982833862305,
+          "transfers": 43,
+          "first_Q": [
+            -9.168719291687012,
+            -9.237482070922852
+          ],
+          "discounted_MC_return": -0.7808440640405115,
+          "Q_minus_MC": [
+            -8.3878752276465,
+            -8.45663800688234
+          ]
+        },
+        {
+          "map_id": "library_map_002",
+          "seed": 2631242821,
+          "stream_index": 0,
+          "role": "semantic_transfer",
+          "source_split": "smoke",
+          "proposal_seed": 7546036176058750245,
+          "difficulty": "library",
+          "strict_success": true,
+          "terminated": true,
+          "truncated": false,
+          "failures": 0,
+          "time_s": 5.800004005432129,
+          "transfers": 58,
+          "first_Q": [
+            -2.955080270767212,
+            -3.716916561126709
+          ],
+          "discounted_MC_return": -0.24134124947201596,
+          "Q_minus_MC": [
+            -2.713739021295196,
+            -3.4755753116546932
+          ]
+        },
+        {
+          "map_id": "library_map_002",
+          "seed": 2407846046,
+          "stream_index": 0,
+          "role": "semantic_transfer",
+          "source_split": "smoke",
+          "proposal_seed": 2227190365323047312,
+          "difficulty": "library",
+          "strict_success": true,
+          "terminated": true,
+          "truncated": false,
+          "failures": 0,
+          "time_s": 32.69978713989258,
+          "transfers": 328,
+          "first_Q": [
+            -19.933805465698242,
+            -20.46237564086914
+          ],
+          "discounted_MC_return": -6.252033422303941,
+          "Q_minus_MC": [
+            -13.6817720433943,
+            -14.210342218565199
+          ]
+        },
+        {
+          "map_id": "library_map_002",
+          "seed": 3554729779,
+          "stream_index": 0,
+          "role": "semantic_transfer",
+          "source_split": "smoke",
+          "proposal_seed": 3867394086967155781,
+          "difficulty": "library",
+          "strict_success": true,
+          "terminated": true,
+          "truncated": false,
+          "failures": 0,
+          "time_s": 4.850000381469727,
+          "transfers": 49,
+          "first_Q": [
+            -0.9298596978187561,
+            -1.4780219793319702
+          ],
+          "discounted_MC_return": -0.6663721195046076,
+          "Q_minus_MC": [
+            -0.2634875783141485,
+            -0.8116498598273626
+          ]
+        }
+      ]
+    }
+  ],
+  "scenarios": {
+    "switch_only_ideal": {
+      "actual_episodes": 4,
+      "recorded_target_episodes": 2,
+      "total_transfers": 382,
+      "recorded_transfers": 191,
+      "max_substep_attempt_records": 382,
+      "action_records": 191,
+      "trace_bytes_engineering_32768_per_action": 6258688,
+      "linear_proxy_compute_s": 21.372230029576993,
+      "assumed_invocations": 2,
+      "linear_proxy_with_load_s": 296.0448798750579,
+      "single_gpu_worker_h_proxy": 0.08223468885418275
+    },
+    "ideal_30plus2": {
+      "actual_episodes": 32,
+      "recorded_target_episodes": 30,
+      "total_transfers": 2886,
+      "recorded_transfers": 2695,
+      "max_substep_attempt_records": 5390,
+      "action_records": 2695,
+      "trace_bytes_engineering_32768_per_action": 88309760,
+      "linear_proxy_compute_s": 161.46663839099267,
+      "assumed_invocations": 5,
+      "linear_proxy_with_load_s": 848.148263004695,
+      "single_gpu_worker_h_proxy": 0.23559673972352638
+    },
+    "switch_batches": {
+      "actual_episodes": 64,
+      "recorded_run_episodes": 32,
+      "total_transfers": 7714,
+      "recorded_transfers": 3857,
+      "max_substep_attempt_records": 7714,
+      "action_records": 3857,
+      "trace_bytes_engineering_32768_per_action": 126386176,
+      "linear_proxy_compute_s": 431.58477080669354,
+      "assumed_invocations": 2,
+      "linear_proxy_with_load_s": 706.2574206521745,
+      "single_gpu_worker_h_proxy": 0.19618261684782623
+    },
+    "minimal_batches_combined": {
+      "actual_episodes": 176,
+      "recorded_run_episodes": 144,
+      "recorded_target_episodes": 30,
+      "total_transfers": 20715,
+      "recorded_transfers": 16858,
+      "max_substep_attempt_records": 33716,
+      "action_records": 16858,
+      "trace_bytes_engineering_32768_per_action": 552402944,
+      "linear_proxy_compute_s": 1158.9679190122706,
+      "assumed_invocations": 5,
+      "linear_proxy_with_load_s": 1845.649543625973,
+      "single_gpu_worker_h_proxy": 0.5126804287849924
+    },
+    "full196_combined": {
+      "actual_episodes": 620,
+      "recorded_run_episodes": 588,
+      "recorded_target_episodes": 30,
+      "total_transfers": 68192,
+      "recorded_transfers": 64335,
+      "max_substep_attempt_records": 128670,
+      "action_records": 64335,
+      "trace_bytes_engineering_32768_per_action": 2108129280,
+      "linear_proxy_compute_s": 3815.222801510247,
+      "assumed_invocations": 5,
+      "linear_proxy_with_load_s": 4501.904426123949,
+      "single_gpu_worker_h_proxy": 1.2505290072566524
+    },
+    "both_original_roles_combined": {
+      "actual_episodes": 908,
+      "recorded_run_episodes": 876,
+      "recorded_target_episodes": 30,
+      "total_transfers": 98228,
+      "recorded_transfers": 94371,
+      "max_substep_attempt_records": 188742,
+      "action_records": 94371,
+      "trace_bytes_engineering_32768_per_action": 3092348928,
+      "linear_proxy_compute_s": 5495.684322893427,
+      "assumed_invocations": 8,
+      "linear_proxy_with_load_s": 6594.37492227535,
+      "single_gpu_worker_h_proxy": 1.8317708117431528
+    },
+    "original_evaluate_switch_392": {
+      "actual_episodes": 392,
+      "recorded_run_episodes": 196,
+      "recorded_target_episodes": 2,
+      "total_transfers": 42346,
+      "recorded_transfers": 191,
+      "max_substep_attempt_records": 382,
+      "action_records": 191,
+      "trace_bytes_engineering_32768_per_action": 6258688,
+      "linear_proxy_compute_s": 2369.1844314986056,
+      "assumed_invocations": 2,
+      "linear_proxy_with_load_s": 2643.8570813440865,
+      "single_gpu_worker_h_proxy": 0.7344047448178018,
+      "historical_eval_wall_sum_plus_2_load_proxy_s": 2489.200735643506
+    },
+    "original_evaluate_combined_784": {
+      "actual_episodes": 784,
+      "recorded_run_episodes": 588,
+      "recorded_target_episodes": 30,
+      "total_transfers": 85508,
+      "recorded_transfers": 2695,
+      "max_substep_attempt_records": 5390,
+      "action_records": 2695,
+      "trace_bytes_engineering_32768_per_action": 88309760,
+      "linear_proxy_compute_s": 4784.022631856203,
+      "assumed_invocations": 4,
+      "linear_proxy_with_load_s": 5333.3679315471645,
+      "single_gpu_worker_h_proxy": 1.4814910920964346,
+      "historical_eval_wall_sum_plus_4_load_proxy_s": 5123.17817957513
+    },
+    "strict_gate_original_evaluate_980": {
+      "actual_episodes": 980,
+      "recorded_run_episodes": 784,
+      "recorded_target_episodes": 30,
+      "total_transfers": 106681,
+      "recorded_transfers": 2695,
+      "max_substep_attempt_records": 5390,
+      "action_records": 2695,
+      "trace_bytes_engineering_32768_per_action": 88309760,
+      "linear_proxy_compute_s": 5968.614847605506,
+      "assumed_invocations": 5,
+      "linear_proxy_with_load_s": 6655.296472219208,
+      "single_gpu_worker_h_proxy": 1.8486934645053357,
+      "historical_eval_wall_sum_plus_5_load_proxy_s": 6367.778547396883
+    },
+    "strict_gate_batches_208": {
+      "actual_episodes": 208,
+      "recorded_run_episodes": 176,
+      "recorded_target_episodes": 30,
+      "total_transfers": 24572,
+      "recorded_transfers": 2695,
+      "max_substep_attempt_records": 5390,
+      "action_records": 2695,
+      "trace_bytes_engineering_32768_per_action": 88309760,
+      "linear_proxy_compute_s": 1374.7603044156174,
+      "assumed_invocations": 5,
+      "linear_proxy_with_load_s": 2061.44192902932,
+      "single_gpu_worker_h_proxy": 0.5726227580637
+    }
+  },
+  "proxy_s_per_transition": 0.05594824615072511,
+  "load_and_outer_proxy_s": 137.33632492274046,
+  "conservative_charge_five_full_eval_plus_load_s": 6641.089731985703,
+  "inputs": [
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed4718/validation-5000000.json",
+      "bytes": 134841,
+      "sha256": "559efed126002d87e55eb329e41512e9eeb0f44e8774fc996d168c0fae279a1b"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4718/evaluation.json",
+      "bytes": 65862,
+      "sha256": "01015a5c66990819943fb59bcd8402de41f29a4ad1e29a6529a03de65aac2900"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4718/status.json",
+      "bytes": 104,
+      "sha256": "867db09b496e3b10dcd620292ea0ec33219fdc2d541c7dbae3496a85190f6b05"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4718/loaded.json",
+      "bytes": 849,
+      "sha256": "6056ecc1a5c50a71cfde2b40d093a796b99e99216eb57903ee370a176e86812f"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed4718/runtime.json",
+      "bytes": 792,
+      "sha256": "756c2c60d6e640d387857900e48b14722037f804ac9b5489711c4d12db401aa4"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed4719/validation-5000000.json",
+      "bytes": 134888,
+      "sha256": "697d71e1c20149d8fa44d9448f93ad3f3e33bc34af80bd2aa2641c45f4fc7f24"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4719/evaluation.json",
+      "bytes": 65839,
+      "sha256": "8c49cdc832fb7992688838d04f0644a5e13ebaaac7af83672bec49f5c87e2b1a"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4719/status.json",
+      "bytes": 104,
+      "sha256": "d20e39d915a2b75fa542352f156409d7194420e22993f5dc8f41b67179d440df"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4719/loaded.json",
+      "bytes": 849,
+      "sha256": "2436c1e919b75229e83be6a281cc7cd66b2039976ad06f1203d9ec5f6271275e"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed4719/runtime.json",
+      "bytes": 792,
+      "sha256": "756c2c60d6e640d387857900e48b14722037f804ac9b5489711c4d12db401aa4"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed4720/validation-5000000.json",
+      "bytes": 134840,
+      "sha256": "8439373f9286184dff53f2badebddd7c72b074708d45a9c4860faf98748105a0"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4720/evaluation.json",
+      "bytes": 65825,
+      "sha256": "a3da450b495fbd4cb3dc350337e0e5317ac51e5c656cc4aa92356dbde32fb9b4"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4720/status.json",
+      "bytes": 104,
+      "sha256": "a3b0ceb08d42cac2ef160ad7885b9e79f92d99e7b4635838f0c97630f3869edc"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4720/loaded.json",
+      "bytes": 849,
+      "sha256": "5b2c16d5b1a74e0b02943b411b9788780afcc26fe0d09e1223beb7df82566567"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed4720/runtime.json",
+      "bytes": 792,
+      "sha256": "91e01d9fc549e19e553fa98e10fb41163c7cda99f44417ce39b593152fcebe88"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task9_opt/runtime/src/task7_sim/core.py",
+      "bytes": 27629,
+      "sha256": "e8b91d60b2d5e1639f4966521d64aa4005772c5555f7532e23bd370e1da6a67b"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task9_opt/runtime/src/task7_sim/core.py",
+      "bytes": 27629,
+      "sha256": "e8b91d60b2d5e1639f4966521d64aa4005772c5555f7532e23bd370e1da6a67b"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task9_opt/runtime/src/task7_lower/training.py",
+      "bytes": 21947,
+      "sha256": "36c02dbcad56ed6df5651591ed0f9d399308d5b2ea30b0e1a4a56e32cae3a99c"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task9_opt/runtime/src/task7_lower/training.py",
+      "bytes": 21947,
+      "sha256": "36c02dbcad56ed6df5651591ed0f9d399308d5b2ea30b0e1a4a56e32cae3a99c"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task9_opt/runtime/src/task8_lower/evaluation.py",
+      "bytes": 9878,
+      "sha256": "9103d71af1b68a7eb526d896218fe48bfcc97a578acb42b21a7c0d6fa7a070f0"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task9_opt/runtime/src/task8_lower/evaluation.py",
+      "bytes": 9878,
+      "sha256": "9103d71af1b68a7eb526d896218fe48bfcc97a578acb42b21a7c0d6fa7a070f0"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task9_opt/runtime/src/task8_sim/primitive_scene.py",
+      "bytes": 28212,
+      "sha256": "62fcce99f8bafcd4dc7d33fb7bbf0085dba29e08b6cef99fa3210448f8bde30b"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task9_opt/runtime/src/task8_sim/primitive_scene.py",
+      "bytes": 28212,
+      "sha256": "62fcce99f8bafcd4dc7d33fb7bbf0085dba29e08b6cef99fa3210448f8bde30b"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task9_opt/runtime/src/task8_sim/env.py",
+      "bytes": 6922,
+      "sha256": "40b61e84c92bcc0ccc7ee7b3199b145ac837ad9618525785ed7230f849cc28a9"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task9_opt/runtime/src/task8_sim/env.py",
+      "bytes": 6922,
+      "sha256": "40b61e84c92bcc0ccc7ee7b3199b145ac837ad9618525785ed7230f849cc28a9"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task9_opt/runtime/src/task7_sim/robot.py",
+      "bytes": 19661,
+      "sha256": "9fa144f7858130e09945dd09b8094ae8d2046f8698ed48315ecae2affbda3017"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task9_opt/runtime/src/task7_sim/robot.py",
+      "bytes": 19661,
+      "sha256": "9fa144f7858130e09945dd09b8094ae8d2046f8698ed48315ecae2affbda3017"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/scripts/task9_semantic_eval.py",
+      "bytes": 7598,
+      "sha256": "69b17dc3a5fdf8460f5166c473f7d27ed41086aafa34545210f5adeb8d8887b9"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/scripts/task9_semantic_eval.py",
+      "bytes": 7598,
+      "sha256": "69b17dc3a5fdf8460f5166c473f7d27ed41086aafa34545210f5adeb8d8887b9"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task7_sim/core.py",
+      "bytes": 27629,
+      "sha256": "e8b91d60b2d5e1639f4966521d64aa4005772c5555f7532e23bd370e1da6a67b"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task7_sim/core.py",
+      "bytes": 27629,
+      "sha256": "e8b91d60b2d5e1639f4966521d64aa4005772c5555f7532e23bd370e1da6a67b"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task7_lower/training.py",
+      "bytes": 21947,
+      "sha256": "36c02dbcad56ed6df5651591ed0f9d399308d5b2ea30b0e1a4a56e32cae3a99c"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task7_lower/training.py",
+      "bytes": 21947,
+      "sha256": "36c02dbcad56ed6df5651591ed0f9d399308d5b2ea30b0e1a4a56e32cae3a99c"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task8_lower/evaluation.py",
+      "bytes": 9858,
+      "sha256": "178e81125b082bcc2b8e260ebaacdbe6e68e64396287c52199ef015ddf148f48"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task8_lower/evaluation.py",
+      "bytes": 9858,
+      "sha256": "178e81125b082bcc2b8e260ebaacdbe6e68e64396287c52199ef015ddf148f48"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task8_sim/primitive_scene.py",
+      "bytes": 28212,
+      "sha256": "62fcce99f8bafcd4dc7d33fb7bbf0085dba29e08b6cef99fa3210448f8bde30b"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task8_sim/primitive_scene.py",
+      "bytes": 28212,
+      "sha256": "62fcce99f8bafcd4dc7d33fb7bbf0085dba29e08b6cef99fa3210448f8bde30b"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task8_sim/robot.py",
+      "bytes": 2732,
+      "sha256": "4ff158e50bb3fefd9e340b419b0469e32b10d7c19ef905a6950338f937248e5e"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task8_sim/robot.py",
+      "bytes": 2732,
+      "sha256": "4ff158e50bb3fefd9e340b419b0469e32b10d7c19ef905a6950338f937248e5e"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task8_sim/episode.py",
+      "bytes": 8038,
+      "sha256": "d6ebada23330e9bbacbdb6c9018e1577f4dde273fd200b639995f4b8bc9dc316"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task8_sim/episode.py",
+      "bytes": 8038,
+      "sha256": "d6ebada23330e9bbacbdb6c9018e1577f4dde273fd200b639995f4b8bc9dc316"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task7_sim/geometry.py",
+      "bytes": 6726,
+      "sha256": "618750cf4abc88b56e46a91eb7c9937454ba69e3ba89bbc6ca54b566ee363212"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task7_sim/geometry.py",
+      "bytes": 6726,
+      "sha256": "618750cf4abc88b56e46a91eb7c9937454ba69e3ba89bbc6ca54b566ee363212"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/scripts/task9_semantic_queue.py",
+      "bytes": 4904,
+      "sha256": "d6803a94eb25633f9070d5b12ac5698c332521574ed30c5bd7616ec571655edf"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/scripts/task9_semantic_queue.py",
+      "bytes": 4904,
+      "sha256": "d6803a94eb25633f9070d5b12ac5698c332521574ed30c5bd7616ec571655edf"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task7_sim/kinematics.py",
+      "bytes": 14844,
+      "sha256": "2ab305c2058c9eba5f451e765ee5fc22d094e26dac04de2b4943b46a957bdec4"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task7_sim/kinematics.py",
+      "bytes": 14844,
+      "sha256": "2ab305c2058c9eba5f451e765ee5fc22d094e26dac04de2b4943b46a957bdec4"
+    }
+  ]
+}

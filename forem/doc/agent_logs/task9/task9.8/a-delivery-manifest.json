@@ -1,0 +1,216 @@
+{
+  "run_id": "t9.8-A-20261102",
+  "time": "2026-11-02T15:51:44.031740+08:00",
+  "stage": "A",
+  "stage_delivery": "done",
+  "b_status": "NOT_READY",
+  "recommended_actual_episodes": 980,
+  "target_detailed_episodes": 30,
+  "files": [
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/DECISIONS.md",
+      "bytes": 64444,
+      "sha256": "09109bd1df8c73f402479f8db70c3856bfea08f86838a3bf4303da17213e49d6"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/PROGRESS.md",
+      "bytes": 78638,
+      "sha256": "d1ff7b2da9abef3a32de2ad035531fc20ee3ff64acd85cc907dfcb9c9bc57897"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/SOURCES.md",
+      "bytes": 1797438,
+      "sha256": "0d9e763ceeb040f06306d1d60ef9a200d9697ee2aa83d4ce0e8fab33b5ad6e5d"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.8/20261102-codex-dispatch.md",
+      "bytes": 864,
+      "sha256": "3507e83f0f7ee1a5be1df6165741c3db8ba76ed5137426c7598003231e3c9311"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.8/20261102-codex-stage-a.md",
+      "bytes": 7946,
+      "sha256": "ca2663c858298bf35653408bf350ae1ac023216bb944f6ccd429754e613a53c4"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.8/document-final-check.json",
+      "bytes": 655,
+      "sha256": "e735bfbc56f741cd0c2d85a1871a4201c3324397fc4a35c09b37f9a49be63e17"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.8/frozen-inputs-parent-audit.json",
+      "bytes": 54475,
+      "sha256": "c9de2ed5e3838475cc5d1b44cc071b3c2e39300efba202e3b12336e0dd0074d2"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.8/parent-final-resource-check.json",
+      "bytes": 2315,
+      "sha256": "c413479ad5102bfe57543f5963143522a371c94b91b1fd2346b810e0ae7bbe19"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.8/parent-independent-audit.json",
+      "bytes": 68656,
+      "sha256": "223a68edba055cf5b8a805cacaef0e11dda54055db80db430858015c88db65fa"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.8/parent-verification.json",
+      "bytes": 1457,
+      "sha256": "9b6ce06b7af53202c05357a30590dcde5ac198e8e4bcb0fec713da43fc551d9c"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.8/task9.8.1/20261102-codex-audit.md",
+      "bytes": 8227,
+      "sha256": "18545dc34923610fc3f4ff8827232a718b0340572fe863161edecd6aae121821"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.8/task9.8.1/all-evaluation-maps-inventory.json",
+      "bytes": 75652,
+      "sha256": "e294a42fbc81cfcf136ea41c778381a34bbc2b806af0845fb5903bb7ae3379d4"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.8/task9.8.1/frozen-cases-30.csv",
+      "bytes": 7988,
+      "sha256": "e36d1888b3bb5621f4a8c70d2eb2cea5316ae5883361017dead80de4169a57b8"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.8/task9.8.1/frozen-cases-30.legacy-snapshot-20261102.csv",
+      "bytes": 10002,
+      "sha256": "8dccbd805567ce6e6c48fe407e65aacf9ce3133d6add3ab536f67a1b83a619c5"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.8/task9.8.1/frozen-cases.json",
+      "bytes": 70999,
+      "sha256": "c39d39132efac523ce96a61c005c5801ba6da2b49dbf087d57b347e3fe85480e"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.8/task9.8.1/frozen-cases.legacy-snapshot-20261102.json",
+      "bytes": 57410,
+      "sha256": "b04f338542e1d31008b370857a201f7a260c8afacac02253ac87e46fd262b01e"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.8/task9.8.1/input-inventory.json",
+      "bytes": 22537,
+      "sha256": "d6fa53a864d4ecf4e3de4fc3a5280948a7da66f4227460e57e440ab0d424d1de"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.8/task9.8.2/20261102-codex-audit.md",
+      "bytes": 4763,
+      "sha256": "04d9fae41f7da03f9d078d38fd8bbbea66d8fca21d163e2876a077be4d0c402a"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.8/task9.8.2/audit.json",
+      "bytes": 90882,
+      "sha256": "2cc436683496ca5e3046ac408321130bb558bf57bb155c364711ae0c752e1487"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.8/task9.8.2/budget-order.json",
+      "bytes": 726,
+      "sha256": "6259e9f1c1c1d7e2b9b54d14d38b6c1bda4153639ca37019d8d39ab423ba8472"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.8/task9.8.2/recompute.py",
+      "bytes": 5239,
+      "sha256": "fd5be0bb125165d2943a020f24ffb61830986ea1fc65eaeb94766f41ce9f3f4e"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.8/task9.8.3/20261102-codex-audit.md",
+      "bytes": 11085,
+      "sha256": "6ecf0b3c109800f94954f0c46c69da9114f306341eb24413183e0f04d82f41ea"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.8/task9.8.3/audit_cost.py",
+      "bytes": 7885,
+      "sha256": "7b29f8b3a6fe303b2357fffd3182932050be3db0046fb630af339df8903cf85a"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.8/task9.8.3/cost-audit.json",
+      "bytes": 38841,
+      "sha256": "80f41f4b17dc787cc3837560f2548e098ccb5be26eb7138cf11827845a9a4c0d"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.8/task9.8.3/dependency-metadata.json",
+      "bytes": 458,
+      "sha256": "bb978b8bc17a8de8c6d103a8526057d2d83cadf96daaf19111a3ddcc2159dadf"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.8/task9.8.3/recalculation.stdout.json",
+      "bytes": 6803,
+      "sha256": "902ee35211103292edd132914fe990c43d15cf8152a7ad5766e6519c826a0624"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.8/task9.8.3/resource-snapshot.json",
+      "bytes": 49251,
+      "sha256": "1dddc9f14d2a7e7c4eb3270d488c911dfe60ec66f9a8edc031e92fc1e7c1e719"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.8/verify_frozen_cases.py",
+      "bytes": 8875,
+      "sha256": "be1520fdf77af8427a8866e61611d2c950cd5161902c5a70d67cc0915204376e"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.8/worktree-snapshot.json",
+      "bytes": 1182,
+      "sha256": "d9666131eaec08105fdc32fd62f0a4b1a2c88a6bbb9a2bb7d119212072d23dcc"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/tasks/task9/task9.8/PROCEDURE.md",
+      "bytes": 11110,
+      "sha256": "57446a63f033407b0ee3a521f7e58db65eb14d2306fc7e3f005f2d6884481e2d"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/tasks/task9/task9.8/RESULTS.md",
+      "bytes": 18386,
+      "sha256": "196a0b46f4c7c3f51ab62079f4fd20fa12bb553c61652ce8528f213a9e9ac4f0"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/tasks/task9/task9.8/TASK.md",
+      "bytes": 2152,
+      "sha256": "e7236368b2b2a3473979bcae60e3202c1a0cfdc2fcef7b5335e5daaecb261212"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/tasks/task9/task9.8/task9.8.1/PROCEDURE.md",
+      "bytes": 1376,
+      "sha256": "6f5b454a33e08b15982933450b4fba5c23bb1894ad47105147849bdaec7a5a62"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/tasks/task9/task9.8/task9.8.1/RESULTS.md",
+      "bytes": 6248,
+      "sha256": "0d95a34c982f2c537d500c29c1b7adb1763fe7d0f687feedf1ccb6e376788016"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/tasks/task9/task9.8/task9.8.1/TASK.md",
+      "bytes": 1218,
+      "sha256": "96c4e301585ea402e9535da4a9cbe64da8119fa4345443d0b1f15e4f255ceec9"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/tasks/task9/task9.8/task9.8.2/PROCEDURE.md",
+      "bytes": 2648,
+      "sha256": "0afbdb0922d38404fd7900b252880ec7687d77138374dd6e1ce88e637040398a"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/tasks/task9/task9.8/task9.8.2/RESULTS.md",
+      "bytes": 25934,
+      "sha256": "5eadffec17e7e40acb1557876e0c97b24cd1a5b7b6c4c40bfd195068f89760c5"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/tasks/task9/task9.8/task9.8.2/TASK.md",
+      "bytes": 1921,
+      "sha256": "2ffc9c3331a86410527049fa72d778f54350b43f589a0e81316d623328c8f777"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/tasks/task9/task9.8/task9.8.3/PROCEDURE.md",
+      "bytes": 2547,
+      "sha256": "5a19b051d09847f577e5cafc1b3d3181f6720216f32381ebee5eb0ff155defcf"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/tasks/task9/task9.8/task9.8.3/RESULTS.md",
+      "bytes": 17984,
+      "sha256": "3408812aeea57a05db76b25d850e80ad5336e6d719d1a11f9a610742d4d9cbae"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/tasks/task9/task9.8/task9.8.3/TASK.md",
+      "bytes": 2180,
+      "sha256": "2e6219125b7fa3b88a9a95fcbfe28a67274fa7ab087e1232fa3ba67fce5454ef"
+    }
+  ]
+}

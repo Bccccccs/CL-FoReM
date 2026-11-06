@@ -1,0 +1,78 @@
+{
+  "status": "PASS",
+  "count": 12,
+  "checks": [
+    {
+      "seed": 4718,
+      "case_no": 2,
+      "final_intervention_matches_cpu_input": true,
+      "sha256": "111285a98c2df07672e6e0865f983886d771979016f986f2bd303a11767ddf56"
+    },
+    {
+      "seed": 4718,
+      "case_no": 3,
+      "final_intervention_matches_cpu_input": true,
+      "sha256": "0c6785854978cc442af648a37748784c243a6f2c0b35358b9f7e68e01e5a46f8"
+    },
+    {
+      "seed": 4718,
+      "case_no": 4,
+      "final_intervention_matches_cpu_input": true,
+      "sha256": "c0c3409edb6553fb8ded27812dc161e08f72b8dca9c87de64abf89b2d7479326"
+    },
+    {
+      "seed": 4718,
+      "case_no": 6,
+      "final_intervention_matches_cpu_input": true,
+      "sha256": "24f7bfa5f9e0c848920500a73c49e0082c45266856ccb2d88995e9d1cab8909c"
+    },
+    {
+      "seed": 4718,
+      "case_no": 9,
+      "final_intervention_matches_cpu_input": true,
+      "sha256": "c0ecf8589d23f2b7382be3539777ec46113d931900e8caba89e26f8102c6eb52"
+    },
+    {
+      "seed": 4719,
+      "case_no": 3,
+      "final_intervention_matches_cpu_input": true,
+      "sha256": "d51823ec6288dad3a286ebdf5c37d260127d74817b78262b16d52943862e57dd"
+    },
+    {
+      "seed": 4719,
+      "case_no": 4,
+      "final_intervention_matches_cpu_input": true,
+      "sha256": "210bf732424f6fed7e3af3bd542cad867a84e685717d56fa6f654e7246bd1b50"
+    },
+    {
+      "seed": 4719,
+      "case_no": 6,
+      "final_intervention_matches_cpu_input": true,
+      "sha256": "1ba1d85ccdd88493e7659126e9802064260048a84db422b1e920f4c4eff82d7b"
+    },
+    {
+      "seed": 4719,
+      "case_no": 9,
+      "final_intervention_matches_cpu_input": true,
+      "sha256": "bb06542b87ce0d18bbbc91b07a810cfc49eb23124306da0bf8d1614963509691"
+    },
+    {
+      "seed": 4720,
+      "case_no": 3,
+      "final_intervention_matches_cpu_input": true,
+      "sha256": "de2a1243290b9dea1972873a93c9c3fa5588a37ff2eb420026fde99056ec768e"
+    },
+    {
+      "seed": 4720,
+      "case_no": 4,
+      "final_intervention_matches_cpu_input": true,
+      "sha256": "f7cbe5262aff0222ef3eb5d8b0794e8ba651ad6cfe69a7aa436b2c665a72b066"
+    },
+    {
+      "seed": 4720,
+      "case_no": 6,
+      "final_intervention_matches_cpu_input": true,
+      "sha256": "ea92c1a2c010448b1990ceb529c264fc5d672400d693ae5646e32e314e4a755c"
+    }
+  ]
+}

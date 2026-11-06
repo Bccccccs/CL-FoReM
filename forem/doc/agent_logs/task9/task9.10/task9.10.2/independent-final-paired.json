@@ -1,0 +1,1804 @@
+{
+  "run": "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800",
+  "cases": [
+    {
+      "arm": "C",
+      "seed": 4718,
+      "case_no": 2,
+      "classification": "R",
+      "first_event": 157,
+      "first_segment": 2,
+      "first_action": 39,
+      "first_substep": 1,
+      "baseline_rho_m": 1.0353940846935519,
+      "max_reduction_m": 0.0003749274617164122,
+      "net_reduction_m": 0.0003749274617164122,
+      "same_segment_arrived": false,
+      "post_commits": 1,
+      "rejections": 20,
+      "commits": 78,
+      "attempts": 98,
+      "original_success": false,
+      "strict_success": false,
+      "failures": 20,
+      "final_stalls": 0,
+      "net_s_m": 0.01227116584777832,
+      "net_base_xy_m": 0.0004002168154298649,
+      "final_route_s_m": 0.3744220733642578,
+      "route_length_m": 0.8381490111351013,
+      "final_base_xy_displacement_m": 0.03754727370724358,
+      "same_segment_end_reason": 3,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "arm": "C",
+      "seed": 4718,
+      "case_no": 3,
+      "classification": "N",
+      "first_event": 259,
+      "first_segment": 1,
+      "first_action": 65,
+      "first_substep": 0,
+      "baseline_rho_m": 1.8706580346058606,
+      "max_reduction_m": 0.0,
+      "net_reduction_m": 0.0,
+      "same_segment_arrived": false,
+      "post_commits": 0,
+      "rejections": 20,
+      "commits": 128,
+      "attempts": 148,
+      "original_success": false,
+      "strict_success": false,
+      "failures": 20,
+      "final_stalls": 0,
+      "net_s_m": 0.0,
+      "net_base_xy_m": 0.0,
+      "final_route_s_m": 1.4780606031417847,
+      "route_length_m": 6.853716850280762,
+      "final_base_xy_displacement_m": 1.0812695676663366,
+      "same_segment_end_reason": 2,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "arm": "C",
+      "seed": 4718,
+      "case_no": 4,
+      "classification": "N",
+      "first_event": 124,
+      "first_segment": 1,
+      "first_action": 31,
+      "first_substep": 1,
+      "baseline_rho_m": 0.9952895443899484,
+      "max_reduction_m": 0.0,
+      "net_reduction_m": 0.0,
+      "same_segment_arrived": false,
+      "post_commits": 0,
+      "rejections": 20,
+      "commits": 61,
+      "attempts": 81,
+      "original_success": false,
+      "strict_success": false,
+      "failures": 20,
+      "final_stalls": 0,
+      "net_s_m": 0.0,
+      "net_base_xy_m": 0.0,
+      "final_route_s_m": 0.43627893924713135,
+      "route_length_m": 6.352405071258545,
+      "final_base_xy_displacement_m": 0.037169323026753374,
+      "same_segment_end_reason": 2,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "arm": "C",
+      "seed": 4718,
+      "case_no": 6,
+      "classification": "N",
+      "first_event": 392,
+      "first_segment": 1,
+      "first_action": 98,
+      "first_substep": 1,
+      "baseline_rho_m": 1.2190700751388488,
+      "max_reduction_m": 0.0,
+      "net_reduction_m": -0.0038383932732326542,
+      "same_segment_arrived": false,
+      "post_commits": 8,
+      "rejections": 20,
+      "commits": 203,
+      "attempts": 223,
+      "original_success": false,
+      "strict_success": false,
+      "failures": 20,
+      "final_stalls": 0,
+      "net_s_m": 0.004112362861633301,
+      "net_base_xy_m": 0.006315895140767088,
+      "final_route_s_m": 0.9250029921531677,
+      "route_length_m": 7.528431415557861,
+      "final_base_xy_displacement_m": 0.3432100192243439,
+      "same_segment_end_reason": 2,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "arm": "C",
+      "seed": 4718,
+      "case_no": 9,
+      "classification": "N",
+      "first_event": 732,
+      "first_segment": 2,
+      "first_action": 183,
+      "first_substep": 0,
+      "baseline_rho_m": 1.513538063409983,
+      "max_reduction_m": 0.0,
+      "net_reduction_m": 0.0,
+      "same_segment_arrived": false,
+      "post_commits": 0,
+      "rejections": 20,
+      "commits": 364,
+      "attempts": 384,
+      "original_success": false,
+      "strict_success": false,
+      "failures": 20,
+      "final_stalls": 0,
+      "net_s_m": 0.0,
+      "net_base_xy_m": 0.0,
+      "final_route_s_m": 1.9985910654067993,
+      "route_length_m": 4.978664398193359,
+      "final_base_xy_displacement_m": 1.4899601864024035,
+      "same_segment_end_reason": 3,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "arm": "C",
+      "seed": 4719,
+      "case_no": 3,
+      "classification": "N",
+      "first_event": 167,
+      "first_segment": 1,
+      "first_action": 42,
+      "first_substep": 0,
+      "baseline_rho_m": 1.661961372993704,
+      "max_reduction_m": 0.0,
+      "net_reduction_m": 0.0,
+      "same_segment_arrived": false,
+      "post_commits": 0,
+      "rejections": 20,
+      "commits": 82,
+      "attempts": 102,
+      "original_success": false,
+      "strict_success": false,
+      "failures": 20,
+      "final_stalls": 0,
+      "net_s_m": 0.0,
+      "net_base_xy_m": 0.0,
+      "final_route_s_m": 0.8620443344116211,
+      "route_length_m": 6.853716850280762,
+      "final_base_xy_displacement_m": 0.7177223644829375,
+      "same_segment_end_reason": 2,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "arm": "C",
+      "seed": 4719,
+      "case_no": 4,
+      "classification": "N",
+      "first_event": 19,
+      "first_segment": 1,
+      "first_action": 5,
+      "first_substep": 0,
+      "baseline_rho_m": 0.9840329821027692,
+      "max_reduction_m": 0.0,
+      "net_reduction_m": 0.0,
+      "same_segment_arrived": false,
+      "post_commits": 0,
+      "rejections": 20,
+      "commits": 8,
+      "attempts": 28,
+      "original_success": false,
+      "strict_success": false,
+      "failures": 20,
+      "final_stalls": 0,
+      "net_s_m": 0.0,
+      "net_base_xy_m": 0.0,
+      "final_route_s_m": 0.031838417053222656,
+      "route_length_m": 6.352405071258545,
+      "final_base_xy_displacement_m": 0.060376388941904266,
+      "same_segment_end_reason": 3,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "arm": "C",
+      "seed": 4719,
+      "case_no": 6,
+      "classification": "N",
+      "first_event": 243,
+      "first_segment": 1,
+      "first_action": 61,
+      "first_substep": 0,
+      "baseline_rho_m": 1.1908611783557979,
+      "max_reduction_m": 0.0,
+      "net_reduction_m": 0.0,
+      "same_segment_arrived": false,
+      "post_commits": 0,
+      "rejections": 20,
+      "commits": 120,
+      "attempts": 140,
+      "original_success": false,
+      "strict_success": false,
+      "failures": 20,
+      "final_stalls": 0,
+      "net_s_m": 0.0,
+      "net_base_xy_m": 0.0,
+      "final_route_s_m": 0.8749294281005859,
+      "route_length_m": 7.528431415557861,
+      "final_base_xy_displacement_m": 0.33904127975433385,
+      "same_segment_end_reason": 2,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "arm": "C",
+      "seed": 4719,
+      "case_no": 9,
+      "classification": "N",
+      "first_event": 616,
+      "first_segment": 2,
+      "first_action": 154,
+      "first_substep": 0,
+      "baseline_rho_m": 1.1719288775421552,
+      "max_reduction_m": 0.0,
+      "net_reduction_m": 0.0,
+      "same_segment_arrived": false,
+      "post_commits": 0,
+      "rejections": 20,
+      "commits": 306,
+      "attempts": 326,
+      "original_success": false,
+      "strict_success": false,
+      "failures": 20,
+      "final_stalls": 0,
+      "net_s_m": 0.0,
+      "net_base_xy_m": 0.0,
+      "final_route_s_m": 2.1449978351593018,
+      "route_length_m": 4.978664398193359,
+      "final_base_xy_displacement_m": 1.6003675419766326,
+      "same_segment_end_reason": 3,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "arm": "C",
+      "seed": 4720,
+      "case_no": 3,
+      "classification": "N",
+      "first_event": 284,
+      "first_segment": 1,
+      "first_action": 71,
+      "first_substep": 1,
+      "baseline_rho_m": 1.6987326430875502,
+      "max_reduction_m": 0.0,
+      "net_reduction_m": -0.007383687257608518,
+      "same_segment_arrived": false,
+      "post_commits": 2,
+      "rejections": 20,
+      "commits": 143,
+      "attempts": 163,
+      "original_success": false,
+      "strict_success": false,
+      "failures": 20,
+      "final_stalls": 0,
+      "net_s_m": 0.018087148666381836,
+      "net_base_xy_m": 0.013333801867682942,
+      "final_route_s_m": 0.9942160248756409,
+      "route_length_m": 6.853716850280762,
+      "final_base_xy_displacement_m": 0.8039355313833694,
+      "same_segment_end_reason": 2,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "arm": "C",
+      "seed": 4720,
+      "case_no": 4,
+      "classification": "N",
+      "first_event": 299,
+      "first_segment": 1,
+      "first_action": 75,
+      "first_substep": 0,
+      "baseline_rho_m": 1.0054433103201788,
+      "max_reduction_m": 0.0,
+      "net_reduction_m": 0.0,
+      "same_segment_arrived": false,
+      "post_commits": 0,
+      "rejections": 20,
+      "commits": 148,
+      "attempts": 168,
+      "original_success": false,
+      "strict_success": false,
+      "failures": 20,
+      "final_stalls": 0,
+      "net_s_m": 0.0,
+      "net_base_xy_m": 0.0,
+      "final_route_s_m": 0.484291136264801,
+      "route_length_m": 6.352405071258545,
+      "final_base_xy_displacement_m": 0.007889197038842197,
+      "same_segment_end_reason": 2,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "arm": "C",
+      "seed": 4720,
+      "case_no": 6,
+      "classification": "N",
+      "first_event": 191,
+      "first_segment": 1,
+      "first_action": 48,
+      "first_substep": 0,
+      "baseline_rho_m": 1.6574354746816107,
+      "max_reduction_m": 0.0,
+      "net_reduction_m": 0.0,
+      "same_segment_arrived": false,
+      "post_commits": 0,
+      "rejections": 20,
+      "commits": 94,
+      "attempts": 114,
+      "original_success": false,
+      "strict_success": false,
+      "failures": 20,
+      "final_stalls": 0,
+      "net_s_m": 0.0,
+      "net_base_xy_m": 0.0,
+      "final_route_s_m": 1.0807877779006958,
+      "route_length_m": 7.528431415557861,
+      "final_base_xy_displacement_m": 0.8510663110921665,
+      "same_segment_end_reason": 3,
+      "terminated": true,
+      "truncated": false
+    },
+    {
+      "arm": "T",
+      "seed": 4718,
+      "case_no": 2,
+      "classification": "R",
+      "first_event": 157,
+      "first_segment": 2,
+      "first_action": 39,
+      "first_substep": 1,
+      "baseline_rho_m": 1.0353940846935519,
+      "max_reduction_m": 0.0003749274617164122,
+      "net_reduction_m": 0.0003749274617164122,
+      "same_segment_arrived": false,
+      "post_commits": 1,
+      "rejections": 20,
+      "commits": 78,
+      "attempts": 98,
+      "original_success": false,
+      "strict_success": false,
+      "failures": 20,
+      "final_stalls": 0,
+      "net_s_m": 0.01227116584777832,
+      "net_base_xy_m": 0.0004002168154298649,
+      "final_route_s_m": 0.3744220733642578,
+      "route_length_m": 0.8381490111351013,
+      "final_base_xy_displacement_m": 0.03754727370724358,
+      "same_segment_end_reason": 3,
+      "terminated": true,
+      "truncated": false,
+      "action_changed": true,
+      "intervention": {
+        "serialized": "[91020261103,4718,\"standard_validation_00000\",2396592471,0,\"validation\",\"validation\",1882287200219130464]",
+        "sha256": "a66250b937e73f2f9cb29d268d296e877ddb936b3790106308f20099cf5d22f0",
+        "generator_seed": 2765861877595979567,
+        "epsilon": [
+          0.45578277111053467,
+          0.7564905285835266,
+          -0.8069520592689514
+        ],
+        "mean": [
+          0.7308909893035889,
+          -0.10884088277816772,
+          -0.02669515460729599
+        ],
+        "log_std": [
+          -1.425505518913269,
+          -2.871041774749756,
+          -2.4396793842315674
+        ],
+        "mean_action": [
+          0.6236101388931274,
+          -0.10841312259435654,
+          -0.026688816025853157
+        ],
+        "replacement_action": [
+          0.6860501170158386,
+          -0.06589770317077637,
+          -0.09674876928329468
+        ],
+        "segment": 2,
+        "action": 40,
+        "first_rejection": {
+          "core": 123989500108784,
+          "index": 2,
+          "segment": 2,
+          "rejected_action": 39,
+          "substep": 1
+        },
+        "rng_before": "ca9dbd15a46a2066912bf2bdcebddc52fe40710f7c55e71fc629a89a90715063",
+        "rng_after": "ca9dbd15a46a2066912bf2bdcebddc52fe40710f7c55e71fc629a89a90715063",
+        "rng_unchanged": true
+      },
+      "execution_action_C": [
+        0.24542346596717834,
+        -0.10841312259435654,
+        -0.008006645366549492
+      ],
+      "execution_action_T": [
+        0.25447726249694824,
+        -0.06589770317077637,
+        -0.029024632647633553
+      ],
+      "execution_action_changed": true
+    },
+    {
+      "arm": "T",
+      "seed": 4718,
+      "case_no": 3,
+      "classification": "N",
+      "first_event": 259,
+      "first_segment": 1,
+      "first_action": 65,
+      "first_substep": 0,
+      "baseline_rho_m": 1.8706580346058606,
+      "max_reduction_m": 0.0,
+      "net_reduction_m": 0.0,
+      "same_segment_arrived": false,
+      "post_commits": 0,
+      "rejections": 20,
+      "commits": 128,
+      "attempts": 148,
+      "original_success": false,
+      "strict_success": false,
+      "failures": 20,
+      "final_stalls": 0,
+      "net_s_m": 0.0,
+      "net_base_xy_m": 0.0,
+      "final_route_s_m": 1.4780606031417847,
+      "route_length_m": 6.853716850280762,
+      "final_base_xy_displacement_m": 1.0812695676663366,
+      "same_segment_end_reason": 2,
+      "terminated": true,
+      "truncated": false,
+      "action_changed": true,
+      "intervention": {
+        "serialized": "[91020261103,4718,\"home_map_002\",3570249233,0,\"semantic_transfer\",\"smoke\",3029584731548132938]",
+        "sha256": "e06b8b50acc77a1f58d2ea9069edf0e0400a52c22ecc7e925b734b1533aac9e3",
+        "generator_seed": 6947800028761520671,
+        "epsilon": [
+          -0.17202156782150269,
+          0.6204010844230652,
+          0.764838457107544
+        ],
+        "mean": [
+          1.4331755638122559,
+          0.18448038399219513,
+          1.3286124467849731
+        ],
+        "log_std": [
+          -0.9481817483901978,
+          -2.4891982078552246,
+          -0.9671177268028259
+        ],
+        "mean_action": [
+          0.8923155069351196,
+          0.1824156939983368,
+          0.8689098358154297
+        ],
+        "replacement_action": [
+          0.8778982162475586,
+          0.23167531192302704,
+          0.9245352149009705
+        ],
+        "segment": 1,
+        "action": 66,
+        "first_rejection": {
+          "core": 123989487263920,
+          "index": 8,
+          "segment": 1,
+          "rejected_action": 65,
+          "substep": 0
+        },
+        "rng_before": "3330c965b6f3dffae234f6121e2d201ff12c84d4b6abad14af0781d0b53d220f",
+        "rng_after": "3330c965b6f3dffae234f6121e2d201ff12c84d4b6abad14af0781d0b53d220f",
+        "rng_unchanged": true
+      },
+      "execution_action_C": [
+        0.2843857407569885,
+        0.1824156939983368,
+        0.2606729567050934
+      ],
+      "execution_action_T": [
+        0.28229522705078125,
+        0.23167531192302704,
+        0.27736058831214905
+      ],
+      "execution_action_changed": true
+    },
+    {
+      "arm": "T",
+      "seed": 4718,
+      "case_no": 4,
+      "classification": "N",
+      "first_event": 124,
+      "first_segment": 1,
+      "first_action": 31,
+      "first_substep": 1,
+      "baseline_rho_m": 0.9952895443899484,
+      "max_reduction_m": 0.0,
+      "net_reduction_m": 0.0,
+      "same_segment_arrived": false,
+      "post_commits": 0,
+      "rejections": 20,
+      "commits": 61,
+      "attempts": 81,
+      "original_success": false,
+      "strict_success": false,
+      "failures": 20,
+      "final_stalls": 0,
+      "net_s_m": 0.0,
+      "net_base_xy_m": 0.0,
+      "final_route_s_m": 0.43627893924713135,
+      "route_length_m": 6.352405071258545,
+      "final_base_xy_displacement_m": 0.037169323026753374,
+      "same_segment_end_reason": 2,
+      "terminated": true,
+      "truncated": false,
+      "action_changed": true,
+      "intervention": {
+        "serialized": "[91020261103,4718,\"home_map_002\",4158490082,0,\"semantic_transfer\",\"smoke\",6076064104553683651]",
+        "sha256": "8b6d317e6f90ae03972e7182de5d8a22dbee017e414f95ca3d8dba5ff4a77dcd",
+        "generator_seed": 823368725986061827,
+        "epsilon": [
+          0.6028210520744324,
+          1.1656744480133057,
+          0.2796090543270111
+        ],
+        "mean": [
+          -0.9130098819732666,
+          0.05758771672844887,
+          -0.38907942175865173
+        ],
+        "log_std": [
+          -1.6646473407745361,
+          -2.791423797607422,
+          -3.1823055744171143
+        ],
+        "mean_action": [
+          -0.7225737571716309,
+          0.05752414092421532,
+          -0.37056630849838257
+        ],
+        "replacement_action": [
+          -0.6634334325790405,
+          0.12837080657482147,
+          -0.36051565408706665
+        ],
+        "segment": 1,
+        "action": 32,
+        "first_rejection": {
+          "core": 123989487263920,
+          "index": 9,
+          "segment": 1,
+          "rejected_action": 31,
+          "substep": 1
+        },
+        "rng_before": "3330c965b6f3dffae234f6121e2d201ff12c84d4b6abad14af0781d0b53d220f",
+        "rng_after": "3330c965b6f3dffae234f6121e2d201ff12c84d4b6abad14af0781d0b53d220f",
+        "rng_unchanged": true
+      },
+      "execution_action_C": [
+        0.05022680014371872,
+        0.05752414092421532,
+        -0.11116989701986313
+      ],
+      "execution_action_T": [
+        0.058802150189876556,
+        0.12837080657482147,
+        -0.10815469920635223
+      ],
+      "execution_action_changed": true
+    },
+    {
+      "arm": "T",
+      "seed": 4718,
+      "case_no": 6,
+      "classification": "R",
+      "first_event": 392,
+      "first_segment": 1,
+      "first_action": 98,
+      "first_substep": 1,
+      "baseline_rho_m": 1.2190700751388488,
+      "max_reduction_m": 0.0012711500405742093,
+      "net_reduction_m": -0.0037452972849869592,
+      "same_segment_arrived": false,
+      "post_commits": 66,
+      "rejections": 20,
+      "commits": 261,
+      "attempts": 281,
+      "original_success": false,
+      "strict_success": false,
+      "failures": 20,
+      "final_stalls": 0,
+      "net_s_m": 0.04350864887237549,
+      "net_base_xy_m": 0.01275276725410682,
+      "final_route_s_m": 0.9643992781639099,
+      "route_length_m": 7.528431415557861,
+      "final_base_xy_displacement_m": 0.3480738303397034,
+      "same_segment_end_reason": 2,
+      "terminated": true,
+      "truncated": false,
+      "action_changed": true,
+      "intervention": {
+        "serialized": "[91020261103,4718,\"home_map_002\",803250685,0,\"semantic_transfer\",\"smoke\",4363422522331977694]",
+        "sha256": "a65a5b64a0473acbe0c2ccd55b84b04bfac3f2aa8290aa6a3601e516e6152fc6",
+        "generator_seed": 2763621809089100491,
+        "epsilon": [
+          -0.4155142903327942,
+          0.9497283697128296,
+          1.5142335891723633
+        ],
+        "mean": [
+          -4.466441631317139,
+          0.9435102343559265,
+          0.6823363304138184
+        ],
+        "log_std": [
+          -0.4618905186653137,
+          -2.202850818634033,
+          -2.6308836936950684
+        ],
+        "mean_action": [
+          -0.9997360706329346,
+          0.7368308305740356,
+          0.5930361747741699
+        ],
+        "replacement_action": [
+          -0.9998436570167542,
+          0.7812005281448364,
+          0.6591921448707581
+        ],
+        "segment": 1,
+        "action": 99,
+        "first_rejection": {
+          "core": 123989487263920,
+          "index": 11,
+          "segment": 1,
+          "rejected_action": 98,
+          "substep": 1
+        },
+        "rng_before": "3330c965b6f3dffae234f6121e2d201ff12c84d4b6abad14af0781d0b53d220f",
+        "rng_after": "3330c965b6f3dffae234f6121e2d201ff12c84d4b6abad14af0781d0b53d220f",
+        "rng_unchanged": true
+      },
+      "execution_action_C": [
+        0.010038269683718681,
+        0.7368308305740356,
+        0.17791086435317993
+      ],
+      "execution_action_T": [
+        0.010022669099271297,
+        0.7812005281448364,
+        0.19775764644145966
+      ],
+      "execution_action_changed": true
+    },
+    {
+      "arm": "T",
+      "seed": 4718,
+      "case_no": 9,
+      "classification": "N",
+      "first_event": 732,
+      "first_segment": 2,
+      "first_action": 183,
+      "first_substep": 0,
+      "baseline_rho_m": 1.513538063409983,
+      "max_reduction_m": 0.0,
+      "net_reduction_m": 0.0,
+      "same_segment_arrived": false,
+      "post_commits": 0,
+      "rejections": 20,
+      "commits": 364,
+      "attempts": 384,
+      "original_success": false,
+      "strict_success": false,
+      "failures": 20,
+      "final_stalls": 0,
+      "net_s_m": 0.0,
+      "net_base_xy_m": 0.0,
+      "final_route_s_m": 1.9985910654067993,
+      "route_length_m": 4.978664398193359,
+      "final_base_xy_displacement_m": 1.4899601864024035,
+      "same_segment_end_reason": 3,
+      "terminated": true,
+      "truncated": false,
+      "action_changed": true,
+      "intervention": {
+        "serialized": "[91020261103,4718,\"library_map_002\",2407846046,0,\"semantic_transfer\",\"smoke\",2227190365323047312]",
+        "sha256": "d79807507e2734e520967790fa882fe2711370c68ad71980d92f73fa040bad65",
+        "generator_seed": 6311802920055026917,
+        "epsilon": [
+          -0.9238283038139343,
+          -0.10542620718479156,
+          -0.482859343290329
+        ],
+        "mean": [
+          0.6211029887199402,
+          0.05280379205942154,
+          -0.2978147268295288
+        ],
+        "log_std": [
+          -1.4765723943710327,
+          -2.5375161170959473,
+          -1.9399142265319824
+        ],
+        "mean_action": [
+          0.5518954992294312,
+          0.05275477096438408,
+          -0.2893114984035492
+        ],
+        "replacement_action": [
+          0.38854295015335083,
+          0.04443924129009247,
+          -0.351548433303833
+        ],
+        "segment": 2,
+        "action": 184,
+        "first_rejection": {
+          "core": 123989496667520,
+          "index": 14,
+          "segment": 2,
+          "rejected_action": 183,
+          "substep": 0
+        },
+        "rng_before": "fd9752057cf5aa0bed88cb2520bc10691558d20770a72ebf0c55de4e616b4cf2",
+        "rng_after": "fd9752057cf5aa0bed88cb2520bc10691558d20770a72ebf0c55de4e616b4cf2",
+        "rng_unchanged": true
+      },
+      "execution_action_C": [
+        0.2350248396396637,
+        0.05275477096438408,
+        -0.086793452501297
+      ],
+      "execution_action_T": [
+        0.21133871376514435,
+        0.04443924129009247,
+        -0.10546453297138214
+      ],
+      "execution_action_changed": true
+    },
+    {
+      "arm": "T",
+      "seed": 4719,
+      "case_no": 3,
+      "classification": "N",
+      "first_event": 167,
+      "first_segment": 1,
+      "first_action": 42,
+      "first_substep": 0,
+      "baseline_rho_m": 1.661961372993704,
+      "max_reduction_m": 0.0,
+      "net_reduction_m": 0.0,
+      "same_segment_arrived": false,
+      "post_commits": 0,
+      "rejections": 20,
+      "commits": 82,
+      "attempts": 102,
+      "original_success": false,
+      "strict_success": false,
+      "failures": 20,
+      "final_stalls": 0,
+      "net_s_m": 0.0,
+      "net_base_xy_m": 0.0,
+      "final_route_s_m": 0.8620443344116211,
+      "route_length_m": 6.853716850280762,
+      "final_base_xy_displacement_m": 0.7177223644829375,
+      "same_segment_end_reason": 2,
+      "terminated": true,
+      "truncated": false,
+      "action_changed": true,
+      "intervention": {
+        "serialized": "[91020261103,4719,\"home_map_002\",3570249233,0,\"semantic_transfer\",\"smoke\",3029584731548132938]",
+        "sha256": "1324ff0822a2357aa48c6a000fc0a092f6ee0325d17b5bce50c0693f7f677bf6",
+        "generator_seed": 1379507796288091514,
+        "epsilon": [
+          0.70223468542099,
+          1.0125741958618164,
+          0.460628867149353
+        ],
+        "mean": [
+          0.5892574787139893,
+          -0.6161766648292542,
+          -0.25274649262428284
+        ],
+        "log_std": [
+          -1.1370158195495605,
+          -2.0452702045440674,
+          -2.3400909900665283
+        ],
+        "mean_action": [
+          0.529361367225647,
+          -0.5484603643417358,
+          -0.24749866127967834
+        ],
+        "replacement_action": [
+          0.6720743179321289,
+          -0.45040246844291687,
+          -0.20541465282440186
+        ],
+        "segment": 1,
+        "action": 43,
+        "first_rejection": {
+          "core": 138316952732864,
+          "index": 8,
+          "segment": 1,
+          "rejected_action": 42,
+          "substep": 0
+        },
+        "rng_before": "fa29a96fac597501ee675b801db78ce1d3f690397ff8f4351ceabc6b9b54c660",
+        "rng_after": "fa29a96fac597501ee675b801db78ce1d3f690397ff8f4351ceabc6b9b54c660",
+        "rng_unchanged": true
+      },
+      "execution_action_C": [
+        0.23175740242004395,
+        -0.5484603643417358,
+        -0.07424960285425186
+      ],
+      "execution_action_T": [
+        0.25245076417922974,
+        -0.45040246844291687,
+        -0.061624396592378616
+      ],
+      "execution_action_changed": true
+    },
+    {
+      "arm": "T",
+      "seed": 4719,
+      "case_no": 4,
+      "classification": "N",
+      "first_event": 19,
+      "first_segment": 1,
+      "first_action": 5,
+      "first_substep": 0,
+      "baseline_rho_m": 0.9840329821027692,
+      "max_reduction_m": 0.0,
+      "net_reduction_m": 0.0,
+      "same_segment_arrived": false,
+      "post_commits": 0,
+      "rejections": 20,
+      "commits": 8,
+      "attempts": 28,
+      "original_success": false,
+      "strict_success": false,
+      "failures": 20,
+      "final_stalls": 0,
+      "net_s_m": 0.0,
+      "net_base_xy_m": 0.0,
+      "final_route_s_m": 0.031838417053222656,
+      "route_length_m": 6.352405071258545,
+      "final_base_xy_displacement_m": 0.060376388941904266,
+      "same_segment_end_reason": 3,
+      "terminated": true,
+      "truncated": false,
+      "action_changed": true,
+      "intervention": {
+        "serialized": "[91020261103,4719,\"home_map_002\",4158490082,0,\"semantic_transfer\",\"smoke\",6076064104553683651]",
+        "sha256": "0d6e05ea55c9bac833bdc3240d3be5ea761798baa6e5ab2f739ef568f0fc32c9",
+        "generator_seed": 967717473951005384,
+        "epsilon": [
+          -0.24293388426303864,
+          0.6428820490837097,
+          0.9045038819313049
+        ],
+        "mean": [
+          -0.6564107537269592,
+          -0.19187134504318237,
+          0.7836501002311707
+        ],
+        "log_std": [
+          -1.4462722539901733,
+          -2.6678364276885986,
+          -1.8136451244354248
+        ],
+        "mean_action": [
+          -0.5759698152542114,
+          -0.1895509660243988,
+          0.654796838760376
+        ],
+        "replacement_action": [
+          -0.6129347085952759,
+          -0.14619871973991394,
+          0.731123685836792
+        ],
+        "segment": 1,
+        "action": 6,
+        "first_rejection": {
+          "core": 138316952732864,
+          "index": 9,
+          "segment": 1,
+          "rejected_action": 5,
+          "substep": 0
+        },
+        "rng_before": "fa29a96fac597501ee675b801db78ce1d3f690397ff8f4351ceabc6b9b54c660",
+        "rng_after": "fa29a96fac597501ee675b801db78ce1d3f690397ff8f4351ceabc6b9b54c660",
+        "rng_unchanged": true
+      },
+      "execution_action_C": [
+        0.07148437201976776,
+        -0.1895509660243988,
+        0.19643905758857727
+      ],
+      "execution_action_T": [
+        0.06612446904182434,
+        -0.14619871973991394,
+        0.2193371206521988
+      ],
+      "execution_action_changed": true
+    },
+    {
+      "arm": "T",
+      "seed": 4719,
+      "case_no": 6,
+      "classification": "N",
+      "first_event": 243,
+      "first_segment": 1,
+      "first_action": 61,
+      "first_substep": 0,
+      "baseline_rho_m": 1.1908611783557979,
+      "max_reduction_m": 0.0,
+      "net_reduction_m": 0.0,
+      "same_segment_arrived": false,
+      "post_commits": 0,
+      "rejections": 20,
+      "commits": 120,
+      "attempts": 140,
+      "original_success": false,
+      "strict_success": false,
+      "failures": 20,
+      "final_stalls": 0,
+      "net_s_m": 0.0,
+      "net_base_xy_m": 0.0,
+      "final_route_s_m": 0.8749294281005859,
+      "route_length_m": 7.528431415557861,
+      "final_base_xy_displacement_m": 0.33904127975433385,
+      "same_segment_end_reason": 2,
+      "terminated": true,
+      "truncated": false,
+      "action_changed": true,
+      "intervention": {
+        "serialized": "[91020261103,4719,\"home_map_002\",803250685,0,\"semantic_transfer\",\"smoke\",4363422522331977694]",
+        "sha256": "79f1f1d4439b7cd131d8c6947f0140c4057a9665ce13b30a1781a15551c2da31",
+        "generator_seed": 8787070241946172625,
+        "epsilon": [
+          -0.18081575632095337,
+          0.6715814471244812,
+          -1.3113744258880615
+        ],
+        "mean": [
+          0.3998768627643585,
+          0.07828398048877716,
+          0.10025368630886078
+        ],
+        "log_std": [
+          -1.3799471855163574,
+          -2.906479597091675,
+          -2.407506227493286
+        ],
+        "mean_action": [
+          0.3798435926437378,
+          0.07812445610761642,
+          0.0999191552400589
+        ],
+        "replacement_action": [
+          0.3402586877346039,
+          0.11449363827705383,
+          -0.01781999133527279
+        ],
+        "segment": 1,
+        "action": 62,
+        "first_rejection": {
+          "core": 138316952732864,
+          "index": 11,
+          "segment": 1,
+          "rejected_action": 61,
+          "substep": 0
+        },
+        "rng_before": "737a1f9d39d560a25b5e565d8521be7a8543cd8762be2f1965e28d76a6109793",
+        "rng_after": "737a1f9d39d560a25b5e565d8521be7a8543cd8762be2f1965e28d76a6109793",
+        "rng_unchanged": true
+      },
+      "execution_action_C": [
+        0.21007731556892395,
+        0.07812445610761642,
+        0.02997574768960476
+      ],
+      "execution_action_T": [
+        0.20433750748634338,
+        0.11449363827705383,
+        -0.005345997400581837
+      ],
+      "execution_action_changed": true
+    },
+    {
+      "arm": "T",
+      "seed": 4719,
+      "case_no": 9,
+      "classification": "N",
+      "first_event": 616,
+      "first_segment": 2,
+      "first_action": 154,
+      "first_substep": 0,
+      "baseline_rho_m": 1.1719288775421552,
+      "max_reduction_m": 0.0,
+      "net_reduction_m": 0.0,
+      "same_segment_arrived": false,
+      "post_commits": 0,
+      "rejections": 20,
+      "commits": 306,
+      "attempts": 326,
+      "original_success": false,
+      "strict_success": false,
+      "failures": 20,
+      "final_stalls": 0,
+      "net_s_m": 0.0,
+      "net_base_xy_m": 0.0,
+      "final_route_s_m": 2.1449978351593018,
+      "route_length_m": 4.978664398193359,
+      "final_base_xy_displacement_m": 1.6003675419766326,
+      "same_segment_end_reason": 3,
+      "terminated": true,
+      "truncated": false,
+      "action_changed": true,
+      "intervention": {
+        "serialized": "[91020261103,4719,\"library_map_002\",2407846046,0,\"semantic_transfer\",\"smoke\",2227190365323047312]",
+        "sha256": "6f2481a65129a78efe256d732bd17fd9f673fe064d2705664617e48b7492ca66",
+        "generator_seed": 8008668588697823118,
+        "epsilon": [
+          0.20980733633041382,
+          3.0202651023864746,
+          1.2238372564315796
+        ],
+        "mean": [
+          -0.3736804723739624,
+          -0.08539916574954987,
+          0.016148269176483154
+        ],
+        "log_std": [
+          -1.503469467163086,
+          -2.336488723754883,
+          -2.3528170585632324
+        ],
+        "mean_action": [
+          -0.3572067618370056,
+          -0.08519216626882553,
+          0.016146866604685783
+        ],
+        "replacement_action": [
+          -0.3158479928970337,
+          0.20367072522640228,
+          0.13176564872264862
+        ],
+        "segment": 2,
+        "action": 155,
+        "first_rejection": {
+          "core": 138316975537408,
+          "index": 14,
+          "segment": 2,
+          "rejected_action": 154,
+          "substep": 0
+        },
+        "rng_before": "45a0201e24ca6385ccb34ea89cd0a09224ed28feb5b85453e5dfc626d278248d",
+        "rng_after": "45a0201e24ca6385ccb34ea89cd0a09224ed28feb5b85453e5dfc626d278248d",
+        "rng_unchanged": true
+      },
+      "execution_action_C": [
+        0.10320501774549484,
+        -0.08519216626882553,
+        0.00484406016767025
+      ],
+      "execution_action_T": [
+        0.10920203477144241,
+        0.20367072522640228,
+        0.039529696106910706
+      ],
+      "execution_action_changed": true
+    },
+    {
+      "arm": "T",
+      "seed": 4720,
+      "case_no": 3,
+      "classification": "N",
+      "first_event": 284,
+      "first_segment": 1,
+      "first_action": 71,
+      "first_substep": 1,
+      "baseline_rho_m": 1.6987326430875502,
+      "max_reduction_m": 0.0,
+      "net_reduction_m": -0.00977095822158347,
+      "same_segment_arrived": false,
+      "post_commits": 2,
+      "rejections": 20,
+      "commits": 143,
+      "attempts": 163,
+      "original_success": false,
+      "strict_success": false,
+      "failures": 20,
+      "final_stalls": 0,
+      "net_s_m": 0.018996357917785645,
+      "net_base_xy_m": 0.017444046709770848,
+      "final_route_s_m": 0.9951252341270447,
+      "route_length_m": 6.853716850280762,
+      "final_base_xy_displacement_m": 0.8073736653360359,
+      "same_segment_end_reason": 2,
+      "terminated": true,
+      "truncated": false,
+      "action_changed": true,
+      "intervention": {
+        "serialized": "[91020261103,4720,\"home_map_002\",3570249233,0,\"semantic_transfer\",\"smoke\",3029584731548132938]",
+        "sha256": "42f62a0649f346b5b41e7d9c641346b4af5e07791d9e42377fc5c22a6029c517",
+        "generator_seed": 4825090257272915637,
+        "epsilon": [
+          0.3059014081954956,
+          1.184837818145752,
+          1.470767855644226
+        ],
+        "mean": [
+          0.18035492300987244,
+          -0.0018769291928038,
+          0.47777947783470154
+        ],
+        "log_std": [
+          -1.5394490957260132,
+          -2.1762304306030273,
+          -2.062922954559326
+        ],
+        "mean_action": [
+          0.17842452228069305,
+          -0.0018769269809126854,
+          0.4444635510444641
+        ],
+        "replacement_action": [
+          0.24112719297409058,
+          0.13179367780685425,
+          0.5814745426177979
+        ],
+        "segment": 1,
+        "action": 72,
+        "first_rejection": {
+          "core": 127702707439600,
+          "index": 8,
+          "segment": 1,
+          "rejected_action": 71,
+          "substep": 1
+        },
+        "rng_before": "f8e8b6f010d0e26c1fadd751e6d53ea5352007c4c9a5a8b54f154aca09ab2291",
+        "rng_after": "f8e8b6f010d0e26c1fadd751e6d53ea5352007c4c9a5a8b54f154aca09ab2291",
+        "rng_unchanged": true
+      },
+      "execution_action_C": [
+        0.18087154626846313,
+        -0.0018769269809126854,
+        0.1333390772342682
+      ],
+      "execution_action_T": [
+        0.1899634450674057,
+        0.13179367780685425,
+        0.1744423657655716
+      ],
+      "execution_action_changed": true
+    },
+    {
+      "arm": "T",
+      "seed": 4720,
+      "case_no": 4,
+      "classification": "N",
+      "first_event": 299,
+      "first_segment": 1,
+      "first_action": 75,
+      "first_substep": 0,
+      "baseline_rho_m": 1.0054433103201788,
+      "max_reduction_m": 0.0,
+      "net_reduction_m": 0.0,
+      "same_segment_arrived": false,
+      "post_commits": 0,
+      "rejections": 20,
+      "commits": 148,
+      "attempts": 168,
+      "original_success": false,
+      "strict_success": false,
+      "failures": 20,
+      "final_stalls": 0,
+      "net_s_m": 0.0,
+      "net_base_xy_m": 0.0,
+      "final_route_s_m": 0.484291136264801,
+      "route_length_m": 6.352405071258545,
+      "final_base_xy_displacement_m": 0.007889197038842197,
+      "same_segment_end_reason": 2,
+      "terminated": true,
+      "truncated": false,
+      "action_changed": true,
+      "intervention": {
+        "serialized": "[91020261103,4720,\"home_map_002\",4158490082,0,\"semantic_transfer\",\"smoke\",6076064104553683651]",
+        "sha256": "1faed6d2841802323a02562adc0cd10f4bd6f23943920615cb180c1749539f2e",
+        "generator_seed": 2282998260771062322,
+        "epsilon": [
+          -1.9857314825057983,
+          -1.0430887937545776,
+          1.7159662246704102
+        ],
+        "mean": [
+          -3.2073400020599365,
+          0.6536420583724976,
+          -0.24911722540855408
+        ],
+        "log_std": [
+          -1.0908172130584717,
+          -3.3223845958709717,
+          -3.4325990676879883
+        ],
+        "mean_action": [
+          -0.9967306852340698,
+          0.5741167068481445,
+          -0.24408864974975586
+        ],
+        "replacement_action": [
+          -0.9991378784179688,
+          0.5483517646789551,
+          -0.1913003772497177
+        ],
+        "segment": 1,
+        "action": 76,
+        "first_rejection": {
+          "core": 127702707439600,
+          "index": 9,
+          "segment": 1,
+          "rejected_action": 75,
+          "substep": 0
+        },
+        "rng_before": "f8e8b6f010d0e26c1fadd751e6d53ea5352007c4c9a5a8b54f154aca09ab2291",
+        "rng_after": "f8e8b6f010d0e26c1fadd751e6d53ea5352007c4c9a5a8b54f154aca09ab2291",
+        "rng_unchanged": true
+      },
+      "execution_action_C": [
+        0.010474050417542458,
+        0.5741167068481445,
+        -0.07322660088539124
+      ],
+      "execution_action_T": [
+        0.01012500748038292,
+        0.5483517646789551,
+        -0.05739011615514755
+      ],
+      "execution_action_changed": true
+    },
+    {
+      "arm": "T",
+      "seed": 4720,
+      "case_no": 6,
+      "classification": "N",
+      "first_event": 191,
+      "first_segment": 1,
+      "first_action": 48,
+      "first_substep": 0,
+      "baseline_rho_m": 1.6574354746816107,
+      "max_reduction_m": 0.0,
+      "net_reduction_m": 0.0,
+      "same_segment_arrived": false,
+      "post_commits": 0,
+      "rejections": 20,
+      "commits": 94,
+      "attempts": 114,
+      "original_success": false,
+      "strict_success": false,
+      "failures": 20,
+      "final_stalls": 0,
+      "net_s_m": 0.0,
+      "net_base_xy_m": 0.0,
+      "final_route_s_m": 1.0807877779006958,
+      "route_length_m": 7.528431415557861,
+      "final_base_xy_displacement_m": 0.8510663110921665,
+      "same_segment_end_reason": 3,
+      "terminated": true,
+      "truncated": false,
+      "action_changed": true,
+      "intervention": {
+        "serialized": "[91020261103,4720,\"home_map_002\",803250685,0,\"semantic_transfer\",\"smoke\",4363422522331977694]",
+        "sha256": "e8b7b08431d57e0e71fcc877c047678ceaed49f86bf8d03f2179991c72e899ba",
+        "generator_seed": 7545693782500802062,
+        "epsilon": [
+          -0.921505331993103,
+          0.17775070667266846,
+          0.2282300740480423
+        ],
+        "mean": [
+          0.7786411643028259,
+          0.4936330020427704,
+          1.3290976285934448
+        ],
+        "log_std": [
+          -1.215679407119751,
+          -2.2458865642547607,
+          -1.19834566116333
+        ],
+        "mean_action": [
+          0.6519260406494141,
+          0.4570951759815216,
+          0.869028627872467
+        ],
+        "replacement_action": [
+          0.46635884046554565,
+          0.4718480706214905,
+          0.8849083781242371
+        ],
+        "segment": 1,
+        "action": 49,
+        "first_rejection": {
+          "core": 127702707439600,
+          "index": 11,
+          "segment": 1,
+          "rejected_action": 48,
+          "substep": 0
+        },
+        "rng_before": "bdc03ea0d859b9ecb79beed7d39d785bee38fbea38d07d086fdb78ae92849b7a",
+        "rng_after": "bdc03ea0d859b9ecb79beed7d39d785bee38fbea38d07d086fdb78ae92849b7a",
+        "rng_unchanged": true
+      },
+      "execution_action_C": [
+        0.24952927231788635,
+        0.4570951759815216,
+        0.26070860028266907
+      ],
+      "execution_action_T": [
+        0.22262203693389893,
+        0.4718480706214905,
+        0.26547253131866455
+      ],
+      "execution_action_changed": true
+    }
+  ],
+  "hashes": {
+    "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/C-4718/evaluation.json": "0e677b6239c7c8429614b85ac285ea0465417221ecd5f2daf99a8635d87bfdc9",
+    "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/C-4718/case02.jsonl": "a23b0b9c374d1d68bcf3bd39fcc26b4268215befd472d6d2b2d362576037f8bc",
+    "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/C-4718/case03.jsonl": "0d2856d75ceccc0f246fb470447961f67dffb367f3134abc4696524e4ec5dfef",
+    "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/C-4718/case04.jsonl": "ff347e44a5c39004afd8a1b467effdf78b18ee997803bd30fabd00e8f760ef7e",
+    "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/C-4718/case06.jsonl": "9fd0f4632b8b728c78203d8f143c327c7bfbb0775bdac8cb08273df71d4619c1",
+    "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/C-4718/case09.jsonl": "d5d88278b0345fe7ac1fd45caea366fad56b463d5b2216c517b9933d3ba8917a",
+    "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/C-4719/evaluation.json": "6727d6eb1e8caf5a92d156950d7e61ecc0ec82bc741b0c8260d412e7f9363464",
+    "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/C-4719/case03.jsonl": "0b388972538e9df478c6135846d484946edbec927698ca274bdcc440e9ba889e",
+    "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/C-4719/case04.jsonl": "b48b2a93632abe20824b6f6731986097c960aa446abb4fe2ea5fcbebdd462948",
+    "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/C-4719/case06.jsonl": "e732c98bccbcd1395eb91fe31904cd5517ca77d61124e6b4567642d126738652",
+    "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/C-4719/case09.jsonl": "8fda46fa985a2f4348ed0265d191f7f93ba597fa339ed0bb5e1d815da0994eb2",
+    "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/C-4720/evaluation.json": "25e1af4c6e2766abbf51d5c21928cc91e3832fe9acca5748d4662ece8c5b6082",
+    "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/C-4720/case03.jsonl": "069d121d97246707fa5f673e51862ba35d26f2b2fd91f97bdce74fa59505f2e5",
+    "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/C-4720/case04.jsonl": "3ecd8c5be19af6681f87e5d4d4b9c5e3f7cb573f8944ef1d8412f783ec73cbe7",
+    "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/C-4720/case06.jsonl": "d411831651a1f00b8bee1472b4b4d9d6852b511084ce23925ef9995622587d74",
+    "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/T-4718/evaluation.json": "c5a9aa2473bc1df87399622bc0fb3254442008096434ea7d7255161b52cc4f20",
+    "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/T-4718/case02.jsonl": "37475a759efda03eece06e5607cc82ddb5fee514f5d15ca6d7530a554a162578",
+    "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/T-4718/case03.jsonl": "cf2d2b4fb27eb0d012558b69e812cb4dc58daac070eb976374abae9f92249602",
+    "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/T-4718/case04.jsonl": "033a65e169467189df93965e0fc21d7092de24a9d72fb9143e949acb79480b16",
+    "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/T-4718/case06.jsonl": "830744382c0fbb17f14da5eecd2a983289ea21abf12070b3861f8aa409d81f4c",
+    "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/T-4718/case09.jsonl": "ce21d0e0e2e0aa5b7318adfad46c4a72876c234dc337d41ba02dd09d78bd7adc",
+    "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/T-4719/evaluation.json": "0de3e2144b8a764d580fb068e54f60e3359f1fc478ae69031682b695ef1143b6",
+    "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/T-4719/case03.jsonl": "20118c9e62df9978ebb6cdd8bcb25428a04ae6d7d7154eecc6d8eb4a96f44953",
+    "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/T-4719/case04.jsonl": "909e8a62e957ccc09f065a7742b6a3a2f91de654f15dd1ca8cd3aa91ee7a9f79",
+    "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/T-4719/case06.jsonl": "d282a88c02b0990244456172c1901e94035f652b0ff3edafa8b3e59e5728b48b",
+    "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/T-4719/case09.jsonl": "f3632636196771edbfbb01140fcd86dc7a3836f0f7875e0b8fcb35552af5cc4c",
+    "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/T-4720/evaluation.json": "2f2dde73c6a5d4759dea8fe3a74d292d11c0d5bb9745417ad731a67d3661d0fc",
+    "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/T-4720/case03.jsonl": "7ec62544042071c9eea26f4b2ddd5a89a2db1a6b241a98a9b55c61005dbf23e5",
+    "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/T-4720/case04.jsonl": "73d97f2bcc22cef97733f5a88f9b3be986c1958684b763a97dced3eb0abed55e",
+    "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800/T-4720/case06.jsonl": "e612e1531ffef6e8623ec5b015a0add5e366ff6febbc1dbd37cecde5e3211fbf"
+  },
+  "strict_success_by_arm": {
+    "C": {
+      "4718": {
+        "validation": 67,
+        "transfer": 49
+      },
+      "4719": {
+        "validation": 63,
+        "transfer": 39
+      },
+      "4720": {
+        "validation": 64,
+        "transfer": 44
+      }
+    },
+    "T": {
+      "4718": {
+        "validation": 67,
+        "transfer": 49
+      },
+      "4719": {
+        "validation": 63,
+        "transfer": 39
+      },
+      "4720": {
+        "validation": 64,
+        "transfer": 44
+      }
+    }
+  },
+  "all_evaluation_comparisons": {
+    "4718": {
+      "checked": 196,
+      "non_target_differences": 0,
+      "differences": [
+        {
+          "case_key": {
+            "map_id": "standard_validation_00000",
+            "seed": "2396592471",
+            "stream_index": "0",
+            "role": "validation",
+            "source_split": "validation",
+            "proposal_seed": "1882287200219130464"
+          },
+          "target": true,
+          "differing_fields": {
+            "discounted_MC_return": {
+              "C": -27.97425316438106,
+              "T": -27.97193126085904
+            },
+            "Q_minus_MC": {
+              "C": [
+                23.342163549512897,
+                25.76539658173946
+              ],
+              "T": [
+                23.339841645990877,
+                25.76307467821744
+              ]
+            }
+          }
+        },
+        {
+          "case_key": {
+            "map_id": "home_map_002",
+            "seed": "3570249233",
+            "stream_index": "0",
+            "role": "semantic_transfer",
+            "source_split": "smoke",
+            "proposal_seed": "3029584731548132938"
+          },
+          "target": true,
+          "differing_fields": {
+            "discounted_MC_return": {
+              "C": -28.172021750980498,
+              "T": -28.17355449804827
+            },
+            "Q_minus_MC": {
+              "C": [
+                8.53482997851956,
+                8.053645972782256
+              ],
+              "T": [
+                8.536362725587331,
+                8.055178719850026
+              ]
+            }
+          }
+        },
+        {
+          "case_key": {
+            "map_id": "home_map_002",
+            "seed": "4158490082",
+            "stream_index": "0",
+            "role": "semantic_transfer",
+            "source_split": "smoke",
+            "proposal_seed": "6076064104553683651"
+          },
+          "target": true,
+          "differing_fields": {
+            "discounted_MC_return": {
+              "C": -31.826782674782827,
+              "T": -31.834465541231772
+            },
+            "Q_minus_MC": {
+              "C": [
+                8.672985525124624,
+                13.694714040749624
+              ],
+              "T": [
+                8.680668391573569,
+                13.702396907198569
+              ]
+            }
+          }
+        },
+        {
+          "case_key": {
+            "map_id": "home_map_002",
+            "seed": "803250685",
+            "stream_index": "0",
+            "role": "semantic_transfer",
+            "source_split": "smoke",
+            "proposal_seed": "4363422522331977694"
+          },
+          "target": true,
+          "differing_fields": {
+            "time_s": {
+              "C": 10.150020599365234,
+              "T": 13.050031661987305
+            },
+            "transfers": {
+              "C": 121,
+              "T": 147
+            },
+            "discounted_MC_return": {
+              "C": -21.635701041655597,
+              "T": -18.727507489698997
+            },
+            "Q_minus_MC": {
+              "C": [
+                3.4147728495169254,
+                1.9929398111868473
+              ],
+              "T": [
+                0.5065792975603252,
+                -0.915253740769753
+              ]
+            }
+          }
+        },
+        {
+          "case_key": {
+            "map_id": "library_map_002",
+            "seed": "2407846046",
+            "stream_index": "0",
+            "role": "semantic_transfer",
+            "source_split": "smoke",
+            "proposal_seed": "2227190365323047312"
+          },
+          "target": true,
+          "differing_fields": {
+            "discounted_MC_return": {
+              "C": -10.992705557513325,
+              "T": -10.993487746038667
+            },
+            "Q_minus_MC": {
+              "C": [
+                -5.810498025250347,
+                -5.546446587872417
+              ],
+              "T": [
+                -5.809715836725005,
+                -5.545664399347075
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "4719": {
+      "checked": 196,
+      "non_target_differences": 0,
+      "differences": [
+        {
+          "case_key": {
+            "map_id": "home_map_002",
+            "seed": "3570249233",
+            "stream_index": "0",
+            "role": "semantic_transfer",
+            "source_split": "smoke",
+            "proposal_seed": "3029584731548132938"
+          },
+          "target": true,
+          "differing_fields": {
+            "discounted_MC_return": {
+              "C": -33.70554339819571,
+              "T": -33.720415654137625
+            },
+            "Q_minus_MC": {
+              "C": [
+                12.677516817385161,
+                10.651548265749419
+              ],
+              "T": [
+                12.692389073327078,
+                10.666420521691336
+              ]
+            }
+          }
+        },
+        {
+          "case_key": {
+            "map_id": "home_map_002",
+            "seed": "4158490082",
+            "stream_index": "0",
+            "role": "semantic_transfer",
+            "source_split": "smoke",
+            "proposal_seed": "6076064104553683651"
+          },
+          "target": true,
+          "differing_fields": {
+            "discounted_MC_return": {
+              "C": -78.17496869183901,
+              "T": -78.00574735790552
+            },
+            "Q_minus_MC": {
+              "C": [
+                58.64093014813784,
+                58.43786809064272
+              ],
+              "T": [
+                58.47170881420435,
+                58.26864675670923
+              ]
+            }
+          }
+        },
+        {
+          "case_key": {
+            "map_id": "home_map_002",
+            "seed": "803250685",
+            "stream_index": "0",
+            "role": "semantic_transfer",
+            "source_split": "smoke",
+            "proposal_seed": "4363422522331977694"
+          },
+          "target": true,
+          "differing_fields": {
+            "discounted_MC_return": {
+              "C": -27.902350575392898,
+              "T": -27.90137073113951
+            },
+            "Q_minus_MC": {
+              "C": [
+                8.782958180373367,
+                9.395318180983718
+              ],
+              "T": [
+                8.78197833611998,
+                9.394338336730332
+              ]
+            }
+          }
+        },
+        {
+          "case_key": {
+            "map_id": "library_map_002",
+            "seed": "2407846046",
+            "stream_index": "0",
+            "role": "semantic_transfer",
+            "source_split": "smoke",
+            "proposal_seed": "2227190365323047312"
+          },
+          "target": true,
+          "differing_fields": {
+            "discounted_MC_return": {
+              "C": -12.172514228729085,
+              "T": -12.171584014294718
+            },
+            "Q_minus_MC": {
+              "C": [
+                -6.85310337075822,
+                -5.70671436318986
+              ],
+              "T": [
+                -6.854033585192587,
+                -5.707644577624228
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "4720": {
+      "checked": 196,
+      "non_target_differences": 0,
+      "differences": [
+        {
+          "case_key": {
+            "map_id": "home_map_002",
+            "seed": "3570249233",
+            "stream_index": "0",
+            "role": "semantic_transfer",
+            "source_split": "smoke",
+            "proposal_seed": "3029584731548132938"
+          },
+          "target": true,
+          "differing_fields": {
+            "discounted_MC_return": {
+              "C": -25.719163276662606,
+              "T": -26.010647597536053
+            },
+            "Q_minus_MC": {
+              "C": [
+                6.899054862966317,
+                4.473988868703621
+              ],
+              "T": [
+                7.190539183839764,
+                4.765473189577069
+              ]
+            }
+          }
+        },
+        {
+          "case_key": {
+            "map_id": "home_map_002",
+            "seed": "4158490082",
+            "stream_index": "0",
+            "role": "semantic_transfer",
+            "source_split": "smoke",
+            "proposal_seed": "6076064104553683651"
+          },
+          "target": true,
+          "differing_fields": {
+            "discounted_MC_return": {
+              "C": -22.92700126322048,
+              "T": -22.926595560320553
+            },
+            "Q_minus_MC": {
+              "C": [
+                0.7214405790163774,
+                3.0920841947390336
+              ],
+              "T": [
+                0.7210348761164518,
+                3.091678491839108
+              ]
+            }
+          }
+        },
+        {
+          "case_key": {
+            "map_id": "home_map_002",
+            "seed": "803250685",
+            "stream_index": "0",
+            "role": "semantic_transfer",
+            "source_split": "smoke",
+            "proposal_seed": "4363422522331977694"
+          },
+          "target": true,
+          "differing_fields": {
+            "discounted_MC_return": {
+              "C": -118.48479302191299,
+              "T": -117.93350192633432
+            },
+            "Q_minus_MC": {
+              "C": [
+                101.85712464117569,
+                100.91033394598526
+              ],
+              "T": [
+                101.30583354559701,
+                100.35904285040658
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "counts": {
+    "C": {
+      "R": 1,
+      "N": 11
+    },
+    "T": {
+      "R": 2,
+      "N": 10
+    }
+  },
+  "paired_counts": {
+    "R->R": 1,
+    "N->N": 10,
+    "N->R": 1
+  },
+  "actual_action_change_count": 12,
+  "status": "PASS"
+}

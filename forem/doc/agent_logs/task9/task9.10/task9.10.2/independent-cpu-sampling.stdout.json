@@ -1,0 +1,457 @@
+{
+  "status": "PASS_EPSILON_IDENTITY_ONLY",
+  "torch": "2.7.1+cu128",
+  "cuda_available": false,
+  "network_models_loaded": false,
+  "simulation_environments_created": false,
+  "environment_episodes": 0,
+  "reports": [
+    {
+      "seed": 4718,
+      "case_no": 2,
+      "serialized": "[91020261103,4718,\"standard_validation_00000\",2396592471,0,\"validation\",\"validation\",1882287200219130464]",
+      "generator_seed": 2765861877595979567,
+      "epsilon": [
+        0.45578277111053467,
+        0.7564905285835266,
+        -0.8069520592689514
+      ],
+      "epsilon_exact": true,
+      "global_cpu_rng_unchanged": true,
+      "cpu_float32_action": [
+        0.6860500574111938,
+        -0.06589770317077637,
+        -0.09674876183271408
+      ],
+      "gpu_saved_action": [
+        0.6860501170158386,
+        -0.06589770317077637,
+        -0.09674876928329468
+      ],
+      "cpu_minus_gpu_action": [
+        -5.960464477539063e-08,
+        0.0,
+        7.450580596923828e-09
+      ],
+      "max_abs_action_difference": 5.960464477539063e-08,
+      "cpu_minus_gpu_mean_action": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "cpu_gpu_action_exact": false,
+      "trace_path": "/run-originals/T-4718/case02.jsonl",
+      "intervention_record_sha256": "111285a98c2df07672e6e0865f983886d771979016f986f2bd303a11767ddf56"
+    },
+    {
+      "seed": 4718,
+      "case_no": 3,
+      "serialized": "[91020261103,4718,\"home_map_002\",3570249233,0,\"semantic_transfer\",\"smoke\",3029584731548132938]",
+      "generator_seed": 6947800028761520671,
+      "epsilon": [
+        -0.17202156782150269,
+        0.6204010844230652,
+        0.764838457107544
+      ],
+      "epsilon_exact": true,
+      "global_cpu_rng_unchanged": true,
+      "cpu_float32_action": [
+        0.8778982162475586,
+        0.23167532682418823,
+        0.9245352149009705
+      ],
+      "gpu_saved_action": [
+        0.8778982162475586,
+        0.23167531192302704,
+        0.9245352149009705
+      ],
+      "cpu_minus_gpu_action": [
+        0.0,
+        1.4901161193847656e-08,
+        0.0
+      ],
+      "max_abs_action_difference": 1.4901161193847656e-08,
+      "cpu_minus_gpu_mean_action": [
+        0.0,
+        -1.4901161193847656e-08,
+        -5.960464477539063e-08
+      ],
+      "cpu_gpu_action_exact": false,
+      "trace_path": "/run-originals/T-4718/case03.jsonl",
+      "intervention_record_sha256": "0c6785854978cc442af648a37748784c243a6f2c0b35358b9f7e68e01e5a46f8"
+    },
+    {
+      "seed": 4718,
+      "case_no": 4,
+      "serialized": "[91020261103,4718,\"home_map_002\",4158490082,0,\"semantic_transfer\",\"smoke\",6076064104553683651]",
+      "generator_seed": 823368725986061827,
+      "epsilon": [
+        0.6028210520744324,
+        1.1656744480133057,
+        0.2796090543270111
+      ],
+      "epsilon_exact": true,
+      "global_cpu_rng_unchanged": true,
+      "cpu_float32_action": [
+        -0.6634334325790405,
+        0.12837079167366028,
+        -0.36051568388938904
+      ],
+      "gpu_saved_action": [
+        -0.6634334325790405,
+        0.12837080657482147,
+        -0.36051565408706665
+      ],
+      "cpu_minus_gpu_action": [
+        0.0,
+        -1.4901161193847656e-08,
+        -2.9802322387695312e-08
+      ],
+      "max_abs_action_difference": 2.9802322387695312e-08,
+      "cpu_minus_gpu_mean_action": [
+        0.0,
+        0.0,
+        -2.9802322387695312e-08
+      ],
+      "cpu_gpu_action_exact": false,
+      "trace_path": "/run-originals/T-4718/case04.jsonl",
+      "intervention_record_sha256": "c0c3409edb6553fb8ded27812dc161e08f72b8dca9c87de64abf89b2d7479326"
+    },
+    {
+      "seed": 4718,
+      "case_no": 6,
+      "serialized": "[91020261103,4718,\"home_map_002\",803250685,0,\"semantic_transfer\",\"smoke\",4363422522331977694]",
+      "generator_seed": 2763621809089100491,
+      "epsilon": [
+        -0.4155142903327942,
+        0.9497283697128296,
+        1.5142335891723633
+      ],
+      "epsilon_exact": true,
+      "global_cpu_rng_unchanged": true,
+      "cpu_float32_action": [
+        -0.9998436570167542,
+        0.7812005281448364,
+        0.6591920852661133
+      ],
+      "gpu_saved_action": [
+        -0.9998436570167542,
+        0.7812005281448364,
+        0.6591921448707581
+      ],
+      "cpu_minus_gpu_action": [
+        0.0,
+        0.0,
+        -5.960464477539063e-08
+      ],
+      "max_abs_action_difference": 5.960464477539063e-08,
+      "cpu_minus_gpu_mean_action": [
+        0.0,
+        5.960464477539063e-08,
+        0.0
+      ],
+      "cpu_gpu_action_exact": false,
+      "trace_path": "/run-originals/T-4718/case06.jsonl",
+      "intervention_record_sha256": "24f7bfa5f9e0c848920500a73c49e0082c45266856ccb2d88995e9d1cab8909c"
+    },
+    {
+      "seed": 4718,
+      "case_no": 9,
+      "serialized": "[91020261103,4718,\"library_map_002\",2407846046,0,\"semantic_transfer\",\"smoke\",2227190365323047312]",
+      "generator_seed": 6311802920055026917,
+      "epsilon": [
+        -0.9238283038139343,
+        -0.10542620718479156,
+        -0.482859343290329
+      ],
+      "epsilon_exact": true,
+      "global_cpu_rng_unchanged": true,
+      "cpu_float32_action": [
+        0.3885430097579956,
+        0.04443924129009247,
+        -0.3515484631061554
+      ],
+      "gpu_saved_action": [
+        0.38854295015335083,
+        0.04443924129009247,
+        -0.351548433303833
+      ],
+      "cpu_minus_gpu_action": [
+        5.960464477539063e-08,
+        0.0,
+        -2.9802322387695312e-08
+      ],
+      "max_abs_action_difference": 5.960464477539063e-08,
+      "cpu_minus_gpu_mean_action": [
+        0.0,
+        0.0,
+        -2.9802322387695312e-08
+      ],
+      "cpu_gpu_action_exact": false,
+      "trace_path": "/run-originals/T-4718/case09.jsonl",
+      "intervention_record_sha256": "c0ecf8589d23f2b7382be3539777ec46113d931900e8caba89e26f8102c6eb52"
+    },
+    {
+      "seed": 4719,
+      "case_no": 3,
+      "serialized": "[91020261103,4719,\"home_map_002\",3570249233,0,\"semantic_transfer\",\"smoke\",3029584731548132938]",
+      "generator_seed": 1379507796288091514,
+      "epsilon": [
+        0.70223468542099,
+        1.0125741958618164,
+        0.460628867149353
+      ],
+      "epsilon_exact": true,
+      "global_cpu_rng_unchanged": true,
+      "cpu_float32_action": [
+        0.6720743775367737,
+        -0.4504024088382721,
+        -0.20541463792324066
+      ],
+      "gpu_saved_action": [
+        0.6720743179321289,
+        -0.45040246844291687,
+        -0.20541465282440186
+      ],
+      "cpu_minus_gpu_action": [
+        5.960464477539063e-08,
+        5.960464477539063e-08,
+        1.4901161193847656e-08
+      ],
+      "max_abs_action_difference": 5.960464477539063e-08,
+      "cpu_minus_gpu_mean_action": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "cpu_gpu_action_exact": false,
+      "trace_path": "/run-originals/T-4719/case03.jsonl",
+      "intervention_record_sha256": "d51823ec6288dad3a286ebdf5c37d260127d74817b78262b16d52943862e57dd"
+    },
+    {
+      "seed": 4719,
+      "case_no": 4,
+      "serialized": "[91020261103,4719,\"home_map_002\",4158490082,0,\"semantic_transfer\",\"smoke\",6076064104553683651]",
+      "generator_seed": 967717473951005384,
+      "epsilon": [
+        -0.24293388426303864,
+        0.6428820490837097,
+        0.9045038819313049
+      ],
+      "epsilon_exact": true,
+      "global_cpu_rng_unchanged": true,
+      "cpu_float32_action": [
+        -0.6129347085952759,
+        -0.14619871973991394,
+        0.731123685836792
+      ],
+      "gpu_saved_action": [
+        -0.6129347085952759,
+        -0.14619871973991394,
+        0.731123685836792
+      ],
+      "cpu_minus_gpu_action": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "max_abs_action_difference": 0.0,
+      "cpu_minus_gpu_mean_action": [
+        0.0,
+        1.4901161193847656e-08,
+        -5.960464477539063e-08
+      ],
+      "cpu_gpu_action_exact": true,
+      "trace_path": "/run-originals/T-4719/case04.jsonl",
+      "intervention_record_sha256": "210bf732424f6fed7e3af3bd542cad867a84e685717d56fa6f654e7246bd1b50"
+    },
+    {
+      "seed": 4719,
+      "case_no": 6,
+      "serialized": "[91020261103,4719,\"home_map_002\",803250685,0,\"semantic_transfer\",\"smoke\",4363422522331977694]",
+      "generator_seed": 8787070241946172625,
+      "epsilon": [
+        -0.18081575632095337,
+        0.6715814471244812,
+        -1.3113744258880615
+      ],
+      "epsilon_exact": true,
+      "global_cpu_rng_unchanged": true,
+      "cpu_float32_action": [
+        0.34025871753692627,
+        0.11449363082647324,
+        -0.01781999133527279
+      ],
+      "gpu_saved_action": [
+        0.3402586877346039,
+        0.11449363827705383,
+        -0.01781999133527279
+      ],
+      "cpu_minus_gpu_action": [
+        2.9802322387695312e-08,
+        -7.450580596923828e-09,
+        0.0
+      ],
+      "max_abs_action_difference": 2.9802322387695312e-08,
+      "cpu_minus_gpu_mean_action": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "cpu_gpu_action_exact": false,
+      "trace_path": "/run-originals/T-4719/case06.jsonl",
+      "intervention_record_sha256": "1ba1d85ccdd88493e7659126e9802064260048a84db422b1e920f4c4eff82d7b"
+    },
+    {
+      "seed": 4719,
+      "case_no": 9,
+      "serialized": "[91020261103,4719,\"library_map_002\",2407846046,0,\"semantic_transfer\",\"smoke\",2227190365323047312]",
+      "generator_seed": 8008668588697823118,
+      "epsilon": [
+        0.20980733633041382,
+        3.0202651023864746,
+        1.2238372564315796
+      ],
+      "epsilon_exact": true,
+      "global_cpu_rng_unchanged": true,
+      "cpu_float32_action": [
+        -0.3158480226993561,
+        0.20367072522640228,
+        0.13176563382148743
+      ],
+      "gpu_saved_action": [
+        -0.3158479928970337,
+        0.20367072522640228,
+        0.13176564872264862
+      ],
+      "cpu_minus_gpu_action": [
+        -2.9802322387695312e-08,
+        0.0,
+        -1.4901161193847656e-08
+      ],
+      "max_abs_action_difference": 2.9802322387695312e-08,
+      "cpu_minus_gpu_mean_action": [
+        -2.9802322387695312e-08,
+        0.0,
+        0.0
+      ],
+      "cpu_gpu_action_exact": false,
+      "trace_path": "/run-originals/T-4719/case09.jsonl",
+      "intervention_record_sha256": "bb06542b87ce0d18bbbc91b07a810cfc49eb23124306da0bf8d1614963509691"
+    },
+    {
+      "seed": 4720,
+      "case_no": 3,
+      "serialized": "[91020261103,4720,\"home_map_002\",3570249233,0,\"semantic_transfer\",\"smoke\",3029584731548132938]",
+      "generator_seed": 4825090257272915637,
+      "epsilon": [
+        0.3059014081954956,
+        1.184837818145752,
+        1.470767855644226
+      ],
+      "epsilon_exact": true,
+      "global_cpu_rng_unchanged": true,
+      "cpu_float32_action": [
+        0.24112719297409058,
+        0.13179366290569305,
+        0.5814745426177979
+      ],
+      "gpu_saved_action": [
+        0.24112719297409058,
+        0.13179367780685425,
+        0.5814745426177979
+      ],
+      "cpu_minus_gpu_action": [
+        0.0,
+        -1.4901161193847656e-08,
+        0.0
+      ],
+      "max_abs_action_difference": 1.4901161193847656e-08,
+      "cpu_minus_gpu_mean_action": [
+        -1.4901161193847656e-08,
+        0.0,
+        -2.9802322387695312e-08
+      ],
+      "cpu_gpu_action_exact": false,
+      "trace_path": "/run-originals/T-4720/case03.jsonl",
+      "intervention_record_sha256": "de2a1243290b9dea1972873a93c9c3fa5588a37ff2eb420026fde99056ec768e"
+    },
+    {
+      "seed": 4720,
+      "case_no": 4,
+      "serialized": "[91020261103,4720,\"home_map_002\",4158490082,0,\"semantic_transfer\",\"smoke\",6076064104553683651]",
+      "generator_seed": 2282998260771062322,
+      "epsilon": [
+        -1.9857314825057983,
+        -1.0430887937545776,
+        1.7159662246704102
+      ],
+      "epsilon_exact": true,
+      "global_cpu_rng_unchanged": true,
+      "cpu_float32_action": [
+        -0.9991378784179688,
+        0.5483517646789551,
+        -0.19130036234855652
+      ],
+      "gpu_saved_action": [
+        -0.9991378784179688,
+        0.5483517646789551,
+        -0.1913003772497177
+      ],
+      "cpu_minus_gpu_action": [
+        0.0,
+        0.0,
+        1.4901161193847656e-08
+      ],
+      "max_abs_action_difference": 1.4901161193847656e-08,
+      "cpu_minus_gpu_mean_action": [
+        0.0,
+        -5.960464477539063e-08,
+        -1.4901161193847656e-08
+      ],
+      "cpu_gpu_action_exact": false,
+      "trace_path": "/run-originals/T-4720/case04.jsonl",
+      "intervention_record_sha256": "f7cbe5262aff0222ef3eb5d8b0794e8ba651ad6cfe69a7aa436b2c665a72b066"
+    },
+    {
+      "seed": 4720,
+      "case_no": 6,
+      "serialized": "[91020261103,4720,\"home_map_002\",803250685,0,\"semantic_transfer\",\"smoke\",4363422522331977694]",
+      "generator_seed": 7545693782500802062,
+      "epsilon": [
+        -0.921505331993103,
+        0.17775070667266846,
+        0.2282300740480423
+      ],
+      "epsilon_exact": true,
+      "global_cpu_rng_unchanged": true,
+      "cpu_float32_action": [
+        0.46635881066322327,
+        0.4718480706214905,
+        0.8849083781242371
+      ],
+      "gpu_saved_action": [
+        0.46635884046554565,
+        0.4718480706214905,
+        0.8849083781242371
+      ],
+      "cpu_minus_gpu_action": [
+        -2.9802322387695312e-08,
+        0.0,
+        0.0
+      ],
+      "max_abs_action_difference": 2.9802322387695312e-08,
+      "cpu_minus_gpu_mean_action": [
+        5.960464477539063e-08,
+        -2.9802322387695312e-08,
+        0.0
+      ],
+      "cpu_gpu_action_exact": false,
+      "trace_path": "/run-originals/T-4720/case06.jsonl",
+      "intervention_record_sha256": "ea92c1a2c010448b1990ceb529c264fc5d672400d693ae5646e32e314e4a755c"
+    }
+  ],
+  "wall_s": 0.14263459853827953,
+  "input_scope": "Complete intervention records from append-only live traces; final full-trace coverage and record hashes will be cross-checked after sealing",
+  "numerical_scope": "CPU float32 formula versus saved GPU formula differences reported without tolerance or approximate-equality claim; no numerical difference relaxes exact C/T prefixes"
+}

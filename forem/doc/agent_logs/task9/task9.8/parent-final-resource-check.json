@@ -1,0 +1,61 @@
+{
+  "time": "2026-11-02T15:41:24.907899+08:00",
+  "commands": [
+    {
+      "command": [
+        "nvidia-smi",
+        "--query-gpu=index,uuid,memory.used,utilization.gpu",
+        "--format=csv"
+      ],
+      "exit_code": 0,
+      "stdout": "index, uuid, memory.used [MiB], utilization.gpu [%]\n0, GPU-e2eab186-4b18-f63f-2ada-c61aa98ed587, 14 MiB, 0 %\n1, GPU-baaca86e-0491-44bf-4294-e64ffe4934e9, 14 MiB, 0 %\n2, GPU-656ca5c1-681f-48a2-7d1f-a00824723f68, 14 MiB, 0 %\n3, GPU-29fe1ea1-d4e9-c14b-64f2-cb875ae92a0a, 14 MiB, 0 %\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "nvidia-smi",
+        "--query-compute-apps=gpu_uuid,pid,process_name",
+        "--format=csv"
+      ],
+      "exit_code": 0,
+      "stdout": "gpu_uuid, pid, process_name\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "sg",
+        "docker",
+        "-c",
+        "docker inspect forem-dev --format \"{{json .Mounts}}\""
+      ],
+      "exit_code": 0,
+      "stdout": "[{\"Type\":\"bind\",\"Source\":\"/home/ybc/projects/CL-FoReM/forem\",\"Destination\":\"/root/mm_husky_ws\",\"Mode\":\"\",\"RW\":true,\"Propagation\":\"rprivate\"},{\"Type\":\"bind\",\"Source\":\"/home/ybc/projects/CL-FoReM/forem/docker/forem-entrypoint.sh\",\"Destination\":\"/usr/local/bin/forem-entrypoint\",\"Mode\":\"\",\"RW\":false,\"Propagation\":\"rprivate\"}]\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "sg",
+        "docker",
+        "-c",
+        "docker top forem-dev"
+      ],
+      "exit_code": 0,
+      "stdout": "UID                 PID                 PPID                C                   STIME               TTY                 TIME                CMD\nroot                3895943             3895915             0                   10\u670807              ?                   00:00:33            /sbin/docker-init -- /usr/local/bin/forem-entrypoint sleep infinity\nroot                3896195             3895943             0                   10\u670807              ?                   00:00:00            sleep infinity\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--name-only",
+        "--",
+        "forem/src",
+        "forem/scripts",
+        "forem/config"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ]
+}

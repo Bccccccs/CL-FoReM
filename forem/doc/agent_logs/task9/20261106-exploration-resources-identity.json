@@ -1,0 +1,14 @@
+{
+  "pid": 2541972,
+  "start_ticks": "914011403",
+  "started_epoch": 1793931355.372686,
+  "command": [
+    "python3",
+    "-u",
+    "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/20261106-resource-monitor.py"
+  ],
+  "purpose": "read-only cgroup/GPU accounting; no worker lifecycle actions",
+  "interval_seconds": 60,
+  "stop_file": "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/20261106-exploration-resources.STOP",
+  "old_restarted_lifetimes": "unknown unless independently recorded; do not fill zero"
+}

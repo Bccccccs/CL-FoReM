@@ -1,0 +1,9 @@
+{
+  "start": "2026-11-03T14:48:11.222061+08:00",
+  "deadline": "2026-11-03T18:48:11.222061+08:00",
+  "start_epoch": 1793688491.222061,
+  "deadline_epoch": 1793702891.222061,
+  "max_episodes": 1176,
+  "max_gpu_seconds": 14400,
+  "max_output_bytes": 2147483648
+}

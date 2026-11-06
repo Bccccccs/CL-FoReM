@@ -1,0 +1,39 @@
+{
+  "timeout_s": 0.034,
+  "formula": "ceil(max(calibration32 warmed current IK p95, FK stdio roundtrip p95)/0.001)*0.001",
+  "granularity_s": 0.001,
+  "action_period_s": 0.1,
+  "baseline_wall_s": {
+    "n": 32,
+    "mean": 0.020521732629276812,
+    "p50": 0.01633790321648121,
+    "p95": 0.03386024199426174,
+    "max": 0.07148661091923714
+  },
+  "bridge_roundtrip_wall_s": {
+    "n": 32,
+    "mean": 0.001011085754726082,
+    "p50": 8.754245936870575e-05,
+    "p95": 9.670229628682137e-05,
+    "max": 0.029848676174879074
+  },
+  "warmup_wall_s": 1.4124660342931747,
+  "fk_max_element_error": 6.031309948001384e-10,
+  "main_frozen_before_diagnostic": true,
+  "baseline_budget_enforced": false,
+  "comparison": "actual accuracy-cost; existing algorithm not truncated",
+  "plugin": {
+    "mode": "bio2_memetic",
+    "threads": 1,
+    "random_seed": 471812,
+    "approximate": true,
+    "soft_goals": {
+      "MinimalDisplacement": 1,
+      "AvoidJointLimits": 1
+    },
+    "collision_callback": false,
+    "internal_candidates": "not exposed",
+    "final_collision": "unchanged FoReM geometry"
+  },
+  "calibration_frozen_epoch": 1793929559.1620803
+}

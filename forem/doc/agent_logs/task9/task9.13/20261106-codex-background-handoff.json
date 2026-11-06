@@ -1,0 +1,80 @@
+{
+  "status": "ACTIVE_HEALTHY_BACKGROUND_HANDOFF",
+  "queue_container_pid": 499,
+  "queue_host_pid": 2541557,
+  "queue_start_ticks": "914007182",
+  "worker_container_pid": 509,
+  "worker_host_pid": 2541568,
+  "worker_start_ticks": "914007196",
+  "gpu_uuid": "GPU-656ca5c1-681f-48a2-7d1f-a00824723f68",
+  "latest_learning": {
+    "step": 16000,
+    "updates": 1575,
+    "losses": [
+      0.18881674110889435,
+      0.17973554134368896,
+      -1.4535508155822754,
+      -0.0076687936671078205,
+      0.3494540750980377
+    ],
+    "critic_loss": [
+      0.18881674110889435,
+      0.17973554134368896
+    ],
+    "actor_loss": -1.4535508155822754,
+    "alpha_loss": -0.0076687936671078205,
+    "alpha": 0.3494540750980377,
+    "lr": 9.985503485864619e-05,
+    "critic_lr": 9.985503485864619e-05,
+    "alpha_lr": 1e-06,
+    "Q_mean": [
+      1.414530634880066,
+      1.3965476751327515
+    ],
+    "Q_abs_mean": [
+      1.5861952304840088,
+      1.567918062210083
+    ],
+    "Q_abs_max": 13.627767562866211,
+    "Q_abs_max_each": [
+      13.589508056640625,
+      13.627767562866211
+    ],
+    "policy_entropy": 2.0119435787200928,
+    "log_std_min": -0.5726674795150757,
+    "log_std_max": -0.04716666415333748,
+    "reward_mean": -0.4519200623035431,
+    "replay_failed_fraction": 0.14156250655651093,
+    "replay_age_transfers": {
+      "mean": 7999.5,
+      "min": 0,
+      "max": 15999
+    },
+    "replay_size": 16000,
+    "diagnostic_rows": 256,
+    "diagnostic_sampling": "first 256 physical ring slots (v5 Q reference preserved)",
+    "observed_reward_abs_max": 11.93705940246582,
+    "discounted_reward_bound": 1193.705940246581,
+    "Q_bound_exceeded": false,
+    "arrivals": 38,
+    "segments": 78,
+    "failures": {
+      "1": 22,
+      "2": 3,
+      "3": 1,
+      "4": 17
+    },
+    "step_failures": {
+      "1": 1664,
+      "2": 129,
+      "3": 18,
+      "4": 470
+    },
+    "episodes": 52,
+    "elapsed_s": 163.4066210463643,
+    "previous_wall_s": 0.0
+  },
+  "current_container_base_image": "sha256:e674db49b8156fded725ba4de8c2faf81aa491a367a1e151eddae169a1dfc430",
+  "committed_dependency_snapshot": "sha256:cb40aa39d09dcf3031bcf952265307fba29b2b06626a902cdb8e7568df0b566f",
+  "not_complete": "250k and all3M results remain pending; no improvement claim"
+}

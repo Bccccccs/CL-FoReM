@@ -1,0 +1,11 @@
+{
+  "command": [
+    "sg",
+    "docker",
+    "-c",
+    "docker exec forem-dev /opt/python310/bin/python3 -c \"import sys,importlib.metadata as m; print(sys.version); print({k:m.version(k) for k in [\"torch\",\"numpy\",\"scipy\"]})\""
+  ],
+  "exit_code": 1,
+  "stdout": "3.10.18 (main, Sep 22 2026, 14:50:34) [GCC 9.4.0]\n",
+  "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\nNameError: name 'torch' is not defined\n"
+}

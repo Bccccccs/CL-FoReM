@@ -1,0 +1,176 @@
+{
+  "status": "PASS",
+  "checked_epoch": 1793695690.571999,
+  "episodes": 1176,
+  "phases": [
+    {
+      "arm": "C",
+      "seed": 4718,
+      "started": 196,
+      "completed": 196,
+      "status_sha256": "eae7119043f8a2305ea2a275a24f7fa61e5c79e66d0140817d3f97096ea58901",
+      "write_ahead_sha256": "2847b649e848b1080406456533b33f5bfd288a36c5d616957287e07d4d4787d4"
+    },
+    {
+      "arm": "C",
+      "seed": 4719,
+      "started": 196,
+      "completed": 196,
+      "status_sha256": "3f4218bb94383c82cd06ff5a06a308f63cc5b58c75e14a98d35842591b173286",
+      "write_ahead_sha256": "59c62dc541137a24f4f4b73f94f5b309f3ffa76efe781f43d730ed1486e21892"
+    },
+    {
+      "arm": "C",
+      "seed": 4720,
+      "started": 196,
+      "completed": 196,
+      "status_sha256": "76dd0de7de7ec58af4fcf5e6f3142ef80f63ff92270234dc2f707714ef68d810",
+      "write_ahead_sha256": "71e161e8620ae744bc19ea2ca99dea18728ba6ac4a989139353a08908f4d61e5"
+    },
+    {
+      "arm": "T",
+      "seed": 4718,
+      "started": 196,
+      "completed": 196,
+      "status_sha256": "224a5e2cf8228b189fc9d33ae5f0ecd01e5faba449476fe5d8f017b1f40dd280",
+      "write_ahead_sha256": "d7992573aaadc4d4f0adbc019a602067328d9dc0fa68ea184c9db70630f37f99"
+    },
+    {
+      "arm": "T",
+      "seed": 4719,
+      "started": 196,
+      "completed": 196,
+      "status_sha256": "981d8b24531e89bc226f5decccac6eed6e5cb631059a158d96faedf6f2ee91a4",
+      "write_ahead_sha256": "378de30147a6a3b4fcc1542038ff97779cd7fae92dc669fcf442dd0e24e1d244"
+    },
+    {
+      "arm": "T",
+      "seed": 4720,
+      "started": 196,
+      "completed": 196,
+      "status_sha256": "39e36b09ea672f110ede0aa6246f87bbb6fd202ab48b8e6d3667836c7d234e7f",
+      "write_ahead_sha256": "574560bd0deee4128cf528b3ee273c4f95e1b72019cae7322d3781bf0092f487"
+    }
+  ],
+  "source_inventory_sha256": "7cc78e6b68f7f19b20ed25384de16b569518dd94e5d069676fffdbb9a22a92b2",
+  "source_and_snapshot_files_verified": 5,
+  "runtime_instrumented_function_files_verified": 18,
+  "all_actor_critic_optimizer_parameters_cuda": true,
+  "container_stopped": true,
+  "container_id": "1fefcd185ddc879179189e3f594917a59cc81c08b33ffff951b35c3111640a57",
+  "container_state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 137,
+    "Error": "",
+    "StartedAt": "2026-11-03T06:52:40.967196172Z",
+    "FinishedAt": "2026-11-03T08:47:26.004741074Z"
+  },
+  "gpu_uuid": "GPU-656ca5c1-681f-48a2-7d1f-a00824723f68",
+  "actual_container_window_s": 6885.037544965744,
+  "conservative_gpu_window_s": 6885.213065624237,
+  "global_wall_to_supervisor_stop_s": 7154.890499830246,
+  "worker_costs": {
+    "C": {
+      "4718": {
+        "worker_wall_s": 1011.0073873996735,
+        "supervised_segment_s": 1023.9408442974091
+      },
+      "4719": {
+        "worker_wall_s": 1064.383472442627,
+        "supervised_segment_s": 1075.9747791290283
+      },
+      "4720": {
+        "worker_wall_s": 1096.7498552799225,
+        "supervised_segment_s": 1108.1409659385681
+      }
+    },
+    "T": {
+      "4718": {
+        "worker_wall_s": 1021.1829042434692,
+        "supervised_segment_s": 1034.209902048111
+      },
+      "4719": {
+        "worker_wall_s": 1062.4434924125671,
+        "supervised_segment_s": 1072.8188083171844
+      },
+      "4720": {
+        "worker_wall_s": 1099.3612701892853,
+        "supervised_segment_s": 1107.584933757782
+      }
+    }
+  },
+  "worker_wall_s": 6355.128381967545,
+  "cost_ratios_T_over_C": {
+    "4718": {
+      "worker_wall_s": 1.0100647304565868,
+      "supervised_segment_s": 1.0100289560748483
+    },
+    "4719": {
+      "worker_wall_s": 0.9981773673865794,
+      "supervised_segment_s": 0.9970668728737317
+    },
+    "4720": {
+      "worker_wall_s": 1.0023810487840878,
+      "supervised_segment_s": 0.999498229739828
+    }
+  },
+  "actor_batch_latency": {
+    "C": {
+      "4718": {
+        "n": 3688,
+        "p50_s": 0.0008404860273003578,
+        "p95_s": 0.0008855454623699187,
+        "p99_s": 0.0009859436005353929,
+        "definition": "synchronized host batch select_action timer; mixed last-batch shapes, not per-episode latency"
+      },
+      "4719": {
+        "n": 3980,
+        "p50_s": 0.0008510714396834373,
+        "p95_s": 0.0008949783630669117,
+        "p99_s": 0.0009898344427347184,
+        "definition": "synchronized host batch select_action timer; mixed last-batch shapes, not per-episode latency"
+      },
+      "4720": {
+        "n": 4161,
+        "p50_s": 0.0008443053811788559,
+        "p95_s": 0.0008794628083705902,
+        "p99_s": 0.0009790923446416847,
+        "definition": "synchronized host batch select_action timer; mixed last-batch shapes, not per-episode latency"
+      }
+    },
+    "T": {
+      "4718": {
+        "n": 3688,
+        "p50_s": 0.0008445866405963898,
+        "p95_s": 0.0008749275468289853,
+        "p99_s": 0.001026156209409237,
+        "definition": "synchronized host batch select_action timer; mixed last-batch shapes, not per-episode latency"
+      },
+      "4719": {
+        "n": 3980,
+        "p50_s": 0.0008509652689099312,
+        "p95_s": 0.0008756320923566819,
+        "p99_s": 0.0010271157510578634,
+        "definition": "synchronized host batch select_action timer; mixed last-batch shapes, not per-episode latency"
+      },
+      "4720": {
+        "n": 4161,
+        "p50_s": 0.0008421111851930618,
+        "p95_s": 0.000870121642947197,
+        "p99_s": 0.001017811894416809,
+        "definition": "synchronized host batch select_action timer; mixed last-batch shapes, not per-episode latency"
+      }
+    }
+  },
+  "run_and_log_bytes": 14033669,
+  "external_scope_measured_bytes": 2675212,
+  "external_reserve_charged_bytes": 16777216,
+  "conservatively_charged_bytes": 30810885,
+  "timing_limitations": "reset/core_step/emit have nested coverage; sample timer omits pre-RNG digest; environment creation/candidates/save/cleanup lack separate complete timers; do not add component timings or claim production throughput gain"
+}

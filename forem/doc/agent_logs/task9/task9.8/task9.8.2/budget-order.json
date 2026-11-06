@@ -1,0 +1,26 @@
+{
+  "type": "static derivation; not executed or authorized",
+  "control_first": true,
+  "full_evaluate_episodes": 196,
+  "strict_full_evaluate_calls": 5,
+  "strict_full_evaluate_total": 980,
+  "trace_targets_by_call": [
+    0,
+    2,
+    8,
+    10,
+    10
+  ],
+  "batch_width": 16,
+  "strict_selected_batches": {
+    "control_off": 32,
+    "control_on": 32,
+    "remaining_seed4718": 48,
+    "seed4719": 48,
+    "seed4720": 48
+  },
+  "strict_selected_batch_total": 208,
+  "conditional_merged_full": 784,
+  "conditional_merged_batches": 176,
+  "conditional_requirement": "Supervisor explicitly accepts detailed collection of other targets before both controls pass; also approve budget. Batch option requires new scheduler."
+}

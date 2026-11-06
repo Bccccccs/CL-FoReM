@@ -1,0 +1,1233 @@
+{
+  "frozen_inventory": "/home/ybc/projects/CL-FoReM/forem/logs/task9/t9-opt-design-20261031/parameter-inventory.json",
+  "frozen_inventory_sha256": "4544b053846641106795792cccf458d1462efe8916246575666d899d235ad7bf",
+  "records": [
+    {
+      "relative": "config/task7/model.urdf",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/config/task7/model.urdf",
+      "exists": true,
+      "expected": "f9e23d78f06ab1d6ad13688b48ce3177d725cc6439e930d00c785a258c7d2062",
+      "sha256": "f9e23d78f06ab1d6ad13688b48ce3177d725cc6439e930d00c785a258c7d2062",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task7/model.urdf",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/config/task7/model.urdf",
+      "exists": true,
+      "expected": "f9e23d78f06ab1d6ad13688b48ce3177d725cc6439e930d00c785a258c7d2062",
+      "sha256": "f9e23d78f06ab1d6ad13688b48ce3177d725cc6439e930d00c785a258c7d2062",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task7/robot_geometry.json",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/config/task7/robot_geometry.json",
+      "exists": true,
+      "expected": "6c41120ad85bdea61a24b1089e825febf4f6b62eb93da0474e51f386167b084a",
+      "sha256": "6c41120ad85bdea61a24b1089e825febf4f6b62eb93da0474e51f386167b084a",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task7/robot_geometry.json",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/config/task7/robot_geometry.json",
+      "exists": true,
+      "expected": "6c41120ad85bdea61a24b1089e825febf4f6b62eb93da0474e51f386167b084a",
+      "sha256": "6c41120ad85bdea61a24b1089e825febf4f6b62eb93da0474e51f386167b084a",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task8/lower_train_B0_prim.json",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/config/task8/lower_train_B0_prim.json",
+      "exists": true,
+      "expected": "48bb0dfeeae1cbe98b7129b84fd32218fbf6cc37d6b77a770d9b8a0b0bb262fc",
+      "sha256": "48bb0dfeeae1cbe98b7129b84fd32218fbf6cc37d6b77a770d9b8a0b0bb262fc",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task8/lower_train_B0_prim.json",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/config/task8/lower_train_B0_prim.json",
+      "exists": true,
+      "expected": "48bb0dfeeae1cbe98b7129b84fd32218fbf6cc37d6b77a770d9b8a0b0bb262fc",
+      "sha256": "48bb0dfeeae1cbe98b7129b84fd32218fbf6cc37d6b77a770d9b8a0b0bb262fc",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task8/lower_train_B3_prim.json",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/config/task8/lower_train_B3_prim.json",
+      "exists": true,
+      "expected": "1ab77a1efe8d045dbdc0d24d5fcb6e2a2288802401b827e5c74c516c830b7b9b",
+      "sha256": "1ab77a1efe8d045dbdc0d24d5fcb6e2a2288802401b827e5c74c516c830b7b9b",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task8/lower_train_B3_prim.json",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/config/task8/lower_train_B3_prim.json",
+      "exists": true,
+      "expected": "1ab77a1efe8d045dbdc0d24d5fcb6e2a2288802401b827e5c74c516c830b7b9b",
+      "sha256": "1ab77a1efe8d045dbdc0d24d5fcb6e2a2288802401b827e5c74c516c830b7b9b",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task8/primitive_scene.json",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/config/task8/primitive_scene.json",
+      "exists": true,
+      "expected": "8871d466cc27a5dc695fca61b8a18abd7f15763adf9f2b71b33b8eb1ca48e8c9",
+      "sha256": "8871d466cc27a5dc695fca61b8a18abd7f15763adf9f2b71b33b8eb1ca48e8c9",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task8/primitive_scene.json",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/config/task8/primitive_scene.json",
+      "exists": true,
+      "expected": "8871d466cc27a5dc695fca61b8a18abd7f15763adf9f2b71b33b8eb1ca48e8c9",
+      "sha256": "8871d466cc27a5dc695fca61b8a18abd7f15763adf9f2b71b33b8eb1ca48e8c9",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task8/sensor.json",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/config/task8/sensor.json",
+      "exists": true,
+      "expected": "b29ba7ef378a00caba3cf98a00774f5d6158057688d536cefdba1b5d6a371005",
+      "sha256": "b29ba7ef378a00caba3cf98a00774f5d6158057688d536cefdba1b5d6a371005",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task8/sensor.json",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/config/task8/sensor.json",
+      "exists": true,
+      "expected": "b29ba7ef378a00caba3cf98a00774f5d6158057688d536cefdba1b5d6a371005",
+      "sha256": "b29ba7ef378a00caba3cf98a00774f5d6158057688d536cefdba1b5d6a371005",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task9/stage2/B0_seed4720.json",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/config/task9/stage2/B0_seed4720.json",
+      "exists": true,
+      "expected": "4843b9cf74794edbaf54c5af437ecb88641e09c757630c4f329b1e031070cac4",
+      "sha256": "4843b9cf74794edbaf54c5af437ecb88641e09c757630c4f329b1e031070cac4",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task9/stage2/B0_seed4720.json",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/config/task9/stage2/B0_seed4720.json",
+      "exists": true,
+      "expected": "4843b9cf74794edbaf54c5af437ecb88641e09c757630c4f329b1e031070cac4",
+      "sha256": "4843b9cf74794edbaf54c5af437ecb88641e09c757630c4f329b1e031070cac4",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task9/stage2/B1_seed4718.json",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/config/task9/stage2/B1_seed4718.json",
+      "exists": true,
+      "expected": "2ad9f0a7f621aa096c74fbd1d91981254897aef14533fcea7f13ffce2c9bb55e",
+      "sha256": "2ad9f0a7f621aa096c74fbd1d91981254897aef14533fcea7f13ffce2c9bb55e",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task9/stage2/B1_seed4718.json",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/config/task9/stage2/B1_seed4718.json",
+      "exists": true,
+      "expected": "2ad9f0a7f621aa096c74fbd1d91981254897aef14533fcea7f13ffce2c9bb55e",
+      "sha256": "2ad9f0a7f621aa096c74fbd1d91981254897aef14533fcea7f13ffce2c9bb55e",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task9/stage2/B1_seed4719.json",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/config/task9/stage2/B1_seed4719.json",
+      "exists": true,
+      "expected": "eee95fad4537efa4ccaaaaa2828ede639df1d4375993f4d0bf4fb73b29d87911",
+      "sha256": "eee95fad4537efa4ccaaaaa2828ede639df1d4375993f4d0bf4fb73b29d87911",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task9/stage2/B1_seed4719.json",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/config/task9/stage2/B1_seed4719.json",
+      "exists": true,
+      "expected": "eee95fad4537efa4ccaaaaa2828ede639df1d4375993f4d0bf4fb73b29d87911",
+      "sha256": "eee95fad4537efa4ccaaaaa2828ede639df1d4375993f4d0bf4fb73b29d87911",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task9/stage2/B2_seed4718.json",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/config/task9/stage2/B2_seed4718.json",
+      "exists": true,
+      "expected": "d1226f2aba7f73352b9520d9124eaf06a947cb1d7be6de1d253fe9a1adcc6e48",
+      "sha256": "d1226f2aba7f73352b9520d9124eaf06a947cb1d7be6de1d253fe9a1adcc6e48",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task9/stage2/B2_seed4718.json",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/config/task9/stage2/B2_seed4718.json",
+      "exists": true,
+      "expected": "d1226f2aba7f73352b9520d9124eaf06a947cb1d7be6de1d253fe9a1adcc6e48",
+      "sha256": "d1226f2aba7f73352b9520d9124eaf06a947cb1d7be6de1d253fe9a1adcc6e48",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task9/stage2/B2_seed4719.json",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/config/task9/stage2/B2_seed4719.json",
+      "exists": true,
+      "expected": "2971086512c9df81cfb084442d26d57172373775fb7a4e3df2a8a1fc96099d29",
+      "sha256": "2971086512c9df81cfb084442d26d57172373775fb7a4e3df2a8a1fc96099d29",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task9/stage2/B2_seed4719.json",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/config/task9/stage2/B2_seed4719.json",
+      "exists": true,
+      "expected": "2971086512c9df81cfb084442d26d57172373775fb7a4e3df2a8a1fc96099d29",
+      "sha256": "2971086512c9df81cfb084442d26d57172373775fb7a4e3df2a8a1fc96099d29",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task9/stage2/B3_5M_seed4718.json",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/config/task9/stage2/B3_5M_seed4718.json",
+      "exists": true,
+      "expected": "34bb02e860a63004ea02a6e70090b7783b3361d9b0561fc3b4081928bec4baf2",
+      "sha256": "34bb02e860a63004ea02a6e70090b7783b3361d9b0561fc3b4081928bec4baf2",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task9/stage2/B3_5M_seed4718.json",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/config/task9/stage2/B3_5M_seed4718.json",
+      "exists": true,
+      "expected": "34bb02e860a63004ea02a6e70090b7783b3361d9b0561fc3b4081928bec4baf2",
+      "sha256": "34bb02e860a63004ea02a6e70090b7783b3361d9b0561fc3b4081928bec4baf2",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task9/stage2/B3_5M_seed4719.json",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/config/task9/stage2/B3_5M_seed4719.json",
+      "exists": true,
+      "expected": "dbef8a3b44131c4399f6b4f798bfdd794f2bc7a91b7d2551f1f7fed4c94718ca",
+      "sha256": "dbef8a3b44131c4399f6b4f798bfdd794f2bc7a91b7d2551f1f7fed4c94718ca",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task9/stage2/B3_5M_seed4719.json",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/config/task9/stage2/B3_5M_seed4719.json",
+      "exists": true,
+      "expected": "dbef8a3b44131c4399f6b4f798bfdd794f2bc7a91b7d2551f1f7fed4c94718ca",
+      "sha256": "dbef8a3b44131c4399f6b4f798bfdd794f2bc7a91b7d2551f1f7fed4c94718ca",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task9/stage2/B3_seed4720.json",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/config/task9/stage2/B3_seed4720.json",
+      "exists": true,
+      "expected": "0681c9b110f3acbd6d6c810c5febb4dcc9d618c14edcec4c868b157aba24767f",
+      "sha256": "0681c9b110f3acbd6d6c810c5febb4dcc9d618c14edcec4c868b157aba24767f",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task9/stage2/B3_seed4720.json",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/config/task9/stage2/B3_seed4720.json",
+      "exists": true,
+      "expected": "0681c9b110f3acbd6d6c810c5febb4dcc9d618c14edcec4c868b157aba24767f",
+      "sha256": "0681c9b110f3acbd6d6c810c5febb4dcc9d618c14edcec4c868b157aba24767f",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task9/stage2/H_seed4718.json",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/config/task9/stage2/H_seed4718.json",
+      "exists": true,
+      "expected": "767d53803db806ef00f45499e6fd0aadab5bfcf72f4b3fbc45e3939650d5b446",
+      "sha256": "767d53803db806ef00f45499e6fd0aadab5bfcf72f4b3fbc45e3939650d5b446",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task9/stage2/H_seed4718.json",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/config/task9/stage2/H_seed4718.json",
+      "exists": true,
+      "expected": "767d53803db806ef00f45499e6fd0aadab5bfcf72f4b3fbc45e3939650d5b446",
+      "sha256": "767d53803db806ef00f45499e6fd0aadab5bfcf72f4b3fbc45e3939650d5b446",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task9/stage2/H_seed4719.json",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/config/task9/stage2/H_seed4719.json",
+      "exists": true,
+      "expected": "9676e83f3f854612606806aafe91f6e3f4e53adb872416353f71564d6db42cb4",
+      "sha256": "9676e83f3f854612606806aafe91f6e3f4e53adb872416353f71564d6db42cb4",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task9/stage2/H_seed4719.json",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/config/task9/stage2/H_seed4719.json",
+      "exists": true,
+      "expected": "9676e83f3f854612606806aafe91f6e3f4e53adb872416353f71564d6db42cb4",
+      "sha256": "9676e83f3f854612606806aafe91f6e3f4e53adb872416353f71564d6db42cb4",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task9/stage2/T_seed4718.json",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/config/task9/stage2/T_seed4718.json",
+      "exists": true,
+      "expected": "c9dda4a1fd2a995f247117cea3bd1ed1fe18098403c97ae8a00f21359f7efce9",
+      "sha256": "c9dda4a1fd2a995f247117cea3bd1ed1fe18098403c97ae8a00f21359f7efce9",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task9/stage2/T_seed4718.json",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/config/task9/stage2/T_seed4718.json",
+      "exists": true,
+      "expected": "c9dda4a1fd2a995f247117cea3bd1ed1fe18098403c97ae8a00f21359f7efce9",
+      "sha256": "c9dda4a1fd2a995f247117cea3bd1ed1fe18098403c97ae8a00f21359f7efce9",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task9/stage2/T_seed4719.json",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/config/task9/stage2/T_seed4719.json",
+      "exists": true,
+      "expected": "6b8f777b98b58558f522a8f3881d601231ab0e7284820e29227cfdde0b7aafb5",
+      "sha256": "6b8f777b98b58558f522a8f3881d601231ab0e7284820e29227cfdde0b7aafb5",
+      "matches_frozen": true
+    },
+    {
+      "relative": "config/task9/stage2/T_seed4719.json",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/config/task9/stage2/T_seed4719.json",
+      "exists": true,
+      "expected": "6b8f777b98b58558f522a8f3881d601231ab0e7284820e29227cfdde0b7aafb5",
+      "sha256": "6b8f777b98b58558f522a8f3881d601231ab0e7284820e29227cfdde0b7aafb5",
+      "matches_frozen": true
+    },
+    {
+      "relative": "logs/task9/t9-stage2-20261029/analyze_g2.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/logs/task9/t9-stage2-20261029/analyze_g2.py",
+      "exists": true,
+      "expected": "f3b3fce007b22220d772b44b8bacaea2c6c559590fb224597b3e437e35b61758",
+      "sha256": "f3b3fce007b22220d772b44b8bacaea2c6c559590fb224597b3e437e35b61758",
+      "matches_frozen": true
+    },
+    {
+      "relative": "logs/task9/t9-stage2-20261029/analyze_g2.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/logs/task9/t9-stage2-20261029/analyze_g2.py",
+      "exists": false
+    },
+    {
+      "relative": "logs/task9/t9-stage2-20261029/g2-report.json",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/logs/task9/t9-stage2-20261029/g2-report.json",
+      "exists": true,
+      "expected": "92f1306b25011023723a92f5cab7c780c42f5923bb33c56646107ab4c4260aee",
+      "sha256": "92f1306b25011023723a92f5cab7c780c42f5923bb33c56646107ab4c4260aee",
+      "matches_frozen": true
+    },
+    {
+      "relative": "logs/task9/t9-stage2-20261029/g2-report.json",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/logs/task9/t9-stage2-20261029/g2-report.json",
+      "exists": false
+    },
+    {
+      "relative": "logs/task9/t9-stage2-20261029/queue-checks.json",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/logs/task9/t9-stage2-20261029/queue-checks.json",
+      "exists": true,
+      "expected": "1063680e15daa7b0d71c02f089d101ad39c1350831712062bcb32aa57b51c35e",
+      "sha256": "1063680e15daa7b0d71c02f089d101ad39c1350831712062bcb32aa57b51c35e",
+      "matches_frozen": true
+    },
+    {
+      "relative": "logs/task9/t9-stage2-20261029/queue-checks.json",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/logs/task9/t9-stage2-20261029/queue-checks.json",
+      "exists": false
+    },
+    {
+      "relative": "logs/task9/t9-stage2-20261029/queue_checks.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/logs/task9/t9-stage2-20261029/queue_checks.py",
+      "exists": true,
+      "expected": "6e8b6295843c1cf7acc1e90c194f403fdbf09a84407018e84c39b66806d4083e",
+      "sha256": "6e8b6295843c1cf7acc1e90c194f403fdbf09a84407018e84c39b66806d4083e",
+      "matches_frozen": true
+    },
+    {
+      "relative": "logs/task9/t9-stage2-20261029/queue_checks.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/logs/task9/t9-stage2-20261029/queue_checks.py",
+      "exists": false
+    },
+    {
+      "relative": "logs/task9/t9-stage2-20261029/review/g2-independent.json",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/logs/task9/t9-stage2-20261029/review/g2-independent.json",
+      "exists": true,
+      "expected": "3e7e8770407a0ca3ead2bcca83012e37050d5c7c0223df5d4ff59ae2e578fe32",
+      "sha256": "3e7e8770407a0ca3ead2bcca83012e37050d5c7c0223df5d4ff59ae2e578fe32",
+      "matches_frozen": true
+    },
+    {
+      "relative": "logs/task9/t9-stage2-20261029/review/g2-independent.json",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/logs/task9/t9-stage2-20261029/review/g2-independent.json",
+      "exists": false
+    },
+    {
+      "relative": "logs/task9/t9-stage2-20261029/review/g2-independent.md",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/logs/task9/t9-stage2-20261029/review/g2-independent.md",
+      "exists": true,
+      "expected": "32ef5795b6a7832bf4e135f6baa192a68f1baabfa12acacd1bb896b31936eb65",
+      "sha256": "32ef5795b6a7832bf4e135f6baa192a68f1baabfa12acacd1bb896b31936eb65",
+      "matches_frozen": true
+    },
+    {
+      "relative": "logs/task9/t9-stage2-20261029/review/g2-independent.md",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/logs/task9/t9-stage2-20261029/review/g2-independent.md",
+      "exists": false
+    },
+    {
+      "relative": "results/task8/t8-exec-20261026/semantic-pool/index.json",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task8/t8-exec-20261026/semantic-pool/index.json",
+      "exists": true,
+      "expected": "a2071c66df7039f64e76ad729f2c0e398f918b9674c220153c0137247055a343",
+      "sha256": "a2071c66df7039f64e76ad729f2c0e398f918b9674c220153c0137247055a343",
+      "matches_frozen": true
+    },
+    {
+      "relative": "results/task8/t8-exec-20261026/semantic-pool/index.json",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/results/task8/t8-exec-20261026/semantic-pool/index.json",
+      "exists": false
+    },
+    {
+      "relative": "results/task8/t8-pool-20261027/cube-pool-v2/evaluation-seeds.json",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task8/t8-pool-20261027/cube-pool-v2/evaluation-seeds.json",
+      "exists": true,
+      "expected": "8c7720078023734550c6a15c7f23b74f652adf14fb9120f3bc9639d2fcf4ad76",
+      "sha256": "8c7720078023734550c6a15c7f23b74f652adf14fb9120f3bc9639d2fcf4ad76",
+      "matches_frozen": true
+    },
+    {
+      "relative": "results/task8/t8-pool-20261027/cube-pool-v2/evaluation-seeds.json",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/results/task8/t8-pool-20261027/cube-pool-v2/evaluation-seeds.json",
+      "exists": false
+    },
+    {
+      "relative": "results/task8/t8-pool-20261027/cube-pool-v2/manifest.json",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task8/t8-pool-20261027/cube-pool-v2/manifest.json",
+      "exists": true,
+      "expected": "a501c76edb29939782a7d7c7ac0e6d34fccc4756ed1fb4c510a2ef41769a0fc4",
+      "sha256": "a501c76edb29939782a7d7c7ac0e6d34fccc4756ed1fb4c510a2ef41769a0fc4",
+      "matches_frozen": true
+    },
+    {
+      "relative": "results/task8/t8-pool-20261027/cube-pool-v2/manifest.json",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/results/task8/t8-pool-20261027/cube-pool-v2/manifest.json",
+      "exists": false
+    },
+    {
+      "relative": "scripts/task8_lower_train.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/scripts/task8_lower_train.py",
+      "exists": true,
+      "expected": "fdac755996127f2f35de4ff27ef1a223e0bb32068196419d157f7e764cb488d8",
+      "sha256": "fdac755996127f2f35de4ff27ef1a223e0bb32068196419d157f7e764cb488d8",
+      "matches_frozen": true
+    },
+    {
+      "relative": "scripts/task8_lower_train.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/scripts/task8_lower_train.py",
+      "exists": true,
+      "expected": "fdac755996127f2f35de4ff27ef1a223e0bb32068196419d157f7e764cb488d8",
+      "sha256": "fdac755996127f2f35de4ff27ef1a223e0bb32068196419d157f7e764cb488d8",
+      "matches_frozen": true
+    },
+    {
+      "relative": "scripts/task9_stage2_monitor.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/scripts/task9_stage2_monitor.py",
+      "exists": true,
+      "expected": "2c5e9453f6e6bb2894312558b53d875e7d63cfc7e108dade6cb2168687add57e",
+      "sha256": "2c5e9453f6e6bb2894312558b53d875e7d63cfc7e108dade6cb2168687add57e",
+      "matches_frozen": true
+    },
+    {
+      "relative": "scripts/task9_stage2_monitor.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/scripts/task9_stage2_monitor.py",
+      "exists": true,
+      "expected": "2c5e9453f6e6bb2894312558b53d875e7d63cfc7e108dade6cb2168687add57e",
+      "sha256": "2c5e9453f6e6bb2894312558b53d875e7d63cfc7e108dade6cb2168687add57e",
+      "matches_frozen": true
+    },
+    {
+      "relative": "scripts/task9_stage2_queue.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/scripts/task9_stage2_queue.py",
+      "exists": true,
+      "expected": "37a66520b982d0c08c932bbf5391aaea8581868addfb1a856cc34a42e3cdcdf1",
+      "sha256": "37a66520b982d0c08c932bbf5391aaea8581868addfb1a856cc34a42e3cdcdf1",
+      "matches_frozen": true
+    },
+    {
+      "relative": "scripts/task9_stage2_queue.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/scripts/task9_stage2_queue.py",
+      "exists": true,
+      "expected": "37a66520b982d0c08c932bbf5391aaea8581868addfb1a856cc34a42e3cdcdf1",
+      "sha256": "37a66520b982d0c08c932bbf5391aaea8581868addfb1a856cc34a42e3cdcdf1",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_lower/__init__.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task7_lower/__init__.py",
+      "exists": true,
+      "expected": "f77606e0c3fc83e83c1e6bce1b8343036cdb8e7e18724e834d98be579f3fe497",
+      "sha256": "f77606e0c3fc83e83c1e6bce1b8343036cdb8e7e18724e834d98be579f3fe497",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_lower/__init__.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task7_lower/__init__.py",
+      "exists": true,
+      "expected": "f77606e0c3fc83e83c1e6bce1b8343036cdb8e7e18724e834d98be579f3fe497",
+      "sha256": "f77606e0c3fc83e83c1e6bce1b8343036cdb8e7e18724e834d98be579f3fe497",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_lower/networks.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task7_lower/networks.py",
+      "exists": true,
+      "expected": "43d7a0e6fc924cfba79968ed4337e3dedb0cc27772a967eb924c7ccb81d00012",
+      "sha256": "43d7a0e6fc924cfba79968ed4337e3dedb0cc27772a967eb924c7ccb81d00012",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_lower/networks.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task7_lower/networks.py",
+      "exists": true,
+      "expected": "43d7a0e6fc924cfba79968ed4337e3dedb0cc27772a967eb924c7ccb81d00012",
+      "sha256": "43d7a0e6fc924cfba79968ed4337e3dedb0cc27772a967eb924c7ccb81d00012",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_lower/observation.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task7_lower/observation.py",
+      "exists": true,
+      "expected": "2ae39f8d0a218d67cbcaf5828bcdbcf69297c0f9d782101ed278ef5950e00d7f",
+      "sha256": "2ae39f8d0a218d67cbcaf5828bcdbcf69297c0f9d782101ed278ef5950e00d7f",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_lower/observation.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task7_lower/observation.py",
+      "exists": true,
+      "expected": "2ae39f8d0a218d67cbcaf5828bcdbcf69297c0f9d782101ed278ef5950e00d7f",
+      "sha256": "2ae39f8d0a218d67cbcaf5828bcdbcf69297c0f9d782101ed278ef5950e00d7f",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_lower/recovery.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task7_lower/recovery.py",
+      "exists": true,
+      "expected": "b084da21b2310473bd1b1df61aacfc0470868e9d999223f0b2806bc460376962",
+      "sha256": "b084da21b2310473bd1b1df61aacfc0470868e9d999223f0b2806bc460376962",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_lower/recovery.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task7_lower/recovery.py",
+      "exists": true,
+      "expected": "b084da21b2310473bd1b1df61aacfc0470868e9d999223f0b2806bc460376962",
+      "sha256": "b084da21b2310473bd1b1df61aacfc0470868e9d999223f0b2806bc460376962",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_lower/replay.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task7_lower/replay.py",
+      "exists": true,
+      "expected": "e7e624771fd34c5cefd9e245d249a27f8db20d43ba49172817f09444d92b2dc2",
+      "sha256": "e7e624771fd34c5cefd9e245d249a27f8db20d43ba49172817f09444d92b2dc2",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_lower/replay.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task7_lower/replay.py",
+      "exists": true,
+      "expected": "e7e624771fd34c5cefd9e245d249a27f8db20d43ba49172817f09444d92b2dc2",
+      "sha256": "e7e624771fd34c5cefd9e245d249a27f8db20d43ba49172817f09444d92b2dc2",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_lower/sac.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task7_lower/sac.py",
+      "exists": true,
+      "expected": "1df68ef676ef205f272cbd576b7a2e82f801b63b95f9c18ddaef64658b5a9fa6",
+      "sha256": "1df68ef676ef205f272cbd576b7a2e82f801b63b95f9c18ddaef64658b5a9fa6",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_lower/sac.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task7_lower/sac.py",
+      "exists": true,
+      "expected": "1df68ef676ef205f272cbd576b7a2e82f801b63b95f9c18ddaef64658b5a9fa6",
+      "sha256": "1df68ef676ef205f272cbd576b7a2e82f801b63b95f9c18ddaef64658b5a9fa6",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_lower/training.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task7_lower/training.py",
+      "exists": true,
+      "expected": "36c02dbcad56ed6df5651591ed0f9d399308d5b2ea30b0e1a4a56e32cae3a99c",
+      "sha256": "36c02dbcad56ed6df5651591ed0f9d399308d5b2ea30b0e1a4a56e32cae3a99c",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_lower/training.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task7_lower/training.py",
+      "exists": true,
+      "expected": "36c02dbcad56ed6df5651591ed0f9d399308d5b2ea30b0e1a4a56e32cae3a99c",
+      "sha256": "36c02dbcad56ed6df5651591ed0f9d399308d5b2ea30b0e1a4a56e32cae3a99c",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_sim/__init__.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task7_sim/__init__.py",
+      "exists": true,
+      "expected": "abb33a9d3400ba2bfd3abd7fcc752cf9bc7482d21fc607560d743921d231246f",
+      "sha256": "abb33a9d3400ba2bfd3abd7fcc752cf9bc7482d21fc607560d743921d231246f",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_sim/__init__.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task7_sim/__init__.py",
+      "exists": true,
+      "expected": "abb33a9d3400ba2bfd3abd7fcc752cf9bc7482d21fc607560d743921d231246f",
+      "sha256": "abb33a9d3400ba2bfd3abd7fcc752cf9bc7482d21fc607560d743921d231246f",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_sim/candidates.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task7_sim/candidates.py",
+      "exists": true,
+      "expected": "0b0293c6796fe9b5501f7fc61b18aa343e40b04634ffbcbb67788e29be1635c5",
+      "sha256": "0b0293c6796fe9b5501f7fc61b18aa343e40b04634ffbcbb67788e29be1635c5",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_sim/candidates.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task7_sim/candidates.py",
+      "exists": true,
+      "expected": "0b0293c6796fe9b5501f7fc61b18aa343e40b04634ffbcbb67788e29be1635c5",
+      "sha256": "0b0293c6796fe9b5501f7fc61b18aa343e40b04634ffbcbb67788e29be1635c5",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_sim/core.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task7_sim/core.py",
+      "exists": true,
+      "expected": "e8b91d60b2d5e1639f4966521d64aa4005772c5555f7532e23bd370e1da6a67b",
+      "sha256": "e8b91d60b2d5e1639f4966521d64aa4005772c5555f7532e23bd370e1da6a67b",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_sim/core.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task7_sim/core.py",
+      "exists": true,
+      "expected": "e8b91d60b2d5e1639f4966521d64aa4005772c5555f7532e23bd370e1da6a67b",
+      "sha256": "e8b91d60b2d5e1639f4966521d64aa4005772c5555f7532e23bd370e1da6a67b",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_sim/env.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task7_sim/env.py",
+      "exists": true,
+      "expected": "ae2c447f12d2a9d7cabf578163a6c71ae9872316a737b9deb7432841ed85e7e3",
+      "sha256": "ae2c447f12d2a9d7cabf578163a6c71ae9872316a737b9deb7432841ed85e7e3",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_sim/env.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task7_sim/env.py",
+      "exists": true,
+      "expected": "ae2c447f12d2a9d7cabf578163a6c71ae9872316a737b9deb7432841ed85e7e3",
+      "sha256": "ae2c447f12d2a9d7cabf578163a6c71ae9872316a737b9deb7432841ed85e7e3",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_sim/episode.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task7_sim/episode.py",
+      "exists": true,
+      "expected": "db831097bebe98037bb705870d6d2f6a4ad0af20998c5bf3cb4506bf8e78b5ae",
+      "sha256": "db831097bebe98037bb705870d6d2f6a4ad0af20998c5bf3cb4506bf8e78b5ae",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_sim/episode.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task7_sim/episode.py",
+      "exists": true,
+      "expected": "db831097bebe98037bb705870d6d2f6a4ad0af20998c5bf3cb4506bf8e78b5ae",
+      "sha256": "db831097bebe98037bb705870d6d2f6a4ad0af20998c5bf3cb4506bf8e78b5ae",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_sim/geometry.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task7_sim/geometry.py",
+      "exists": true,
+      "expected": "618750cf4abc88b56e46a91eb7c9937454ba69e3ba89bbc6ca54b566ee363212",
+      "sha256": "618750cf4abc88b56e46a91eb7c9937454ba69e3ba89bbc6ca54b566ee363212",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_sim/geometry.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task7_sim/geometry.py",
+      "exists": true,
+      "expected": "618750cf4abc88b56e46a91eb7c9937454ba69e3ba89bbc6ca54b566ee363212",
+      "sha256": "618750cf4abc88b56e46a91eb7c9937454ba69e3ba89bbc6ca54b566ee363212",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_sim/kinematics.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task7_sim/kinematics.py",
+      "exists": true,
+      "expected": "2ab305c2058c9eba5f451e765ee5fc22d094e26dac04de2b4943b46a957bdec4",
+      "sha256": "2ab305c2058c9eba5f451e765ee5fc22d094e26dac04de2b4943b46a957bdec4",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_sim/kinematics.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task7_sim/kinematics.py",
+      "exists": true,
+      "expected": "2ab305c2058c9eba5f451e765ee5fc22d094e26dac04de2b4943b46a957bdec4",
+      "sha256": "2ab305c2058c9eba5f451e765ee5fc22d094e26dac04de2b4943b46a957bdec4",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_sim/lower_policy.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task7_sim/lower_policy.py",
+      "exists": true,
+      "expected": "d888557e4e512b85836240c28640244cbec016737ab49d49ae6e3f3559c46a0c",
+      "sha256": "d888557e4e512b85836240c28640244cbec016737ab49d49ae6e3f3559c46a0c",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_sim/lower_policy.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task7_sim/lower_policy.py",
+      "exists": true,
+      "expected": "d888557e4e512b85836240c28640244cbec016737ab49d49ae6e3f3559c46a0c",
+      "sha256": "d888557e4e512b85836240c28640244cbec016737ab49d49ae6e3f3559c46a0c",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_sim/mapgen_a.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task7_sim/mapgen_a.py",
+      "exists": true,
+      "expected": "bdb59e11b2d71487317a539110d3a41d81bba5caf03456ce06503963f4e66a1d",
+      "sha256": "bdb59e11b2d71487317a539110d3a41d81bba5caf03456ce06503963f4e66a1d",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_sim/mapgen_a.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task7_sim/mapgen_a.py",
+      "exists": true,
+      "expected": "bdb59e11b2d71487317a539110d3a41d81bba5caf03456ce06503963f4e66a1d",
+      "sha256": "bdb59e11b2d71487317a539110d3a41d81bba5caf03456ce06503963f4e66a1d",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_sim/motion.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task7_sim/motion.py",
+      "exists": true,
+      "expected": "2ad7419144ee55eddb9a0854aa7c38ad8572a9c6f60ff27bc03a19ad2c13e500",
+      "sha256": "2ad7419144ee55eddb9a0854aa7c38ad8572a9c6f60ff27bc03a19ad2c13e500",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_sim/motion.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task7_sim/motion.py",
+      "exists": true,
+      "expected": "2ad7419144ee55eddb9a0854aa7c38ad8572a9c6f60ff27bc03a19ad2c13e500",
+      "sha256": "2ad7419144ee55eddb9a0854aa7c38ad8572a9c6f60ff27bc03a19ad2c13e500",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_sim/perception.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task7_sim/perception.py",
+      "exists": true,
+      "expected": "56c4786f54d8a37945c1b74f3cd9d912e20cf68c6f9181768179ac9625787705",
+      "sha256": "56c4786f54d8a37945c1b74f3cd9d912e20cf68c6f9181768179ac9625787705",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_sim/perception.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task7_sim/perception.py",
+      "exists": true,
+      "expected": "56c4786f54d8a37945c1b74f3cd9d912e20cf68c6f9181768179ac9625787705",
+      "sha256": "56c4786f54d8a37945c1b74f3cd9d912e20cf68c6f9181768179ac9625787705",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_sim/risk.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task7_sim/risk.py",
+      "exists": true,
+      "expected": "eb365e004122fa5384595e43e82e16193910554c89693a204b231afade098517",
+      "sha256": "eb365e004122fa5384595e43e82e16193910554c89693a204b231afade098517",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_sim/risk.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task7_sim/risk.py",
+      "exists": true,
+      "expected": "eb365e004122fa5384595e43e82e16193910554c89693a204b231afade098517",
+      "sha256": "eb365e004122fa5384595e43e82e16193910554c89693a204b231afade098517",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_sim/robot.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task7_sim/robot.py",
+      "exists": true,
+      "expected": "9fa144f7858130e09945dd09b8094ae8d2046f8698ed48315ecae2affbda3017",
+      "sha256": "9fa144f7858130e09945dd09b8094ae8d2046f8698ed48315ecae2affbda3017",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_sim/robot.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task7_sim/robot.py",
+      "exists": true,
+      "expected": "9fa144f7858130e09945dd09b8094ae8d2046f8698ed48315ecae2affbda3017",
+      "sha256": "9fa144f7858130e09945dd09b8094ae8d2046f8698ed48315ecae2affbda3017",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_sim/routes.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task7_sim/routes.py",
+      "exists": true,
+      "expected": "f494333c5a0259cfc528f4d5526400ee7c8097e20bf134d3d22d8383c3c10475",
+      "sha256": "f494333c5a0259cfc528f4d5526400ee7c8097e20bf134d3d22d8383c3c10475",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_sim/routes.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task7_sim/routes.py",
+      "exists": true,
+      "expected": "f494333c5a0259cfc528f4d5526400ee7c8097e20bf134d3d22d8383c3c10475",
+      "sha256": "f494333c5a0259cfc528f4d5526400ee7c8097e20bf134d3d22d8383c3c10475",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_sim/search.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task7_sim/search.py",
+      "exists": true,
+      "expected": "2a43000265ea4bdeb3f98fc2b74acf8f71a4cafcafc4bdb484c437df6a098b52",
+      "sha256": "2a43000265ea4bdeb3f98fc2b74acf8f71a4cafcafc4bdb484c437df6a098b52",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task7_sim/search.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task7_sim/search.py",
+      "exists": true,
+      "expected": "2a43000265ea4bdeb3f98fc2b74acf8f71a4cafcafc4bdb484c437df6a098b52",
+      "sha256": "2a43000265ea4bdeb3f98fc2b74acf8f71a4cafcafc4bdb484c437df6a098b52",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task8_lower/__init__.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task8_lower/__init__.py",
+      "exists": true,
+      "expected": "d268614338c47812783809c5f7a55abad3f16b8c14ba6dbbb1b2cbb67850ea30",
+      "sha256": "d268614338c47812783809c5f7a55abad3f16b8c14ba6dbbb1b2cbb67850ea30",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task8_lower/__init__.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task8_lower/__init__.py",
+      "exists": true,
+      "expected": "d268614338c47812783809c5f7a55abad3f16b8c14ba6dbbb1b2cbb67850ea30",
+      "sha256": "d268614338c47812783809c5f7a55abad3f16b8c14ba6dbbb1b2cbb67850ea30",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task8_lower/diagnostics.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task8_lower/diagnostics.py",
+      "exists": true,
+      "expected": "40c39cede379afac22421ecf7fdda8e7b93b7050b4f98f47086f64dc5f49f6a2",
+      "sha256": "40c39cede379afac22421ecf7fdda8e7b93b7050b4f98f47086f64dc5f49f6a2",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task8_lower/diagnostics.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task8_lower/diagnostics.py",
+      "exists": true,
+      "expected": "40c39cede379afac22421ecf7fdda8e7b93b7050b4f98f47086f64dc5f49f6a2",
+      "sha256": "40c39cede379afac22421ecf7fdda8e7b93b7050b4f98f47086f64dc5f49f6a2",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task8_lower/evaluation.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task8_lower/evaluation.py",
+      "exists": true,
+      "expected": "178e81125b082bcc2b8e260ebaacdbe6e68e64396287c52199ef015ddf148f48",
+      "sha256": "178e81125b082bcc2b8e260ebaacdbe6e68e64396287c52199ef015ddf148f48",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task8_lower/evaluation.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task8_lower/evaluation.py",
+      "exists": true,
+      "expected": "178e81125b082bcc2b8e260ebaacdbe6e68e64396287c52199ef015ddf148f48",
+      "sha256": "178e81125b082bcc2b8e260ebaacdbe6e68e64396287c52199ef015ddf148f48",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task8_lower/replay.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task8_lower/replay.py",
+      "exists": true,
+      "expected": "ab77cc5804f25f199cacf00bce807020accb824571276775668c8247ee11bbdd",
+      "sha256": "ab77cc5804f25f199cacf00bce807020accb824571276775668c8247ee11bbdd",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task8_lower/replay.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task8_lower/replay.py",
+      "exists": true,
+      "expected": "ab77cc5804f25f199cacf00bce807020accb824571276775668c8247ee11bbdd",
+      "sha256": "ab77cc5804f25f199cacf00bce807020accb824571276775668c8247ee11bbdd",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task8_lower/sac.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task8_lower/sac.py",
+      "exists": true,
+      "expected": "39db0908e16cfb305f15387c9275e47fcd8b680d981fb251312239833d3c67e9",
+      "sha256": "39db0908e16cfb305f15387c9275e47fcd8b680d981fb251312239833d3c67e9",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task8_lower/sac.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task8_lower/sac.py",
+      "exists": true,
+      "expected": "39db0908e16cfb305f15387c9275e47fcd8b680d981fb251312239833d3c67e9",
+      "sha256": "39db0908e16cfb305f15387c9275e47fcd8b680d981fb251312239833d3c67e9",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task8_lower/training.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task8_lower/training.py",
+      "exists": true,
+      "expected": "e5240460c7fb70726fd30cb0bb9ad40be6f66418be59c6094f53e65adbeaed45",
+      "sha256": "e5240460c7fb70726fd30cb0bb9ad40be6f66418be59c6094f53e65adbeaed45",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task8_lower/training.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task8_lower/training.py",
+      "exists": true,
+      "expected": "e5240460c7fb70726fd30cb0bb9ad40be6f66418be59c6094f53e65adbeaed45",
+      "sha256": "e5240460c7fb70726fd30cb0bb9ad40be6f66418be59c6094f53e65adbeaed45",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task8_sim/__init__.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task8_sim/__init__.py",
+      "exists": true,
+      "expected": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task8_sim/__init__.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task8_sim/__init__.py",
+      "exists": true,
+      "expected": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task8_sim/assets.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task8_sim/assets.py",
+      "exists": true,
+      "expected": "73c9e766f8713a1cf35709180a0f11ebcecc5a6defe06591c44fbdccb219e838",
+      "sha256": "73c9e766f8713a1cf35709180a0f11ebcecc5a6defe06591c44fbdccb219e838",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task8_sim/assets.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task8_sim/assets.py",
+      "exists": true,
+      "expected": "73c9e766f8713a1cf35709180a0f11ebcecc5a6defe06591c44fbdccb219e838",
+      "sha256": "73c9e766f8713a1cf35709180a0f11ebcecc5a6defe06591c44fbdccb219e838",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task8_sim/env.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task8_sim/env.py",
+      "exists": true,
+      "expected": "40b61e84c92bcc0ccc7ee7b3199b145ac837ad9618525785ed7230f849cc28a9",
+      "sha256": "40b61e84c92bcc0ccc7ee7b3199b145ac837ad9618525785ed7230f849cc28a9",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task8_sim/env.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task8_sim/env.py",
+      "exists": true,
+      "expected": "40b61e84c92bcc0ccc7ee7b3199b145ac837ad9618525785ed7230f849cc28a9",
+      "sha256": "40b61e84c92bcc0ccc7ee7b3199b145ac837ad9618525785ed7230f849cc28a9",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task8_sim/episode.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task8_sim/episode.py",
+      "exists": true,
+      "expected": "d6ebada23330e9bbacbdb6c9018e1577f4dde273fd200b639995f4b8bc9dc316",
+      "sha256": "d6ebada23330e9bbacbdb6c9018e1577f4dde273fd200b639995f4b8bc9dc316",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task8_sim/episode.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task8_sim/episode.py",
+      "exists": true,
+      "expected": "d6ebada23330e9bbacbdb6c9018e1577f4dde273fd200b639995f4b8bc9dc316",
+      "sha256": "d6ebada23330e9bbacbdb6c9018e1577f4dde273fd200b639995f4b8bc9dc316",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task8_sim/perception.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task8_sim/perception.py",
+      "exists": true,
+      "expected": "f76287ba4a4d4cf993a19ceab9b59fd100184f83e6a1dd4526068fbbbe6774a9",
+      "sha256": "f76287ba4a4d4cf993a19ceab9b59fd100184f83e6a1dd4526068fbbbe6774a9",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task8_sim/perception.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task8_sim/perception.py",
+      "exists": true,
+      "expected": "f76287ba4a4d4cf993a19ceab9b59fd100184f83e6a1dd4526068fbbbe6774a9",
+      "sha256": "f76287ba4a4d4cf993a19ceab9b59fd100184f83e6a1dd4526068fbbbe6774a9",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task8_sim/primitive_assets.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task8_sim/primitive_assets.py",
+      "exists": true,
+      "expected": "2f6d382b21d95626cd0717c47f7c447f3edb869ea2efc49697f8ef40eb8a4579",
+      "sha256": "2f6d382b21d95626cd0717c47f7c447f3edb869ea2efc49697f8ef40eb8a4579",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task8_sim/primitive_assets.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task8_sim/primitive_assets.py",
+      "exists": true,
+      "expected": "2f6d382b21d95626cd0717c47f7c447f3edb869ea2efc49697f8ef40eb8a4579",
+      "sha256": "2f6d382b21d95626cd0717c47f7c447f3edb869ea2efc49697f8ef40eb8a4579",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task8_sim/primitive_scene.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task8_sim/primitive_scene.py",
+      "exists": true,
+      "expected": "62fcce99f8bafcd4dc7d33fb7bbf0085dba29e08b6cef99fa3210448f8bde30b",
+      "sha256": "62fcce99f8bafcd4dc7d33fb7bbf0085dba29e08b6cef99fa3210448f8bde30b",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task8_sim/primitive_scene.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task8_sim/primitive_scene.py",
+      "exists": true,
+      "expected": "62fcce99f8bafcd4dc7d33fb7bbf0085dba29e08b6cef99fa3210448f8bde30b",
+      "sha256": "62fcce99f8bafcd4dc7d33fb7bbf0085dba29e08b6cef99fa3210448f8bde30b",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task8_sim/robot.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task8_sim/robot.py",
+      "exists": true,
+      "expected": "4ff158e50bb3fefd9e340b419b0469e32b10d7c19ef905a6950338f937248e5e",
+      "sha256": "4ff158e50bb3fefd9e340b419b0469e32b10d7c19ef905a6950338f937248e5e",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task8_sim/robot.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task8_sim/robot.py",
+      "exists": true,
+      "expected": "4ff158e50bb3fefd9e340b419b0469e32b10d7c19ef905a6950338f937248e5e",
+      "sha256": "4ff158e50bb3fefd9e340b419b0469e32b10d7c19ef905a6950338f937248e5e",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task8_sim/routes.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task8_sim/routes.py",
+      "exists": true,
+      "expected": "87ec9113f15c9f3de28c75c8a38f0dd3c6597586b4106765e0bea98437a7b8f5",
+      "sha256": "87ec9113f15c9f3de28c75c8a38f0dd3c6597586b4106765e0bea98437a7b8f5",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task8_sim/routes.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task8_sim/routes.py",
+      "exists": true,
+      "expected": "87ec9113f15c9f3de28c75c8a38f0dd3c6597586b4106765e0bea98437a7b8f5",
+      "sha256": "87ec9113f15c9f3de28c75c8a38f0dd3c6597586b4106765e0bea98437a7b8f5",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task8_sim/scene.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task8_sim/scene.py",
+      "exists": true,
+      "expected": "d8a9dfdd261161b3e65aa38b6e19a5a61496a0781334213cb5ef8b3028507041",
+      "sha256": "d8a9dfdd261161b3e65aa38b6e19a5a61496a0781334213cb5ef8b3028507041",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task8_sim/scene.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task8_sim/scene.py",
+      "exists": true,
+      "expected": "d8a9dfdd261161b3e65aa38b6e19a5a61496a0781334213cb5ef8b3028507041",
+      "sha256": "d8a9dfdd261161b3e65aa38b6e19a5a61496a0781334213cb5ef8b3028507041",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task8_sim/scene_cache.py",
+      "location": "historical",
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task8_sim/scene_cache.py",
+      "exists": true,
+      "expected": "b4e058d2928514ee9c772f4502d94d42eb73a7f97caea6a569c5421874e446bb",
+      "sha256": "b4e058d2928514ee9c772f4502d94d42eb73a7f97caea6a569c5421874e446bb",
+      "matches_frozen": true
+    },
+    {
+      "relative": "src/task8_sim/scene_cache.py",
+      "location": "checkout",
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task8_sim/scene_cache.py",
+      "exists": true,
+      "expected": "b4e058d2928514ee9c772f4502d94d42eb73a7f97caea6a569c5421874e446bb",
+      "sha256": "b4e058d2928514ee9c772f4502d94d42eb73a7f97caea6a569c5421874e446bb",
+      "matches_frozen": true
+    }
+  ],
+  "summary": {
+    "historical": {
+      "present": 69,
+      "missing": 0,
+      "mismatch": 0
+    },
+    "checkout": {
+      "present": 60,
+      "missing": 9,
+      "mismatch": 0
+    }
+  }
+}

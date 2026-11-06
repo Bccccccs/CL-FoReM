@@ -1,0 +1,3105 @@
+{
+  "format": "task9.8-parent-independent-readonly-v1",
+  "input_files": [
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed4718/validation-5000000.json",
+      "sha256": "559efed126002d87e55eb329e41512e9eeb0f44e8774fc996d168c0fae279a1b"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4718/evaluation.json",
+      "sha256": "01015a5c66990819943fb59bcd8402de41f29a4ad1e29a6529a03de65aac2900"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed4719/validation-5000000.json",
+      "sha256": "697d71e1c20149d8fa44d9448f93ad3f3e33bc34af80bd2aa2641c45f4fc7f24"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4719/evaluation.json",
+      "sha256": "8c49cdc832fb7992688838d04f0644a5e13ebaaac7af83672bec49f5c87e2b1a"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed4720/validation-5000000.json",
+      "sha256": "8439373f9286184dff53f2badebddd7c72b074708d45a9c4860faf98748105a0"
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4720/evaluation.json",
+      "sha256": "a3da450b495fbd4cb3dc350337e0e5317ac51e5c656cc4aa92356dbde32fb9b4"
+    }
+  ],
+  "rows": [
+    {
+      "model_seed": 4718,
+      "group": "validation",
+      "key": [
+        "standard_validation_00003",
+        3294758832,
+        0,
+        "validation",
+        "validation",
+        7707049123805970015
+      ],
+      "row_index": 53,
+      "batch_offset": 48,
+      "local_index": 5,
+      "batch_size": 16,
+      "strict_success": true,
+      "failures": 0,
+      "terminated": true,
+      "truncated": false,
+      "transfers": 107,
+      "source": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed4718/validation-5000000.json"
+    },
+    {
+      "model_seed": 4718,
+      "group": "validation",
+      "key": [
+        "standard_validation_00000",
+        2396592471,
+        0,
+        "validation",
+        "validation",
+        1882287200219130464
+      ],
+      "row_index": 50,
+      "batch_offset": 48,
+      "local_index": 2,
+      "batch_size": 16,
+      "strict_success": false,
+      "failures": 20,
+      "terminated": true,
+      "truncated": false,
+      "transfers": 58,
+      "source": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed4718/validation-5000000.json"
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "key": [
+        "home_map_002",
+        3570249233,
+        0,
+        "semantic_transfer",
+        "smoke",
+        3029584731548132938
+      ],
+      "row_index": 8,
+      "batch_offset": 0,
+      "local_index": 8,
+      "batch_size": 16,
+      "strict_success": false,
+      "failures": 20,
+      "terminated": true,
+      "truncated": false,
+      "transfers": 84,
+      "source": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4718/evaluation.json"
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "key": [
+        "home_map_002",
+        4158490082,
+        0,
+        "semantic_transfer",
+        "smoke",
+        6076064104553683651
+      ],
+      "row_index": 9,
+      "batch_offset": 0,
+      "local_index": 9,
+      "batch_size": 16,
+      "strict_success": false,
+      "failures": 20,
+      "terminated": true,
+      "truncated": false,
+      "transfers": 50,
+      "source": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4718/evaluation.json"
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "key": [
+        "home_map_002",
+        2785914634,
+        0,
+        "semantic_transfer",
+        "smoke",
+        137547240365178703
+      ],
+      "row_index": 10,
+      "batch_offset": 0,
+      "local_index": 10,
+      "batch_size": 16,
+      "strict_success": false,
+      "failures": 0,
+      "terminated": true,
+      "truncated": false,
+      "transfers": 24,
+      "source": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4718/evaluation.json"
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "key": [
+        "home_map_002",
+        803250685,
+        0,
+        "semantic_transfer",
+        "smoke",
+        4363422522331977694
+      ],
+      "row_index": 11,
+      "batch_offset": 0,
+      "local_index": 11,
+      "batch_size": 16,
+      "strict_success": false,
+      "failures": 20,
+      "terminated": true,
+      "truncated": false,
+      "transfers": 121,
+      "source": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4718/evaluation.json"
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "key": [
+        "library_map_002",
+        626209918,
+        0,
+        "semantic_transfer",
+        "smoke",
+        4788373355529194444
+      ],
+      "row_index": 44,
+      "batch_offset": 32,
+      "local_index": 12,
+      "batch_size": 16,
+      "strict_success": true,
+      "failures": 0,
+      "terminated": true,
+      "truncated": false,
+      "transfers": 44,
+      "source": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4718/evaluation.json"
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "key": [
+        "library_map_002",
+        2631242821,
+        0,
+        "semantic_transfer",
+        "smoke",
+        7546036176058750245
+      ],
+      "row_index": 45,
+      "batch_offset": 32,
+      "local_index": 13,
+      "batch_size": 16,
+      "strict_success": true,
+      "failures": 0,
+      "terminated": true,
+      "truncated": false,
+      "transfers": 49,
+      "source": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4718/evaluation.json"
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "key": [
+        "library_map_002",
+        2407846046,
+        0,
+        "semantic_transfer",
+        "smoke",
+        2227190365323047312
+      ],
+      "row_index": 46,
+      "batch_offset": 32,
+      "local_index": 14,
+      "batch_size": 16,
+      "strict_success": false,
+      "failures": 20,
+      "terminated": true,
+      "truncated": false,
+      "transfers": 202,
+      "source": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4718/evaluation.json"
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "key": [
+        "library_map_002",
+        3554729779,
+        0,
+        "semantic_transfer",
+        "smoke",
+        3867394086967155781
+      ],
+      "row_index": 47,
+      "batch_offset": 32,
+      "local_index": 15,
+      "batch_size": 16,
+      "strict_success": true,
+      "failures": 0,
+      "terminated": true,
+      "truncated": false,
+      "transfers": 159,
+      "source": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4718/evaluation.json"
+    },
+    {
+      "model_seed": 4719,
+      "group": "validation",
+      "key": [
+        "standard_validation_00003",
+        3294758832,
+        0,
+        "validation",
+        "validation",
+        7707049123805970015
+      ],
+      "row_index": 53,
+      "batch_offset": 48,
+      "local_index": 5,
+      "batch_size": 16,
+      "strict_success": true,
+      "failures": 0,
+      "terminated": true,
+      "truncated": false,
+      "transfers": 113,
+      "source": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed4719/validation-5000000.json"
+    },
+    {
+      "model_seed": 4719,
+      "group": "validation",
+      "key": [
+        "standard_validation_00000",
+        2396592471,
+        0,
+        "validation",
+        "validation",
+        1882287200219130464
+      ],
+      "row_index": 50,
+      "batch_offset": 48,
+      "local_index": 2,
+      "batch_size": 16,
+      "strict_success": true,
+      "failures": 0,
+      "terminated": true,
+      "truncated": false,
+      "transfers": 62,
+      "source": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed4719/validation-5000000.json"
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "key": [
+        "home_map_002",
+        3570249233,
+        0,
+        "semantic_transfer",
+        "smoke",
+        3029584731548132938
+      ],
+      "row_index": 8,
+      "batch_offset": 0,
+      "local_index": 8,
+      "batch_size": 16,
+      "strict_success": false,
+      "failures": 20,
+      "terminated": true,
+      "truncated": false,
+      "transfers": 61,
+      "source": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4719/evaluation.json"
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "key": [
+        "home_map_002",
+        4158490082,
+        0,
+        "semantic_transfer",
+        "smoke",
+        6076064104553683651
+      ],
+      "row_index": 9,
+      "batch_offset": 0,
+      "local_index": 9,
+      "batch_size": 16,
+      "strict_success": false,
+      "failures": 20,
+      "terminated": true,
+      "truncated": false,
+      "transfers": 24,
+      "source": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4719/evaluation.json"
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "key": [
+        "home_map_002",
+        2785914634,
+        0,
+        "semantic_transfer",
+        "smoke",
+        137547240365178703
+      ],
+      "row_index": 10,
+      "batch_offset": 0,
+      "local_index": 10,
+      "batch_size": 16,
+      "strict_success": false,
+      "failures": 0,
+      "terminated": true,
+      "truncated": false,
+      "transfers": 75,
+      "source": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4719/evaluation.json"
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "key": [
+        "home_map_002",
+        803250685,
+        0,
+        "semantic_transfer",
+        "smoke",
+        4363422522331977694
+      ],
+      "row_index": 11,
+      "batch_offset": 0,
+      "local_index": 11,
+      "batch_size": 16,
+      "strict_success": false,
+      "failures": 20,
+      "terminated": true,
+      "truncated": false,
+      "transfers": 80,
+      "source": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4719/evaluation.json"
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "key": [
+        "library_map_002",
+        626209918,
+        0,
+        "semantic_transfer",
+        "smoke",
+        4788373355529194444
+      ],
+      "row_index": 44,
+      "batch_offset": 32,
+      "local_index": 12,
+      "batch_size": 16,
+      "strict_success": true,
+      "failures": 0,
+      "terminated": true,
+      "truncated": false,
+      "transfers": 40,
+      "source": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4719/evaluation.json"
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "key": [
+        "library_map_002",
+        2631242821,
+        0,
+        "semantic_transfer",
+        "smoke",
+        7546036176058750245
+      ],
+      "row_index": 45,
+      "batch_offset": 32,
+      "local_index": 13,
+      "batch_size": 16,
+      "strict_success": true,
+      "failures": 0,
+      "terminated": true,
+      "truncated": false,
+      "transfers": 76,
+      "source": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4719/evaluation.json"
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "key": [
+        "library_map_002",
+        2407846046,
+        0,
+        "semantic_transfer",
+        "smoke",
+        2227190365323047312
+      ],
+      "row_index": 46,
+      "batch_offset": 32,
+      "local_index": 14,
+      "batch_size": 16,
+      "strict_success": false,
+      "failures": 20,
+      "terminated": true,
+      "truncated": false,
+      "transfers": 173,
+      "source": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4719/evaluation.json"
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "key": [
+        "library_map_002",
+        3554729779,
+        0,
+        "semantic_transfer",
+        "smoke",
+        3867394086967155781
+      ],
+      "row_index": 47,
+      "batch_offset": 32,
+      "local_index": 15,
+      "batch_size": 16,
+      "strict_success": true,
+      "failures": 0,
+      "terminated": true,
+      "truncated": false,
+      "transfers": 38,
+      "source": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4719/evaluation.json"
+    },
+    {
+      "model_seed": 4720,
+      "group": "validation",
+      "key": [
+        "standard_validation_00003",
+        3294758832,
+        0,
+        "validation",
+        "validation",
+        7707049123805970015
+      ],
+      "row_index": 53,
+      "batch_offset": 48,
+      "local_index": 5,
+      "batch_size": 16,
+      "strict_success": true,
+      "failures": 0,
+      "terminated": true,
+      "truncated": false,
+      "transfers": 110,
+      "source": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed4720/validation-5000000.json"
+    },
+    {
+      "model_seed": 4720,
+      "group": "validation",
+      "key": [
+        "standard_validation_00000",
+        2396592471,
+        0,
+        "validation",
+        "validation",
+        1882287200219130464
+      ],
+      "row_index": 50,
+      "batch_offset": 48,
+      "local_index": 2,
+      "batch_size": 16,
+      "strict_success": true,
+      "failures": 0,
+      "terminated": true,
+      "truncated": false,
+      "transfers": 34,
+      "source": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed4720/validation-5000000.json"
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "key": [
+        "home_map_002",
+        3570249233,
+        0,
+        "semantic_transfer",
+        "smoke",
+        3029584731548132938
+      ],
+      "row_index": 8,
+      "batch_offset": 0,
+      "local_index": 8,
+      "batch_size": 16,
+      "strict_success": false,
+      "failures": 20,
+      "terminated": true,
+      "truncated": false,
+      "transfers": 91,
+      "source": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4720/evaluation.json"
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "key": [
+        "home_map_002",
+        4158490082,
+        0,
+        "semantic_transfer",
+        "smoke",
+        6076064104553683651
+      ],
+      "row_index": 9,
+      "batch_offset": 0,
+      "local_index": 9,
+      "batch_size": 16,
+      "strict_success": false,
+      "failures": 20,
+      "terminated": true,
+      "truncated": false,
+      "transfers": 94,
+      "source": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4720/evaluation.json"
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "key": [
+        "home_map_002",
+        2785914634,
+        0,
+        "semantic_transfer",
+        "smoke",
+        137547240365178703
+      ],
+      "row_index": 10,
+      "batch_offset": 0,
+      "local_index": 10,
+      "batch_size": 16,
+      "strict_success": false,
+      "failures": 0,
+      "terminated": true,
+      "truncated": false,
+      "transfers": 181,
+      "source": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4720/evaluation.json"
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "key": [
+        "home_map_002",
+        803250685,
+        0,
+        "semantic_transfer",
+        "smoke",
+        4363422522331977694
+      ],
+      "row_index": 11,
+      "batch_offset": 0,
+      "local_index": 11,
+      "batch_size": 16,
+      "strict_success": false,
+      "failures": 20,
+      "terminated": true,
+      "truncated": false,
+      "transfers": 67,
+      "source": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4720/evaluation.json"
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "key": [
+        "library_map_002",
+        626209918,
+        0,
+        "semantic_transfer",
+        "smoke",
+        4788373355529194444
+      ],
+      "row_index": 44,
+      "batch_offset": 32,
+      "local_index": 12,
+      "batch_size": 16,
+      "strict_success": true,
+      "failures": 0,
+      "terminated": true,
+      "truncated": false,
+      "transfers": 43,
+      "source": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4720/evaluation.json"
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "key": [
+        "library_map_002",
+        2631242821,
+        0,
+        "semantic_transfer",
+        "smoke",
+        7546036176058750245
+      ],
+      "row_index": 45,
+      "batch_offset": 32,
+      "local_index": 13,
+      "batch_size": 16,
+      "strict_success": true,
+      "failures": 0,
+      "terminated": true,
+      "truncated": false,
+      "transfers": 58,
+      "source": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4720/evaluation.json"
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "key": [
+        "library_map_002",
+        2407846046,
+        0,
+        "semantic_transfer",
+        "smoke",
+        2227190365323047312
+      ],
+      "row_index": 46,
+      "batch_offset": 32,
+      "local_index": 14,
+      "batch_size": 16,
+      "strict_success": true,
+      "failures": 0,
+      "terminated": true,
+      "truncated": false,
+      "transfers": 328,
+      "source": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4720/evaluation.json"
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "key": [
+        "library_map_002",
+        3554729779,
+        0,
+        "semantic_transfer",
+        "smoke",
+        3867394086967155781
+      ],
+      "row_index": 47,
+      "batch_offset": 32,
+      "local_index": 15,
+      "batch_size": 16,
+      "strict_success": true,
+      "failures": 0,
+      "terminated": true,
+      "truncated": false,
+      "transfers": 49,
+      "source": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4720/evaluation.json"
+    }
+  ],
+  "companion_envelope": [
+    {
+      "model_seed": 4718,
+      "group": "validation",
+      "row_index": 48,
+      "key": [
+        "sparse_validation_00048",
+        759516999,
+        0,
+        "validation",
+        "validation",
+        6537267644025810416
+      ],
+      "target": false,
+      "transfers": 87,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4718,
+      "group": "validation",
+      "row_index": 49,
+      "key": [
+        "sparse_validation_00049",
+        3271608067,
+        0,
+        "validation",
+        "validation",
+        5133260772984883519
+      ],
+      "target": false,
+      "transfers": 140,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4718,
+      "group": "validation",
+      "row_index": 50,
+      "key": [
+        "standard_validation_00000",
+        2396592471,
+        0,
+        "validation",
+        "validation",
+        1882287200219130464
+      ],
+      "target": true,
+      "transfers": 58,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4718,
+      "group": "validation",
+      "row_index": 51,
+      "key": [
+        "standard_validation_00001",
+        3359828711,
+        0,
+        "validation",
+        "validation",
+        518785107299805091
+      ],
+      "target": false,
+      "transfers": 61,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4718,
+      "group": "validation",
+      "row_index": 52,
+      "key": [
+        "standard_validation_00002",
+        3966153474,
+        0,
+        "validation",
+        "validation",
+        2201829737391338667
+      ],
+      "target": false,
+      "transfers": 72,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4718,
+      "group": "validation",
+      "row_index": 53,
+      "key": [
+        "standard_validation_00003",
+        3294758832,
+        0,
+        "validation",
+        "validation",
+        7707049123805970015
+      ],
+      "target": true,
+      "transfers": 107,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4718,
+      "group": "validation",
+      "row_index": 54,
+      "key": [
+        "standard_validation_00004",
+        1735967587,
+        0,
+        "validation",
+        "validation",
+        2885057118864557747
+      ],
+      "target": false,
+      "transfers": 75,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4718,
+      "group": "validation",
+      "row_index": 55,
+      "key": [
+        "standard_validation_00005",
+        132801034,
+        0,
+        "validation",
+        "validation",
+        2456464939597707236
+      ],
+      "target": false,
+      "transfers": 24,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4718,
+      "group": "validation",
+      "row_index": 56,
+      "key": [
+        "standard_validation_00006",
+        3095645367,
+        0,
+        "validation",
+        "validation",
+        4494314677110847844
+      ],
+      "target": false,
+      "transfers": 394,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4718,
+      "group": "validation",
+      "row_index": 57,
+      "key": [
+        "standard_validation_00007",
+        951440992,
+        0,
+        "validation",
+        "validation",
+        3101487158787327332
+      ],
+      "target": false,
+      "transfers": 255,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4718,
+      "group": "validation",
+      "row_index": 58,
+      "key": [
+        "standard_validation_00008",
+        3503415160,
+        0,
+        "validation",
+        "validation",
+        5989467899870854267
+      ],
+      "target": false,
+      "transfers": 141,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4718,
+      "group": "validation",
+      "row_index": 59,
+      "key": [
+        "standard_validation_00009",
+        2499221955,
+        0,
+        "validation",
+        "validation",
+        6923065955399581364
+      ],
+      "target": false,
+      "transfers": 105,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4718,
+      "group": "validation",
+      "row_index": 60,
+      "key": [
+        "standard_validation_00010",
+        1251284068,
+        0,
+        "validation",
+        "validation",
+        2034494046373926528
+      ],
+      "target": false,
+      "transfers": 301,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4718,
+      "group": "validation",
+      "row_index": 61,
+      "key": [
+        "standard_validation_00011",
+        3908494018,
+        0,
+        "validation",
+        "validation",
+        5040428455136962796
+      ],
+      "target": false,
+      "transfers": 96,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4718,
+      "group": "validation",
+      "row_index": 62,
+      "key": [
+        "standard_validation_00012",
+        2071817248,
+        0,
+        "validation",
+        "validation",
+        4900353095304180314
+      ],
+      "target": false,
+      "transfers": 95,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4718,
+      "group": "validation",
+      "row_index": 63,
+      "key": [
+        "standard_validation_00013",
+        213053577,
+        0,
+        "validation",
+        "validation",
+        8491841102592534153
+      ],
+      "target": false,
+      "transfers": 75,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "row_index": 0,
+      "key": [
+        "home_map_000",
+        1389583777,
+        0,
+        "semantic_transfer",
+        "smoke",
+        4304407402789619543
+      ],
+      "target": false,
+      "transfers": 61,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "row_index": 1,
+      "key": [
+        "home_map_000",
+        824106817,
+        0,
+        "semantic_transfer",
+        "smoke",
+        7217642147507574313
+      ],
+      "target": false,
+      "transfers": 98,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "row_index": 2,
+      "key": [
+        "home_map_000",
+        2209220344,
+        0,
+        "semantic_transfer",
+        "smoke",
+        5407219535018942807
+      ],
+      "target": false,
+      "transfers": 304,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "row_index": 3,
+      "key": [
+        "home_map_000",
+        425270169,
+        0,
+        "semantic_transfer",
+        "smoke",
+        104734547017774768
+      ],
+      "target": false,
+      "transfers": 154,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "row_index": 4,
+      "key": [
+        "home_map_001",
+        669186141,
+        0,
+        "semantic_transfer",
+        "smoke",
+        2702586713749907475
+      ],
+      "target": false,
+      "transfers": 54,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "row_index": 5,
+      "key": [
+        "home_map_001",
+        1432968108,
+        0,
+        "semantic_transfer",
+        "smoke",
+        8956754882636763049
+      ],
+      "target": false,
+      "transfers": 104,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "row_index": 6,
+      "key": [
+        "home_map_001",
+        565187609,
+        0,
+        "semantic_transfer",
+        "smoke",
+        8595772671697714078
+      ],
+      "target": false,
+      "transfers": 49,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "row_index": 7,
+      "key": [
+        "home_map_001",
+        1833965583,
+        0,
+        "semantic_transfer",
+        "smoke",
+        5793433585084349514
+      ],
+      "target": false,
+      "transfers": 221,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "row_index": 8,
+      "key": [
+        "home_map_002",
+        3570249233,
+        0,
+        "semantic_transfer",
+        "smoke",
+        3029584731548132938
+      ],
+      "target": true,
+      "transfers": 84,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "row_index": 9,
+      "key": [
+        "home_map_002",
+        4158490082,
+        0,
+        "semantic_transfer",
+        "smoke",
+        6076064104553683651
+      ],
+      "target": true,
+      "transfers": 50,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "row_index": 10,
+      "key": [
+        "home_map_002",
+        2785914634,
+        0,
+        "semantic_transfer",
+        "smoke",
+        137547240365178703
+      ],
+      "target": true,
+      "transfers": 24,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "row_index": 11,
+      "key": [
+        "home_map_002",
+        803250685,
+        0,
+        "semantic_transfer",
+        "smoke",
+        4363422522331977694
+      ],
+      "target": true,
+      "transfers": 121,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "row_index": 12,
+      "key": [
+        "hospital_map_000",
+        2136676315,
+        0,
+        "semantic_transfer",
+        "smoke",
+        5764662207666969926
+      ],
+      "target": false,
+      "transfers": 38,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "row_index": 13,
+      "key": [
+        "hospital_map_000",
+        2490107142,
+        0,
+        "semantic_transfer",
+        "smoke",
+        5418880728944386588
+      ],
+      "target": false,
+      "transfers": 88,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "row_index": 14,
+      "key": [
+        "hospital_map_000",
+        1712351559,
+        0,
+        "semantic_transfer",
+        "smoke",
+        8078935458032733736
+      ],
+      "target": false,
+      "transfers": 158,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "row_index": 15,
+      "key": [
+        "hospital_map_000",
+        3284144614,
+        0,
+        "semantic_transfer",
+        "smoke",
+        1585390074392971883
+      ],
+      "target": false,
+      "transfers": 163,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "row_index": 32,
+      "key": [
+        "laboratory_map_002",
+        572905331,
+        0,
+        "semantic_transfer",
+        "smoke",
+        8342813335099261497
+      ],
+      "target": false,
+      "transfers": 272,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "row_index": 33,
+      "key": [
+        "laboratory_map_002",
+        3433183397,
+        0,
+        "semantic_transfer",
+        "smoke",
+        4097111579733064578
+      ],
+      "target": false,
+      "transfers": 27,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "row_index": 34,
+      "key": [
+        "laboratory_map_002",
+        1314434255,
+        0,
+        "semantic_transfer",
+        "smoke",
+        4283078318646916048
+      ],
+      "target": false,
+      "transfers": 48,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "row_index": 35,
+      "key": [
+        "laboratory_map_002",
+        2171104066,
+        0,
+        "semantic_transfer",
+        "smoke",
+        1977874657932141173
+      ],
+      "target": false,
+      "transfers": 35,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "row_index": 36,
+      "key": [
+        "library_map_000",
+        4281460873,
+        0,
+        "semantic_transfer",
+        "smoke",
+        236445230722194306
+      ],
+      "target": false,
+      "transfers": 37,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "row_index": 37,
+      "key": [
+        "library_map_000",
+        284590779,
+        0,
+        "semantic_transfer",
+        "smoke",
+        8850758824455217815
+      ],
+      "target": false,
+      "transfers": 273,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "row_index": 38,
+      "key": [
+        "library_map_000",
+        494513176,
+        0,
+        "semantic_transfer",
+        "smoke",
+        5613687193536618308
+      ],
+      "target": false,
+      "transfers": 116,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "row_index": 39,
+      "key": [
+        "library_map_000",
+        2771720943,
+        0,
+        "semantic_transfer",
+        "smoke",
+        2234814551788822657
+      ],
+      "target": false,
+      "transfers": 28,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "row_index": 40,
+      "key": [
+        "library_map_001",
+        3611543013,
+        0,
+        "semantic_transfer",
+        "smoke",
+        485347437896114697
+      ],
+      "target": false,
+      "transfers": 61,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "row_index": 41,
+      "key": [
+        "library_map_001",
+        4207069990,
+        0,
+        "semantic_transfer",
+        "smoke",
+        4625048491305134056
+      ],
+      "target": false,
+      "transfers": 177,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "row_index": 42,
+      "key": [
+        "library_map_001",
+        1883746993,
+        0,
+        "semantic_transfer",
+        "smoke",
+        6275432470792220301
+      ],
+      "target": false,
+      "transfers": 72,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "row_index": 43,
+      "key": [
+        "library_map_001",
+        3682464708,
+        0,
+        "semantic_transfer",
+        "smoke",
+        8580245895978247161
+      ],
+      "target": false,
+      "transfers": 46,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "row_index": 44,
+      "key": [
+        "library_map_002",
+        626209918,
+        0,
+        "semantic_transfer",
+        "smoke",
+        4788373355529194444
+      ],
+      "target": true,
+      "transfers": 44,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "row_index": 45,
+      "key": [
+        "library_map_002",
+        2631242821,
+        0,
+        "semantic_transfer",
+        "smoke",
+        7546036176058750245
+      ],
+      "target": true,
+      "transfers": 49,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "row_index": 46,
+      "key": [
+        "library_map_002",
+        2407846046,
+        0,
+        "semantic_transfer",
+        "smoke",
+        2227190365323047312
+      ],
+      "target": true,
+      "transfers": 202,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4718,
+      "group": "transfer",
+      "row_index": 47,
+      "key": [
+        "library_map_002",
+        3554729779,
+        0,
+        "semantic_transfer",
+        "smoke",
+        3867394086967155781
+      ],
+      "target": true,
+      "transfers": 159,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4719,
+      "group": "validation",
+      "row_index": 48,
+      "key": [
+        "sparse_validation_00048",
+        759516999,
+        0,
+        "validation",
+        "validation",
+        6537267644025810416
+      ],
+      "target": false,
+      "transfers": 91,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4719,
+      "group": "validation",
+      "row_index": 49,
+      "key": [
+        "sparse_validation_00049",
+        3271608067,
+        0,
+        "validation",
+        "validation",
+        5133260772984883519
+      ],
+      "target": false,
+      "transfers": 172,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4719,
+      "group": "validation",
+      "row_index": 50,
+      "key": [
+        "standard_validation_00000",
+        2396592471,
+        0,
+        "validation",
+        "validation",
+        1882287200219130464
+      ],
+      "target": true,
+      "transfers": 62,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4719,
+      "group": "validation",
+      "row_index": 51,
+      "key": [
+        "standard_validation_00001",
+        3359828711,
+        0,
+        "validation",
+        "validation",
+        518785107299805091
+      ],
+      "target": false,
+      "transfers": 270,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4719,
+      "group": "validation",
+      "row_index": 52,
+      "key": [
+        "standard_validation_00002",
+        3966153474,
+        0,
+        "validation",
+        "validation",
+        2201829737391338667
+      ],
+      "target": false,
+      "transfers": 118,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4719,
+      "group": "validation",
+      "row_index": 53,
+      "key": [
+        "standard_validation_00003",
+        3294758832,
+        0,
+        "validation",
+        "validation",
+        7707049123805970015
+      ],
+      "target": true,
+      "transfers": 113,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4719,
+      "group": "validation",
+      "row_index": 54,
+      "key": [
+        "standard_validation_00004",
+        1735967587,
+        0,
+        "validation",
+        "validation",
+        2885057118864557747
+      ],
+      "target": false,
+      "transfers": 79,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4719,
+      "group": "validation",
+      "row_index": 55,
+      "key": [
+        "standard_validation_00005",
+        132801034,
+        0,
+        "validation",
+        "validation",
+        2456464939597707236
+      ],
+      "target": false,
+      "transfers": 24,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4719,
+      "group": "validation",
+      "row_index": 56,
+      "key": [
+        "standard_validation_00006",
+        3095645367,
+        0,
+        "validation",
+        "validation",
+        4494314677110847844
+      ],
+      "target": false,
+      "transfers": 486,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4719,
+      "group": "validation",
+      "row_index": 57,
+      "key": [
+        "standard_validation_00007",
+        951440992,
+        0,
+        "validation",
+        "validation",
+        3101487158787327332
+      ],
+      "target": false,
+      "transfers": 243,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4719,
+      "group": "validation",
+      "row_index": 58,
+      "key": [
+        "standard_validation_00008",
+        3503415160,
+        0,
+        "validation",
+        "validation",
+        5989467899870854267
+      ],
+      "target": false,
+      "transfers": 141,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4719,
+      "group": "validation",
+      "row_index": 59,
+      "key": [
+        "standard_validation_00009",
+        2499221955,
+        0,
+        "validation",
+        "validation",
+        6923065955399581364
+      ],
+      "target": false,
+      "transfers": 110,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4719,
+      "group": "validation",
+      "row_index": 60,
+      "key": [
+        "standard_validation_00010",
+        1251284068,
+        0,
+        "validation",
+        "validation",
+        2034494046373926528
+      ],
+      "target": false,
+      "transfers": 33,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4719,
+      "group": "validation",
+      "row_index": 61,
+      "key": [
+        "standard_validation_00011",
+        3908494018,
+        0,
+        "validation",
+        "validation",
+        5040428455136962796
+      ],
+      "target": false,
+      "transfers": 201,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4719,
+      "group": "validation",
+      "row_index": 62,
+      "key": [
+        "standard_validation_00012",
+        2071817248,
+        0,
+        "validation",
+        "validation",
+        4900353095304180314
+      ],
+      "target": false,
+      "transfers": 79,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4719,
+      "group": "validation",
+      "row_index": 63,
+      "key": [
+        "standard_validation_00013",
+        213053577,
+        0,
+        "validation",
+        "validation",
+        8491841102592534153
+      ],
+      "target": false,
+      "transfers": 32,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "row_index": 0,
+      "key": [
+        "home_map_000",
+        1389583777,
+        0,
+        "semantic_transfer",
+        "smoke",
+        4304407402789619543
+      ],
+      "target": false,
+      "transfers": 26,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "row_index": 1,
+      "key": [
+        "home_map_000",
+        824106817,
+        0,
+        "semantic_transfer",
+        "smoke",
+        7217642147507574313
+      ],
+      "target": false,
+      "transfers": 102,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "row_index": 2,
+      "key": [
+        "home_map_000",
+        2209220344,
+        0,
+        "semantic_transfer",
+        "smoke",
+        5407219535018942807
+      ],
+      "target": false,
+      "transfers": 372,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "row_index": 3,
+      "key": [
+        "home_map_000",
+        425270169,
+        0,
+        "semantic_transfer",
+        "smoke",
+        104734547017774768
+      ],
+      "target": false,
+      "transfers": 40,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "row_index": 4,
+      "key": [
+        "home_map_001",
+        669186141,
+        0,
+        "semantic_transfer",
+        "smoke",
+        2702586713749907475
+      ],
+      "target": false,
+      "transfers": 61,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "row_index": 5,
+      "key": [
+        "home_map_001",
+        1432968108,
+        0,
+        "semantic_transfer",
+        "smoke",
+        8956754882636763049
+      ],
+      "target": false,
+      "transfers": 105,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "row_index": 6,
+      "key": [
+        "home_map_001",
+        565187609,
+        0,
+        "semantic_transfer",
+        "smoke",
+        8595772671697714078
+      ],
+      "target": false,
+      "transfers": 51,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "row_index": 7,
+      "key": [
+        "home_map_001",
+        1833965583,
+        0,
+        "semantic_transfer",
+        "smoke",
+        5793433585084349514
+      ],
+      "target": false,
+      "transfers": 96,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "row_index": 8,
+      "key": [
+        "home_map_002",
+        3570249233,
+        0,
+        "semantic_transfer",
+        "smoke",
+        3029584731548132938
+      ],
+      "target": true,
+      "transfers": 61,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "row_index": 9,
+      "key": [
+        "home_map_002",
+        4158490082,
+        0,
+        "semantic_transfer",
+        "smoke",
+        6076064104553683651
+      ],
+      "target": true,
+      "transfers": 24,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "row_index": 10,
+      "key": [
+        "home_map_002",
+        2785914634,
+        0,
+        "semantic_transfer",
+        "smoke",
+        137547240365178703
+      ],
+      "target": true,
+      "transfers": 75,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "row_index": 11,
+      "key": [
+        "home_map_002",
+        803250685,
+        0,
+        "semantic_transfer",
+        "smoke",
+        4363422522331977694
+      ],
+      "target": true,
+      "transfers": 80,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "row_index": 12,
+      "key": [
+        "hospital_map_000",
+        2136676315,
+        0,
+        "semantic_transfer",
+        "smoke",
+        5764662207666969926
+      ],
+      "target": false,
+      "transfers": 46,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "row_index": 13,
+      "key": [
+        "hospital_map_000",
+        2490107142,
+        0,
+        "semantic_transfer",
+        "smoke",
+        5418880728944386588
+      ],
+      "target": false,
+      "transfers": 92,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "row_index": 14,
+      "key": [
+        "hospital_map_000",
+        1712351559,
+        0,
+        "semantic_transfer",
+        "smoke",
+        8078935458032733736
+      ],
+      "target": false,
+      "transfers": 172,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "row_index": 15,
+      "key": [
+        "hospital_map_000",
+        3284144614,
+        0,
+        "semantic_transfer",
+        "smoke",
+        1585390074392971883
+      ],
+      "target": false,
+      "transfers": 85,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "row_index": 32,
+      "key": [
+        "laboratory_map_002",
+        572905331,
+        0,
+        "semantic_transfer",
+        "smoke",
+        8342813335099261497
+      ],
+      "target": false,
+      "transfers": 55,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "row_index": 33,
+      "key": [
+        "laboratory_map_002",
+        3433183397,
+        0,
+        "semantic_transfer",
+        "smoke",
+        4097111579733064578
+      ],
+      "target": false,
+      "transfers": 64,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "row_index": 34,
+      "key": [
+        "laboratory_map_002",
+        1314434255,
+        0,
+        "semantic_transfer",
+        "smoke",
+        4283078318646916048
+      ],
+      "target": false,
+      "transfers": 58,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "row_index": 35,
+      "key": [
+        "laboratory_map_002",
+        2171104066,
+        0,
+        "semantic_transfer",
+        "smoke",
+        1977874657932141173
+      ],
+      "target": false,
+      "transfers": 36,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "row_index": 36,
+      "key": [
+        "library_map_000",
+        4281460873,
+        0,
+        "semantic_transfer",
+        "smoke",
+        236445230722194306
+      ],
+      "target": false,
+      "transfers": 32,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "row_index": 37,
+      "key": [
+        "library_map_000",
+        284590779,
+        0,
+        "semantic_transfer",
+        "smoke",
+        8850758824455217815
+      ],
+      "target": false,
+      "transfers": 34,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "row_index": 38,
+      "key": [
+        "library_map_000",
+        494513176,
+        0,
+        "semantic_transfer",
+        "smoke",
+        5613687193536618308
+      ],
+      "target": false,
+      "transfers": 48,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "row_index": 39,
+      "key": [
+        "library_map_000",
+        2771720943,
+        0,
+        "semantic_transfer",
+        "smoke",
+        2234814551788822657
+      ],
+      "target": false,
+      "transfers": 25,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "row_index": 40,
+      "key": [
+        "library_map_001",
+        3611543013,
+        0,
+        "semantic_transfer",
+        "smoke",
+        485347437896114697
+      ],
+      "target": false,
+      "transfers": 67,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "row_index": 41,
+      "key": [
+        "library_map_001",
+        4207069990,
+        0,
+        "semantic_transfer",
+        "smoke",
+        4625048491305134056
+      ],
+      "target": false,
+      "transfers": 47,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "row_index": 42,
+      "key": [
+        "library_map_001",
+        1883746993,
+        0,
+        "semantic_transfer",
+        "smoke",
+        6275432470792220301
+      ],
+      "target": false,
+      "transfers": 73,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "row_index": 43,
+      "key": [
+        "library_map_001",
+        3682464708,
+        0,
+        "semantic_transfer",
+        "smoke",
+        8580245895978247161
+      ],
+      "target": false,
+      "transfers": 365,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "row_index": 44,
+      "key": [
+        "library_map_002",
+        626209918,
+        0,
+        "semantic_transfer",
+        "smoke",
+        4788373355529194444
+      ],
+      "target": true,
+      "transfers": 40,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "row_index": 45,
+      "key": [
+        "library_map_002",
+        2631242821,
+        0,
+        "semantic_transfer",
+        "smoke",
+        7546036176058750245
+      ],
+      "target": true,
+      "transfers": 76,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "row_index": 46,
+      "key": [
+        "library_map_002",
+        2407846046,
+        0,
+        "semantic_transfer",
+        "smoke",
+        2227190365323047312
+      ],
+      "target": true,
+      "transfers": 173,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4719,
+      "group": "transfer",
+      "row_index": 47,
+      "key": [
+        "library_map_002",
+        3554729779,
+        0,
+        "semantic_transfer",
+        "smoke",
+        3867394086967155781
+      ],
+      "target": true,
+      "transfers": 38,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4720,
+      "group": "validation",
+      "row_index": 48,
+      "key": [
+        "sparse_validation_00048",
+        759516999,
+        0,
+        "validation",
+        "validation",
+        6537267644025810416
+      ],
+      "target": false,
+      "transfers": 94,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4720,
+      "group": "validation",
+      "row_index": 49,
+      "key": [
+        "sparse_validation_00049",
+        3271608067,
+        0,
+        "validation",
+        "validation",
+        5133260772984883519
+      ],
+      "target": false,
+      "transfers": 159,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4720,
+      "group": "validation",
+      "row_index": 50,
+      "key": [
+        "standard_validation_00000",
+        2396592471,
+        0,
+        "validation",
+        "validation",
+        1882287200219130464
+      ],
+      "target": true,
+      "transfers": 34,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4720,
+      "group": "validation",
+      "row_index": 51,
+      "key": [
+        "standard_validation_00001",
+        3359828711,
+        0,
+        "validation",
+        "validation",
+        518785107299805091
+      ],
+      "target": false,
+      "transfers": 392,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4720,
+      "group": "validation",
+      "row_index": 52,
+      "key": [
+        "standard_validation_00002",
+        3966153474,
+        0,
+        "validation",
+        "validation",
+        2201829737391338667
+      ],
+      "target": false,
+      "transfers": 108,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4720,
+      "group": "validation",
+      "row_index": 53,
+      "key": [
+        "standard_validation_00003",
+        3294758832,
+        0,
+        "validation",
+        "validation",
+        7707049123805970015
+      ],
+      "target": true,
+      "transfers": 110,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4720,
+      "group": "validation",
+      "row_index": 54,
+      "key": [
+        "standard_validation_00004",
+        1735967587,
+        0,
+        "validation",
+        "validation",
+        2885057118864557747
+      ],
+      "target": false,
+      "transfers": 84,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4720,
+      "group": "validation",
+      "row_index": 55,
+      "key": [
+        "standard_validation_00005",
+        132801034,
+        0,
+        "validation",
+        "validation",
+        2456464939597707236
+      ],
+      "target": false,
+      "transfers": 48,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4720,
+      "group": "validation",
+      "row_index": 56,
+      "key": [
+        "standard_validation_00006",
+        3095645367,
+        0,
+        "validation",
+        "validation",
+        4494314677110847844
+      ],
+      "target": false,
+      "transfers": 94,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4720,
+      "group": "validation",
+      "row_index": 57,
+      "key": [
+        "standard_validation_00007",
+        951440992,
+        0,
+        "validation",
+        "validation",
+        3101487158787327332
+      ],
+      "target": false,
+      "transfers": 259,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4720,
+      "group": "validation",
+      "row_index": 58,
+      "key": [
+        "standard_validation_00008",
+        3503415160,
+        0,
+        "validation",
+        "validation",
+        5989467899870854267
+      ],
+      "target": false,
+      "transfers": 146,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4720,
+      "group": "validation",
+      "row_index": 59,
+      "key": [
+        "standard_validation_00009",
+        2499221955,
+        0,
+        "validation",
+        "validation",
+        6923065955399581364
+      ],
+      "target": false,
+      "transfers": 112,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4720,
+      "group": "validation",
+      "row_index": 60,
+      "key": [
+        "standard_validation_00010",
+        1251284068,
+        0,
+        "validation",
+        "validation",
+        2034494046373926528
+      ],
+      "target": false,
+      "transfers": 319,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4720,
+      "group": "validation",
+      "row_index": 61,
+      "key": [
+        "standard_validation_00011",
+        3908494018,
+        0,
+        "validation",
+        "validation",
+        5040428455136962796
+      ],
+      "target": false,
+      "transfers": 171,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4720,
+      "group": "validation",
+      "row_index": 62,
+      "key": [
+        "standard_validation_00012",
+        2071817248,
+        0,
+        "validation",
+        "validation",
+        4900353095304180314
+      ],
+      "target": false,
+      "transfers": 104,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4720,
+      "group": "validation",
+      "row_index": 63,
+      "key": [
+        "standard_validation_00013",
+        213053577,
+        0,
+        "validation",
+        "validation",
+        8491841102592534153
+      ],
+      "target": false,
+      "transfers": 47,
+      "batch_offset": 48
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "row_index": 0,
+      "key": [
+        "home_map_000",
+        1389583777,
+        0,
+        "semantic_transfer",
+        "smoke",
+        4304407402789619543
+      ],
+      "target": false,
+      "transfers": 28,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "row_index": 1,
+      "key": [
+        "home_map_000",
+        824106817,
+        0,
+        "semantic_transfer",
+        "smoke",
+        7217642147507574313
+      ],
+      "target": false,
+      "transfers": 105,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "row_index": 2,
+      "key": [
+        "home_map_000",
+        2209220344,
+        0,
+        "semantic_transfer",
+        "smoke",
+        5407219535018942807
+      ],
+      "target": false,
+      "transfers": 341,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "row_index": 3,
+      "key": [
+        "home_map_000",
+        425270169,
+        0,
+        "semantic_transfer",
+        "smoke",
+        104734547017774768
+      ],
+      "target": false,
+      "transfers": 298,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "row_index": 4,
+      "key": [
+        "home_map_001",
+        669186141,
+        0,
+        "semantic_transfer",
+        "smoke",
+        2702586713749907475
+      ],
+      "target": false,
+      "transfers": 43,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "row_index": 5,
+      "key": [
+        "home_map_001",
+        1432968108,
+        0,
+        "semantic_transfer",
+        "smoke",
+        8956754882636763049
+      ],
+      "target": false,
+      "transfers": 133,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "row_index": 6,
+      "key": [
+        "home_map_001",
+        565187609,
+        0,
+        "semantic_transfer",
+        "smoke",
+        8595772671697714078
+      ],
+      "target": false,
+      "transfers": 20,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "row_index": 7,
+      "key": [
+        "home_map_001",
+        1833965583,
+        0,
+        "semantic_transfer",
+        "smoke",
+        5793433585084349514
+      ],
+      "target": false,
+      "transfers": 83,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "row_index": 8,
+      "key": [
+        "home_map_002",
+        3570249233,
+        0,
+        "semantic_transfer",
+        "smoke",
+        3029584731548132938
+      ],
+      "target": true,
+      "transfers": 91,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "row_index": 9,
+      "key": [
+        "home_map_002",
+        4158490082,
+        0,
+        "semantic_transfer",
+        "smoke",
+        6076064104553683651
+      ],
+      "target": true,
+      "transfers": 94,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "row_index": 10,
+      "key": [
+        "home_map_002",
+        2785914634,
+        0,
+        "semantic_transfer",
+        "smoke",
+        137547240365178703
+      ],
+      "target": true,
+      "transfers": 181,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "row_index": 11,
+      "key": [
+        "home_map_002",
+        803250685,
+        0,
+        "semantic_transfer",
+        "smoke",
+        4363422522331977694
+      ],
+      "target": true,
+      "transfers": 67,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "row_index": 12,
+      "key": [
+        "hospital_map_000",
+        2136676315,
+        0,
+        "semantic_transfer",
+        "smoke",
+        5764662207666969926
+      ],
+      "target": false,
+      "transfers": 55,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "row_index": 13,
+      "key": [
+        "hospital_map_000",
+        2490107142,
+        0,
+        "semantic_transfer",
+        "smoke",
+        5418880728944386588
+      ],
+      "target": false,
+      "transfers": 94,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "row_index": 14,
+      "key": [
+        "hospital_map_000",
+        1712351559,
+        0,
+        "semantic_transfer",
+        "smoke",
+        8078935458032733736
+      ],
+      "target": false,
+      "transfers": 198,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "row_index": 15,
+      "key": [
+        "hospital_map_000",
+        3284144614,
+        0,
+        "semantic_transfer",
+        "smoke",
+        1585390074392971883
+      ],
+      "target": false,
+      "transfers": 146,
+      "batch_offset": 0
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "row_index": 32,
+      "key": [
+        "laboratory_map_002",
+        572905331,
+        0,
+        "semantic_transfer",
+        "smoke",
+        8342813335099261497
+      ],
+      "target": false,
+      "transfers": 82,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "row_index": 33,
+      "key": [
+        "laboratory_map_002",
+        3433183397,
+        0,
+        "semantic_transfer",
+        "smoke",
+        4097111579733064578
+      ],
+      "target": false,
+      "transfers": 190,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "row_index": 34,
+      "key": [
+        "laboratory_map_002",
+        1314434255,
+        0,
+        "semantic_transfer",
+        "smoke",
+        4283078318646916048
+      ],
+      "target": false,
+      "transfers": 45,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "row_index": 35,
+      "key": [
+        "laboratory_map_002",
+        2171104066,
+        0,
+        "semantic_transfer",
+        "smoke",
+        1977874657932141173
+      ],
+      "target": false,
+      "transfers": 35,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "row_index": 36,
+      "key": [
+        "library_map_000",
+        4281460873,
+        0,
+        "semantic_transfer",
+        "smoke",
+        236445230722194306
+      ],
+      "target": false,
+      "transfers": 31,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "row_index": 37,
+      "key": [
+        "library_map_000",
+        284590779,
+        0,
+        "semantic_transfer",
+        "smoke",
+        8850758824455217815
+      ],
+      "target": false,
+      "transfers": 283,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "row_index": 38,
+      "key": [
+        "library_map_000",
+        494513176,
+        0,
+        "semantic_transfer",
+        "smoke",
+        5613687193536618308
+      ],
+      "target": false,
+      "transfers": 112,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "row_index": 39,
+      "key": [
+        "library_map_000",
+        2771720943,
+        0,
+        "semantic_transfer",
+        "smoke",
+        2234814551788822657
+      ],
+      "target": false,
+      "transfers": 31,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "row_index": 40,
+      "key": [
+        "library_map_001",
+        3611543013,
+        0,
+        "semantic_transfer",
+        "smoke",
+        485347437896114697
+      ],
+      "target": false,
+      "transfers": 56,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "row_index": 41,
+      "key": [
+        "library_map_001",
+        4207069990,
+        0,
+        "semantic_transfer",
+        "smoke",
+        4625048491305134056
+      ],
+      "target": false,
+      "transfers": 494,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "row_index": 42,
+      "key": [
+        "library_map_001",
+        1883746993,
+        0,
+        "semantic_transfer",
+        "smoke",
+        6275432470792220301
+      ],
+      "target": false,
+      "transfers": 75,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "row_index": 43,
+      "key": [
+        "library_map_001",
+        3682464708,
+        0,
+        "semantic_transfer",
+        "smoke",
+        8580245895978247161
+      ],
+      "target": false,
+      "transfers": 212,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "row_index": 44,
+      "key": [
+        "library_map_002",
+        626209918,
+        0,
+        "semantic_transfer",
+        "smoke",
+        4788373355529194444
+      ],
+      "target": true,
+      "transfers": 43,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "row_index": 45,
+      "key": [
+        "library_map_002",
+        2631242821,
+        0,
+        "semantic_transfer",
+        "smoke",
+        7546036176058750245
+      ],
+      "target": true,
+      "transfers": 58,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "row_index": 46,
+      "key": [
+        "library_map_002",
+        2407846046,
+        0,
+        "semantic_transfer",
+        "smoke",
+        2227190365323047312
+      ],
+      "target": true,
+      "transfers": 328,
+      "batch_offset": 32
+    },
+    {
+      "model_seed": 4720,
+      "group": "transfer",
+      "row_index": 47,
+      "key": [
+        "library_map_002",
+        3554729779,
+        0,
+        "semantic_transfer",
+        "smoke",
+        3867394086967155781
+      ],
+      "target": true,
+      "transfers": 49,
+      "batch_offset": 32
+    }
+  ],
+  "counts": {
+    "targets": 30,
+    "minimal_original_batch_episodes": 144,
+    "companions": 114,
+    "minimal_episodes_with_off_controls": 176,
+    "full_roles_with_off_controls": 620
+  },
+  "transfers": {
+    "target": 2695,
+    "batch_envelope": 16858
+  },
+  "code_files": [
+    {
+      "relative": "src/task8_lower/evaluation.py",
+      "checkout_sha256": "178e81125b082bcc2b8e260ebaacdbe6e68e64396287c52199ef015ddf148f48",
+      "historical_sha256": "178e81125b082bcc2b8e260ebaacdbe6e68e64396287c52199ef015ddf148f48",
+      "same": true
+    },
+    {
+      "relative": "scripts/task9_semantic_eval.py",
+      "checkout_sha256": "69b17dc3a5fdf8460f5166c473f7d27ed41086aafa34545210f5adeb8d8887b9",
+      "historical_sha256": "69b17dc3a5fdf8460f5166c473f7d27ed41086aafa34545210f5adeb8d8887b9",
+      "same": true
+    },
+    {
+      "relative": "src/task7_sim/core.py",
+      "checkout_sha256": "e8b91d60b2d5e1639f4966521d64aa4005772c5555f7532e23bd370e1da6a67b",
+      "historical_sha256": "e8b91d60b2d5e1639f4966521d64aa4005772c5555f7532e23bd370e1da6a67b",
+      "same": true
+    },
+    {
+      "relative": "src/task7_lower/training.py",
+      "checkout_sha256": "36c02dbcad56ed6df5651591ed0f9d399308d5b2ea30b0e1a4a56e32cae3a99c",
+      "historical_sha256": "36c02dbcad56ed6df5651591ed0f9d399308d5b2ea30b0e1a4a56e32cae3a99c",
+      "same": true
+    },
+    {
+      "relative": "src/task8_sim/env.py",
+      "checkout_sha256": "40b61e84c92bcc0ccc7ee7b3199b145ac837ad9618525785ed7230f849cc28a9",
+      "historical_sha256": "40b61e84c92bcc0ccc7ee7b3199b145ac837ad9618525785ed7230f849cc28a9",
+      "same": true
+    },
+    {
+      "relative": "src/task8_sim/episode.py",
+      "checkout_sha256": "d6ebada23330e9bbacbdb6c9018e1577f4dde273fd200b639995f4b8bc9dc316",
+      "historical_sha256": "d6ebada23330e9bbacbdb6c9018e1577f4dde273fd200b639995f4b8bc9dc316",
+      "same": true
+    },
+    {
+      "relative": "src/task7_sim/episode.py",
+      "checkout_sha256": "db831097bebe98037bb705870d6d2f6a4ad0af20998c5bf3cb4506bf8e78b5ae",
+      "historical_sha256": "db831097bebe98037bb705870d6d2f6a4ad0af20998c5bf3cb4506bf8e78b5ae",
+      "same": true
+    },
+    {
+      "relative": "src/task7_sim/kinematics.py",
+      "checkout_sha256": "2ab305c2058c9eba5f451e765ee5fc22d094e26dac04de2b4943b46a957bdec4",
+      "historical_sha256": "2ab305c2058c9eba5f451e765ee5fc22d094e26dac04de2b4943b46a957bdec4",
+      "same": true
+    },
+    {
+      "relative": "src/task7_sim/candidates.py",
+      "checkout_sha256": "0b0293c6796fe9b5501f7fc61b18aa343e40b04634ffbcbb67788e29be1635c5",
+      "historical_sha256": "0b0293c6796fe9b5501f7fc61b18aa343e40b04634ffbcbb67788e29be1635c5",
+      "same": true
+    },
+    {
+      "relative": "src/task8_sim/primitive_scene.py",
+      "checkout_sha256": "62fcce99f8bafcd4dc7d33fb7bbf0085dba29e08b6cef99fa3210448f8bde30b",
+      "historical_sha256": "62fcce99f8bafcd4dc7d33fb7bbf0085dba29e08b6cef99fa3210448f8bde30b",
+      "same": true
+    },
+    {
+      "relative": "src/task7_lower/networks.py",
+      "checkout_sha256": "43d7a0e6fc924cfba79968ed4337e3dedb0cc27772a967eb924c7ccb81d00012",
+      "historical_sha256": "43d7a0e6fc924cfba79968ed4337e3dedb0cc27772a967eb924c7ccb81d00012",
+      "same": true
+    },
+    {
+      "relative": "src/task7_lower/sac.py",
+      "checkout_sha256": "1df68ef676ef205f272cbd576b7a2e82f801b63b95f9c18ddaef64658b5a9fa6",
+      "historical_sha256": "1df68ef676ef205f272cbd576b7a2e82f801b63b95f9c18ddaef64658b5a9fa6",
+      "same": true
+    },
+    {
+      "relative": "src/task8_lower/sac.py",
+      "checkout_sha256": "39db0908e16cfb305f15387c9275e47fcd8b680d981fb251312239833d3c67e9",
+      "historical_sha256": "39db0908e16cfb305f15387c9275e47fcd8b680d981fb251312239833d3c67e9",
+      "same": true
+    },
+    {
+      "relative": "config/task7/robot_geometry.json",
+      "checkout_sha256": "6c41120ad85bdea61a24b1089e825febf4f6b62eb93da0474e51f386167b084a",
+      "historical_sha256": "6c41120ad85bdea61a24b1089e825febf4f6b62eb93da0474e51f386167b084a",
+      "same": true
+    },
+    {
+      "relative": "config/task8/sensor.json",
+      "checkout_sha256": "b29ba7ef378a00caba3cf98a00774f5d6158057688d536cefdba1b5d6a371005",
+      "historical_sha256": "b29ba7ef378a00caba3cf98a00774f5d6158057688d536cefdba1b5d6a371005",
+      "same": true
+    }
+  ],
+  "limitations": [
+    "No project imports, model loading or environment execution.",
+    "Row number, batch offset and local index are reconstructed from unchanged source output order, not logged per-case fields.",
+    "Hashes identify bytes; no claim of checkpoint internal tensors freshly validated."
+  ]
+}

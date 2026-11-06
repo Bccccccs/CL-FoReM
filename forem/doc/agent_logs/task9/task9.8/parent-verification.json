@@ -1,0 +1,37 @@
+{
+  "checked_at": "2026-11-02T15:50:26.615370+08:00",
+  "status": "PASS",
+  "scope": "Document/case/byte identity only; no trajectory equivalence or checkpoint tensor loading.",
+  "cases": 30,
+  "unique_case_keys": 10,
+  "training_seeds": 3,
+  "target_transfers": 2695,
+  "minimum_original_batch_episodes": 144,
+  "batch_transfers": 16858,
+  "with_off_control_episodes": 176,
+  "with_off_control_transfers": 20715,
+  "strict_gate_original_entry_episodes": 980,
+  "strict_gate_original_entry_transfers_proxy": 106681,
+  "strict_gate_time_proxy_seconds": 6655.296472219208,
+  "strict_gate_time_proxy_hours": 1.8486934645053357,
+  "all_evaluation_map_sidecars_verified": 124,
+  "legacy_semantic_terminal_matches": 288,
+  "legacy_semantic_transfer_matches": 288,
+  "frozen_inventory": {
+    "historical": {
+      "present": 69,
+      "missing": 0,
+      "mismatch": 0
+    },
+    "checkout": {
+      "present": 60,
+      "missing": 9,
+      "mismatch": 0
+    }
+  },
+  "csv_path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.8/task9.8.1/frozen-cases-30.csv",
+  "csv_sha256": "e36d1888b3bb5621f4a8c70d2eb2cea5316ae5883361017dead80de4169a57b8",
+  "json_path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.8/task9.8.1/frozen-cases.json",
+  "json_sha256": "c39d39132efac523ce96a61c005c5801ba6da2b49dbf087d57b347e3fe85480e",
+  "maps_inventory_sha256": "e294a42fbc81cfcf136ea41c778381a34bbc2b806af0845fb5903bb7ae3379d4"
+}

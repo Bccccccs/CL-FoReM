@@ -1,0 +1,20 @@
+{
+  "status": "PASS",
+  "checked_markdown": 17,
+  "triplets": 4,
+  "source_entries": [
+    1364,
+    1365,
+    1366,
+    1367,
+    1368
+  ],
+  "errors": [],
+  "artifacts_sha256": {
+    "task9.8.1/frozen-cases-30.csv": "e36d1888b3bb5621f4a8c70d2eb2cea5316ae5883361017dead80de4169a57b8",
+    "task9.8.1/frozen-cases.json": "c39d39132efac523ce96a61c005c5801ba6da2b49dbf087d57b347e3fe85480e",
+    "task9.8.1/input-inventory.json": "d6fa53a864d4ecf4e3de4fc3a5280948a7da66f4227460e57e440ab0d424d1de",
+    "task9.8.1/all-evaluation-maps-inventory.json": "e294a42fbc81cfcf136ea41c778381a34bbc2b806af0845fb5903bb7ae3379d4"
+  },
+  "source_config_script_diff": ""
+}

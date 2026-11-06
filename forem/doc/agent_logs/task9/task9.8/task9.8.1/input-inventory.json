@@ -1,0 +1,282 @@
+{
+  "git": {
+    "working_tree_head": "d198e5ca48f86071c05274f9da753f393ce058b4",
+    "working_tree_branch": "codex/task9-lower-improve",
+    "working_tree_status_short": "## codex/task9-lower-improve\n M forem/doc/DECISIONS.md\n M forem/doc/PROGRESS.md\n M forem/doc/SOURCES.md\n M forem/doc/tasks/task9/PROCEDURE.md\n M forem/doc/tasks/task9/RESULTS.md\n M forem/doc/tasks/task9/task9.7/PROCEDURE.md\n M forem/doc/tasks/task9/task9.7/RESULTS.md\n M forem/doc/tasks/task9/task9.7/TASK.md\n?? forem/doc/agent_logs/task9/task9.7/20261102-codex-analysis.md\n?? forem/doc/agent_logs/task9/task9.8/\n?? forem/doc/tasks/task9/task9.8/",
+    "historical_root_head": "121cb36e64e53163be232dbafa8c32ff065a290b",
+    "historical_root_status_short": "## codex/task9-sac-opt-20261031\n M forem/doc/DECISIONS.md\n M forem/doc/PLAN.md\n M forem/doc/PROGRESS.md\n M forem/doc/README.md\n M forem/doc/SOURCES.md\n M forem/doc/agent_logs/task7/20261021-claude-impl-setup.md\n M forem/doc/experiments/README.md\n M forem/doc/paper/README.md\n M forem/doc/tasks/task3/task3.4/RESULTS.md\n M forem/doc/tasks/task6/PROCEDURE.md\n M forem/doc/tasks/task6/RESULTS.md\n M forem/doc/tasks/task6/TASK.md\n M forem/doc/tasks/task7/PROCEDURE.md\n M forem/doc/tasks/task7/RESULTS.md\n M forem/doc/tasks/task7/TASK.md\n M forem/doc/tasks/task7/task7.11/RESULTS.md\n M forem/doc/tasks/task7/task7.13/RESULTS.md\n M forem/doc/tasks/task7/task7.15/RESULTS.md\n M forem/doc/tasks/task7/task7.15/TASK.md\n M forem/doc/tasks/task7/task7.16/RESULTS.md\n M forem/doc/tasks/task7/task7.16/TASK.md\n M forem/doc/tasks/task7/task7.17/RESULTS.md\n M forem/doc/tasks/task7/task7.17/TASK.md\n M forem/doc/tasks/task7/task7.18/PROCEDURE.md\n M forem/doc/tasks/task7/task7.18/RESULTS.md\n M forem/doc/tasks/task7/task7.18/TASK.md\n M forem/doc/tasks/task7/task7.19/PROCEDURE.md\n M forem/doc/tasks/task7/task7.19/RESULTS.md\n M forem/doc/tasks/task7/task7.19/TASK.md\n M forem/doc/tasks/task7/task7.4/RESULTS.md\n M forem/doc/tasks/task7/task7.5/RESULTS.md\n M forem/doc/tasks/task8/PROCEDURE.md\n M forem/doc/tasks/task8/RESULTS.md\n M forem/doc/tasks/task8/TASK.md\n M forem/doc/tasks/task8/task8.12/PROCEDURE.md\n M forem/doc/tasks/task8/task8.12/RESULTS.md\n M forem/doc/tasks/task8/task8.12/TASK.md\n M forem/scripts/eval_task6_final.py\n M forem/src/task8_lower/sac.py\n M forem/src/task8_lower/training.py\n?? forem/config/task7/\n?? forem/config/task9/\n?? forem/doc/agent_logs/experiments/\n?? forem/doc/agent_logs/paper/\n?? forem/doc/agent_logs/project/20261022-claude-design-report-deck.md\n?? forem/doc/agent_logs/project/20261022-claude-sonnet-cbl-n2m2-learning.md\n?? forem/doc/agent_logs/project/20261022-codex-report-robot.md\n?? forem/doc/agent_logs/project/20261023-codex-ppt-review.md\n?? forem/doc/agent_logs/project/20261027-claude-map-representation-survey.md\n?? forem/doc/agent_logs/project/20261102-codex-github-connectivity.md\n?? forem/doc/agent_logs/project/20261102-codex-sac-split.md\n?? forem/doc/agent_logs/task10/\n?? forem/doc/agent_logs/task12/\n?? forem/doc/agent_logs/task6/task6.6/\n?? forem/doc/agent_logs/task7/20261021-claude-codex-dispatch-7.20-7.22.md\n?? forem/doc/agent_logs/task7/20261021-claude-codex-exec-dispatch.md\n?? forem/doc/agent_logs/task7/20261021-claude-truth-map-line.md\n?? forem/doc/agent_logs/task7/20261021-claude-upper-impl-draft.md\n?? forem/doc/agent_logs/task7/task7.11/20261021-claude-g6-isolation.md\n?? forem/doc/agent_logs/task7/task7.15/\n?? forem/doc/agent_logs/task7/task7.16/\n?? forem/doc/agent_logs/task7/task7.17/\n?? forem/doc/agent_logs/task7/task7.18/\n?? forem/doc/agent_logs/task7/task7.19/\n?? forem/doc/agent_logs/task7/task7.20/\n?? forem/doc/agent_logs/task7/task7.21/\n?? forem/doc/agent_logs/task7/task7.22/\n?? forem/doc/agent_logs/task7/task7.23/\n?? forem/doc/agent_logs/task7/task7.24/\n?? forem/doc/agent_logs/task7/task7.25/\n?? forem/doc/agent_logs/task9/\n?? forem/doc/experiments/experiment0/\n?? forem/doc/paper/paper0/\n?? forem/doc/paper/paper1/\n?? forem/doc/paper/paper2/\n?? forem/doc/tasks/task12/\n?? forem/doc/tasks/task6/task6.6/\n?? forem/doc/tasks/task7/task7.18/task7.18.1/\n?? forem/doc/tasks/task7/task7.18/task7.18.2/\n?? forem/doc/tasks/task7/task7.18/task7.18.3/\n?? forem/doc/tasks/task7/task7.18/task7.18.4/\n?? forem/doc/tasks/task7/task7.18/task7.18.5/\n?? forem/doc/tasks/task7/task7.18/task7.18.6/\n?? forem/doc/tasks/task7/task7.18/task7.18.7/\n?? forem/doc/tasks/task7/task7.18/task7.18.8/\n?? forem/doc/tasks/task7/task7.20/\n?? forem/doc/tasks/task7/task7.21/\n?? forem/doc/tasks/task7/task7.22/\n?? forem/doc/tasks/task7/task7.23/\n?? forem/doc/tasks/task7/task7.24/\n?? forem/doc/tasks/task7/task7.25/\n?? forem/doc/tasks/task8/task8.13/\n?? forem/doc/tasks/task9/\n?? forem/scripts/task12_audit_teacher.py\n?? forem/scripts/task6_6_extract_cbl_policy.py\n?? forem/scripts/task7_diag_analyze.py\n?? forem/scripts/task7_diag_containment.py\n?? forem/scripts/task7_diag_geometry.py\n?? forem/scripts/task7_diag_mesh.py\n?? forem/scripts/task7_diag_run.py\n?? forem/scripts/task7_diag_selfcoll.py\n?? forem/scripts/task7_diag_summarize.py\n?? forem/scripts/task7_diag_verify.py\n?? forem/scripts/task7_lower_diag_eval.py\n?? forem/scripts/task7_lower_launch.py\n?? forem/scripts/task7_lower_monitor.py\n?? forem/scripts/task7_lower_supervise.py\n?? forem/scripts/task7_lower_train.py\n?? forem/scripts/task7_lower_watchdog.py\n?? forem/scripts/task7_lower_window_stats.py\n?? forem/scripts/task7_selfcoll_accept.py\n?? forem/scripts/task7_selfcoll_always.py\n?? forem/scripts/task7_selfcoll_build.py\n?? forem/scripts/task7_selfcoll_containment.py\n?? forem/scripts/task7_selfcoll_metadata.py\n?? forem/scripts/task7_selfcoll_multisphere_allowed.py\n?? forem/scripts/task7_selfcoll_multisphere_audit.py\n?? forem/scripts/task7_selfcoll_multisphere_audit_verify.py\n?? forem/scripts/task7_selfcoll_multisphere_build.py\n?? forem/scripts/task7_selfcoll_multisphere_equivalence.py\n?? forem/scripts/task7_selfcoll_multisphere_finalize.py\n?? forem/scripts/task7_selfcoll_multisphere_finish_table.py\n?? forem/scripts/task7_selfcoll_multisphere_invariants.py\n?? forem/scripts/task7_selfcoll_multisphere_profile.py\n?? forem/scripts/task7_selfcoll_multisphere_revalidate.py\n?? forem/scripts/task7_selfcoll_multisphere_summary.py\n?? forem/scripts/task7_selfcoll_multisphere_test_fixtures.py\n?? forem/scripts/task7_selfcoll_multisphere_tests.py\n?? forem/scripts/task7_selfcoll_multisphere_validate.py\n?? forem/scripts/task7_selfcoll_profile.py\n?? forem/scripts/task7_selfcoll_run.py\n?? forem/scripts/task7_selfcoll_spherepairs_audit.py\n?? forem/scripts/task7_selfcoll_spherepairs_build.py\n?? forem/scripts/task7_selfcoll_spherepairs_equivalence.py\n?? forem/scripts/task7_selfcoll_spherepairs_finalize.py\n?? forem/scripts/task7_selfcoll_spherepairs_invariants.py\n?? forem/scripts/task7_selfcoll_spherepairs_metadata.py\n?? forem/scripts/task7_selfcoll_spherepairs_profile.py\n?? forem/scripts/task7_selfcoll_spherepairs_tests.py\n?? forem/scripts/task7_selfcoll_spherepairs_validate.py\n?? forem/scripts/task7_selfcoll_summarize.py\n?? forem/scripts/task7_selfcoll_tests.py\n?? forem/scripts/task7_selfcoll_validate.py\n?? forem/scripts/task7_selfcoll_verify.py\n?? forem/scripts/task7_upper_eval.py\n?? forem/scripts/task7_upper_train.py\n?? forem/scripts/task9_extra_b3_5m_waiter.py\n?? forem/scripts/task9_long_launch.py\n?? forem/scripts/task9_long_monitor.py\n?? forem/scripts/task9_opt_monitor.py\n?? forem/scripts/task9_opt_queue.py\n?? forem/scripts/task9_opt_worker.py\n?? forem/scripts/task9_semantic_eval.py\n?? forem/scripts/task9_semantic_queue.py\n?? forem/scripts/task9_stage2_250k_guard.py\n?? forem/scripts/task9_stage2_monitor.py\n?? forem/scripts/task9_stage2_queue.py\n?? forem/src/task7_lower/\n?? forem/src/task7_sim/\n?? forem/src/task7_upper/\n?? forem/src/task9_opt/"
+  },
+  "files": [
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed4718/final.pt",
+      "relative_to_historical_root": "results/task9/t9-stage2-20261029/B3_5M-seed4718/final.pt",
+      "exists": true,
+      "sha256": "76a11b4544dbf0bac9412a4d3ec2aeb9b597e029075a87f4a43ea3f2260a7255",
+      "bytes": 34861361635
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed4718/config.json",
+      "relative_to_historical_root": "results/task9/t9-stage2-20261029/B3_5M-seed4718/config.json",
+      "exists": true,
+      "sha256": "52d0d7a33019b73601c0e4997d999d9ca366d5da01750a66a4a35b7a469f7086",
+      "bytes": 1417
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed4718/validation-5000000.json",
+      "relative_to_historical_root": "results/task9/t9-stage2-20261029/B3_5M-seed4718/validation-5000000.json",
+      "exists": true,
+      "sha256": "559efed126002d87e55eb329e41512e9eeb0f44e8774fc996d168c0fae279a1b",
+      "bytes": 134841
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4718/loaded.json",
+      "relative_to_historical_root": "results/task9/t9-semantic-20261102/seed4718/loaded.json",
+      "exists": true,
+      "sha256": "6056ecc1a5c50a71cfde2b40d093a796b99e99216eb57903ee370a176e86812f",
+      "bytes": 849
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4718/evaluation.json",
+      "relative_to_historical_root": "results/task9/t9-semantic-20261102/seed4718/evaluation.json",
+      "exists": true,
+      "sha256": "01015a5c66990819943fb59bcd8402de41f29a4ad1e29a6529a03de65aac2900",
+      "bytes": 65862
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed4719/final.pt",
+      "relative_to_historical_root": "results/task9/t9-stage2-20261029/B3_5M-seed4719/final.pt",
+      "exists": true,
+      "sha256": "1eacf758ffdd3b485a5a30e377cf5f2788cc6544ce0a2391aa46cb431e96daf6",
+      "bytes": 34861549731
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed4719/config.json",
+      "relative_to_historical_root": "results/task9/t9-stage2-20261029/B3_5M-seed4719/config.json",
+      "exists": true,
+      "sha256": "a7c5db8a4369de00d13a8217cbc9ac5a51d583c5b045d9bdb8b526de276287de",
+      "bytes": 1417
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed4719/validation-5000000.json",
+      "relative_to_historical_root": "results/task9/t9-stage2-20261029/B3_5M-seed4719/validation-5000000.json",
+      "exists": true,
+      "sha256": "697d71e1c20149d8fa44d9448f93ad3f3e33bc34af80bd2aa2641c45f4fc7f24",
+      "bytes": 134888
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4719/loaded.json",
+      "relative_to_historical_root": "results/task9/t9-semantic-20261102/seed4719/loaded.json",
+      "exists": true,
+      "sha256": "2436c1e919b75229e83be6a281cc7cd66b2039976ad06f1203d9ec5f6271275e",
+      "bytes": 849
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4719/evaluation.json",
+      "relative_to_historical_root": "results/task9/t9-semantic-20261102/seed4719/evaluation.json",
+      "exists": true,
+      "sha256": "8c49cdc832fb7992688838d04f0644a5e13ebaaac7af83672bec49f5c87e2b1a",
+      "bytes": 65839
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed4720/final.pt",
+      "relative_to_historical_root": "results/task9/t9-stage2-20261029/B3_5M-seed4720/final.pt",
+      "exists": true,
+      "sha256": "a4d89a7e7650c83a0f263efafb9aecef5abbb92c2c5fccb6d87fc491c202e60e",
+      "bytes": 34861336931
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed4720/config.json",
+      "relative_to_historical_root": "results/task9/t9-stage2-20261029/B3_5M-seed4720/config.json",
+      "exists": true,
+      "sha256": "10f9c7ee281305e0e77f2318172c0705d977a5e72b8e0746b34e0cfeb50d1669",
+      "bytes": 1417
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed4720/validation-5000000.json",
+      "relative_to_historical_root": "results/task9/t9-stage2-20261029/B3_5M-seed4720/validation-5000000.json",
+      "exists": true,
+      "sha256": "8439373f9286184dff53f2badebddd7c72b074708d45a9c4860faf98748105a0",
+      "bytes": 134840
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4720/loaded.json",
+      "relative_to_historical_root": "results/task9/t9-semantic-20261102/seed4720/loaded.json",
+      "exists": true,
+      "sha256": "5b2c16d5b1a74e0b02943b411b9788780afcc26fe0d09e1223beb7df82566567",
+      "bytes": 849
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4720/evaluation.json",
+      "relative_to_historical_root": "results/task9/t9-semantic-20261102/seed4720/evaluation.json",
+      "exists": true,
+      "sha256": "a3da450b495fbd4cb3dc350337e0e5317ac51e5c656cc4aa92356dbde32fb9b4",
+      "bytes": 65825
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task8/t8-exec-20261026/semantic-pool/index.json",
+      "relative_to_historical_root": "results/task8/t8-exec-20261026/semantic-pool/index.json",
+      "exists": true,
+      "sha256": "a2071c66df7039f64e76ad729f2c0e398f918b9674c220153c0137247055a343",
+      "bytes": 26510
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task8/t8-pool-20261027/cube-pool-v2/manifest.json",
+      "relative_to_historical_root": "results/task8/t8-pool-20261027/cube-pool-v2/manifest.json",
+      "exists": true,
+      "sha256": "a501c76edb29939782a7d7c7ac0e6d34fccc4756ed1fb4c510a2ef41769a0fc4",
+      "bytes": 50670245
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task8/t8-pool-20261027/cube-pool-v2/evaluation-seeds.json",
+      "relative_to_historical_root": "results/task8/t8-pool-20261027/cube-pool-v2/evaluation-seeds.json",
+      "exists": true,
+      "sha256": "8c7720078023734550c6a15c7f23b74f652adf14fb9120f3bc9639d2fcf4ad76",
+      "bytes": 65181
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/logs/task9/t9-semantic-20261102/provenance.json",
+      "relative_to_historical_root": "logs/task9/t9-semantic-20261102/provenance.json",
+      "exists": true,
+      "sha256": "ebed887c47fd861fdb30f2e804066a1f7489544704e6eeddf231297f4503ce32",
+      "bytes": 485
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task8_lower/evaluation.py",
+      "relative_to_historical_root": "src/task8_lower/evaluation.py",
+      "exists": true,
+      "sha256": "178e81125b082bcc2b8e260ebaacdbe6e68e64396287c52199ef015ddf148f48",
+      "bytes": 9858,
+      "working_tree_same_relative_path": "/home/ybc/projects/CL-FoReM-task9/forem/src/task8_lower/evaluation.py",
+      "working_tree_exists": true,
+      "working_tree_sha256": "178e81125b082bcc2b8e260ebaacdbe6e68e64396287c52199ef015ddf148f48",
+      "same_name_byte_identical": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/scripts/task9_semantic_eval.py",
+      "relative_to_historical_root": "scripts/task9_semantic_eval.py",
+      "exists": true,
+      "sha256": "69b17dc3a5fdf8460f5166c473f7d27ed41086aafa34545210f5adeb8d8887b9",
+      "bytes": 7598,
+      "working_tree_same_relative_path": "/home/ybc/projects/CL-FoReM-task9/forem/scripts/task9_semantic_eval.py",
+      "working_tree_exists": true,
+      "working_tree_sha256": "69b17dc3a5fdf8460f5166c473f7d27ed41086aafa34545210f5adeb8d8887b9",
+      "same_name_byte_identical": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/scripts/task9_semantic_queue.py",
+      "relative_to_historical_root": "scripts/task9_semantic_queue.py",
+      "exists": true,
+      "sha256": "d6803a94eb25633f9070d5b12ac5698c332521574ed30c5bd7616ec571655edf",
+      "bytes": 4904,
+      "working_tree_same_relative_path": "/home/ybc/projects/CL-FoReM-task9/forem/scripts/task9_semantic_queue.py",
+      "working_tree_exists": true,
+      "working_tree_sha256": "d6803a94eb25633f9070d5b12ac5698c332521574ed30c5bd7616ec571655edf",
+      "same_name_byte_identical": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/config/task9/stage2/B3_5M_seed4718.json",
+      "relative_to_historical_root": "config/task9/stage2/B3_5M_seed4718.json",
+      "exists": true,
+      "sha256": "34bb02e860a63004ea02a6e70090b7783b3361d9b0561fc3b4081928bec4baf2",
+      "bytes": 1418,
+      "working_tree_same_relative_path": "/home/ybc/projects/CL-FoReM-task9/forem/config/task9/stage2/B3_5M_seed4718.json",
+      "working_tree_exists": true,
+      "working_tree_sha256": "34bb02e860a63004ea02a6e70090b7783b3361d9b0561fc3b4081928bec4baf2",
+      "same_name_byte_identical": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/config/task9/stage2/B3_5M_seed4719.json",
+      "relative_to_historical_root": "config/task9/stage2/B3_5M_seed4719.json",
+      "exists": true,
+      "sha256": "dbef8a3b44131c4399f6b4f798bfdd794f2bc7a91b7d2551f1f7fed4c94718ca",
+      "bytes": 1418,
+      "working_tree_same_relative_path": "/home/ybc/projects/CL-FoReM-task9/forem/config/task9/stage2/B3_5M_seed4719.json",
+      "working_tree_exists": true,
+      "working_tree_sha256": "dbef8a3b44131c4399f6b4f798bfdd794f2bc7a91b7d2551f1f7fed4c94718ca",
+      "same_name_byte_identical": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/config/task9/stage2-extra/B3_5M_seed4720.json",
+      "relative_to_historical_root": "config/task9/stage2-extra/B3_5M_seed4720.json",
+      "exists": true,
+      "sha256": "fb1c043faf99c7bcfcbab5e022a4e40ee98cdda4934e143521299f42e362d16d",
+      "bytes": 1418,
+      "working_tree_same_relative_path": "/home/ybc/projects/CL-FoReM-task9/forem/config/task9/stage2-extra/B3_5M_seed4720.json",
+      "working_tree_exists": true,
+      "working_tree_sha256": "fb1c043faf99c7bcfcbab5e022a4e40ee98cdda4934e143521299f42e362d16d",
+      "same_name_byte_identical": true
+    }
+  ],
+  "map_sidecars": [
+    {
+      "map_id": "home_map_002",
+      "kind": "semantic",
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task8/t8-exec-20261026/semantic-pool/home_map_002.json",
+      "sha256": "8a8795fdd43fa8b1e8861882ead32fd741eaa24a5b2458e8f9ab8a7c2e830390",
+      "index_declared_sha256": "8a8795fdd43fa8b1e8861882ead32fd741eaa24a5b2458e8f9ab8a7c2e830390"
+    },
+    {
+      "map_id": "library_map_002",
+      "kind": "semantic",
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task8/t8-exec-20261026/semantic-pool/library_map_002.json",
+      "sha256": "5f6e55d44743e4eac2465f10ca9f911f17402c8ff6cd4f1e422190fd3d03c271",
+      "index_declared_sha256": "5f6e55d44743e4eac2465f10ca9f911f17402c8ff6cd4f1e422190fd3d03c271"
+    },
+    {
+      "map_id": "standard_validation_00003",
+      "kind": "random_standard_validation",
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task8/t8-pool-20261027/cube-pool-v2/sidecars/standard_validation_00003.json",
+      "sha256": "cf00d8725eea67ffcbabb68600ea13446b4ac2ce6916244c3b48a4cbca91221f",
+      "manifest_declared_sha256": "cf00d8725eea67ffcbabb68600ea13446b4ac2ce6916244c3b48a4cbca91221f"
+    },
+    {
+      "map_id": "standard_validation_00000",
+      "kind": "random_standard_validation",
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task8/t8-pool-20261027/cube-pool-v2/sidecars/standard_validation_00000.json",
+      "sha256": "e4135be3e0f1e0ae04ed521d886cf2041647b2f9edcca7679978bf1d2bb754da",
+      "manifest_declared_sha256": "e4135be3e0f1e0ae04ed521d886cf2041647b2f9edcca7679978bf1d2bb754da"
+    }
+  ],
+  "case_artifacts": {
+    "frozen-cases-30.csv": {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.8/task9.8.1/frozen-cases-30.csv",
+      "sha256": "e36d1888b3bb5621f4a8c70d2eb2cea5316ae5883361017dead80de4169a57b8",
+      "bytes": 7988
+    },
+    "frozen-cases.json": {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.8/task9.8.1/frozen-cases.json",
+      "sha256": "c39d39132efac523ce96a61c005c5801ba6da2b49dbf087d57b347e3fe85480e",
+      "bytes": 70999
+    },
+    "frozen-cases-30.legacy-snapshot-20261102.csv": {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.8/task9.8.1/frozen-cases-30.legacy-snapshot-20261102.csv",
+      "sha256": "8dccbd805567ce6e6c48fe407e65aacf9ce3133d6add3ab536f67a1b83a619c5",
+      "bytes": 10002
+    },
+    "frozen-cases.legacy-snapshot-20261102.json": {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.8/task9.8.1/frozen-cases.legacy-snapshot-20261102.json",
+      "sha256": "b04f338542e1d31008b370857a201f7a260c8afacac02253ac87e46fd262b01e",
+      "bytes": 57410
+    },
+    "all-evaluation-maps-inventory.json": {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.8/task9.8.1/all-evaluation-maps-inventory.json",
+      "sha256": "e294a42fbc81cfcf136ea41c778381a34bbc2b806af0845fb5903bb7ae3379d4",
+      "bytes": 75652
+    }
+  },
+  "verification_notes": [
+    "SHA256 calculated over complete file bytes. Each final.pt is 34,861,361,635 bytes and was streamed for hashing; no torch or pickle APIs were called.",
+    "File hashes establish byte identity only, not semantic validity of checkpoints.",
+    "Source code current/historical byte comparison limited to the explicitly listed evaluation and runner files.",
+    "Historical Git status/head is separate from current worktree status; two repo HEADs differ."
+  ],
+  "delivery_correction": {
+    "reason": "Parent independent review found the prior CSV and JSON did not contain numeric batch_offset, batch_local_index, batch_size despite documentation claiming they did.",
+    "legacy_csv_sha256": "8dccbd805567ce6e6c48fe407e65aacf9ce3133d6add3ab536f67a1b83a619c5",
+    "legacy_json_sha256": "b04f338542e1d31008b370857a201f7a260c8afacac02253ac87e46fd262b01e",
+    "final_csv_sha256": "e36d1888b3bb5621f4a8c70d2eb2cea5316ae5883361017dead80de4169a57b8",
+    "final_json_sha256": "c39d39132efac523ce96a61c005c5801ba6da2b49dbf087d57b347e3fe85480e",
+    "derivation": "Regenerated from original read-only result JSON; batch size/offset/local reconstructed from configuration and source evaluator row order.",
+    "all_124_map_sidecars_sha256": "e294a42fbc81cfcf136ea41c778381a34bbc2b806af0845fb5903bb7ae3379d4"
+  }
+}

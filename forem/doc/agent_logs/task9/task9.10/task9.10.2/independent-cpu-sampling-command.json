@@ -1,0 +1,18 @@
+{
+  "command": [
+    "sg",
+    "docker",
+    "-c",
+    "docker run --rm --read-only --network none --user 1004:1004 --env CUDA_VISIBLE_DEVICES= --env NVIDIA_VISIBLE_DEVICES=void --env PYTHONDONTWRITEBYTECODE=1 --env OMP_NUM_THREADS=1 --env OPENBLAS_NUM_THREADS=1 --mount type=bind,src=/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.10-paired-20261103T144811+0800,dst=/run-originals,readonly --mount type=bind,src=/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.10/task9.10.2,dst=/audit,readonly --mount type=bind,src=/home/ybc/projects/CL-FoReM-task9/forem/doc/agent_logs/task9/task9.8/task9.8.1/frozen-cases-30.csv,dst=/frozen.csv,readonly --workdir / --entrypoint python3 sha256:e674db49b8156fded725ba4de8c2faf81aa491a367a1e151eddae169a1dfc430 -B /audit/independent_sample_check.py --run /run-originals --frozen /frozen.csv"
+  ],
+  "exit_code": 0,
+  "start_epoch": 1793695260.2073407,
+  "end_epoch": 1793695262.2218854,
+  "wall_s": 2.014544725418091,
+  "no_gpus_requested": true,
+  "all_bind_mounts_readonly": true,
+  "outputs_in_original_run": false,
+  "stdout_bytes": 14050,
+  "stderr_bytes": 0,
+  "script_sha256": "284c10c52feffcb5772709fca04d9ed6d45d4e2a9557c2cd2b91b81336f365b6"
+}

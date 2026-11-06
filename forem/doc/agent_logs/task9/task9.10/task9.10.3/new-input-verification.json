@@ -1,0 +1,1415 @@
+{
+  "status": "completed",
+  "started_epoch": 1793688790.776328,
+  "updated_epoch": 1793688885.875208,
+  "source_ledgers": {
+    "input_verification_after": "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.8-B3-20261102T163355+0800/input-verification-after.json",
+    "input_verification_status": "PASS",
+    "input_verification_all_original_input_hashes_unchanged": true,
+    "source_manifest": "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.8-B3-20261102T163355+0800/source-manifest.json",
+    "source_manifest_entries": 6
+  },
+  "unique_files": 31,
+  "total_expected_bytes": 104635709969,
+  "bytes_hashed": 104635709969,
+  "files_completed": 31,
+  "stream_block_bytes": 16777216,
+  "hash_method": "SHA-256 over sequential raw byte stream; no checkpoint deserialization",
+  "files": [
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed4718/final.pt",
+      "sources": [
+        "input-verification-after"
+      ],
+      "expected_bytes": 34861361635,
+      "expected_sha256": "76a11b4544dbf0bac9412a4d3ec2aeb9b597e029075a87f4a43ea3f2260a7255",
+      "status_before": null,
+      "status_after": "MATCH",
+      "stat_before": {
+        "st_dev": 2064,
+        "st_ino": 315721374,
+        "st_size": 34861361635,
+        "st_mtime_ns": 1793425425899362654,
+        "st_ctime_ns": 1793425532918356275,
+        "st_atime_ns": 1793590521114522211
+      },
+      "bytes_read": 34861361635,
+      "fd_stat_before": {
+        "st_dev": 2064,
+        "st_ino": 315721374,
+        "st_size": 34861361635,
+        "st_mtime_ns": 1793425425899362654,
+        "st_ctime_ns": 1793425532918356275
+      },
+      "fd_stat_after": {
+        "st_dev": 2064,
+        "st_ino": 315721374,
+        "st_size": 34861361635,
+        "st_mtime_ns": 1793425425899362654,
+        "st_ctime_ns": 1793425532918356275
+      },
+      "stat_after": {
+        "st_dev": 2064,
+        "st_ino": 315721374,
+        "st_size": 34861361635,
+        "st_mtime_ns": 1793425425899362654,
+        "st_ctime_ns": 1793425532918356275,
+        "st_atime_ns": 1793688790787664882
+      },
+      "actual_sha256": "76a11b4544dbf0bac9412a4d3ec2aeb9b597e029075a87f4a43ea3f2260a7255",
+      "sha256_match": true,
+      "bytes_match": true,
+      "stable_during_read": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed4718/config.json",
+      "sources": [
+        "input-verification-after"
+      ],
+      "expected_bytes": 1417,
+      "expected_sha256": "52d0d7a33019b73601c0e4997d999d9ca366d5da01750a66a4a35b7a469f7086",
+      "status_before": null,
+      "status_after": "MATCH",
+      "stat_before": {
+        "st_dev": 2064,
+        "st_ino": 315721141,
+        "st_size": 1417,
+        "st_mtime_ns": 1793368507606755248,
+        "st_ctime_ns": 1793368508677755185,
+        "st_atime_ns": 1793550290338920153
+      },
+      "bytes_read": 1417,
+      "fd_stat_before": {
+        "st_dev": 2064,
+        "st_ino": 315721141,
+        "st_size": 1417,
+        "st_mtime_ns": 1793368507606755248,
+        "st_ctime_ns": 1793368508677755185
+      },
+      "fd_stat_after": {
+        "st_dev": 2064,
+        "st_ino": 315721141,
+        "st_size": 1417,
+        "st_mtime_ns": 1793368507606755248,
+        "st_ctime_ns": 1793368508677755185
+      },
+      "stat_after": {
+        "st_dev": 2064,
+        "st_ino": 315721141,
+        "st_size": 1417,
+        "st_mtime_ns": 1793368507606755248,
+        "st_ctime_ns": 1793368508677755185,
+        "st_atime_ns": 1793688822226663008
+      },
+      "actual_sha256": "52d0d7a33019b73601c0e4997d999d9ca366d5da01750a66a4a35b7a469f7086",
+      "sha256_match": true,
+      "bytes_match": true,
+      "stable_during_read": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed4718/validation-5000000.json",
+      "sources": [
+        "input-verification-after"
+      ],
+      "expected_bytes": 134841,
+      "expected_sha256": "559efed126002d87e55eb329e41512e9eeb0f44e8774fc996d168c0fae279a1b",
+      "status_before": null,
+      "status_after": "MATCH",
+      "stat_before": {
+        "st_dev": 2064,
+        "st_ino": 315721372,
+        "st_size": 134841,
+        "st_mtime_ns": 1793425322237368832,
+        "st_ctime_ns": 1793425322258368831,
+        "st_atime_ns": 1793688591487676761
+      },
+      "bytes_read": 134841,
+      "fd_stat_before": {
+        "st_dev": 2064,
+        "st_ino": 315721372,
+        "st_size": 134841,
+        "st_mtime_ns": 1793425322237368832,
+        "st_ctime_ns": 1793425322258368831
+      },
+      "fd_stat_after": {
+        "st_dev": 2064,
+        "st_ino": 315721372,
+        "st_size": 134841,
+        "st_mtime_ns": 1793425322237368832,
+        "st_ctime_ns": 1793425322258368831
+      },
+      "stat_after": {
+        "st_dev": 2064,
+        "st_ino": 315721372,
+        "st_size": 134841,
+        "st_mtime_ns": 1793425322237368832,
+        "st_ctime_ns": 1793425322258368831,
+        "st_atime_ns": 1793688591487676761
+      },
+      "actual_sha256": "559efed126002d87e55eb329e41512e9eeb0f44e8774fc996d168c0fae279a1b",
+      "sha256_match": true,
+      "bytes_match": true,
+      "stable_during_read": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4718/loaded.json",
+      "sources": [
+        "input-verification-after"
+      ],
+      "expected_bytes": 849,
+      "expected_sha256": "6056ecc1a5c50a71cfde2b40d093a796b99e99216eb57903ee370a176e86812f",
+      "status_before": null,
+      "status_after": "MATCH",
+      "stat_before": {
+        "st_dev": 2064,
+        "st_ino": 358252601,
+        "st_size": 849,
+        "st_mtime_ns": 1793590624294516061,
+        "st_ctime_ns": 1793590624334516059,
+        "st_atime_ns": 1793600051821954137
+      },
+      "bytes_read": 849,
+      "fd_stat_before": {
+        "st_dev": 2064,
+        "st_ino": 358252601,
+        "st_size": 849,
+        "st_mtime_ns": 1793590624294516061,
+        "st_ctime_ns": 1793590624334516059
+      },
+      "fd_stat_after": {
+        "st_dev": 2064,
+        "st_ino": 358252601,
+        "st_size": 849,
+        "st_mtime_ns": 1793590624294516061,
+        "st_ctime_ns": 1793590624334516059
+      },
+      "stat_after": {
+        "st_dev": 2064,
+        "st_ino": 358252601,
+        "st_size": 849,
+        "st_mtime_ns": 1793590624294516061,
+        "st_ctime_ns": 1793590624334516059,
+        "st_atime_ns": 1793688822238663007
+      },
+      "actual_sha256": "6056ecc1a5c50a71cfde2b40d093a796b99e99216eb57903ee370a176e86812f",
+      "sha256_match": true,
+      "bytes_match": true,
+      "stable_during_read": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4718/evaluation.json",
+      "sources": [
+        "input-verification-after"
+      ],
+      "expected_bytes": 65862,
+      "expected_sha256": "01015a5c66990819943fb59bcd8402de41f29a4ad1e29a6529a03de65aac2900",
+      "status_before": null,
+      "status_after": "MATCH",
+      "stat_before": {
+        "st_dev": 2064,
+        "st_ino": 358252602,
+        "st_size": 65862,
+        "st_mtime_ns": 1793591100733487663,
+        "st_ctime_ns": 1793591100749487662,
+        "st_atime_ns": 1793688591487676761
+      },
+      "bytes_read": 65862,
+      "fd_stat_before": {
+        "st_dev": 2064,
+        "st_ino": 358252602,
+        "st_size": 65862,
+        "st_mtime_ns": 1793591100733487663,
+        "st_ctime_ns": 1793591100749487662
+      },
+      "fd_stat_after": {
+        "st_dev": 2064,
+        "st_ino": 358252602,
+        "st_size": 65862,
+        "st_mtime_ns": 1793591100733487663,
+        "st_ctime_ns": 1793591100749487662
+      },
+      "stat_after": {
+        "st_dev": 2064,
+        "st_ino": 358252602,
+        "st_size": 65862,
+        "st_mtime_ns": 1793591100733487663,
+        "st_ctime_ns": 1793591100749487662,
+        "st_atime_ns": 1793688591487676761
+      },
+      "actual_sha256": "01015a5c66990819943fb59bcd8402de41f29a4ad1e29a6529a03de65aac2900",
+      "sha256_match": true,
+      "bytes_match": true,
+      "stable_during_read": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed4719/final.pt",
+      "sources": [
+        "input-verification-after"
+      ],
+      "expected_bytes": 34861549731,
+      "expected_sha256": "1eacf758ffdd3b485a5a30e377cf5f2788cc6544ce0a2391aa46cb431e96daf6",
+      "status_before": null,
+      "status_after": "MATCH",
+      "stat_before": {
+        "st_dev": 2064,
+        "st_ino": 315722562,
+        "st_size": 34861549731,
+        "st_mtime_ns": 1793484870165819499,
+        "st_ctime_ns": 1793484934817815645,
+        "st_atime_ns": 1793591104956487412
+      },
+      "bytes_read": 34861549731,
+      "fd_stat_before": {
+        "st_dev": 2064,
+        "st_ino": 315722562,
+        "st_size": 34861549731,
+        "st_mtime_ns": 1793484870165819499,
+        "st_ctime_ns": 1793484934817815645
+      },
+      "fd_stat_after": {
+        "st_dev": 2064,
+        "st_ino": 315722562,
+        "st_size": 34861549731,
+        "st_mtime_ns": 1793484870165819499,
+        "st_ctime_ns": 1793484934817815645
+      },
+      "stat_after": {
+        "st_dev": 2064,
+        "st_ino": 315722562,
+        "st_size": 34861549731,
+        "st_mtime_ns": 1793484870165819499,
+        "st_ctime_ns": 1793484934817815645,
+        "st_atime_ns": 1793688822250663007
+      },
+      "actual_sha256": "1eacf758ffdd3b485a5a30e377cf5f2788cc6544ce0a2391aa46cb431e96daf6",
+      "sha256_match": true,
+      "bytes_match": true,
+      "stable_during_read": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed4719/config.json",
+      "sources": [
+        "input-verification-after"
+      ],
+      "expected_bytes": 1417,
+      "expected_sha256": "a7c5db8a4369de00d13a8217cbc9ac5a51d583c5b045d9bdb8b526de276287de",
+      "status_before": null,
+      "status_after": "MATCH",
+      "stat_before": {
+        "st_dev": 2064,
+        "st_ino": 315721376,
+        "st_size": 1417,
+        "st_mtime_ns": 1793425555002354958,
+        "st_ctime_ns": 1793425555011354958,
+        "st_atime_ns": 1793550290366920151
+      },
+      "bytes_read": 1417,
+      "fd_stat_before": {
+        "st_dev": 2064,
+        "st_ino": 315721376,
+        "st_size": 1417,
+        "st_mtime_ns": 1793425555002354958,
+        "st_ctime_ns": 1793425555011354958
+      },
+      "fd_stat_after": {
+        "st_dev": 2064,
+        "st_ino": 315721376,
+        "st_size": 1417,
+        "st_mtime_ns": 1793425555002354958,
+        "st_ctime_ns": 1793425555011354958
+      },
+      "stat_after": {
+        "st_dev": 2064,
+        "st_ino": 315721376,
+        "st_size": 1417,
+        "st_mtime_ns": 1793425555002354958,
+        "st_ctime_ns": 1793425555011354958,
+        "st_atime_ns": 1793688853822661125
+      },
+      "actual_sha256": "a7c5db8a4369de00d13a8217cbc9ac5a51d583c5b045d9bdb8b526de276287de",
+      "sha256_match": true,
+      "bytes_match": true,
+      "stable_during_read": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed4719/validation-5000000.json",
+      "sources": [
+        "input-verification-after"
+      ],
+      "expected_bytes": 134888,
+      "expected_sha256": "697d71e1c20149d8fa44d9448f93ad3f3e33bc34af80bd2aa2641c45f4fc7f24",
+      "status_before": null,
+      "status_after": "MATCH",
+      "stat_before": {
+        "st_dev": 2064,
+        "st_ino": 315722554,
+        "st_size": 134888,
+        "st_mtime_ns": 1793484726474828064,
+        "st_ctime_ns": 1793484726874828040,
+        "st_atime_ns": 1793590183513542334
+      },
+      "bytes_read": 134888,
+      "fd_stat_before": {
+        "st_dev": 2064,
+        "st_ino": 315722554,
+        "st_size": 134888,
+        "st_mtime_ns": 1793484726474828064,
+        "st_ctime_ns": 1793484726874828040
+      },
+      "fd_stat_after": {
+        "st_dev": 2064,
+        "st_ino": 315722554,
+        "st_size": 134888,
+        "st_mtime_ns": 1793484726474828064,
+        "st_ctime_ns": 1793484726874828040
+      },
+      "stat_after": {
+        "st_dev": 2064,
+        "st_ino": 315722554,
+        "st_size": 134888,
+        "st_mtime_ns": 1793484726474828064,
+        "st_ctime_ns": 1793484726874828040,
+        "st_atime_ns": 1793688853823661125
+      },
+      "actual_sha256": "697d71e1c20149d8fa44d9448f93ad3f3e33bc34af80bd2aa2641c45f4fc7f24",
+      "sha256_match": true,
+      "bytes_match": true,
+      "stable_during_read": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4719/loaded.json",
+      "sources": [
+        "input-verification-after"
+      ],
+      "expected_bytes": 849,
+      "expected_sha256": "2436c1e919b75229e83be6a281cc7cd66b2039976ad06f1203d9ec5f6271275e",
+      "status_before": null,
+      "status_after": "MATCH",
+      "stat_before": {
+        "st_dev": 2064,
+        "st_ino": 358252621,
+        "st_size": 849,
+        "st_mtime_ns": 1793591220345480534,
+        "st_ctime_ns": 1793591220375480532,
+        "st_atime_ns": 1793600051823954137
+      },
+      "bytes_read": 849,
+      "fd_stat_before": {
+        "st_dev": 2064,
+        "st_ino": 358252621,
+        "st_size": 849,
+        "st_mtime_ns": 1793591220345480534,
+        "st_ctime_ns": 1793591220375480532
+      },
+      "fd_stat_after": {
+        "st_dev": 2064,
+        "st_ino": 358252621,
+        "st_size": 849,
+        "st_mtime_ns": 1793591220345480534,
+        "st_ctime_ns": 1793591220375480532
+      },
+      "stat_after": {
+        "st_dev": 2064,
+        "st_ino": 358252621,
+        "st_size": 849,
+        "st_mtime_ns": 1793591220345480534,
+        "st_ctime_ns": 1793591220375480532,
+        "st_atime_ns": 1793688853824661125
+      },
+      "actual_sha256": "2436c1e919b75229e83be6a281cc7cd66b2039976ad06f1203d9ec5f6271275e",
+      "sha256_match": true,
+      "bytes_match": true,
+      "stable_during_read": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4719/evaluation.json",
+      "sources": [
+        "input-verification-after"
+      ],
+      "expected_bytes": 65839,
+      "expected_sha256": "8c49cdc832fb7992688838d04f0644a5e13ebaaac7af83672bec49f5c87e2b1a",
+      "status_before": null,
+      "status_after": "MATCH",
+      "stat_before": {
+        "st_dev": 2064,
+        "st_ino": 358252589,
+        "st_size": 65839,
+        "st_mtime_ns": 1793591730463450129,
+        "st_ctime_ns": 1793591730466450128,
+        "st_atime_ns": 1793688591490676761
+      },
+      "bytes_read": 65839,
+      "fd_stat_before": {
+        "st_dev": 2064,
+        "st_ino": 358252589,
+        "st_size": 65839,
+        "st_mtime_ns": 1793591730463450129,
+        "st_ctime_ns": 1793591730466450128
+      },
+      "fd_stat_after": {
+        "st_dev": 2064,
+        "st_ino": 358252589,
+        "st_size": 65839,
+        "st_mtime_ns": 1793591730463450129,
+        "st_ctime_ns": 1793591730466450128
+      },
+      "stat_after": {
+        "st_dev": 2064,
+        "st_ino": 358252589,
+        "st_size": 65839,
+        "st_mtime_ns": 1793591730463450129,
+        "st_ctime_ns": 1793591730466450128,
+        "st_atime_ns": 1793688591490676761
+      },
+      "actual_sha256": "8c49cdc832fb7992688838d04f0644a5e13ebaaac7af83672bec49f5c87e2b1a",
+      "sha256_match": true,
+      "bytes_match": true,
+      "stable_during_read": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed4720/final.pt",
+      "sources": [
+        "input-verification-after"
+      ],
+      "expected_bytes": 34861336931,
+      "expected_sha256": "a4d89a7e7650c83a0f263efafb9aecef5abbb92c2c5fccb6d87fc491c202e60e",
+      "status_before": null,
+      "status_after": "MATCH",
+      "stat_before": {
+        "st_dev": 2064,
+        "st_ino": 315722636,
+        "st_size": 34861336931,
+        "st_mtime_ns": 1793503381948716111,
+        "st_ctime_ns": 1793503490412709646,
+        "st_atime_ns": 1793591734270449902
+      },
+      "bytes_read": 34861336931,
+      "fd_stat_before": {
+        "st_dev": 2064,
+        "st_ino": 315722636,
+        "st_size": 34861336931,
+        "st_mtime_ns": 1793503381948716111,
+        "st_ctime_ns": 1793503490412709646
+      },
+      "fd_stat_after": {
+        "st_dev": 2064,
+        "st_ino": 315722636,
+        "st_size": 34861336931,
+        "st_mtime_ns": 1793503381948716111,
+        "st_ctime_ns": 1793503490412709646
+      },
+      "stat_after": {
+        "st_dev": 2064,
+        "st_ino": 315722636,
+        "st_size": 34861336931,
+        "st_mtime_ns": 1793503381948716111,
+        "st_ctime_ns": 1793503490412709646,
+        "st_atime_ns": 1793688853855661123
+      },
+      "actual_sha256": "a4d89a7e7650c83a0f263efafb9aecef5abbb92c2c5fccb6d87fc491c202e60e",
+      "sha256_match": true,
+      "bytes_match": true,
+      "stable_during_read": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed4720/config.json",
+      "sources": [
+        "input-verification-after"
+      ],
+      "expected_bytes": 1417,
+      "expected_sha256": "10f9c7ee281305e0e77f2318172c0705d977a5e72b8e0746b34e0cfeb50d1669",
+      "status_before": null,
+      "status_after": "MATCH",
+      "stat_before": {
+        "st_dev": 2064,
+        "st_ino": 315721463,
+        "st_size": 1417,
+        "st_mtime_ns": 1793444723520212426,
+        "st_ctime_ns": 1793444723539212425,
+        "st_atime_ns": 1793550290397920149
+      },
+      "bytes_read": 1417,
+      "fd_stat_before": {
+        "st_dev": 2064,
+        "st_ino": 315721463,
+        "st_size": 1417,
+        "st_mtime_ns": 1793444723520212426,
+        "st_ctime_ns": 1793444723539212425
+      },
+      "fd_stat_after": {
+        "st_dev": 2064,
+        "st_ino": 315721463,
+        "st_size": 1417,
+        "st_mtime_ns": 1793444723520212426,
+        "st_ctime_ns": 1793444723539212425
+      },
+      "stat_after": {
+        "st_dev": 2064,
+        "st_ino": 315721463,
+        "st_size": 1417,
+        "st_mtime_ns": 1793444723520212426,
+        "st_ctime_ns": 1793444723539212425,
+        "st_atime_ns": 1793688885796659219
+      },
+      "actual_sha256": "10f9c7ee281305e0e77f2318172c0705d977a5e72b8e0746b34e0cfeb50d1669",
+      "sha256_match": true,
+      "bytes_match": true,
+      "stable_during_read": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed4720/validation-5000000.json",
+      "sources": [
+        "input-verification-after"
+      ],
+      "expected_bytes": 134840,
+      "expected_sha256": "8439373f9286184dff53f2badebddd7c72b074708d45a9c4860faf98748105a0",
+      "status_before": null,
+      "status_after": "MATCH",
+      "stat_before": {
+        "st_dev": 2064,
+        "st_ino": 315722631,
+        "st_size": 134840,
+        "st_mtime_ns": 1793503259027723437,
+        "st_ctime_ns": 1793503259035723437,
+        "st_atime_ns": 1793590183514542334
+      },
+      "bytes_read": 134840,
+      "fd_stat_before": {
+        "st_dev": 2064,
+        "st_ino": 315722631,
+        "st_size": 134840,
+        "st_mtime_ns": 1793503259027723437,
+        "st_ctime_ns": 1793503259035723437
+      },
+      "fd_stat_after": {
+        "st_dev": 2064,
+        "st_ino": 315722631,
+        "st_size": 134840,
+        "st_mtime_ns": 1793503259027723437,
+        "st_ctime_ns": 1793503259035723437
+      },
+      "stat_after": {
+        "st_dev": 2064,
+        "st_ino": 315722631,
+        "st_size": 134840,
+        "st_mtime_ns": 1793503259027723437,
+        "st_ctime_ns": 1793503259035723437,
+        "st_atime_ns": 1793688885797659219
+      },
+      "actual_sha256": "8439373f9286184dff53f2badebddd7c72b074708d45a9c4860faf98748105a0",
+      "sha256_match": true,
+      "bytes_match": true,
+      "stable_during_read": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4720/loaded.json",
+      "sources": [
+        "input-verification-after"
+      ],
+      "expected_bytes": 849,
+      "expected_sha256": "5b2c16d5b1a74e0b02943b411b9788780afcc26fe0d09e1223beb7df82566567",
+      "status_before": null,
+      "status_after": "MATCH",
+      "stat_before": {
+        "st_dev": 2064,
+        "st_ino": 358252620,
+        "st_size": 849,
+        "st_mtime_ns": 1793591870408441787,
+        "st_ctime_ns": 1793591870421441786,
+        "st_atime_ns": 1793600051825954137
+      },
+      "bytes_read": 849,
+      "fd_stat_before": {
+        "st_dev": 2064,
+        "st_ino": 358252620,
+        "st_size": 849,
+        "st_mtime_ns": 1793591870408441787,
+        "st_ctime_ns": 1793591870421441786
+      },
+      "fd_stat_after": {
+        "st_dev": 2064,
+        "st_ino": 358252620,
+        "st_size": 849,
+        "st_mtime_ns": 1793591870408441787,
+        "st_ctime_ns": 1793591870421441786
+      },
+      "stat_after": {
+        "st_dev": 2064,
+        "st_ino": 358252620,
+        "st_size": 849,
+        "st_mtime_ns": 1793591870408441787,
+        "st_ctime_ns": 1793591870421441786,
+        "st_atime_ns": 1793688885798659219
+      },
+      "actual_sha256": "5b2c16d5b1a74e0b02943b411b9788780afcc26fe0d09e1223beb7df82566567",
+      "sha256_match": true,
+      "bytes_match": true,
+      "stable_during_read": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-semantic-20261102/seed4720/evaluation.json",
+      "sources": [
+        "input-verification-after"
+      ],
+      "expected_bytes": 65825,
+      "expected_sha256": "a3da450b495fbd4cb3dc350337e0e5317ac51e5c656cc4aa92356dbde32fb9b4",
+      "status_before": null,
+      "status_after": "MATCH",
+      "stat_before": {
+        "st_dev": 2064,
+        "st_ino": 358252622,
+        "st_size": 65825,
+        "st_mtime_ns": 1793592388462410909,
+        "st_ctime_ns": 1793592388464410909,
+        "st_atime_ns": 1793688591492676761
+      },
+      "bytes_read": 65825,
+      "fd_stat_before": {
+        "st_dev": 2064,
+        "st_ino": 358252622,
+        "st_size": 65825,
+        "st_mtime_ns": 1793592388462410909,
+        "st_ctime_ns": 1793592388464410909
+      },
+      "fd_stat_after": {
+        "st_dev": 2064,
+        "st_ino": 358252622,
+        "st_size": 65825,
+        "st_mtime_ns": 1793592388462410909,
+        "st_ctime_ns": 1793592388464410909
+      },
+      "stat_after": {
+        "st_dev": 2064,
+        "st_ino": 358252622,
+        "st_size": 65825,
+        "st_mtime_ns": 1793592388462410909,
+        "st_ctime_ns": 1793592388464410909,
+        "st_atime_ns": 1793688591492676761
+      },
+      "actual_sha256": "a3da450b495fbd4cb3dc350337e0e5317ac51e5c656cc4aa92356dbde32fb9b4",
+      "sha256_match": true,
+      "bytes_match": true,
+      "stable_during_read": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task8/t8-exec-20261026/semantic-pool/index.json",
+      "sources": [
+        "input-verification-after"
+      ],
+      "expected_bytes": 26510,
+      "expected_sha256": "a2071c66df7039f64e76ad729f2c0e398f918b9674c220153c0137247055a343",
+      "status_before": null,
+      "status_after": "MATCH",
+      "stat_before": {
+        "st_dev": 2064,
+        "st_ino": 314577478,
+        "st_size": 26510,
+        "st_mtime_ns": 1792983527679701842,
+        "st_ctime_ns": 1792983527679701842,
+        "st_atime_ns": 1793600711312914828
+      },
+      "bytes_read": 26510,
+      "fd_stat_before": {
+        "st_dev": 2064,
+        "st_ino": 314577478,
+        "st_size": 26510,
+        "st_mtime_ns": 1792983527679701842,
+        "st_ctime_ns": 1792983527679701842
+      },
+      "fd_stat_after": {
+        "st_dev": 2064,
+        "st_ino": 314577478,
+        "st_size": 26510,
+        "st_mtime_ns": 1792983527679701842,
+        "st_ctime_ns": 1792983527679701842
+      },
+      "stat_after": {
+        "st_dev": 2064,
+        "st_ino": 314577478,
+        "st_size": 26510,
+        "st_mtime_ns": 1792983527679701842,
+        "st_ctime_ns": 1792983527679701842,
+        "st_atime_ns": 1793688885799659219
+      },
+      "actual_sha256": "a2071c66df7039f64e76ad729f2c0e398f918b9674c220153c0137247055a343",
+      "sha256_match": true,
+      "bytes_match": true,
+      "stable_during_read": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task8/t8-pool-20261027/cube-pool-v2/manifest.json",
+      "sources": [
+        "input-verification-after"
+      ],
+      "expected_bytes": 50670245,
+      "expected_sha256": "a501c76edb29939782a7d7c7ac0e6d34fccc4756ed1fb4c510a2ef41769a0fc4",
+      "status_before": null,
+      "status_after": "MATCH",
+      "stat_before": {
+        "st_dev": 2064,
+        "st_ino": 314704511,
+        "st_size": 50670245,
+        "st_mtime_ns": 1793076760471144734,
+        "st_ctime_ns": 1793076760498144732,
+        "st_atime_ns": 1793688310748693495
+      },
+      "bytes_read": 50670245,
+      "fd_stat_before": {
+        "st_dev": 2064,
+        "st_ino": 314704511,
+        "st_size": 50670245,
+        "st_mtime_ns": 1793076760471144734,
+        "st_ctime_ns": 1793076760498144732
+      },
+      "fd_stat_after": {
+        "st_dev": 2064,
+        "st_ino": 314704511,
+        "st_size": 50670245,
+        "st_mtime_ns": 1793076760471144734,
+        "st_ctime_ns": 1793076760498144732
+      },
+      "stat_after": {
+        "st_dev": 2064,
+        "st_ino": 314704511,
+        "st_size": 50670245,
+        "st_mtime_ns": 1793076760471144734,
+        "st_ctime_ns": 1793076760498144732,
+        "st_atime_ns": 1793688310748693495
+      },
+      "actual_sha256": "a501c76edb29939782a7d7c7ac0e6d34fccc4756ed1fb4c510a2ef41769a0fc4",
+      "sha256_match": true,
+      "bytes_match": true,
+      "stable_during_read": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task8/t8-pool-20261027/cube-pool-v2/evaluation-seeds.json",
+      "sources": [
+        "input-verification-after"
+      ],
+      "expected_bytes": 65181,
+      "expected_sha256": "8c7720078023734550c6a15c7f23b74f652adf14fb9120f3bc9639d2fcf4ad76",
+      "status_before": null,
+      "status_after": "MATCH",
+      "stat_before": {
+        "st_dev": 2064,
+        "st_ino": 314704513,
+        "st_size": 65181,
+        "st_mtime_ns": 1793076760511144731,
+        "st_ctime_ns": 1793076760511144731,
+        "st_atime_ns": 1793600051819954137
+      },
+      "bytes_read": 65181,
+      "fd_stat_before": {
+        "st_dev": 2064,
+        "st_ino": 314704513,
+        "st_size": 65181,
+        "st_mtime_ns": 1793076760511144731,
+        "st_ctime_ns": 1793076760511144731
+      },
+      "fd_stat_after": {
+        "st_dev": 2064,
+        "st_ino": 314704513,
+        "st_size": 65181,
+        "st_mtime_ns": 1793076760511144731,
+        "st_ctime_ns": 1793076760511144731
+      },
+      "stat_after": {
+        "st_dev": 2064,
+        "st_ino": 314704513,
+        "st_size": 65181,
+        "st_mtime_ns": 1793076760511144731,
+        "st_ctime_ns": 1793076760511144731,
+        "st_atime_ns": 1793688885861659215
+      },
+      "actual_sha256": "8c7720078023734550c6a15c7f23b74f652adf14fb9120f3bc9639d2fcf4ad76",
+      "sha256_match": true,
+      "bytes_match": true,
+      "stable_during_read": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/logs/task9/t9-semantic-20261102/provenance.json",
+      "sources": [
+        "input-verification-after"
+      ],
+      "expected_bytes": 485,
+      "expected_sha256": "ebed887c47fd861fdb30f2e804066a1f7489544704e6eeddf231297f4503ce32",
+      "status_before": null,
+      "status_after": "MATCH",
+      "stat_before": {
+        "st_dev": 2064,
+        "st_ino": 358252612,
+        "st_size": 485,
+        "st_mtime_ns": 1793590470942525202,
+        "st_ctime_ns": 1793590470942525202,
+        "st_atime_ns": 1793601120888890416
+      },
+      "bytes_read": 485,
+      "fd_stat_before": {
+        "st_dev": 2064,
+        "st_ino": 358252612,
+        "st_size": 485,
+        "st_mtime_ns": 1793590470942525202,
+        "st_ctime_ns": 1793590470942525202
+      },
+      "fd_stat_after": {
+        "st_dev": 2064,
+        "st_ino": 358252612,
+        "st_size": 485,
+        "st_mtime_ns": 1793590470942525202,
+        "st_ctime_ns": 1793590470942525202
+      },
+      "stat_after": {
+        "st_dev": 2064,
+        "st_ino": 358252612,
+        "st_size": 485,
+        "st_mtime_ns": 1793590470942525202,
+        "st_ctime_ns": 1793590470942525202,
+        "st_atime_ns": 1793688885861659215
+      },
+      "actual_sha256": "ebed887c47fd861fdb30f2e804066a1f7489544704e6eeddf231297f4503ce32",
+      "sha256_match": true,
+      "bytes_match": true,
+      "stable_during_read": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/src/task8_lower/evaluation.py",
+      "sources": [
+        "input-verification-after"
+      ],
+      "expected_bytes": 9858,
+      "expected_sha256": "178e81125b082bcc2b8e260ebaacdbe6e68e64396287c52199ef015ddf148f48",
+      "status_before": null,
+      "status_after": "MATCH",
+      "stat_before": {
+        "st_dev": 2064,
+        "st_ino": 314672755,
+        "st_size": 9858,
+        "st_mtime_ns": 1793113974495926605,
+        "st_ctime_ns": 1793113974495926605,
+        "st_atime_ns": 1793685956305833830
+      },
+      "bytes_read": 9858,
+      "fd_stat_before": {
+        "st_dev": 2064,
+        "st_ino": 314672755,
+        "st_size": 9858,
+        "st_mtime_ns": 1793113974495926605,
+        "st_ctime_ns": 1793113974495926605
+      },
+      "fd_stat_after": {
+        "st_dev": 2064,
+        "st_ino": 314672755,
+        "st_size": 9858,
+        "st_mtime_ns": 1793113974495926605,
+        "st_ctime_ns": 1793113974495926605
+      },
+      "stat_after": {
+        "st_dev": 2064,
+        "st_ino": 314672755,
+        "st_size": 9858,
+        "st_mtime_ns": 1793113974495926605,
+        "st_ctime_ns": 1793113974495926605,
+        "st_atime_ns": 1793685956305833830
+      },
+      "actual_sha256": "178e81125b082bcc2b8e260ebaacdbe6e68e64396287c52199ef015ddf148f48",
+      "sha256_match": true,
+      "bytes_match": true,
+      "stable_during_read": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/scripts/task9_semantic_eval.py",
+      "sources": [
+        "input-verification-after"
+      ],
+      "expected_bytes": 7598,
+      "expected_sha256": "69b17dc3a5fdf8460f5166c473f7d27ed41086aafa34545210f5adeb8d8887b9",
+      "status_before": null,
+      "status_after": "MATCH",
+      "stat_before": {
+        "st_dev": 2064,
+        "st_ino": 311724280,
+        "st_size": 7598,
+        "st_mtime_ns": 1793590470942525202,
+        "st_ctime_ns": 1793590470942525202,
+        "st_atime_ns": 1793687434177745742
+      },
+      "bytes_read": 7598,
+      "fd_stat_before": {
+        "st_dev": 2064,
+        "st_ino": 311724280,
+        "st_size": 7598,
+        "st_mtime_ns": 1793590470942525202,
+        "st_ctime_ns": 1793590470942525202
+      },
+      "fd_stat_after": {
+        "st_dev": 2064,
+        "st_ino": 311724280,
+        "st_size": 7598,
+        "st_mtime_ns": 1793590470942525202,
+        "st_ctime_ns": 1793590470942525202
+      },
+      "stat_after": {
+        "st_dev": 2064,
+        "st_ino": 311724280,
+        "st_size": 7598,
+        "st_mtime_ns": 1793590470942525202,
+        "st_ctime_ns": 1793590470942525202,
+        "st_atime_ns": 1793687434177745742
+      },
+      "actual_sha256": "69b17dc3a5fdf8460f5166c473f7d27ed41086aafa34545210f5adeb8d8887b9",
+      "sha256_match": true,
+      "bytes_match": true,
+      "stable_during_read": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/scripts/task9_semantic_queue.py",
+      "sources": [
+        "input-verification-after"
+      ],
+      "expected_bytes": 4904,
+      "expected_sha256": "d6803a94eb25633f9070d5b12ac5698c332521574ed30c5bd7616ec571655edf",
+      "status_before": null,
+      "status_after": "MATCH",
+      "stat_before": {
+        "st_dev": 2064,
+        "st_ino": 311724281,
+        "st_size": 4904,
+        "st_mtime_ns": 1793590509041522931,
+        "st_ctime_ns": 1793590509041522931,
+        "st_atime_ns": 1793687434177745742
+      },
+      "bytes_read": 4904,
+      "fd_stat_before": {
+        "st_dev": 2064,
+        "st_ino": 311724281,
+        "st_size": 4904,
+        "st_mtime_ns": 1793590509041522931,
+        "st_ctime_ns": 1793590509041522931
+      },
+      "fd_stat_after": {
+        "st_dev": 2064,
+        "st_ino": 311724281,
+        "st_size": 4904,
+        "st_mtime_ns": 1793590509041522931,
+        "st_ctime_ns": 1793590509041522931
+      },
+      "stat_after": {
+        "st_dev": 2064,
+        "st_ino": 311724281,
+        "st_size": 4904,
+        "st_mtime_ns": 1793590509041522931,
+        "st_ctime_ns": 1793590509041522931,
+        "st_atime_ns": 1793687434177745742
+      },
+      "actual_sha256": "d6803a94eb25633f9070d5b12ac5698c332521574ed30c5bd7616ec571655edf",
+      "sha256_match": true,
+      "bytes_match": true,
+      "stable_during_read": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/config/task9/stage2/B3_5M_seed4718.json",
+      "sources": [
+        "input-verification-after"
+      ],
+      "expected_bytes": 1418,
+      "expected_sha256": "34bb02e860a63004ea02a6e70090b7783b3361d9b0561fc3b4081928bec4baf2",
+      "status_before": null,
+      "status_after": "MATCH",
+      "stat_before": {
+        "st_dev": 2064,
+        "st_ino": 315720330,
+        "st_size": 1418,
+        "st_mtime_ns": 1793279125488082838,
+        "st_ctime_ns": 1793279125488082838,
+        "st_atime_ns": 1793687434170745743
+      },
+      "bytes_read": 1418,
+      "fd_stat_before": {
+        "st_dev": 2064,
+        "st_ino": 315720330,
+        "st_size": 1418,
+        "st_mtime_ns": 1793279125488082838,
+        "st_ctime_ns": 1793279125488082838
+      },
+      "fd_stat_after": {
+        "st_dev": 2064,
+        "st_ino": 315720330,
+        "st_size": 1418,
+        "st_mtime_ns": 1793279125488082838,
+        "st_ctime_ns": 1793279125488082838
+      },
+      "stat_after": {
+        "st_dev": 2064,
+        "st_ino": 315720330,
+        "st_size": 1418,
+        "st_mtime_ns": 1793279125488082838,
+        "st_ctime_ns": 1793279125488082838,
+        "st_atime_ns": 1793687434170745743
+      },
+      "actual_sha256": "34bb02e860a63004ea02a6e70090b7783b3361d9b0561fc3b4081928bec4baf2",
+      "sha256_match": true,
+      "bytes_match": true,
+      "stable_during_read": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/config/task9/stage2/B3_5M_seed4719.json",
+      "sources": [
+        "input-verification-after"
+      ],
+      "expected_bytes": 1418,
+      "expected_sha256": "dbef8a3b44131c4399f6b4f798bfdd794f2bc7a91b7d2551f1f7fed4c94718ca",
+      "status_before": null,
+      "status_after": "MATCH",
+      "stat_before": {
+        "st_dev": 2064,
+        "st_ino": 315720331,
+        "st_size": 1418,
+        "st_mtime_ns": 1793279125488082838,
+        "st_ctime_ns": 1793279125488082838,
+        "st_atime_ns": 1793687434170745743
+      },
+      "bytes_read": 1418,
+      "fd_stat_before": {
+        "st_dev": 2064,
+        "st_ino": 315720331,
+        "st_size": 1418,
+        "st_mtime_ns": 1793279125488082838,
+        "st_ctime_ns": 1793279125488082838
+      },
+      "fd_stat_after": {
+        "st_dev": 2064,
+        "st_ino": 315720331,
+        "st_size": 1418,
+        "st_mtime_ns": 1793279125488082838,
+        "st_ctime_ns": 1793279125488082838
+      },
+      "stat_after": {
+        "st_dev": 2064,
+        "st_ino": 315720331,
+        "st_size": 1418,
+        "st_mtime_ns": 1793279125488082838,
+        "st_ctime_ns": 1793279125488082838,
+        "st_atime_ns": 1793687434170745743
+      },
+      "actual_sha256": "dbef8a3b44131c4399f6b4f798bfdd794f2bc7a91b7d2551f1f7fed4c94718ca",
+      "sha256_match": true,
+      "bytes_match": true,
+      "stable_during_read": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/config/task9/stage2-extra/B3_5M_seed4720.json",
+      "sources": [
+        "input-verification-after"
+      ],
+      "expected_bytes": 1418,
+      "expected_sha256": "fb1c043faf99c7bcfcbab5e022a4e40ee98cdda4934e143521299f42e362d16d",
+      "status_before": null,
+      "status_after": "MATCH",
+      "stat_before": {
+        "st_dev": 2064,
+        "st_ino": 315720674,
+        "st_size": 1418,
+        "st_mtime_ns": 1793317888161772403,
+        "st_ctime_ns": 1793317888161772403,
+        "st_atime_ns": 1793687434170745743
+      },
+      "bytes_read": 1418,
+      "fd_stat_before": {
+        "st_dev": 2064,
+        "st_ino": 315720674,
+        "st_size": 1418,
+        "st_mtime_ns": 1793317888161772403,
+        "st_ctime_ns": 1793317888161772403
+      },
+      "fd_stat_after": {
+        "st_dev": 2064,
+        "st_ino": 315720674,
+        "st_size": 1418,
+        "st_mtime_ns": 1793317888161772403,
+        "st_ctime_ns": 1793317888161772403
+      },
+      "stat_after": {
+        "st_dev": 2064,
+        "st_ino": 315720674,
+        "st_size": 1418,
+        "st_mtime_ns": 1793317888161772403,
+        "st_ctime_ns": 1793317888161772403,
+        "st_atime_ns": 1793687434170745743
+      },
+      "actual_sha256": "fb1c043faf99c7bcfcbab5e022a4e40ee98cdda4934e143521299f42e362d16d",
+      "sha256_match": true,
+      "bytes_match": true,
+      "stable_during_read": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.8-B3-20261102T163355+0800/source-snapshot/analysis.py",
+      "sources": [
+        "source-manifest"
+      ],
+      "expected_bytes": 13018,
+      "expected_sha256": "6bdb03726ee3029fb2027ddeb6460aac4bbdec0eaa9879c864d4a0c771dd8cf9",
+      "status_before": null,
+      "status_after": "MATCH",
+      "stat_before": {
+        "st_dev": 2064,
+        "st_ino": 314544035,
+        "st_size": 13018,
+        "st_mtime_ns": 1793608467405452529,
+        "st_ctime_ns": 1793613901873128609,
+        "st_atime_ns": 1793614370993100648
+      },
+      "bytes_read": 13018,
+      "fd_stat_before": {
+        "st_dev": 2064,
+        "st_ino": 314544035,
+        "st_size": 13018,
+        "st_mtime_ns": 1793608467405452529,
+        "st_ctime_ns": 1793613901873128609
+      },
+      "fd_stat_after": {
+        "st_dev": 2064,
+        "st_ino": 314544035,
+        "st_size": 13018,
+        "st_mtime_ns": 1793608467405452529,
+        "st_ctime_ns": 1793613901873128609
+      },
+      "stat_after": {
+        "st_dev": 2064,
+        "st_ino": 314544035,
+        "st_size": 13018,
+        "st_mtime_ns": 1793608467405452529,
+        "st_ctime_ns": 1793613901873128609,
+        "st_atime_ns": 1793614370993100648
+      },
+      "actual_sha256": "6bdb03726ee3029fb2027ddeb6460aac4bbdec0eaa9879c864d4a0c771dd8cf9",
+      "sha256_match": true,
+      "bytes_match": true,
+      "stable_during_read": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.8-B3-20261102T163355+0800/source-snapshot/finalize_startup_failure.py",
+      "sources": [
+        "source-manifest"
+      ],
+      "expected_bytes": 3709,
+      "expected_sha256": "e7c798ba03a3387ab4de16bd1a47d3b1e118e9e1e4aa5a8a2d61144be2b22689",
+      "status_before": null,
+      "status_after": "MATCH",
+      "stat_before": {
+        "st_dev": 2064,
+        "st_ino": 314544034,
+        "st_size": 3709,
+        "st_mtime_ns": 1793608467405452529,
+        "st_ctime_ns": 1793613901873128609,
+        "st_atime_ns": 1793614443573096322
+      },
+      "bytes_read": 3709,
+      "fd_stat_before": {
+        "st_dev": 2064,
+        "st_ino": 314544034,
+        "st_size": 3709,
+        "st_mtime_ns": 1793608467405452529,
+        "st_ctime_ns": 1793613901873128609
+      },
+      "fd_stat_after": {
+        "st_dev": 2064,
+        "st_ino": 314544034,
+        "st_size": 3709,
+        "st_mtime_ns": 1793608467405452529,
+        "st_ctime_ns": 1793613901873128609
+      },
+      "stat_after": {
+        "st_dev": 2064,
+        "st_ino": 314544034,
+        "st_size": 3709,
+        "st_mtime_ns": 1793608467405452529,
+        "st_ctime_ns": 1793613901873128609,
+        "st_atime_ns": 1793614443573096322
+      },
+      "actual_sha256": "e7c798ba03a3387ab4de16bd1a47d3b1e118e9e1e4aa5a8a2d61144be2b22689",
+      "sha256_match": true,
+      "bytes_match": true,
+      "stable_during_read": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.8-B3-20261102T163355+0800/source-snapshot/replay.py",
+      "sources": [
+        "source-manifest"
+      ],
+      "expected_bytes": 17993,
+      "expected_sha256": "cf59c618928edf954a78d4aea24ea77490016c065541f4a562b3925667d40f7e",
+      "status_before": null,
+      "status_after": "MATCH",
+      "stat_before": {
+        "st_dev": 2064,
+        "st_ino": 314544038,
+        "st_size": 17993,
+        "st_mtime_ns": 1793608467405452529,
+        "st_ctime_ns": 1793613901873128609,
+        "st_atime_ns": 1793614370993100648
+      },
+      "bytes_read": 17993,
+      "fd_stat_before": {
+        "st_dev": 2064,
+        "st_ino": 314544038,
+        "st_size": 17993,
+        "st_mtime_ns": 1793608467405452529,
+        "st_ctime_ns": 1793613901873128609
+      },
+      "fd_stat_after": {
+        "st_dev": 2064,
+        "st_ino": 314544038,
+        "st_size": 17993,
+        "st_mtime_ns": 1793608467405452529,
+        "st_ctime_ns": 1793613901873128609
+      },
+      "stat_after": {
+        "st_dev": 2064,
+        "st_ino": 314544038,
+        "st_size": 17993,
+        "st_mtime_ns": 1793608467405452529,
+        "st_ctime_ns": 1793613901873128609,
+        "st_atime_ns": 1793614370993100648
+      },
+      "actual_sha256": "cf59c618928edf954a78d4aea24ea77490016c065541f4a562b3925667d40f7e",
+      "sha256_match": true,
+      "bytes_match": true,
+      "stable_during_read": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.8-B3-20261102T163355+0800/source-snapshot/report.py",
+      "sources": [
+        "source-manifest"
+      ],
+      "expected_bytes": 6982,
+      "expected_sha256": "8ae34bc44a72931e0852619a557863e9342159a1d05cea44cf7d3223ef8ad8cd",
+      "status_before": null,
+      "status_after": "MATCH",
+      "stat_before": {
+        "st_dev": 2064,
+        "st_ino": 314544033,
+        "st_size": 6982,
+        "st_mtime_ns": 1793608467404452529,
+        "st_ctime_ns": 1793613901873128609,
+        "st_atime_ns": 1793614370993100648
+      },
+      "bytes_read": 6982,
+      "fd_stat_before": {
+        "st_dev": 2064,
+        "st_ino": 314544033,
+        "st_size": 6982,
+        "st_mtime_ns": 1793608467404452529,
+        "st_ctime_ns": 1793613901873128609
+      },
+      "fd_stat_after": {
+        "st_dev": 2064,
+        "st_ino": 314544033,
+        "st_size": 6982,
+        "st_mtime_ns": 1793608467404452529,
+        "st_ctime_ns": 1793613901873128609
+      },
+      "stat_after": {
+        "st_dev": 2064,
+        "st_ino": 314544033,
+        "st_size": 6982,
+        "st_mtime_ns": 1793608467404452529,
+        "st_ctime_ns": 1793613901873128609,
+        "st_atime_ns": 1793614370993100648
+      },
+      "actual_sha256": "8ae34bc44a72931e0852619a557863e9342159a1d05cea44cf7d3223ef8ad8cd",
+      "sha256_match": true,
+      "bytes_match": true,
+      "stable_during_read": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.8-B3-20261102T163355+0800/source-snapshot/supervisor.py",
+      "sources": [
+        "source-manifest"
+      ],
+      "expected_bytes": 11111,
+      "expected_sha256": "f9b77503ced086c6cdfb970847b5205b3c489232a85d65dcf5cc4dad5e628ef2",
+      "status_before": null,
+      "status_after": "MATCH",
+      "stat_before": {
+        "st_dev": 2064,
+        "st_ino": 314544036,
+        "st_size": 11111,
+        "st_mtime_ns": 1793608467405452529,
+        "st_ctime_ns": 1793613901873128609,
+        "st_atime_ns": 1793614443573096322
+      },
+      "bytes_read": 11111,
+      "fd_stat_before": {
+        "st_dev": 2064,
+        "st_ino": 314544036,
+        "st_size": 11111,
+        "st_mtime_ns": 1793608467405452529,
+        "st_ctime_ns": 1793613901873128609
+      },
+      "fd_stat_after": {
+        "st_dev": 2064,
+        "st_ino": 314544036,
+        "st_size": 11111,
+        "st_mtime_ns": 1793608467405452529,
+        "st_ctime_ns": 1793613901873128609
+      },
+      "stat_after": {
+        "st_dev": 2064,
+        "st_ino": 314544036,
+        "st_size": 11111,
+        "st_mtime_ns": 1793608467405452529,
+        "st_ctime_ns": 1793613901873128609,
+        "st_atime_ns": 1793614443573096322
+      },
+      "actual_sha256": "f9b77503ced086c6cdfb970847b5205b3c489232a85d65dcf5cc4dad5e628ef2",
+      "sha256_match": true,
+      "bytes_match": true,
+      "stable_during_read": true
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/results/task9/t9.8-B3-20261102T163355+0800/source-snapshot/test_analysis.py",
+      "sources": [
+        "source-manifest"
+      ],
+      "expected_bytes": 10931,
+      "expected_sha256": "50ddeb081cff2d1535ef6b5eeef070df2773cd2aac4653d659b08cd44fe44de6",
+      "status_before": null,
+      "status_after": "MATCH",
+      "stat_before": {
+        "st_dev": 2064,
+        "st_ino": 314544037,
+        "st_size": 10931,
+        "st_mtime_ns": 1793608467405452529,
+        "st_ctime_ns": 1793613901873128609,
+        "st_atime_ns": 1793614370993100648
+      },
+      "bytes_read": 10931,
+      "fd_stat_before": {
+        "st_dev": 2064,
+        "st_ino": 314544037,
+        "st_size": 10931,
+        "st_mtime_ns": 1793608467405452529,
+        "st_ctime_ns": 1793613901873128609
+      },
+      "fd_stat_after": {
+        "st_dev": 2064,
+        "st_ino": 314544037,
+        "st_size": 10931,
+        "st_mtime_ns": 1793608467405452529,
+        "st_ctime_ns": 1793613901873128609
+      },
+      "stat_after": {
+        "st_dev": 2064,
+        "st_ino": 314544037,
+        "st_size": 10931,
+        "st_mtime_ns": 1793608467405452529,
+        "st_ctime_ns": 1793613901873128609,
+        "st_atime_ns": 1793614370993100648
+      },
+      "actual_sha256": "50ddeb081cff2d1535ef6b5eeef070df2773cd2aac4653d659b08cd44fe44de6",
+      "sha256_match": true,
+      "bytes_match": true,
+      "stable_during_read": true
+    }
+  ]
+}

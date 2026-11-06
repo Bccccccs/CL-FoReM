@@ -1,0 +1,23 @@
+{
+  "frozen_at": "2026-11-06T09:50:21.016277+08:00",
+  "max_requests": 256,
+  "target_per_stratum": 64,
+  "stable_order": [
+    "training_seed",
+    "domain",
+    "domain_index",
+    "step_id",
+    "substep"
+  ],
+  "strata": {
+    "first_ik_rejection": "first rejection of episode has kind1; take exactly this request",
+    "first_collision_rejection": "first rejection has kind2/3/4; take exactly this request",
+    "zero_progress_no_rejection": "episode failures0 and strictfalse; use first available real committed request with trials==s and unchanged base; no request or no such request => unavailable, not manufactured",
+    "executable": "strict success episode; take first real committed request"
+  },
+  "diagnostic_repetitions": 3,
+  "main_repetition": 0,
+  "repeat_protocol": "Each replicate fresh plugin with same initialization seed471812, same request order. Time-budget nondeterminism retained, report all repeats. Baseline once; no best repetition selection.",
+  "selection": "frozen from full current backend outputs only; no BioIK outcomes used",
+  "cost": "includes bridge and GPU copies; baseline unchanged, no enforced truncation"
+}

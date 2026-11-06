@@ -1,0 +1,56 @@
+{
+  "time": "2026-11-04T09:19:57.967381+08:00",
+  "rows": [
+    {
+      "path": "/home/ybc/projects/CL-FoReM/forem/results/task9/t9-stage2-20261029/B3_5M-seed4718/config.json",
+      "values": {
+        "total_transfers": 5000000,
+        "update_every_transfers": 10,
+        "alpha_rule": "rllib",
+        "lr_schedule": "linear_transfers",
+        "alpha_lr_start": 0.0001,
+        "alpha_lr_end": 1e-06,
+        "alpha_lr_schedule": null,
+        "lr_start": 0.0001,
+        "lr_end": 1e-06,
+        "batch_size": 256,
+        "replay_capacity": 100000,
+        "environments": 256
+      }
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/config/task9/task9_11/C_seed4718.json",
+      "values": {
+        "total_transfers": 3000000,
+        "update_every_transfers": 10,
+        "alpha_rule": "capped",
+        "lr_schedule": "exp_updates",
+        "alpha_lr_start": 1e-06,
+        "alpha_lr_end": 1e-06,
+        "alpha_lr_schedule": "exp_updates",
+        "lr_start": 0.0001,
+        "lr_end": 1e-06,
+        "batch_size": 256,
+        "replay_capacity": 100000,
+        "environments": 256
+      }
+    },
+    {
+      "path": "/home/ybc/projects/CL-FoReM-task9/forem/config/task9/task9_11/L_seed4718.json",
+      "values": {
+        "total_transfers": 3000000,
+        "update_every_transfers": 10,
+        "alpha_rule": "capped",
+        "lr_schedule": "linear_transfers",
+        "alpha_lr_start": 1e-06,
+        "alpha_lr_end": 1e-06,
+        "alpha_lr_schedule": "exp_updates",
+        "lr_start": 0.0001,
+        "lr_end": 1e-06,
+        "batch_size": 256,
+        "replay_capacity": 100000,
+        "environments": 256
+      }
+    }
+  ]
+}
