@@ -16,7 +16,7 @@
 ## 原main.py的prior/modified差异（解释）
 
 1. `SAC.update_parameters`：双Q+tanh高斯策略+自动α；目标`r + mask·γ·(minQ' − α·logπ)`；策略损失`α·logπ − minQ`。**参考的“普通”更新仍含本地改动**：α=exp(logα)×0.35（上限）、降到0.05后冻结并停止调整、lr=1e-4按`(1e-6/1e-4)^(step/num_steps)`指数衰减、梯度裁剪10、τ=0.001。
-2. `update_parameters_modified(…, prior_agent)`：另需一个冻结的`prior_agent`（由`load_and_freeze_checkpoint`载入），目标变为`minQ' + α·logπ_prior(a'|s') − α·logπ(a'|s')`，策略损失`α·logπ − minQ − α·logπ_prior`——策略被正则化到先验策略；还要求`state_action`同批次由策略采样后用先验估log-prob。
+2. `update_parameters_modified(…, prior_agent)`：另需一个冻结的`prior_agent`（由`load_and_freeze_checkpoint`载入），目标变为`minQ' + α·logπ_prior(a'|s') − α·logπ(a'|s')`，策略损失`α·logπ − minQ − α·logπ_prior`——策略被正则化到先验策略；还要求`state_action`同批次由策略采样后用先验估log-prob。**更正（2026-10-27，[SRC-1240](../../../SOURCES.md#src-1240)）**：`state_action/state_log_pi`在`torch.no_grad()`内采样，策略实际得不到梯度、不更新，只有critic和α在学；“正则化到先验”只是代码意图。
 3. main.py还有：硬编码绝对checkpoint路径；`resume=True`时先用该权重评估20个episode并**把这些评估转移写入replay**；每500个episode评估20个，每1000个episode保存；`num_steps=5000001`既是上限也是学习率衰减的horizon；`buffer_size=100000`。以上均不进入FoReM普通入口（[SRC-0058](../../../SOURCES.md#src-0058)）。`tests/test_task3_sac_roundtrip.py::test_modified_update_needs_prior_and_differs`给出实测对照：缺prior抛`TypeError`；同批数据policy loss不同。
 
 > 注意：smoke-r1/train-r1在旧（全链重力开）模型上运行；最终模型上的smoke/eval见[t3.5-int-r4](../../../../results/task3/t3.5-int-r4/sac_smoke/sac_summary.json)（76步、60次更新、1个episode结束、往返确定性差0.0、错误contract全拒绝；eval阶段2个episode）。

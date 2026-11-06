@@ -1,0 +1,626 @@
+{
+  "schema": 1,
+  "sources": [
+    "SRC-0904",
+    "SRC-0484"
+  ],
+  "map_index": "results/task7/maps/a/20261021T021400Z/index.json",
+  "map_index_sha256": "95976a0767b5bcb89a550c9602d68b60cbcd5813cad582433859c31bf6330109",
+  "maps": [
+    {
+      "map_id": "sparse_validation_00000",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00001",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00002",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00003",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00004",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00005",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00006",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00007",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00008",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00009",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00010",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00011",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00012",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00013",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00014",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00015",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00016",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00017",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00018",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00019",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00020",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00021",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00022",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00023",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00024",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00025",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00026",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00027",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00028",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00029",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00030",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00031",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00032",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00033",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00034",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00035",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00036",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00037",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00038",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00039",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00040",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00041",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00042",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00043",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00044",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00045",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00046",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00047",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00048",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "sparse_validation_00049",
+      "difficulty": "sparse"
+    },
+    {
+      "map_id": "standard_validation_00000",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00001",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00002",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00003",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00004",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00005",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00006",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00007",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00008",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00009",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00010",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00011",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00012",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00013",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00014",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00015",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00016",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00017",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00018",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00019",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00020",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00021",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00022",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00023",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00024",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00025",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00026",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00027",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00028",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00029",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00030",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00031",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00032",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00033",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00034",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00035",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00036",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00037",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00038",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00039",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00040",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00041",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00042",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00043",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00044",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00045",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00046",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00047",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00048",
+      "difficulty": "standard"
+    },
+    {
+      "map_id": "standard_validation_00049",
+      "difficulty": "standard"
+    }
+  ],
+  "initial_episode_seeds": [
+    1208925819614629174706176,
+    1208925819614629174706177,
+    1208925819614629174706178,
+    1208925819614629174706179,
+    1208925819614629174706180,
+    1208925819614629174706181,
+    1208925819614629174706182,
+    1208925819614629174706183,
+    1208925819614629174706184,
+    1208925819614629174706185,
+    1208925819614629174706186,
+    1208925819614629174706187,
+    1208925819614629174706188,
+    1208925819614629174706189,
+    1208925819614629174706190,
+    1208925819614629174706191,
+    1208925819614629174706192,
+    1208925819614629174706193,
+    1208925819614629174706194,
+    1208925819614629174706195,
+    1208925819614629174706196,
+    1208925819614629174706197,
+    1208925819614629174706198,
+    1208925819614629174706199,
+    1208925819614629174706200,
+    1208925819614629174706201,
+    1208925819614629174706202,
+    1208925819614629174706203,
+    1208925819614629174706204,
+    1208925819614629174706205,
+    1208925819614629174706206,
+    1208925819614629174706207,
+    1208925819614629174706208,
+    1208925819614629174706209,
+    1208925819614629174706210,
+    1208925819614629174706211,
+    1208925819614629174706212,
+    1208925819614629174706213,
+    1208925819614629174706214,
+    1208925819614629174706215,
+    1208925819614629174706216,
+    1208925819614629174706217,
+    1208925819614629174706218,
+    1208925819614629174706219,
+    1208925819614629174706220,
+    1208925819614629174706221,
+    1208925819614629174706222,
+    1208925819614629174706223,
+    1208925819614629174706224,
+    1208925819614629174706225,
+    1208925819614629174706226,
+    1208925819614629174706227,
+    1208925819614629174706228,
+    1208925819614629174706229,
+    1208925819614629174706230,
+    1208925819614629174706231,
+    1208925819614629174706232,
+    1208925819614629174706233,
+    1208925819614629174706234,
+    1208925819614629174706235,
+    1208925819614629174706236,
+    1208925819614629174706237,
+    1208925819614629174706238,
+    1208925819614629174706239,
+    1208925819614629174706240,
+    1208925819614629174706241,
+    1208925819614629174706242,
+    1208925819614629174706243,
+    1208925819614629174706244,
+    1208925819614629174706245,
+    1208925819614629174706246,
+    1208925819614629174706247,
+    1208925819614629174706248,
+    1208925819614629174706249,
+    1208925819614629174706250,
+    1208925819614629174706251,
+    1208925819614629174706252,
+    1208925819614629174706253,
+    1208925819614629174706254,
+    1208925819614629174706255,
+    1208925819614629174706256,
+    1208925819614629174706257,
+    1208925819614629174706258,
+    1208925819614629174706259,
+    1208925819614629174706260,
+    1208925819614629174706261,
+    1208925819614629174706262,
+    1208925819614629174706263,
+    1208925819614629174706264,
+    1208925819614629174706265,
+    1208925819614629174706266,
+    1208925819614629174706267,
+    1208925819614629174706268,
+    1208925819614629174706269,
+    1208925819614629174706270,
+    1208925819614629174706271,
+    1208925819614629174706272,
+    1208925819614629174706273,
+    1208925819614629174706274,
+    1208925819614629174706275,
+    1208925819614629174706276,
+    1208925819614629174706277,
+    1208925819614629174706278,
+    1208925819614629174706279,
+    1208925819614629174706280,
+    1208925819614629174706281,
+    1208925819614629174706282,
+    1208925819614629174706283,
+    1208925819614629174706284,
+    1208925819614629174706285,
+    1208925819614629174706286,
+    1208925819614629174706287,
+    1208925819614629174706288,
+    1208925819614629174706289,
+    1208925819614629174706290,
+    1208925819614629174706291,
+    1208925819614629174706292,
+    1208925819614629174706293,
+    1208925819614629174706294,
+    1208925819614629174706295,
+    1208925819614629174706296,
+    1208925819614629174706297,
+    1208925819614629174706298,
+    1208925819614629174706299,
+    1208925819614629174706300,
+    1208925819614629174706301,
+    1208925819614629174706302,
+    1208925819614629174706303,
+    1208925819614629174706304,
+    1208925819614629174706305,
+    1208925819614629174706306,
+    1208925819614629174706307,
+    1208925819614629174706308,
+    1208925819614629174706309,
+    1208925819614629174706310,
+    1208925819614629174706311,
+    1208925819614629174706312,
+    1208925819614629174706313,
+    1208925819614629174706314,
+    1208925819614629174706315,
+    1208925819614629174706316,
+    1208925819614629174706317,
+    1208925819614629174706318,
+    1208925819614629174706319,
+    1208925819614629174706320,
+    1208925819614629174706321,
+    1208925819614629174706322,
+    1208925819614629174706323,
+    1208925819614629174706324,
+    1208925819614629174706325,
+    1208925819614629174706326,
+    1208925819614629174706327,
+    1208925819614629174706328,
+    1208925819614629174706329,
+    1208925819614629174706330,
+    1208925819614629174706331,
+    1208925819614629174706332,
+    1208925819614629174706333,
+    1208925819614629174706334,
+    1208925819614629174706335,
+    1208925819614629174706336,
+    1208925819614629174706337,
+    1208925819614629174706338,
+    1208925819614629174706339,
+    1208925819614629174706340,
+    1208925819614629174706341,
+    1208925819614629174706342,
+    1208925819614629174706343,
+    1208925819614629174706344,
+    1208925819614629174706345,
+    1208925819614629174706346,
+    1208925819614629174706347,
+    1208925819614629174706348,
+    1208925819614629174706349,
+    1208925819614629174706350,
+    1208925819614629174706351,
+    1208925819614629174706352,
+    1208925819614629174706353,
+    1208925819614629174706354,
+    1208925819614629174706355,
+    1208925819614629174706356,
+    1208925819614629174706357,
+    1208925819614629174706358,
+    1208925819614629174706359,
+    1208925819614629174706360,
+    1208925819614629174706361,
+    1208925819614629174706362,
+    1208925819614629174706363,
+    1208925819614629174706364,
+    1208925819614629174706365,
+    1208925819614629174706366,
+    1208925819614629174706367,
+    1208925819614629174706368,
+    1208925819614629174706369,
+    1208925819614629174706370,
+    1208925819614629174706371,
+    1208925819614629174706372,
+    1208925819614629174706373,
+    1208925819614629174706374,
+    1208925819614629174706375
+  ],
+  "seed_reservation": [
+    1208925819614629174706176,
+    1208925819614633469673471
+  ],
+  "seed_rule": "Initial round r=0,1, map i in configured order: initial_episode_seeds[2*i+r]. Supplemental round r>=2: supplement_start+(r-2)*len(maps)+i. Complete each 100-map round; stop each variant independently after initial two rounds and >=minimum_eligible_pairs. Reuse identical schedules across variants, never replace maps or skip episodes. Seed reservation exhaustion raises; no silent reuse.",
+  "seed_selection": "Engineering namespace choice (not external experimental evidence): reserve [2**80,2**80+2**32-1], above uint64 map/proposal RNG outputs and all audited explicit episode seeds. Use arbitrary nonnegative Python int SeedSequence entropy, not a uint64 cast. Future callers must reserve this namespace; audit before formal launch.",
+  "supplement_start": 1208925819614629174706376,
+  "minimum_eligible_pairs": 1000,
+  "bootstrap": {
+    "unit": "episode",
+    "repetitions": 10000,
+    "seed": 71920261021
+  }
+}

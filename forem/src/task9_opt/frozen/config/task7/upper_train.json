@@ -1,0 +1,52 @@
+{
+  "schema": "task7-upper-learner-v1",
+  "authorization": "bounded-only",
+  "formal_training_authorized": false,
+  "device": "cuda:0",
+  "physical_gpu": 1,
+  "replay_capacity": 100000,
+  "sequences": 32,
+  "sequence_length": 8,
+  "burn_in": 4,
+  "random_warmup_decisions": 1000,
+  "gamma": 0.99,
+  "tau_seconds": 0.1,
+  "target_tau": 0.001,
+  "gradient_clip": 10,
+  "lr_start": 0.0001,
+  "lr_end": 1e-06,
+  "alpha_lr": 1e-06,
+  "fp_lr": 0.0001,
+  "holdout_episode_fraction": 0.1,
+  "holdout_patience_epochs": 5,
+  "bounded_limits": {
+    "stage1_decisions": 5000,
+    "stage2_decisions": 2000,
+    "stage3_decisions": 2000
+  },
+  "formal_budget_reference_only": {
+    "B1": 200000,
+    "B3": 100000,
+    "seeds": 3,
+    "test_maps_per_difficulty": 100
+  },
+  "validation_interval": 10000,
+  "validation_tie_rule": "arrival_then_earliest",
+  "actual_result_to_v1_mapping": "core.feature_vector(actual_core_before_autoreset)",
+  "new_information_three_bin_edges": "holdout_tertiles_once_fixed_diagnostic_only",
+  "stage2_epoch_definition": "each_eligible_arrival_training_sample_once_batch256",
+  "lower_status": "pipeline-only pilot; D10 not passed",
+  "stage2_batch_size": 256,
+  "g3_zero_variance": "trained_fp_mean",
+  "stage3_entry_atol": 1e-06,
+  "stage3_entry_rtol": 1e-06,
+  "performance": {
+    "risk_chunk_size": 256,
+    "observation_chunk_size": 128,
+    "dls_cuda_graph": true,
+    "reuse_route_raster": true,
+    "simulator_batch": "full_E_times_13",
+    "lower_nn_batch": "full_E_times_13",
+    "trial_environments": 64
+  }
+}

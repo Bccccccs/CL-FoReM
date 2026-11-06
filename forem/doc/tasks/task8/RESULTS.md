@@ -1,6 +1,6 @@
 # task8 — 结果与交接
 
-状态：**review（PCD后端与本次24图链路已通过；8.6存在执行越界，严格合规失败，交付已归档）**。执行依据[SRC-0990](../../SOURCES.md#src-0990)，功能证据[SRC-0991–0996](../../SOURCES.md#src-0996)，执行偏差[SRC-0997](../../SOURCES.md#src-0997)；SAC下一阶段未启动。父实际模型/强度未知，子Agent按显式Sol/Luna分工记录，推荐见下文及执行日志。
+状态：**done（2026-10-28 地图迁移收尾，[SRC-1313](../../SOURCES.md#src-1313)）**；训练移至[task9](../task9/RESULTS.md)。原状态：review（PCD后端与本次24图链路已通过；8.6存在执行越界，严格合规失败，交付已归档），历史记录保留。执行依据[SRC-0990](../../SOURCES.md#src-0990)，功能证据[SRC-0991–0996](../../SOURCES.md#src-0996)，执行偏差[SRC-0997](../../SOURCES.md#src-0997)；SAC下一阶段未启动。父实际模型/强度未知，子Agent按显式Sol/Luna分工记录，推荐见下文及执行日志。
 
 ## 规划阶段历史：已完成的静态工作
 
@@ -26,7 +26,8 @@
 |8.9|closed：2026-10-27用户作废（SRC-1220）；8.9.1.1森林raycast、8.9.1.2 scene缓存已并入v3并保留，8.9.2 cube-pool-v2已发布；未smoke/未长训|[RESULTS](task8.9/RESULTS.md)|
 |8.10|done（2026-10-27）：primitive-obb-v1可选后端A/C/E/F/H pass、B pass_approved（SRC-1310）、D/G报告，S4独立验收；默认仍v3|[RESULTS](task8.10/RESULTS.md)|
 |8.11|done（2026-10-27）：W/I/C pass、R/T报告，X2独立验收|[RESULTS](task8.11/RESULTS.md)|
-|8.12|draft（仅建档，未授权训练）|[RESULTS](task8.12/RESULTS.md)|
+|8.12|superseded（2026-10-28，无运行证据，协议移至task9）|[RESULTS](task8.12/RESULTS.md)|
+|8.13|done（2026-10-28）：M1修补，`_contract()`含两原语几何文件且哈希一致|[RESULTS](task8.13/RESULTS.md)|
 
 以上为规划阶段历史，当时没有新代码、地图生成、扫描渲染或机器人运行。当前实施结果见下方t8-exec-20261026；规划/哈希核查本身不构成迁移验收。
 

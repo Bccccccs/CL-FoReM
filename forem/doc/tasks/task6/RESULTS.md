@@ -15,6 +15,7 @@
 |task6.3 sim策略Gazebo零样本迁移|done（Claude复核R3）：sim 0.433 → Gazebo 0.160（R-48同口径）/0.200（原论文配置）；R-48 0.053|[RESULTS](task6.3/RESULTS.md)|
 |task6.4 task5 A/B按原论文Gazebo零样本评估|尚未执行（2026-10-13文档交付，待用户派发）|[RESULTS](task6.4/RESULTS.md)|
 |task6.5 原作者模型复现N²M²|尚未执行（2026-10-14文档交付，待用户派发）|[RESULTS](task6.5/RESULTS.md)|
+|task6.6 评估CBL自己的检查点|done（2026-10-27，Claude复核通过）：15个CBL检查点合计S 360/750＝0.480（单个19–27/50），Z-B 0.223，Z-A 0.236；全部低于task5.5的sim最低种子30/50，Gazebo同样约降一半|[RESULTS](task6.6/RESULTS.md)|
 
 ## 四组对照表（父汇总时填写）
 

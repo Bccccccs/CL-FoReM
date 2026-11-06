@@ -29,7 +29,7 @@ FORMAT='task8-lower-full-v1'
 
 def _contract():
     root=Path(__file__).resolve().parents[2]
-    names=['src/task8_sim/assets.py','src/task8_sim/scene_cache.py','src/task8_sim/env.py','src/task8_sim/scene.py','src/task8_sim/episode.py',
+    names=['src/task8_sim/assets.py','src/task8_sim/primitive_assets.py','src/task8_sim/primitive_scene.py','src/task8_sim/scene_cache.py','src/task8_sim/env.py','src/task8_sim/scene.py','src/task8_sim/episode.py',
            'src/task8_sim/robot.py','src/task8_sim/routes.py','src/task8_sim/perception.py',
            'src/task7_sim/core.py','src/task7_lower/observation.py','config/task8/sensor.json',
            'config/task7/robot_geometry.json','src/task8_lower/training.py','src/task8_lower/sac.py',
@@ -144,6 +144,9 @@ def validate_config(config):
     if config['update_every_transfers']<1:raise ValueError('UTD interval must be positive')
     if config['log_interval']!=1000:raise ValueError('diagnostics must be every 1000 transitions')
     if not (0<config['batch_size']<config['replay_capacity']):raise ValueError('replay capacity/batch size')
+    if config.get('alpha_lr_schedule',config['lr_schedule']) not in ('exp_updates','linear_transfers'):raise ValueError('unsupported alpha LR schedule')
+    if config.get('critic_loss','mse') not in ('mse','huber'):raise ValueError('unsupported critic loss')
+    if not config.get('huber_delta',1.0)>0:raise ValueError('Huber delta must be positive')
     resolve_map_backend(config)
 
 

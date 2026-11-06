@@ -8,6 +8,12 @@ from torch.nn import functional as F
 from task7_lower.sac import LowerSAC as V5SAC, soft_update
 
 
+def huber_loss(error, delta=1.0):
+    """RLlib 1.6.0 torch_ops.huber_loss, elementwise (not MSE scaling)."""
+    return torch.where(error.abs() < delta, 0.5 * error ** 2,
+                       delta * (error.abs() - 0.5 * delta))
+
+
 def update_due(transfer, replay_size, config):
     """Global consumed transition number; old replay tested before insertion."""
     return replay_size > config['batch_size'] and transfer % config['update_every_transfers'] == 0
@@ -21,6 +27,12 @@ class LowerSAC(V5SAC):
         if self.alpha_rule not in ('capped','rllib'):raise ValueError('unsupported alpha rule')
         if self.lr_schedule not in ('exp_updates','linear_transfers'):raise ValueError('unsupported LR schedule')
         if self.lr_schedule=='exp_updates' and (config['lr_start']!=1e-4 or config['lr_end']!=1e-6):raise ValueError('v5 schedule parameters changed')
+        self.alpha_lr_schedule=config.get('alpha_lr_schedule',self.lr_schedule)
+        self.critic_loss=config.get('critic_loss','mse')
+        self.huber_delta=config.get('huber_delta',1.0)
+        if self.alpha_lr_schedule not in ('exp_updates','linear_transfers'):raise ValueError('unsupported alpha LR schedule')
+        if self.critic_loss not in ('mse','huber'):raise ValueError('unsupported critic loss')
+        if not self.huber_delta > 0:raise ValueError('Huber delta must be positive')
         for g in self.alpha_optim.param_groups:g['lr']=config['alpha_lr_start']
 
     @torch.no_grad()
@@ -36,6 +48,8 @@ class LowerSAC(V5SAC):
             lr=self.config['lr_start']+(self.config['lr_end']-self.config['lr_start'])*progress
             for optimizer in (self.policy_optim,self.critic_optim):
                 for group in optimizer.param_groups:group['lr']=lr
+        if self.alpha_lr_schedule=='linear_transfers':
+            progress=min(max(self.env_steps/self.config['total_transfers'],0.),1.)
             alpha_lr=self.config['alpha_lr_start']+(self.config['alpha_lr_end']-self.config['alpha_lr_start'])*progress
             for group in self.alpha_optim.param_groups:group['lr']=alpha_lr
 
@@ -61,8 +75,12 @@ class LowerSAC(V5SAC):
             min_qf_next_target = torch.min(qf1_next_target, qf2_next_target) - self.alpha * next_state_log_pi.unsqueeze(1)
             next_q_value = reward_batch + mask_batch * self.gamma * (min_qf_next_target)
         qf1, qf2 = self.critic(map_state_batch, rob_state_batch, action_batch)
-        qf1_loss = F.mse_loss(qf1, next_q_value)
-        qf2_loss = F.mse_loss(qf2, next_q_value)
+        if self.critic_loss == 'mse':
+            qf1_loss = F.mse_loss(qf1, next_q_value)
+            qf2_loss = F.mse_loss(qf2, next_q_value)
+        else:
+            qf1_loss = huber_loss(qf1 - next_q_value, self.huber_delta).mean()
+            qf2_loss = huber_loss(qf2 - next_q_value, self.huber_delta).mean()
         qf_loss = qf1_loss + qf2_loss
 
         self._finite(qf1, qf2, next_q_value, qf1_loss, qf2_loss)

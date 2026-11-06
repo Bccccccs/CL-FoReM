@@ -1,5 +1,7 @@
 # 总体计划
 
+> 2026-10-26当前调度：用户冻结task7全部后续执行（paused），历史设计/成果保留；task8现已实施PCD与ghost迁移，本次24图链路功能通过，整体review（[执行越界SRC-0997](SOURCES.md#src-0997)）；[task8结果](tasks/task8/RESULTS.md)含证据与下层SAC后续交接，未启动下一阶段。依据[SRC-0984](SOURCES.md#src-0984)。本文下方task7路线不构成恢复执行许可。
+
 2026-10-16按用户指令改为两阶段结构（[SRC-0321](SOURCES.md#src-0321)）。旧计划（固定底座时延路线、视觉惯性定位路线、Task4内WM路线）已删除，原文见备份。
 
 ## 阶段一：CBL项目复现（task0、task3–task6）

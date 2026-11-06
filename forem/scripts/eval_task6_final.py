@@ -20,6 +20,7 @@ sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(HERE.parent / "src" / "modulation_rl" / "scripts"))
 from scwm_env import ScwmEnv  # noqa: E402
 from scwm_sac import ScwmSAC  # noqa: E402
+from model import GaussianPolicy as ReferenceGaussianPolicy  # noqa: E402  (task6.6: reference class, predict() squashes twice)
 from scwm_train import run_eval  # noqa: E402
 
 
@@ -34,6 +35,9 @@ def main():
     ap.add_argument("--out", required=True)
     ap.add_argument("--execute_style", choices=["direct", "track"], default=None)
     ap.add_argument("--ik_fail_thresh", type=int, default=None)
+    ap.add_argument("--policy-class", choices=["fixed", "reference"], default="fixed",
+                    help="fixed (default, unchanged): FixedGaussianPolicy single-tanh predict(); reference: reference model.GaussianPolicy "
+                         "(deterministic action tanh(tanh(mean)), what the cbl checkpoints executed; task6.6)")
     a = ap.parse_args()
     env_kwargs = {"world": "sim", "max_close_steps": a.max_close_steps} if a.world == "sim" else {}
     if a.world == "gazebo":
@@ -50,7 +54,9 @@ def main():
     print("effective_config", json.dumps(effective_config), flush=True)
     sac_args = dict(gamma=0.99, tau=0.001, initial_alpha=1.0, device=a.device, train_batch_size=256,
                     model=dict(custom_model_config=dict(post_fcnet_hiddens=[512, 512, 256])))
-    agent = ScwmSAC(env.observation_space, env.action_space, 1, sac_args, 5000001)
+    agent_kwargs = {} if a.policy_class == "fixed" else dict(policy_factory=ReferenceGaussianPolicy)
+    agent = ScwmSAC(env.observation_space, env.action_space, 1, sac_args, 5000001, **agent_kwargs)
+    print("policy_class", a.policy_class, type(agent.policy).__name__, flush=True)
     agent.policy.load_state_dict(torch.load(a.policy, map_location=a.device))
     agent.policy.eval()
     seeds = [int(x) for x in a.seeds.split(",")]
@@ -69,7 +75,7 @@ def main():
     errored = [e for e in eps if "error" in e]
     completed = [e for e in eps if "error" not in e and e.get("done")]
     capped = [e for e in eps if "error" not in e and not e.get("done")]
-    res = dict(effective_config=effective_config, max_steps_per_episode=a.max_steps, world=a.world, policy=a.policy, seeds=seeds, wall_s=time.time() - t0, episodes=eps, n=len(seeds),
+    res = dict(effective_config=effective_config, policy_class=a.policy_class, max_steps_per_episode=a.max_steps, world=a.world, policy=a.policy, seeds=seeds, wall_s=time.time() - t0, episodes=eps, n=len(seeds),
                completed=len(completed), capped=len(capped), errored=len(errored),
                internal_successes=sum(bool(e.get("internal_success")) for e in eps),
                physical_successes=sum(bool(e.get("physical_success")) for e in eps),
