@@ -1,5 +1,13 @@
 # task10 流程
 
+## 2026-11-04 · 当前预算与审核口径（优先于旧工程停点）
+
+依据[用户最新决定](../../SOURCES.md#src-budget-review-20261104)及[全局原则](../../../../AGENTS.md#budget-review)，合理训练规模、评估与工程耗时由执行者按实际成本自主确定并登记，旧成本门和工程窗口不再要求重复批准。已有适用的保存/恢复及成本证据直接复用；bug修复后做受影响路径回归即可恢复或必要重跑，保留原失败记录和实际累计成本，无需每次另请重启授权。真实恢复点与账本一致性仍需成立，无恢复点另建run并明确从头开始，不伪造续训。相同原因反复失败先定位根因，不循环重跑。
+
+当前r2仍按已加载10k/9k、GPU1及54h训练/4.5h评估配置运行，本次不改变其运行代码、快照、超时器或GPU分配；该时间是当前配置事实，不是对后续合理执行的新审批门槛。后续如需调整，先记录理由、预期成本与安全执行方式。已有用户最多两卡/任务资源隔离继续遵守；新增科学条件和比较规模须事前记录并保证对照可比。20k×3等后续规模先依据10k结果判断，不仅因预算待批而阻塞，也不以本次规则更新宣称已启动。
+
+审核采用变更范围内一次必要核查，已有证据直接引用，遇新改动/失败才复查受影响部分，不重复全量测试或另开审核Agent。推荐GPT6.1sol/low、Sonnet5.5/low作常规执行；恢复/时序排错按需medium/high；执行者保留选模与先建档委派权限。
+
 递归规则：已授权拆分task10.1–10.4（见文末执行拆分）；子任务继承编号并各备 TASK、PROCEDURE、RESULTS，父流程登记顺序、依赖、负责人及验收关系并链接三文档。
 
 1. 核对旧 task7.20 决策环境、task7.21 候选编码、task7.22 普通离散 SAC 路径与 B3 接口。列出观测、候选/掩码、各候选推演特征、选中索引、B3 子目标、终止前反馈的来源及时间；仅所选候选有真实执行结果。
@@ -109,3 +117,20 @@
 两者独立，父接runner并串行GPU1验证/唯一训练，核验原件；执行者可按难度选可用模型/强度并先建档再委派，共享授权/预算/截止。推荐GPT6.1sol/high、Sonnet5.5/high，因deadline合同/有效GPU梯度需跨模块核查。[父日志](../../agent_logs/task10/20261102-codex-online-trial.md)。
 
 - 10.13独立审核，terra/high，只写三文档/日志，父核验；[TASK](task10.13/TASK.md) · [PROCEDURE](task10.13/PROCEDURE.md) · [RESULTS](task10.13/RESULTS.md)。不启动GPU/真实采集。
+
+## task10.14 · 本轮待派发
+父试训1200/200完成后，依次执行模型/清单冻结、入口核验、三策略配对与复算。负责人为待派发执行者，Codex审核；依赖本次在线试训首更及账本验收。子结果汇总到父RESULTS后决定后续规模。[TASK](task10.14/TASK.md) · [PROCEDURE](task10.14/PROCEDURE.md) · [RESULTS](task10.14/RESULTS.md)。执行者有自主选模及先建档后委派权限，父统一资源账本。推荐GPT6.1sol/medium、Sonnet5.5/medium，因模型加载及配对核查。
+
+## task10.15 · 10.14之后
+task10.14已通过工程验收，结果触发原地排序/学习信号诊断。依赖完整评估和在线回放，负责人待派发、Codex审核，A→B/C→必要时D→E裁定。选模/委派权限及预算按子流程，父核验。[TASK](task10.15/TASK.md) · [PROCEDURE](task10.15/PROCEDURE.md) · [RESULTS](task10.15/RESULTS.md)。推荐GPT6.1sol/high、Sonnet5.5/high，涉及变时长Bellman与熵的因果核查。
+
+## task10.17 · 单种子10k阶段训练
+依赖16验收，先恢复/成本门，再训练与三检查点评估。Codex父已执行A：真实恢复通过、成本门NOT_READY，B/C未启动并交回决策者；先建档可委派、共享预算。推荐GPT6.1sol/high、Sonnet5.5/high。[TASK](task10.17/TASK.md) · [PROCEDURE](task10.17/PROCEDURE.md) · [RESULTS](task10.17/RESULTS.md)。
+
+## task10.18 SCWM对照与优化诊断
+
+依赖task10.17完整原件，负责人Codex，18.1文献和18.2行为证据独立并行→父实现核查/因果综合→必要bug修复或新机制提案→验收。推荐GPT6.1sol/high、Sonnet5.5/high；执行者可自主选模/先建档委派。[TASK](task10.18/TASK.md) · [PROCEDURE](task10.18/PROCEDURE.md) · [RESULTS](task10.18/RESULTS.md)。
+
+## task10.19 固定模型扩大配对评价
+
+依赖17已验收终点/18小样本优先级修正；当前只规划待派发。A冻结80新图2初态与三臂→B新入口定向核查→C持久480回合0更新→D按地图组统计/交接；负责人待执行者，当前Codex验收。推荐GPT6.1sol/medium、Sonnet5.5/medium，可自主选模/建档委派，父共享范围与资源。[TASK](task10.19/TASK.md) · [PROCEDURE](task10.19/PROCEDURE.md) · [RESULTS](task10.19/RESULTS.md)。

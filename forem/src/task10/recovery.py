@@ -21,9 +21,11 @@ from .runtime import atomic_torch, Budget, sha256
 
 def tree_equal(a, b):
     if isinstance(a, torch.Tensor):
+        # Singleton dimensions can be contiguous with stride > 1; force a fresh
+        # unit-stride buffer before viewing bytes, preserving NaNs and signed zero.
         return (isinstance(b, torch.Tensor) and a.dtype == b.dtype and a.shape == b.shape
-                and torch.equal(a.detach().cpu().contiguous().reshape(-1).view(torch.uint8),
-                                b.detach().cpu().contiguous().reshape(-1).view(torch.uint8)))
+                and torch.equal(a.detach().cpu().reshape(-1).clone(memory_format=torch.contiguous_format).view(torch.uint8),
+                                b.detach().cpu().reshape(-1).clone(memory_format=torch.contiguous_format).view(torch.uint8)))
     if isinstance(a, np.ndarray):
         return isinstance(b, np.ndarray) and a.dtype == b.dtype and a.shape == b.shape and a.tobytes() == b.tobytes()
     if isinstance(a, dict):
@@ -66,7 +68,8 @@ def verify_learner_checkpoint(path, learner, replay, config, counters, *, learne
     device = next(learner.model.parameters()).device
     if learner_factory is None:
         learner_factory = lambda: Stage1Learner(
-            UpperModel(vector_dim=counters['vector_dim']).to(device), learner.total_updates)
+            UpperModel(vector_dim=counters['vector_dim']).to(device), learner.total_updates,
+            objective=learner.learning_objective['objective'])
     try:
         save_checkpoint(path, learner, replay, counters=counters, config=config)
         count = min(32, len(replay))
@@ -330,3 +333,209 @@ def mismatch_report(left, right, prefix='root'):
             entry.update(reason='non-tensor unequal', left=str(left)[:200], right=str(right)[:200])
         result.append(entry)
     return result
+
+
+# Versioned normal batch8 boundary API. The old natural-end API above deliberately
+# retains its original rejection rules for legacy smoke/online-trial callers.
+DECISION_BOUNDARY_FORMAT = 'task10-decision-boundary-v1'
+
+
+def _decision_journals(paths, replay, environment, completed):
+    """Verify durable committed identities and exact recorded replay fields."""
+    from task7_upper.replay import row, exact_cpu
+    journals, covered = [], {}
+    for value in paths:
+        p = Path(value)
+        with p.open('rb') as stream:
+            os.fsync(stream.fileno())
+            raw = torch.load(stream, map_location='cpu', weights_only=False)
+        if raw.get('next_boundary_ready') is False:
+            raise ValueError('journal next boundary is not committed')
+        fields = raw['fields']
+        n = len(fields['episode_id'])
+        for i in range(n):
+            identity = (str(fields['run_id']), int(fields['environment_id'][i]),
+                        int(fields['episode_id'][i]), int(fields['decision_index'][i]))
+            if identity in covered:
+                raise ValueError('duplicate committed journal transition identity')
+            covered[identity] = exact_cpu(row(fields, i, n))
+        journals.append(dict(path=str(p.resolve()), sha256=sha256(p)))
+    if len(covered) != completed or len(replay) != completed:
+        raise ValueError('journal/replay identity count differs from completed ledger')
+    seen = set()
+    for key, sequence in replay.episodes.items():
+        for record in sequence:
+            identity = (str(key[0]), int(key[1]), int(key[2]), int(record['decision_index']))
+            if identity in seen or identity not in covered:
+                raise ValueError('replay identity missing or repeated in committed journals')
+            seen.add(identity)
+            for field, recorded in covered[identity].items():
+                if field not in record or not tree_equal(record[field], recorded):
+                    raise ValueError(f'journal real transition differs from replay: {field}')
+    ep, c = environment.episodes, environment.episodes.core
+    for i in range(environment.batch):
+        episode, count = int(ep.episode_count[i]), int(c.decisions[i])
+        key = (environment.run_id, i, episode)
+        if count:
+            last = replay.episodes.get(key, [None])[-1]
+            if last is None or int(last['decision_index']) != count-1:
+                raise ValueError('active row last transition missing from replay')
+            if bool(last['terminated'] | last['truncated']):
+                raise ValueError('active row current replay episode is terminal')
+        elif episode > 1:
+            previous = replay.episodes.get((environment.run_id, i, episode-1), [None])[-1]
+            if previous is None or not bool(previous['terminated'] | previous['truncated']):
+                raise ValueError('new row lacks its previous natural terminal transition')
+    return journals
+
+
+def _module_runtime(module):
+    from task7_upper.stages import runtime
+    from .boundary_state import encode
+    return encode(dict(vcm=runtime(module.vcm),
+        training={k: m.training for k, m in module.named_modules()},
+        gradients={k: None if p.grad is None else p.grad for k, p in module.named_parameters()},
+        alignment_fitted=getattr(module.random_world_model, '_alignment_fitted', False)))
+
+
+def _restore_module_runtime(module, state):
+    from task7_upper.stages import restore_runtime
+    from .boundary_state import decode
+    state = decode(state, device=next(module.parameters()).device)
+    restore_runtime(module.vcm, state['vcm'])
+    modules, parameters = dict(module.named_modules()), dict(module.named_parameters())
+    if modules.keys() != state['training'].keys() or parameters.keys() != state['gradients'].keys():
+        raise ValueError('model runtime field schema changed')
+    for key, flag in state['training'].items(): modules[key].training = flag
+    for key, gradient in state['gradients'].items(): parameters[key].grad = gradient
+    module.random_world_model._alignment_fitted = state['alignment_fitted']
+
+
+def save_decision_boundary(path, learner, replay, *, environment, policy_generator,
+                           budget, config, counters, journal_paths, histories):
+    """Save a fully committed normal decision boundary, after natural row resets.
+
+    Exactly the existing scene is saved; no episode is ended or sampled here.
+    Journal/replay/learner/ledger must all describe the same completed batch.
+    """
+    from .boundary_state import capture_environment, encode, source_contract, runtime_contract
+    env = environment
+    if Path(path).exists():
+        raise ValueError('immutable decision boundary already exists')
+    if budget.state['in_flight'] or budget.state['reserved_decisions'] != budget.state['completed_decisions']:
+        raise ValueError('unfinished decision reservation')
+    if (counters['decisions'] != budget.state['completed_decisions']
+            or counters['updates'] != learner.updates or learner.updates != budget.state['updates']):
+        raise ValueError('learner/counter/ledger mismatch')
+    if len(histories) != env.batch:
+        raise ValueError('one recurrent history per environment required')
+    environment_state = capture_environment(env)
+    for i, history in enumerate(histories):
+        if len(history) != int(env.episodes.core.decisions[i]):
+            raise ValueError('history length differs from current episode decision count')
+        key = (env.run_id, i, int(env.episodes.episode_count[i]))
+        if not tree_equal(history, replay.episodes.get(key, [])):
+            raise ValueError('history differs from exact current-episode replay')
+    journals = _decision_journals(journal_paths, replay, env, counters['decisions'])
+    budget.check()
+    budget.flush()
+    payload = dict(format=DECISION_BOUNDARY_FORMAT, config=deepcopy(config),
+        counters=deepcopy(counters), learner=deepcopy(learner.state_dict()),
+        replay=replay.state_dict(), environment_state=environment_state,
+        histories=encode(histories), model_runtime=_module_runtime(learner.model),
+        target_runtime=_module_runtime(learner.target), rng=rng_state(),
+        policy_generator=policy_generator.get_state().cpu().clone(),
+        policy_generator_device=str(policy_generator.device), contract=_boundary_contract(env),
+        sources=source_contract(), runtime=runtime_contract(), streams=_streams_state(env.episodes),
+        ledger_path=str(budget.path.resolve()), ledger_sha256=sha256(budget.path),
+        ledger=deepcopy(budget.state), started_monotonic=budget.started,
+        deadline_monotonic=budget.deadline,
+        boot_id=Path('/proc/sys/kernel/random/boot_id').read_text().strip(), journals=journals,
+        boundary='selected segment/next boundary/natural resets/replay/updates committed; no pending or inflight')
+    atomic_torch(path, payload)
+    return dict(collector_resumable=True, format=DECISION_BOUNDARY_FORMAT,
+                completed_decisions=counters['decisions'], updates=counters['updates'],
+                episode_ids=env.episodes.episode_count.cpu().tolist(),
+                row_decisions=env.episodes.core.decisions.cpu().tolist(), boundary=payload['boundary'])
+
+
+def load_decision_boundary(path, learner, replay, *, environment_factory, config,
+                           test_only_allow_same_pid=False):
+    """Restore the saved mixed-row boundary in a new PID, with the original clock.
+
+    A changed ledger/journal/source/runtime or live previous PID is rejected
+    before constructing the environment. A rejected load never rewinds a ledger.
+    """
+    from .boundary_state import (decode, restore_environment, source_contract,
+                                 runtime_contract)
+    state = torch.load(path, map_location='cpu', weights_only=False)
+    if state.get('format') != DECISION_BOUNDARY_FORMAT or not tree_equal(state.get('config'), config):
+        raise ValueError('decision boundary format/config mismatch')
+    ledger_path = Path(state['ledger_path'])
+    lock = ledger_path.with_suffix(ledger_path.suffix+'.resume.lock').open('a')
+    try:
+        try:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            raise ValueError('another resumed collector owns this ledger')
+        if sha256(ledger_path) != state['ledger_sha256']:
+            raise ValueError('ledger changed since boundary; refuse budget rewind')
+        for item in state['journals']:
+            if sha256(item['path']) != item['sha256']:
+                raise ValueError('committed journal changed')
+        if not tree_equal(state['sources'], source_contract()):
+            raise ValueError('boundary source/version changed')
+        if not tree_equal(state['runtime'], runtime_contract()):
+            raise ValueError('boundary runtime/determinism changed')
+        if state['boot_id'] != Path('/proc/sys/kernel/random/boot_id').read_text().strip():
+            raise ValueError('host reboot changed monotonic clock; refuse deadline reset')
+        old_pid = state['ledger']['pid']
+        if old_pid == os.getpid() and not test_only_allow_same_pid:
+            raise ValueError('same-PID collector restore is a test-only fixture')
+        if old_pid != os.getpid():
+            try:
+                os.kill(old_pid, 0)
+            except ProcessLookupError:
+                pass
+            else:
+                raise ValueError('previous collector PID still exists; stop it before resume')
+        budget = Budget.__new__(Budget)
+        budget.path, budget.state = ledger_path, deepcopy(state['ledger'])
+        budget.started, budget.deadline = state['started_monotonic'], state['deadline_monotonic']
+        budget.check()
+        if (budget.state['in_flight'] or budget.state['reserved_decisions'] != budget.state['completed_decisions']
+                or budget.state['completed_decisions'] != state['counters']['decisions']
+                or budget.state['updates'] != state['counters']['updates']):
+            raise ValueError('saved ledger/counter mismatch or uncovered consumption')
+        budget._resume_lock = lock
+        env = environment_factory()
+        if env.episodes.core is not None or env.observation is not None or not tree_equal(_boundary_contract(env), state['contract']):
+            raise ValueError('fresh environment constructor/identity mismatch')
+        restore_environment(env, state['environment_state'])
+        learner.load_state_dict(state['learner'])
+        replay.load_state_dict(state['replay'])
+        _restore_module_runtime(learner.model, state['model_runtime'])
+        _restore_module_runtime(learner.target, state['target_runtime'])
+        _restore_streams(env.episodes, state['streams'])
+        generator = torch.Generator(device=state['policy_generator_device'])
+        generator.set_state(state['policy_generator'].cpu())
+        histories = decode(state['histories'], device=env.episodes.device)
+        if learner.updates != state['counters']['updates'] or len(replay) != state['counters']['decisions']:
+            raise ValueError('restored learner/replay differs from committed counters')
+        if len(histories) != env.batch or any(len(h) != int(env.episodes.core.decisions[i])
+                for i, h in enumerate(histories)):
+            raise ValueError('restored history/episode counter mismatch')
+        # Revalidate the versioned data boundary before publishing new ownership.
+        from .boundary_state import capture_environment
+        capture_environment(env)
+        restore_rng(state['rng'])
+        budget.check()
+        budget.state['pid'] = os.getpid()
+        # Persist ownership before any resumed work. Subsequent failures cannot
+        # silently load this same checkpoint and erase intervening consumption.
+        budget.flush()
+        return dict(counters=deepcopy(state['counters']), environment=env,
+                    policy_generator=generator, budget=budget, histories=histories)
+    except BaseException:
+        lock.close()
+        raise

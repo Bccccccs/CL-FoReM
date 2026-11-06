@@ -66,25 +66,82 @@ def attempt_reward(progress_before, progress_after, total_length, attempted_step
                 discount=discount, dt=dt, bootstrap_mask=float(not end))
 
 
-def bellman(reward, bootstrap_mask, dt, next_logits, next_q1, next_q2, next_mask, alpha):
+OBJECTIVE_VERSIONS = {'legacy': 'task10-entropy-v1',
+                      'relative_uniform': 'task10-relative-uniform-v1'}
+RELATIVE_UNIFORM_ALPHA = .35
+
+
+def objective_contract(objective='legacy'):
+    if objective not in OBJECTIVE_VERSIONS:
+        raise ValueError('unknown task10 learning objective')
+    return dict(objective=objective, version=OBJECTIVE_VERSIONS[objective],
+                temperature='fixed' if objective == 'relative_uniform' else 'legacy-adaptive',
+                fixed_alpha=RELATIVE_UNIFORM_ALPHA if objective == 'relative_uniform' else None)
+
+
+def learning_options(config):
+    """Validated scientific objective options for the normal runner factory."""
+    objective = config.get('objective', 'legacy')
+    contract = objective_contract(objective)
+    if objective == 'relative_uniform':
+        if (config.get('objective_version') != contract['version']
+                or config.get('alpha') != RELATIVE_UNIFORM_ALPHA):
+            raise ValueError('relative_uniform requires its version and fixed alpha=.35')
+    elif 'objective_version' in config or 'alpha' in config:
+        raise ValueError('legacy configuration cannot specify relative objective settings')
+    return dict(objective=objective)
+
+
+class FixedTemperature:
+    """Fixed .35 contract; no temperature optimizer or trainable parameter."""
+    def __init__(self, device):
+        # Retain the diagnostic attribute, but it has no gradient or optimizer.
+        self.log_alpha = torch.tensor(0., device=device)
+        self.fixed = True
+
+    @property
+    def alpha(self):
+        return self.log_alpha.new_tensor(RELATIVE_UNIFORM_ALPHA)
+
+    def update(self, p, logp, mask):
+        return 0.
+
+    def state_dict(self):
+        return dict(format='task10-fixed-temperature-v1', alpha=RELATIVE_UNIFORM_ALPHA)
+
+    def load_state_dict(self, state):
+        if state != self.state_dict():
+            raise ValueError('fixed temperature contract mismatch')
+
+
+def bellman(reward, bootstrap_mask, dt, next_logits, next_q1, next_q2, next_mask, alpha,
+            *, objective='legacy'):
     """Semi-Markov target with explicit binary mask independent of Gym flags."""
     if not torch.isfinite(dt).all() or (dt < 0).any():
         raise ValueError('nonnegative finite attempt duration required')
     if not ((bootstrap_mask == 0) | (bootstrap_mask == 1)).all():
         raise ValueError('binary bootstrap mask required')
     p, logp = distribution(next_logits, next_mask)
+    objective_contract(objective)
     q = torch.minimum(next_q1, next_q2).masked_fill(~next_mask, 0.)
     if not torch.isfinite(q[next_mask]).all():
         raise FloatingPointError('nonfinite valid next Q')
     value = (p * (q - alpha * logp)).sum(-1)
+    if objective == 'relative_uniform':
+        value = value - alpha * next_mask.sum(-1).to(p.dtype).log()
     return reward + bootstrap_mask.to(reward.dtype) * (.99 ** (dt / .1)) * value
 
 
 class Stage1Learner(DiscreteSAC):
     """Narrow adapter: retain raw terminated/truncated; use bootstrap_mask in SAC."""
-    def __init__(self, model, total_updates, temperature=None):
+    def __init__(self, model, total_updates, temperature=None, *, objective='legacy'):
         if model.stage != '1':
             raise ValueError('task10 requires UpperModel stage 1')
+        self.learning_objective = objective_contract(objective)
+        if objective == 'relative_uniform':
+            if temperature is not None:
+                raise ValueError('relative_uniform owns its fixed temperature')
+            temperature = FixedTemperature(next(model.parameters()).device)
         # Runtime tensors are not model parameters; do not deepcopy active graphs.
         saved = runtime(model.vcm)
         model.vcm.reset()
@@ -98,7 +155,8 @@ class Stage1Learner(DiscreteSAC):
         # Validate the independent Bellman contract before changing any parameter.
         with torch.no_grad():
             bellman(batch['reward'], mask, batch['dt'], next_online['logits'],
-                    next_target['q1'], next_target['q2'], batch['next_mask'], self.temperature.alpha)
+                    next_target['q1'], next_target['q2'], batch['next_mask'], self.temperature.alpha,
+                    objective=self.learning_objective['objective'])
         selected = batch['selected']
         if selected.dtype != torch.long or (selected < 0).any() or (selected >= batch['mask'].shape[-1]).any():
             raise ValueError('selected must contain in-range integer indices')
@@ -109,7 +167,33 @@ class Stage1Learner(DiscreteSAC):
         # Legacy SAC only reads this field for its target. Original replay flags
         # remain untouched; this synthetic view expresses the independent mask.
         adapted = dict(batch, terminated=~mask.bool())
-        return super().update(current, next_online, next_target, adapted)
+        relative = self.learning_objective['objective'] == 'relative_uniform'
+        if relative:
+            # Q shift gives V=E[Q-alpha(log p+log N)] through unchanged SAC.
+            shift = self.temperature.alpha * batch['next_mask'].sum(-1).to(next_online['logits'].dtype).log()
+            next_target = dict(next_target, **{k: next_target[k] - shift[:, None] for k in ('q1', 'q2')})
+            actor_constant = self.temperature.alpha * batch['mask'].sum(-1).to(current['logits'].dtype).log().mean()
+        result = super().update(current, next_online, next_target, adapted)
+        if relative:
+            # Current log N is constant in actor parameters; gradients unchanged.
+            result['actor'] += float(actor_constant)
+        return result
+
+    def state_dict(self):
+        return dict(super().state_dict(), learning_objective=dict(self.learning_objective),
+                    alpha=float(self.temperature.alpha))
+
+    def load_state_dict(self, state):
+        # Historical checkpoints without a version belong only to legacy.
+        saved = state.get('learning_objective', objective_contract('legacy'))
+        if saved != self.learning_objective:
+            raise ValueError('resume learning objective/version mismatch')
+        if saved['objective'] == 'relative_uniform':
+            if state.get('alpha') != float(self.temperature.alpha):
+                raise ValueError('resume fixed alpha mismatch')
+            # Check before model/optimizer mutation.
+            self.temperature.load_state_dict(state['temperature'])
+        super().load_state_dict(state)
 
 
 @dataclass(frozen=True)

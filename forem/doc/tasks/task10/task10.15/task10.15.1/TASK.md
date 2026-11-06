@@ -1,0 +1,2 @@
+# task10.15.1 首更Bellman与梯度因果核查
+状态 done（CPU交付完成，待父复核），负责人Codex子Agent。输入父task10.15三文档、根AGENTS、原online首更before/after/sample/evidence及源码；依赖父输入冻结。目标CPU精确复算首更样本reward/discount/bootstrap/Q/entropy/target/actor项，核梯度与detach/optimizer/LR。禁止optimizer.step、GPU和新环境。独占脚本forem/scripts/task10_signal_diagnostic.py、子三文档与子日志、父run/signal-*产物。交付可复算脚本与逐样本CSV/JSON、反例及局限，父原件审核验收。推荐GPT6.1sol/high、Sonnet5.5/high；实际变体/强度未知，需记录。执行者可选平台可用模型并先建档委派；本子范围不再拆分。

@@ -22,7 +22,15 @@ def write(path,value):
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--run',type=Path,required=True);p.add_argument('--commit',required=True)
+    p.add_argument('--config',type=Path)
     args=p.parse_args();root=args.run.resolve()
+    config_args=[]
+    if args.config is not None:
+        config_path=args.config.resolve()
+        config_relative=config_path.relative_to(Path(__file__).resolve().parents[1])
+        if not config_path.is_file():
+            raise ValueError('configuration file does not exist')
+        config_args=['--config',str(Path('/workspace')/config_relative)]
     root.mkdir(parents=True,exist_ok=False)
     epoch=time.time();started=time.monotonic()
     output='/workspace/results/task10/'+root.name
@@ -31,6 +39,7 @@ def main():
            '-e','TASK10_PHYSICAL_GPU=1','-e',f'TASK10_CODE_COMMIT={args.commit}',
            '-e',f'TASK10_STARTED_EPOCH={epoch}','forem-task10-runtime',
            'bash','/workspace/scripts/task10_run_bounded.sh','train',output,'--run-profile','online-trial']
+    words.extend(config_args)
     command=['sg','docker','-c',shlex.join(words)]
     evidence=dict(run_id=root.name,code_commit=args.commit,parent_pid=os.getpid(),command=command,
         started_epoch=epoch,deadline_epoch=epoch+25200,started_monotonic=started,

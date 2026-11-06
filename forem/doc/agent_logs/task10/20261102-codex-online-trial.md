@@ -19,3 +19,7 @@
 正常入口预检完成：代码b5b60ee，原derived-fixture SHA b9ddd64e...，run-id t10-online-entry-20261102，预检600s/0真实/8fixture cap下实际14.641088s、rc0、5fixture更新，两组严格verified，取证verified_cuda；flags实际全符合要求，GPU1无fallback。预检原件entry-contract/entry-summary/entry-update-evidence和controls，命令/epoch在preflight-ledger。CPU最终203passed/3条件skipped/47.09s/rc0。入口门通过，所有src和shell/config冻结，后续只写独立报告脚本/文档，不改训练代码。下一命令唯一启动在线25200s/1200真实/200在线更新，空回放seed101、B3seed4718、batch8、1000真实预热。预检5更新明确不计入在线200。
 
 唯一试训已启动：开始 2026-11-02T19:29:28.225644+08:00，硬截止 2026-11-03T02:29:28.225644+08:00，原epoch=1793618968.2256439。父PID3815493、docker client 3815501、容器worker PID554；exec会话39972。actual contract profileonline-trial/1200/200/25200，Python与两层timeout硬截止epoch逐值相同；CUDA/driver/CPU亲和和flags在contract.actual_runtime。监控：task10_online_report.py --run ... --compact，tail *-train.log及budget/events/updates/batch-boundaries；停止仅在确认run身份后给worker PID554发送TERM，保留原deadline且不得重启。当前未启动恢复/配对/task11。
+
+2026-11-02T19:58:54.037489+08:00 父监控：reserved/completed=128/128、inflight=0、updates=0；当前128行已完成回放边界，仍随机预热。训练无故障，原截止不变，未恢复/重跑/配对。只读审计脚本已用旧56行验证（rc0，不新采集/不GPU）；实际数据仍以本run原件为准。
+
+2026-11-02T20:03:14.233029+08:00 · 自动监控快照（父统一watcher，非新运行）：reserved/completed=152/144，inflight=8，在线updates=0，已完成replay边界=144，elapsed=2026.000s。原截止不变，journal/账本/monitor.jsonl为原件，未恢复/重启/配对；[运行证据](../../SOURCES.md#src-t10-023)。

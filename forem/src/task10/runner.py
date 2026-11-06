@@ -23,6 +23,12 @@ from .runtime import (Budget, atomic_json, atomic_torch, sha256, split_manifest,
 ROOT = Path(__file__).resolve().parents[2]
 
 
+def create_learner(model, total_updates, config):
+    """The normal training factory shares objective validation with CPU checks."""
+    from .learning import Stage1Learner, learning_options
+    return Stage1Learner(model, total_updates, **learning_options(config))
+
+
 def emit(path, event):
     def serializable(value):
         if hasattr(value, 'detach'):
@@ -250,7 +256,7 @@ def train(args, launched):
                 raise ValueError('resume limits must match the original ledger')
             vector_dim = payload['counters']['vector_dim']
             model = UpperModel(vector_dim=vector_dim).cuda()
-            learner = Stage1Learner(model, total_updates=200)
+            learner = create_learner(model, total_updates=200, config=resolved['config'])
             replay = EpisodeReplay(seed=101)
             bundle = load_episode_boundary(resume, learner, replay, environment_factory=factory, config=cfg)
             env, generator, budget, history = (bundle[k] for k in
@@ -282,7 +288,7 @@ def train(args, launched):
             emit(args.output/'events.jsonl', dict(event='initial_boundary_ready', vector_dim=vector_dim,
                  reset_seconds=timers.records['initial_reset'][-1], timing=env.last_timing))
             model = UpperModel(vector_dim=vector_dim).cuda()
-            learner = Stage1Learner(model, total_updates=200)
+            learner = create_learner(model, total_updates=200, config=resolved['config'])
             replay = EpisodeReplay(seed=101)
             history = [[] for _ in range(8)]
             generator = torch.Generator(device='cuda:0').manual_seed(101)
@@ -547,6 +553,8 @@ def train(args, launched):
                 model.vcm.reset()
                 actor_path = args.output/'final.actor.pt'
                 atomic_torch(actor_path, dict(format='task10-stage1-actor-v1', model=model.state_dict(),
+                                learning_objective=dict(learner.learning_objective),
+                                alpha=float(learner.temperature.alpha),
                                 vector_dim=vector_dim, updates=learner.updates,
                                 decisions=budget.state['completed_decisions']))
                 # This is an offline learner artifact at a completed append
@@ -718,7 +726,9 @@ def entry_check(args, launched):
     source = torch.load(args.fixture_source, map_location='cpu', weights_only=False)
     if not str(source['config'].get('evidence_kind','')).startswith('derived-replay-fixture'):
         raise ValueError('entry check requires explicitly derived old replay fixture')
-    learner = Stage1Learner(UpperModel(vector_dim=source['counters']['vector_dim']).cuda(), source['learner']['total_updates'])
+    learner = Stage1Learner(UpperModel(vector_dim=source['counters']['vector_dim']).cuda(),
+        source['learner']['total_updates'],
+        objective=source['learner'].get('learning_objective', {}).get('objective', 'legacy'))
     replay = EpisodeReplay(capacity=source['replay']['capacity'])
     load_checkpoint(args.fixture_source, learner, replay, config=source['config'])
     report = run_controls(learner, replay, ReplayAdapter(False, 'cuda:0'), config=source['config'],

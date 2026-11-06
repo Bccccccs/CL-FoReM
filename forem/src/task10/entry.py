@@ -22,13 +22,13 @@ def resolve_profile(*, run_profile='smoke', config=None, seconds=None,
                     max_decisions=None, max_updates=None, phase='train'):
     """Validate an explicit authorization profile; never infer trial from seconds."""
     import json
-    if run_profile not in ('smoke', 'online-trial'):
+    if run_profile not in ('smoke', 'online-trial', 'long-10k'):
         raise ValueError('unknown task10 run profile')
     if phase not in ('train', 'paired', 'entry-check'):
         raise ValueError('unknown task10 phase')
-    if run_profile == 'online-trial' and phase != 'train':
+    if run_profile in ('online-trial', 'long-10k') and phase != 'train':
         raise ValueError('online-trial profile authorizes train only')
-    filename = 'online_trial.json' if run_profile == 'online-trial' else 'smoke.json'
+    filename = {'online-trial': 'online_trial.json', 'long-10k': 'kl_10k.json'}.get(run_profile, 'smoke.json')
     path = Path(config) if config is not None else ROOT/'config/task10'/filename
     path = path.resolve()
     value = json.loads(path.read_text())
@@ -41,6 +41,16 @@ def resolve_profile(*, run_profile='smoke', config=None, seconds=None,
     expected = dict(baseline)
     if run_profile == 'online-trial':
         expected.update(run_profile='online-trial', training_wall_seconds=25200)
+    if run_profile == 'long-10k':
+        expected.update(run_profile='long-10k', training_wall_seconds=194400,
+            max_decisions=10000, max_updates=9000, formal_training_authorized=True,
+            objective='relative_uniform', objective_version='task10-relative-uniform-v1', alpha=.35)
+    relative_path = (ROOT/'config/task10/relative_uniform_trial.json').resolve()
+    if path == relative_path:
+        if run_profile != 'online-trial':
+            raise ValueError('relative_uniform trial requires explicit online-trial profile')
+        expected.update(objective='relative_uniform',
+                        objective_version='task10-relative-uniform-v1', alpha=.35)
     if value != expected:
         raise ValueError('configuration differs from approved task10 profile')
     cap = value['paired_wall_seconds' if phase == 'paired' else 'training_wall_seconds']
@@ -49,11 +59,14 @@ def resolve_profile(*, run_profile='smoke', config=None, seconds=None,
     updates = value['max_updates'] if max_updates is None else max_updates
     if not isinstance(seconds, (int, float)) or not math.isfinite(seconds) or not 0 < seconds <= cap:
         raise ValueError('seconds outside explicit task10 profile')
-    if (not isinstance(decisions, int) or isinstance(decisions, bool) or not 0 <= decisions <= 1200
-            or not isinstance(updates, int) or isinstance(updates, bool) or not 0 <= updates <= 200):
+    decision_cap, update_cap = (10000, 9000) if run_profile == 'long-10k' else (1200, 200)
+    if (not isinstance(decisions, int) or isinstance(decisions, bool) or not 0 <= decisions <= decision_cap
+            or not isinstance(updates, int) or isinstance(updates, bool) or not 0 <= updates <= update_cap):
         raise ValueError('decision/update limits outside explicit task10 profile')
     if run_profile == 'online-trial' and (seconds != 25200 or decisions != 1200 or updates != 200):
         raise ValueError('online-trial requires exactly 25200 seconds, 1200 decisions and 200 updates')
+    if run_profile == 'long-10k' and (seconds != 194400 or decisions != 10000 or updates != 9000):
+        raise ValueError('long-10k requires exactly 194400 seconds, 10000 decisions and 9000 updates')
     return dict(run_profile=run_profile, config_path=str(path), config=value,
                 config_sha256=sha256(path), seconds=seconds,
                 limits=dict(decisions=decisions, updates=updates,
@@ -157,7 +170,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('phase', choices=('train', 'paired', 'entry-check'))
     parser.add_argument('--output', type=Path, required=True)
-    parser.add_argument('--run-profile', choices=('smoke', 'online-trial'), default='smoke')
+    parser.add_argument('--run-profile', choices=('smoke', 'online-trial', 'long-10k'), default='smoke')
     parser.add_argument('--config', type=Path)
     parser.add_argument('--seconds', type=float)
     parser.add_argument('--max-decisions', type=int)
@@ -169,6 +182,10 @@ def main(argv=None):
             max_updates=args.max_updates, phase=args.phase)
     except (ValueError, OSError) as exc:
         parser.error(str(exc))
+    if args.run_profile == 'long-10k':
+        command = [sys.executable, '-u', '-m', 'task10.long_training',
+            '--output', str(args.output), '--config', resolved['config_path'], *remaining]
+        return supervise(command, seconds=resolved['seconds'])
     command = [sys.executable, '-u', '-m', 'task10.runner', args.phase,
         '--output', str(args.output), '--run-profile', resolved['run_profile'],
         '--config', resolved['config_path'], '--seconds', str(resolved['seconds']),

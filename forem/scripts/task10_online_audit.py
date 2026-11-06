@@ -67,8 +67,15 @@ def audit(run):
                                parameters_changed=any(not c['exact'] for c in comparisons))
     missing_replay=sorted(set(source)-set(replay),key=repr)
     missing_journal=sorted(set(replay)-set(source),key=repr)
+    update_records=[]
+    if (run/'updates.jsonl').exists():
+        update_records=[json.loads(v) for v in (run/'updates.jsonl').read_text().splitlines() if v.strip()]
+    checkpoint_updates=None if final is None else final['learner']['updates']
+    update_accounting=(checkpoint_updates==budget['updates']==len(update_records))
+    decision_accounting=(counts==len(source)==len(replay)==budget['completed_decisions']==budget['reserved_decisions'])
     problems=bool(duplicates or gaps or field_mismatches or valid_mask_violations or fixture_rows or missing_journal)
-    incomplete=final is None or bool(missing_replay) or budget['in_flight']!=0
+    incomplete=(final is None or bool(missing_replay) or budget['in_flight']!=0
+                or not update_accounting or not decision_accounting)
     result=dict(status='failed' if problems else ('incomplete' if incomplete else 'verified'),
         decisions_in_durable_journals=counts,unique_journal_identities=len(source),replay_rows=len(replay),
         duplicate_journal_identities=duplicates,nonconsecutive_replay_episodes=gaps,
@@ -77,7 +84,10 @@ def audit(run):
         missing_journal_identities=missing_journal,ledger=budget,
         first_update_raw_recomputed=evidence,first_update_sample_recomputed=sample,
         initial_to_final_heads=changed,
-        final_checkpoint_updates=None if final is None else final['learner']['updates'],
+        decision_accounting_complete=decision_accounting,update_accounting_complete=update_accounting,
+        update_journal_records=len(update_records),
+        update_record_ids=[v.get('updates') for v in update_records],
+        final_checkpoint_updates=checkpoint_updates,
         final_checkpoint_decisions=None if final is None else final['counters']['decisions'],
         first_evidence_summary_exact=None if first_raw is None else evidence==first_raw['summary'],
         evidence_sha256={p.name:sha(p) for p in [run/'offline-learner.pt',run/'initial-learner.pt',run/'first-update-before.pt',

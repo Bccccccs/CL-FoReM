@@ -1,0 +1,11 @@
+{
+  "command": [
+    "sg",
+    "docker",
+    "-c",
+    "docker exec --user 1004:1004 -e CUDA_VISIBLE_DEVICES= -e PYTHONPATH=/workspace/src forem-task10-runtime python3 /workspace/scripts/task10_validation_audit.py --run /workspace/results/task10/t10-eval-20261103-s101 --reference /reference/source --output /workspace/results/task10/t10-eval-20261103-s101/independent-audit.json"
+  ],
+  "returncode": 1,
+  "wall_seconds": 11.187725305557251,
+  "log": "forem/logs/task10/t10-eval-20261103-s101-independent-audit.log"
+}

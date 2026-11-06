@@ -9948,3 +9948,349 @@ CPU专项10.11最终23passed/2.60s，10.12最终15passed/4.11s；父集成203pas
 <a id="src-t10-023"></a>
 
 **SRC-T10-023 · 唯一连续在线试训原始证据（运行中）。** 来源类型：项目本次真实运行，Codex父；2026-11-02启动，结果待结束核验。run-id t10-online-20261102-s101，代码b5b60ee581767e36c0b17efe596fc7bad612218b，工作树forem/results/task10/t10-online-20261102-s101；launch.json/training-budget.json/contract.json保存同一epoch1793618968.2256439，硬截止1793644168.2256439（北京时间2026-11-03 02:29:28），25200s/1200真实/200在线更新。GPU1，容器forem-task10-runtime、workerPID554、父3815493；源/产物主仓挂载只读。精确符号runner.train、training_evidence；真实journal先于budget.complete，warmup-complete与first-update-before/after learner/replay/RNG、first-update-sample身份、首更独立actor/Q1/Q2/B3原件、latest-update写前账本和最新全回放checkpoint，未完成环境不伪装可恢复。日志forem/logs/task10/t10-online-20261102-s101-train.log、monitor.jsonl与父日志；只读报告task10_online_report.py，父watcher每30秒记录、每30分钟追加进度/日志；无额外训练或预算。采用：本次真实证据是回答有效GPU更新、B3一致性和成本的唯一来源，预检旧5fixture不计预热/在线更新。当前运行中，不预宣称完成、真实更新或成功率改善；真实batch8恢复/配对/task11不在本轮。验收结束后追加实际计数/成本/哈希/限制。[授权](#src-t10-021)、[入口](#src-t10-022)、[父日志](agent_logs/task10/20261102-codex-online-trial.md)。
+
+<a id="src-t10-024"></a>
+
+**SRC-T10-024 · 在线试训结束后状态核查。** 项目实测与只读复核，Codex，2026-11-03 14:41 起核查。训练 b5b60ee，工作树 HEAD 91f538c，run-id t10-online-20261102-s101。原件为该 run 的 training-budget.json、training-summary.json、events.jsonl、updates.jsonl、首更及最终 checkpoint；复核输出 review-20261103.json。以工作区现有 task10_online_audit.py（未提交修改状态）在 forem-task10-runtime 中 CUDA 隐藏、仅 CPU 读原件审计，退出0，verified，1200 journal/replay、首个真实GPU更新、final checkpoint200均核对通过；另直接核对更新序号1–200连续，actor/q1/q2各200份有限非零梯度记录。首次参数变化及设备采用原 worker 取证，CPU审计不能独立建立原设备事实。账本无在途，状态bounded_complete，无error。开始11月2日19:29:28，结束11月3日00:12:00（开始epoch加16951.958秒），约4h42m32s。预热1000，新增实际200在线更新，B3原worker前后哈希一致。现场未见task10训练进程和GPU compute；runtime容器仍运行。训练更新均值0.3629s/p95 0.4257s，复位及候选边界/执行仍占主要墙钟。无独立任务表现评估，batch8在线恢复仍未验。采用为试训管线完成证据，不能据此宣称成功率提高或task10正式基线已完成。
+
+<a id="src-t10-025"></a>
+
+**SRC-T10-025 · 三策略验证设计。** 来源为2026-11-03用户“设计流程给出提示词继续推进”的委托、项目原件静态核对及工程选择。Codex同日核查主仓 cube-pool-v2/manifest.json，validation为sparse50/standard50，旧4场景来自sparse前4；在线试训及首更证据见SRC-T10-024。代码91f538c的task10/runner.py::paired只支持两组4图，需适配三组及新manifest。选12图（每难度6、避开旧4）、3策略、seed101/随机102、90分钟等均为决策者的小规模验证选择，兼顾覆盖及开销，无统计功效或完工承诺。36=12×3回合，5400=36×Core既有150决策上限；90分钟为含入口核验的保守资源上限，旧8回合380秒仅提供历史参照，难度和训练后行为有差异。初始策略必须源于同run initial-learner.pt，最终策略绑定200更新产物，严格成功沿用Core规则。采用方式与局限详见[task10.14流程](tasks/task10/task10.14/PROCEDURE.md)。实际评估尚未执行。
+
+<a id="src-t10-026"></a>
+
+**SRC-T10-026 · task10.14执行授权与边界。** 来源类型：用户直接派发，2026-11-03本会话，Codex核查同日。指定工作树CL-FoReM-task10、分支codex/task10-upper-wm，保留现有未提交修改；按SRC-T10-025落盘协议一次36回合三策略验证（trained=源run final.actor.pt，initial=同run initial-learner.pt完整learner.model，uniform=有效候选均匀；B3 seed4718冻结）。validation sparse/standard各6，排除旧sparse00000–00003，scene101/uniform独立CUDA RNG102；先冻结输入和执行顺序，必要CPU/GPU旧输入夹具，真实36/5400决策/0更新/5400s先到即停，GPU入口同窗、单环境顺序、故障不重跑不补场景。父统一启动/记账/监控/原件核查；可自主选模/先建档委派且共享预算。采用：[task10.14](tasks/task10/task10.14/PROCEDURE.md)；只授权本轮评估及必要实现和复算，不调参、不增加训练、不test、不task11。最终交决策者审核，工程完成与收益分列。
+
+<a id="src-t10-027"></a>
+
+**SRC-T10-027 · 三策略评估入口、冻结与夹具。** 来源类型：本项目代码、CPU夹具与旧输入GPU入口实测；Codex父及task10.14.1独立子Agent，2026-11-03核验。HEAD91f538cf2ee10bebffd6b643d5c908fa0d419ced加未提交独立评估实现；精确版本由run `t10-eval-20261103-s101/manifest.json` 的files逐文件SHA及frozen-code保存，manifest SHA256 `672d11e93ad1c9dfcdee684d837190c7449942d5c3d8351c84a7a3e04a94dbee`。符号 `src/task10/validation.py::{select_scenes,episode_list,payload_state,load_model,old_fixture_check,EvalBudget,worker}`、`scripts/task10_validation_launch.py`与独立 `task10_validation_audit.py`。完整127张量strict加载initial learner.model（0决策/0更新）和final actor（1200/200），stage1/eval/no_grad、每回合VCM清空；masked argmax平局最小有效索引、uniform独立CUDA generator102，sampler为每回合新建seed101环境；source run只读打开。全部旧科学合同及终止继承，不改变环境。每段先reservation及intent，raw journal含实际replay_fields和所有Core attempts，结束前从未复位Core读全部trigger；全36身份预置、逐回合/逐决策持久化，缺失保留、不重启。
+
+CPU全回归155passed/2条件skipped（44.37s，rc0）；最终专项22passed/3.95s，覆盖完整加载/原始grid快照、同初态、掩码/独立RNG/终止/缺失/在途与不重启。日志 `forem/logs/task10/t10.14-cpu-gate-final.log`、`t10.14-final-targeted.log`。早期临时目录所有权、旧测试默认宿主路径及fake缺timing字段失败保留，均已修运行参数/夹具并重验，非真实评估失败。独立审查发现DecisionStep字段和grid特殊存储两处阻断，GPU前已修复。
+
+唯一GPU窗口始于15:01:22.668413+08，硬截止16:31:22.668413+08；双timeout与worker同epoch，预留20s清理。GPU1独占本容器，另GPU2用户任务不受影响。旧batch-000008.pt只验证前向、无新真实/无更新，entry-check.json verified，10.668s（含GPU加载等）计入同窗，raw learner与两个评估加载模型输出严格一致、记忆清空后输出严格一致、global CUDA RNG不被uniform生成器消费；真实设备CUDA0、物理GPU1。采用为进入唯一36回合的管线门；不是任务表现改善证据，也不证明跨种子泛化。后续结果另登记，源文件hash结束复核。
+
+<a id="src-t10-029"></a>
+
+**SRC-T10-029 · task12热力候选与task10选点评分关系。** 项目文档核查与工程解释，Codex，2026-11-03。读取主工作区 /home/ybc/projects/CL-FoReM/forem/doc/tasks/task12/{TASK,PROCEDURE,RESULTS}.md 的可派发v1、A停止门及审核者裁定。该协议为局部128×128高度/可见性/路线图，q/TCP/路线向量条件化U-Net，从冻结B3逐点推演生成“段到达且零失败”标签，标注格BCE训练、每扇区解码一点保留原地槽，再由B3推演与上层SAC选择。现有实施停A，标签/网络更新为0。task10在线1200/200证据见SRC-T10-024，不能直接解除task12要求的真实B3/真实几何逐步对照与隔离证据门。采用为衔接现有两任务的说明；网络分数拟表示局部可执行性，概率校准和完整任务收益均待验证。
+
+<a id="src-t10-028"></a>
+
+**SRC-T10-028 · task10.14唯一三策略验证原件与独立复算。** 来源类型：本项目真实测量、CPU原件复算及明确标注的工程判断。Codex父/10.14.1独立子Agent，2026-11-03核查。run-id `t10-eval-20261103-s101`，执行代码HEAD91f538c加manifest files与frozen-code绑定的未提交实现；源训练 `t10-online-20261102-s101` 的final.actor（1200/200）/initial-learner完整learner.model（0/0），B3 seed4718及既有sync_v5/cbl_continue合同。原件位置 `forem/results/task10/t10-eval-20261103-s101/`：manifest/freeze-lock/launch/budget/entry-check/weights、36个episodes JSON、36个initial PT、123个decisions PT（含完整replay_fields与Core attempts）、逐决策JSONL、原始日志 `forem/logs/task10/t10-eval-20261103-s101-eval.log`。精确统计入口 `scripts/task10_validation_audit_v2.py`、`task10_validation_diagnostics.py`，父第二份原件核对入口在run内 `parent_raw_recompute.py`，输出independent-audit-v2、independent-diagnostics、parent-recompute、parent-raw-recompute JSON；全部复算CPU/CUDA隐藏，无新真实决策。
+
+实际15:01:22.668413–15:56:34.586509+08，outer3311.918092s（55m11.918s，含10.668243s旧输入入口/监督/退出），worker约3310.930164s，回合累计3298.841563s；原5400s绝对截止未改变。36唯一预登记身份全完成、123预留=123完成、0在途/0更新/0missing，rc0。严格成功trained0/12、initial0/12、uniform10/12；sparse及standard均为0/6、0/6、5/6。trained对initial胜/负/平/缺失=0/0/12/0，对uniform=0/10/2/0；只比较完整配对。36初态快照、12完整物理/路线/传感时间/观测/首次候选mask配对、127完整模型张量/119冻结文件、源训练产物及B3前后冻结一致。原件float32时钟保留；整数尝试substeps×0.05s另复算，最大尝试时钟累积差0.000071334839s、提交时钟差0.000144195557s，未改变结果或新增判定阈值。
+
+失败与行为事实：两模型各52/52决策选择inplace槽12，全部仍有其他有效候选，平均有效8.403846；35/52决策为0真实尝试，7/12回合触发stall_limit。另5/12回合failure_limit，各累计100次self_collision（按Core IK→base→arm→self优先级对active且未committed的attempts复算，不把35个零尝试决策当IK拒绝）。12/12图两模型完整真实轨迹/选择序列一致，52个共享状态的logits都变化（最大绝对差1.235067），没有改变最大logit选点。uniform19决策、不选12，10严格成功，两个失败图为sparse00004底盘碰撞20次、standard00000 IK拒绝20次。各组尝试仿真秒52.749995/52.749995/208.250335，不是GPU墙钟。既有训练critic每50更新均值0.203412→0.159386→0.156449→0.147325，仅数值变化，不能证明选点收益。
+
+独立审计v1的tuple/list地图ID类型比较产生123同类误报（输出/日志及冻结脚本原样保留，不是123个评估错配）；v2只将map_ids作list归一化，新增3专项通过，v2 rc0/verified_complete/issues=[]。v2 SHA25099fb719e2a156ecc661417c863886def7a1362a46349ebbcb5e89d115eaf3；独立诊断脚本SHA6d6d498ab33d5bbab2f186c7689de568d86151da53cda910e1a15a46587c4a63，其4专项通过；先前审计13专项及父最终22专项/全CPU155pass2skip见SRC-T10-027。父逐原件核对复现同一结论，不将子Agent自报当验收。
+
+采用/限制：工程执行与可复算交付完成，任务置review交决策者；该单训练种子、12验证场景不支持“200次更新改善选点”，本清单中trained与initial行为相同且严格成功数低于uniform。工程判断建议先诊断上层评分/学习信号为何长期把inplace排首，以及self_collision/零尝试停滞样本在训练中的作用，再由决策者决定追加预算；尚不能断言某个实现bug、方法无效或增加训练绝无帮助。本轮未调参、未新增训练、未运行test/task11。三文档中的具体参数/逐场景结果是事实来源，台账不复制另一份协议。[结果与复算](tasks/task10/task10.14/RESULTS.md)。
+
+<a id="src-t10-030"></a>
+
+**SRC-T10-030 · 10.14决策者验收及下一诊断设计。** Codex，2026-11-03，独立CPU复算、项目源码核查与工程选择。对t10-eval-20261103-s101重新运行task10_validation_audit_v2.py，CUDA隐藏，输出容器/tmp/t10-review-14.json，rc0，verified_complete/issues=[]，36完整、0/0/10成功。原行为与成本见SRC-T10-028；源码task10/learning.py::attempt_reward/bellman和task7_upper/sac_discrete.py::DiscreteSAC.update表明dt=0时g=1，非终局目标含每决策alpha×entropy。零耗时额外决策的软价值是否导致停滞仅为待检验假设，当前未确定bug或原因。决定接受10.14工程完成、收益未改善，先做task10.15的已有回放目标/排序诊断，再核定10k/20k×3训练。最多20隔离更新、1800秒GPU窗、0新真实决策为有界工程诊断选择，不是新训练成果。详细流程与限制见[task10.15](tasks/task10/task10.15/PROCEDURE.md)。未改变当前奖励、mask或环境。
+
+SRC-T10-030补记：同时重新执行task10_validation_diagnostics.py，CPU rc0，复现两组52次原地、12组完整选点轨迹一致、真实状态无错配。两份本次输出持久化为评估run的reviewer-audit.json与reviewer-diagnostics.json。task10.15三文档本地链接/锚点及本轮diff whitespace检查通过。
+
+
+<a id="src-t10-031"></a>
+
+**SRC-T10-031 · task10.15派发与输入冻结。** 来源类型：用户直接授权、项目原件及代码哈希核查；核查人Codex，日期2026-11-03。用户指定工作树`/home/ybc/projects/CL-FoReM-task10`、分支`codex/task10-upper-wm`，执行task10.15 A–E；只读online/eval两源run、CPU优先、0新环境决策，必要时唯一GPU窗口≤1800s且所有分支合计≤20更新，保持原objective/config。工作树HEAD`91f538cf2ee10bebffd6b643d5c908fa0d419ced`，已有dirty改动保留。原件`forem/results/task10/t10-diag-20261103-s101/input-freeze.json`逐文件登记两源run475项SHA256，training contract code_sha256与当前代码无差异，evaluation frozen-code与当前相应代码无差异；`input-integrity-after.json`在CPU分析后复核475项未变。源run为`t10-online-20261102-s101`、`t10-eval-20261103-s101`，训练/评估历史见SRC-T10-024/028/030。模型、B3及外部地图/执行文件另由本run `online-audit.json`、`eval-audit.json`只读复算，verified/verified_complete，无issues。采用为输入身份与本轮授权，不能把仅hash通过当模型表现或原地原因证明。[执行记录](agent_logs/task10/task10.15/20261103-codex-execution.md)。
+
+<a id="src-t10-032"></a>
+
+**SRC-T10-032 · task10.15候选排序、归一化与1200回放覆盖。** 来源类型：项目实测的CPU只读复算；Codex，2026-11-03。精确入口`scripts/task10_preference_diagnostic.py`、`task10_diagnostic_supplement.py`，源代码版本见SRC-T10-031与本run evidence-hashes。原件`forem/results/task10/t10-diag-20261103-s101/`中state-rankings、candidate-scores、candidate-features、permutation-check、replay-transitions、episode-returns CSV及ranking/coverage/supplement-summary JSON。按每回合真实观测从0重建VCM，两模型52个共享输入逐Tensor核对；原地argmax52/52。原GPU记录logits直接softmax得到initial原地概率20.8715–61.4978%/均26.1330%，trained15.0060–31.5233%/均19.3781%；logit相对最佳移动差均0.463066→0.240309。CPU minQ原地最佳51/52→52/52，Q差均0.030783→0.084808。CPU相对原GPU有效logits最大绝对差initial9.61423e-5、trained1.58511e-4，非逐位一致；所有argmax仍一致，精确概率以原logits另算。候选逆序同步重排，logit最大误差7.153e-7、Q最大2.385e-7；源码无candidate slot embedding，历史VCM的时间编码不属于候选位置编码。
+
+52状态437有效候选的slot12是唯一inplace/相对零位姿，移动slot0–11按30度顺序单位米半径；selected_prediction与选中f_k严格相同；由start_base换算world_pose最大float32差2.385e-7。按现行normalize的3.2m和T_seg手算，有效特征误差0，padding不参加正T_seg检查。完整19字段及6几何原值/归一化值都落表；沿用既有字段单位/缩放，不把自然不同的特征分布判为错误。例：原地段arrived均0.8654不等于任务成功，delta_s均0.1005m；移动对应0.06234/1.2878m。该相关性不能证明其单独造成偏好。
+
+1200回放=155原地+1045移动，1000 warmup含120原地/14零尝试、后200含35原地/6零尝试；529严格成功终局、233非成功终局、438非终局；763 episodes（762完整、1采集截止未完整）。失败尝试4448、含失败决策233。20零dt全部原地且非终局；完整回合最多2个零尝试，而validation原地策略每个停滞回合连续5个零尝试。终局主原因529成功/221失败上限/7停滞失败/5带失败到路线末端；另一个成功终局也触发stall，不能计入7停滞失败。7个停滞失败终局实际selected全为移动槽，dt=.05、bm=0、r=−1；没有原地终局停滞训练样本。按episodes原始route_length逐条复算reward/discount最大误差2.976e-8；完整回合塑形望远镜最大误差3.749e-8。未完整回合不伪造成终局。原episode/replay/journal对齐及200更新序号另由online-audit验证。采用为本单种子的具体覆盖、概率与实施一致性证据，不推断未保存的200次历史抽样频次，不声称采样评估可成功。[结果](tasks/task10/task10.15/RESULTS.md)。
+
+<a id="src-t10-033"></a>
+
+**SRC-T10-033 · task10.15首更Bellman、梯度与停滞链。** 来源类型：原GPU首更保存状态/梯度、CPU复算及数学分解；核查人Codex子Agent与父原件复核，2026-11-03。入口`scripts/task10_signal_diagnostic.py`，源为online的first-update-before/after/evidence PT、sample JSON和offline-learner完整replay；输入SHA在signal-summary.json。产物位于本轮独立run的signal-first-update-{rows,candidates}.csv、signal-first-update-tensors.pt、signal-stall-chain-{rows,returns}.csv和signal-summary.json。32 anchors精确恢复、49真实loss rows、19首决策、0padding；critic0.3479388952、actor−0.6639289856，与原GPU绝对差8.941e-8/5.960e-8，joint norm差4.883e-7。3个真实零尝试原地样本r=0,g=1,bm=1，next熵贡献0.780598/0.700563/0.455358，target0.753890/0.669046/0.440539，扣该贡献的代数值为−0.026708/−0.031517/−0.014818。它们是同objective的项分解，没有执行去熵训练。
+
+首更actor的49/49原地logit导数为正（下降方向降低该概率），Q项向上而熵项向下且净熵项占优；解析logit梯度与autograd最大差6.403e-10。actor-only只到head_a.actor，VCM/candidate_encoder/Q无梯度，符合stage1候选detach与独立头设计；critic到VCM/candidate_encoder/双Q，actor头不受critic梯度。optimizer恰好包含全部85个可训练参数张量一次，首更34/35 VCM、32/32候选编码器、18/18 head_a张量改变，冻结模块未变；已保存Adam首步的有效元素变化均反向于原保存梯度。原lr1e-4→首步9.77237e-5→第200步1e-6，alpha0.35→0.349984；200是实际调度总预算，不是因中断漏掉后续高lr。
+
+把保存的首更后模型重新前向同49样本，原地概率49/49下降、均0.283805→0.268547，但argmax仍49/49原地；final均0.205615、48降1升、argmax仍49/49。按真实历史重建8个stall trigger episodes（含1成功）在before/after-first/final三模型下共159行；7失败终局bm=0、y=−1，不保留next Q或熵。final被选移动Q残差0.900669–1.192093，未充分拟合负终局；critic loss仅直接监督所选槽，前序由target EMA逐步bootstrap、actor经当前minQ间接受影响。不能据此声称每个终局都曾被抽中或更长训练必成功。原始路径条件化的熵累计只作算术量，不是当前策略的期望回报。tau=.001时若online固定不变，200步EMA追随量1−.999^200=0.181351；这是条件推导而非实际moving online终点跟随测量。零optimizer.step/新交互/GPU；详见[子结果](tasks/task10/task10.15/task10.15.1/RESULTS.md)。
+
+<a id="src-t10-034"></a>
+
+**SRC-T10-034 · task10.15裁定与待审核下一轮选择。** 来源类型：基于SRC-T10-031–033的推导、工程建议及待验证假设；Codex，2026-11-03。没有发现本次核查路径偏离现行合同；这不是全系统无bug证明。证据同时支持“当前soft目标为零耗时非终局决策计入额外熵价值”和“200更新未充分拟合稀有负终局且未越过actor排序”，不能认定唯一原因，也不能把已在0更新时存在的偏好归因于后续学习。建议决策者先裁定目标是否应对等物理时间的额外决策赋予熵收益；最小待审协议方向是按尝试时长计熵、dt=0贡献为0，同时一致审议actor/temperature/Bellman，不能只删target项或暗改discount、奖励、终止、mask。具体函数/尺度及有界反例验收待新协议，不在本轮实施或声称改善。
+
+若决策者保留当前目标、选择单种子10k作为训练充分性对照，必须另定lr总更新数、checkpoint、截止和配对预算。条件估算使用原online实际wall16951.9584s，200更新累计72.5802s，非update16879.3782s/1200=14.06615s每决策、update0.362901s每次；10000决策、1000预热、约9000更新，线性外推143927.5952s≈39.98h训练，再加原36回合评估outer3311.9181s≈0.92h，合约40.90h。输入原件为updates.jsonl、training-summary.json及SRC-T10-028；公式与单位在supplement-summary.json。它假设batch8、策略/场景/开销分布不变，非独立新profile、非期限承诺或预算授权；不能把20次局部固定样本诊断或200步压缩lr当已满足10k可行性证据。正式长训前仍需按已批准协议有界性能核查；不得自动缩规模、延时或新增训练。GPU D本轮跳过，因为CPU已复现梯度且保存的真实更新前/后权重足以核响应；实际新增更新/交互/GPU秒均0。[完整裁定](tasks/task10/task10.15/RESULTS.md)。
+
+<a id="src-t10-035"></a>
+
+**SRC-T10-035 · 原地问题目标修正。** Codex与Terra/high独立数学核查，2026-11-03。用户明确要求审核并解决原地现象，相关实际样本见SRC-T10-033/034。原式V=Σπ(Q−αlogπ)，零时长g=1且αH>0。选新目标参考均匀有效候选u=1/N，V=Σπ[Q−αlog(π/u)]，actor最小化Σπ[αlog(π/u)−Q]，g与真实奖励/终局mask沿原合同。由KL≥0得期望正则−αKL≤0，均匀时0；不是每个已采样动作均非正，也不证明不再停滞。固定alpha=.35沿旧初始值以减少首轮额外选值，停用自适应温度（避免变长轨迹约束常数引入未定义目标），属于协议改动及工程选择，非已验证最优。dt为未选动作未知，不能用实际所选dt为全动作统一计熵。目标修正需新checkpoint合同及新训练，不将旧最终权重当新目标已训练结果。独立推导见[16.1](tasks/task10/task10.16/task10.16.1/RESULTS.md)，实现见[16.2](tasks/task10/task10.16/task10.16.2/PROCEDURE.md)。首轮只实现及CPU核验，实际任务收益待验证。
+
+SRC-T10-035独立原件复算：task10_signal_diagnostic.py以CUDA隐藏在CPU读取原before/after/replay，输出/tmp/t10-review-15-signal；首更32anchors/49loss，critic/actor与原记录一致。对保存的next target Q、next mask及实际dt/终局mask做代数修正，3个dt0样本（33/39/46）target从0.7538898/0.6690456/0.4405394变为−0.0520150/−0.0999830/−0.1227638；新目标减项为alpha log N，N=10/9/5，alpha=.35。原件forem/results/task10/t10-fix-20261103-objective/{review-signal-summary,target-algebra}.json。此为同Q输入的算式验证，未更新模型或新增环境结果。
+
+<a id="src-t10-036"></a>
+
+**SRC-T10-036 · KL修正验证与新试训授权。** 2026-11-03，用户明确回复“批准试训及配对评估”，针对本轮新目标从头1200真实/200更新/7小时，以及相同12场景最终策略评估≤90分钟。各一次独立run，预算不与旧run混用。固定alpha=.35、均匀先验KL目标见SRC-T10-035。实现16.2专项11passed及旧路径62passed，父再跑专项并用原49个首更tensor调用新bellman，与直接期望Q−alpha KL算式最大误差1.19e−7，3个dt0目标全负，记录t10-fix-20261103-objective/implementation-check.json。新目标改变学习目标与温度，实际收益必须新训练和同初态比较；此前CPU验证不能替代GPU实际训练。使用相同初始种子/模型结构/B3、预热、真实预算与环境，记录温度固定与旧自适应差别。当前训练源码及config冻结到新run，运行中不修改。
+
+SRC-T10-036启动记录：新run t10-kl-online-20261103-s101，实际启动epoch1793695774.9137278（北京时间2026-11-03 16:49:34），截止同日23:49:34，宿主launcher325237、容器worker1215、GPU1。明确传入relative_uniform_trial.json，actual contract确认objective relative_uniform、alpha .35、确定性算法True。80项训练源码hash逐项核对并存run/frozen-code。启动首次已完成8真实决策，无在途、0更新，仍预热。无后验成功率结论。日志forem/logs/task10/t10-kl-online-20261103-s101-train.log；停止仅对已核实该worker发TERM，原deadline不变、不得重启。
+
+<a id="src-t10-037"></a>
+
+**SRC-T10-037 · KL试训完成状态核查。** Codex，2026-11-03 21:56+08，用户仅要求检查进度。原run t10-kl-online-20261103-s101 的training-budget/summary/events、200行updates、checkpoint；CPU CUDA隐藏重跑task10_online_audit.py，rc0，输出review-20261103.json为verified，1200 journal/replay唯一身份、首个真实GPU更新与final checkpoint200通过。原worker记录bounded_complete、error null、inflight0、warmup1000、lower_unchanged true。首更后actor/q1/q2每项200条有限非零梯度记录。开始epoch1793695774.9137278+worker wall16830.271118s推算结束2026-11-03 21:30:05+08（4h40m30s）。现场训练及launcher PID均不存在，GPU无compute。launch.json仍running、外层日志停在240条，属外层收尾证据缺失，不据此伪造launcher退出码或修改原记录；worker结果与原件审计独立报告。尚无新目标12场景评估，用户此前要求退出监督，本轮仅状态核查/CPU审计，未启动评估。
+
+<a id="src-t10-038"></a>
+
+**SRC-T10-038 · task10.16.3新KL配对评估执行授权、CPU核验与冻结。** 类型：用户本会话明确授权、项目原件CPU核验和工程执行安排。Codex，2026-11-03。用户指定工作树CL-FoReM-task10、分支codex/task10-upper-wm；新训练t10-kl-online-20261103-s101只读，以worker bounded_complete、最终checkpoint和review-20261103.json verified进入评估，原launch残留running及外层退出码缺失保留；禁止task10_kl_pipeline.py。唯一新trained 12回合/1800真实/0更新/5400s，先到即止、不重跑；固定旧12validation地图、场景seed101、B3seed4718及既定环境，逐回合真实执行前精确核对原始物理/路线/grid/观测/候选/mask/seed。独立持久launcher启动核实后退出主动监督，顺序CPU只读report获授权。
+
+run t10-kl-eval-20261103-s101，HEAD91f538cf2ee10bebffd6b643d5c908fa0d419ced加现有未提交实现。CPU命令task10_online_audit.py输出本新run/source-audit.json为verified、rc0，1200真实journal/replay、200更新、首个真实GPU更新核验；preflight.py与freeze均rc0，无新交互/更新。actor完整state SHA a293ab15d6badc492722bfadb6ee37fd86b441f42572a56e8b2fa35fbe02cdb9，与最终learner完全一致；relative_uniform v1固定alpha .35，最终1200/200；新旧initial state均f84740d7dd1827c2c84e20dbbb576afe3b98e50a7ce4d0bcaf2e26080d363f15。原始review记录的6项模型/首更SHA与当前文件及新审计逐项相符，完整训练目录SHA另存source-input-hashes.json，结束复核不写源目录。
+
+旧评估原件再审计reference-audit.json verified_complete，旧trained/initial均0/12、uniform10/12；4份当前源码(entry/learning/recovery/runner)因后续KL实现有意改变，审计只对这4项解析到旧run/frozen-code对应原始SHA，其他旧模型、初态、决策、地图直接读原件，详细映射和119项冻结检查均保存在reference-audit.json。新manifest SHA a1901e2f4efe714f0640003309eaa2faae018a82779e64f13a53614b05d76eff，321冻结输入，12trained身份、12/1800/0/5400，scenes/pool/frozen_lower及既定环境配置逐项与旧manifest相同；freeze stdout先输出base临时36清单，随后最终KL manifest改为12，实际launcher仅读最终manifest。原19项CPU专项和脚本全文已阅，本轮未改执行脚本，未重跑无关测试；run内持久driver/finalize为单次执行收尾产物，语法编译通过，不修改算法。脚本SHA、精确命令/退出码、模型/地图SHA与frozen-code副本在manifest、freeze-lock及日志。采用/限制：放行唯一有界评估，不是收益验收；完整验收须12完成/0缺失/0在途/0更新、worker与launcher正常结束及report verified_complete，单训练种子12验证场景。最终观察另见SRC-T10-039（结束后生成）。[流程](tasks/task10/task10.16/task10.16.3/PROCEDURE.md)。
+
+SRC-T10-038启动事实补记：2026-11-03T22:06:51.829083+08:00开始，硬截止2026-11-03T23:36:51.829083+08:00；host driver534271已脱离聊天（PPID1/SID534271），launcher534276、docker client534277；launch running及内部同epoch双层timeout存在。独占claim/launch禁止重复，日志及退出状态由独立driver持久记录；顺序report/finalize为已排收尾而非已完成结果。详细命令见run/launch.json与detached-status.json。用户要求启动核实后退出主动监督，未新增周期监控。
+
+SRC-T10-038启动核实补记（2026-11-03T22:08:49.785967+08:00）：entry-check verified，容器worker1300，upper/B3实际cuda:0/物理GPU1，eval/no_grad/VCM初始记忆复位通过；首回合8项typed hash在真实执行前与旧初态完全一致、差异空。收尾证据startup-verified.json，之后退出主动监督，独立driver继续。此为启动核实而非12回合收益验收。
+
+<a id="src-t10-039"></a>
+
+**SRC-T10-039 · 新KL配对评估原件复算与交接。** 类型：项目原始实测、CPU只读重算和明确范围的观察结论。核查人Codex及本run顺序finalize，日期2026-11-03T22:19:41.078682+08:00。run `t10-kl-eval-20261103-s101`，版本HEAD91f538cf2ee10bebffd6b643d5c908fa0d419ced加manifest/frozen-code绑定的未提交文件，入口scripts/task10_kl_validation.py::report及run/finalize.py，精确产物report.json、handoff.json、initial-logit-comparison.csv、source-input-hashes.json、launch/budget/summary/weights及每回合原始PT/JSON。完整验收=False，report=failed，完成12/12、缺失0、成功10/12、0更新合同；实际更新0、在途0、launcher rc0、report rc1。原地行为：完整验收未通过，不能给出完整12场景结论；已落盘原地0/21，旧trained 52/52。 成功率：完整验收未通过；已完成12/12，已知严格成功10/12、缺失0，不按完整样本宣称提高。 配对与失败原因原数见报告及所属任务RESULTS，不在台账维护另一套协议。原地logit领先定义max有效原地−max有效移动，仅对同12初态比较；后续不同轨迹不逐步比logits。完整谓词要求12完成/0缺失/0在途/0更新、worker和launcher正常退出、report verified_complete及原件一致，不以rc0替代。源训练launch残留running、外层退出码缺失保留，仅据已核验worker/checkpoint/CPU审计入评估。限制：单训练种子、12验证场景，缺失保留，不代表跨种子显著性或泛化，不自动重跑。[结果](tasks/task10/task10.16/task10.16.3/RESULTS.md)。
+
+<a id="src-t10-040"></a>
+
+**SRC-T10-040 · task10.16.3报告接口修复、原件完整复核与行为/收益结果。** 来源类型：项目原始实测、CPU原件复算、报告工程修复及限定范围的观察结论；核查人Codex，日期2026-11-03T22:30:50.608942+08:00。用户再次要求“检查”，沿已批准唯一评估的必要复算与交接范围修复CPU报告，不新增评估/训练/真实决策/更新/GPU。run `t10-kl-eval-20261103-s101`，工作树/HEAD91f538cf2ee10bebffd6b643d5c908fa0d419ced及原manifest/frozen-code绑定的执行源码不变。原report.json的唯一错误是snapshot_checks被误传4参而实际仅接3参，原19专项用任意参数stub漏验实际接口；原report/handoff及冻结执行脚本全部保留。新增`scripts/task10_kl_validation_report_v2.py`在CPU报告调用时仅去掉不使用的budget参数、finally恢复原审计函数，不改评分/阈值/任何审计检查；新增真实snapshot审计接线/候选损坏拒绝/异常恢复3专项，3passed/1.36s/rc0。adapter SHA `9353463e6480e6ada57ee94786815bfa6327e875acc52b0d8e9dd7c8a0a2d1f8`。完整report-v2.json为verified_complete/issues=[]/rc0，SHA `681b4725534ec574f9d1a8c0b516fbff6bb891cf4207909e70f70e2ca8bf35c8`；父独立原件入口run/parent_check_v2.py从终局PT字段、mask/所选槽、attempts与初态再核，parent-check-v2.json同为verified_complete/issues=[]/rc0，SHA `35fbe863860b1e17e4bb16f8a5d694f594d1e0132cf0fd7a2ffcc726ed3a56f5`。精确命令、退出码/版本在日志、report-check-exits.json、handoff-v2.json。
+
+完整条件同时通过：12唯一回合完成、缺失0、21预留=21真实完成、在途0、更新0、worker complete/error null、launcher process_exited/rc0，12初态执行前比较及独立快照/首次原件观测候选检查通过、eval/no_grad/逐回合记忆复位及有效最大logit核验。321冻结输入、254训练源文件、70本轮检查前原件SHA全部未变；新报告只增加文件，旧failed报告和训练launch残留running/外层退出码缺失均未篡改。时间由launch原epoch核：2026-11-03 22:06:51.829083–22:19:18.778081+08，outer746.948999s（12m26.949s），不把CPU报告时间当GPU执行；训练完整审计依据SRC-T10-037/038。
+
+观察：新策略严格成功10/12（83.33%，sparse5/6、standard5/6），旧trained0/12、旧uniform10/12；对旧trained胜/负/平/缺失=10/0/2/0，对旧uniform=0/0/12/0。原地选择新0/21（0%）、旧trained52/52（100%），两边全部有其他有效候选；同12初态的原地logit领先（max有效原地−max有效移动）旧均为正，范围[0.1854663,0.4535053]、均0.2975696，新均为负，范围[−0.9922315,−0.4527432]、均−0.7153881。逐图原始数在initial-logit-comparison.csv，不对不同后续轨迹做逐步logit比较。结束主因10严格成功、2失败上限、0停滞；sparse00004为20次self_collision，standard00000为20次ik_rejected，按Core IK→base→arm→self优先级逐attempt核验，未把零尝试当IK失败。
+
+采用/限制：本清单中原地行为改变、相对旧trained任务成功率提高83.33个百分点，与旧uniform持平；仅单训练种子、12validation场景，不证明跨种子显著性/泛化/目标修正唯一因果，不宣称优于uniform。此为SRC-T10-039初次failed报告后的完整验收补证，取代其“完整验收未通过”的当前状态，历史原件保留。工程复算通过、状态review交当前决策者最终审核，未新增后续训练或实验授权。[结果](tasks/task10/task10.16/task10.16.3/RESULTS.md)。
+
+<a id="src-t10-041"></a>
+
+**SRC-T10-041 · KL修正最终决策者验收。** Codex，2026-11-03 22:31+08，用户要求审核。CPU/CUDA隐藏独立复跑task10_kl_validation_report_v2.py到/tmp/t10-kl-review-final.json，rc0，verified_complete/issues=[]，落盘run t10-kl-eval-20261103-s101/decision-review.json。另逐12个manifest身份读取episodes、初态logit CSV、launch/budget/summary，核对12唯一且完成、10严格成功、0缺失/更新/在途、launcher rc0及worker complete/error null。原件复算证据复现旧trained原地52/52→新0/21，12相同初态logit领先全部由正转负；严格成功0/12→10/12，新对旧trained胜10平2，对uniform12平。剩余两个失败为自碰撞与IK拒绝，无停滞。早期报告failed源于snapshot_checks调用参数数量，修正版只去掉多余预算参数、保留原始快照检查，未跳过验收；原failed文件保留。此轮接受代码目标修正、单次训练与12场景配对交付done，原地病态在该固定清单已解除；不推广至其他种子/地图，不宣称优于uniform，固定温度及后续采样分布变化仍限制单因归因。训练旧外层退出码缺失和batch8采集恢复未验仍独立保留。没有新环境、GPU、更新。
+
+<a id="src-t10-042"></a>
+
+**SRC-T10-042 · 单种子10k阶段训练派发设计。** Codex，2026-11-03。用户同意前述单种子1万真实决策、1000预热、约9000更新，并要求派发词；16收益证据见SRC-T10-041。固定新KL目标及学习器参数见SRC-T10-035/036，目标是学习充分性曲线，非预设训练更长必有效。工程选择为A预检128真实/64诊断更新/1h、正式10000/9000/48h、每256决策保存及2000/5000/10000检查点、各12图90min评估。上层seed101/B3seed4718沿既有可比条件。旧在线成本16951.958s/1200、update72.580s/200，非update每决策14.06615s，10000×14.06615+9000×.362901≈39.98h；48h是约20%资源余量上限，保存恢复和数据分布变化可能使其不够，需A核定，非工期保证。3×12=36评估回合、36×150=5400决策上界，3×90min=4.5h仅资源上限。现有全批自然终局恢复未通过，需在混合行的正常决策边界实证恢复；属于长任务可靠性必要实现。具体协议见[17流程](tasks/task10/task10.17/PROCEDURE.md)，本轮尚未运行。
+
+<a id="src-t10-043"></a>
+
+**SRC-T10-043 · task10.17正常batch8恢复实现与A核查。** 类型：用户本轮明确授权、工程实现、CPU合成夹具；Codex父/17.1/17.2子Agent，核查日期2026-11-03T23:03:05.521857+08:00。HEAD91f538cf2ee10bebffd6b643d5c908fa0d419ced加既有/本轮未提交实现，精确源码SHA将在A frozen-code及checkpoint sources登记。位置：src/task10/boundary_state.py::capture_environment/restore_environment、recovery.py::save_decision_boundary/load_decision_boundary、resume_audit.py；long_training.py与entry显式long-10k入口。正常边界为执行、next候选、回放/更新提交并自然reset ended行，保留存活行。纯树白名单编码完整动态物理/场景/传感grid/queue/时钟/候选/episode/sampler/所有RNG/history/VCM/learner/target/optimizer/scheduler/replay，重建资源引用；拒绝未提交/版本/哈希/账本变化和旧PID存活，不回滚原截止。CPU跨PID夹具为合成真实对象结构，19项新恢复（最终合并旧恢复/字节检查45passed/25.38s/rc0），训练入口/launcher合同37passed/rc0；原件logs/task10/task10.17.1/cpu-tests-v2.txt、task10.17.2/cpu-tests.txt。父全task10初次201passed/2skipped/11failed，11项均test_lower默认宿主artifact路径在容器不存在；显式TASK10_ARTIFACT_ROOT=/reference复跑该文件13passed/1skip/rc0，未改科学条件或源码。CPU不替代真实恢复。A统一共享128真实/64诊断更新/3600s，上层10000/9000/48h沿SRC-T10-042；所有参照/恢复均计入同预算，尚未启动真实A。采用限制：CPU仅证明夹具；真实下一批场景/观测/候选/选点/采样/梯度/更新/账本及48h成本门待实测，不能据本条放行B。详见[17结果](tasks/task10/task10.17/RESULTS.md)和子节点。
+
+<a id="src-t10-044"></a>
+
+**SRC-T10-044 · task10.17持久B→C→D交付与CPU评估适配。** 类型：本轮用户授权、工程选择与CPU原件核验；Codex父和17.3，核查2026-11-03T23:07:56.259637+08:00。位置scripts/task10_long_validation.py::checked_boundary/freeze/sequence/report/curves、scripts/task10_long_handoff.py::audit/drive/finalise。新checkpoint直接使用decision-boundary-v1，核2000/1000、5000/4000、10000/9000及总调度9000/原48h上限，禁止伪装旧1200/200。旧参照原件包括legacy independent-audit-v2.json与KL report-v2.json；真实CPU核200 legacy输入、52 KL输入、12原始初态一致，原件logs/task10/task10.17.3/reference-input-check.txt（0新交互/0更新/GPU）。子26专项passed/1.57s/rc0，父此前25pass/1.54s/rc0，覆盖显式metadata/路径hash/原始snapshot审计真实接口及篡改拒绝/原epoch时限/一次launch拒重；代码与日志在17.3三文档。父持久driver准备顺序B→C→CPU原件审计/曲线/文档交接，未执行B/C，不将工程准备称训练或收益。额外训练loss图采用过去100更新的均值作明确标注的描述性平滑（工程绘图选择，原始CSV同时保存），不作验收阈值或选模依据；严格成功/原地曲线只用固定12validation配对原件。B/C实际模型/配置/地图/代码hash、退出码与预算待run/contract、checkpoint metadata、manifest、stage-exits与handoff补记。所有最终建议仅依据本单种子清单，不能推断test泛化或自动授权20k×3。[结果](tasks/task10/task10.17/RESULTS.md)。
+
+SRC-T10-044 父复审补充 2026-11-03T23:19:58.928429+08:00：C report的timeout现同时夹紧原组epoch+5400与global epoch+16200，到限不启动report，标missing_group_deadline/global；30专项passed（cpu-tests-v7），父C+D33pass/4.29s/rc0。脚本SHA 9aa0e18d0a1da58baa4e6aeff497f201672a9e93b7463582400e919d8a4993d0。CPU补证不新增真实评估/更新；需要时D保存report-D而保留原C缺失记录。C仍尚未执行。
+
+SRC-T10-043 实际A与父复核 2026-11-03T23:30:28.721796+08:00：原始项目实测与工程推导，Codex。run `t10-17-audit-20261103-s101`，HEAD91f538cf2ee10bebffd6b643d5c908fa0d419ced+frozen-code哈希；checkpoint来源SHA `4842b9184800861400cbbffd9c377dcf22809e08de14e3a4bc19f6fa16988cd3`，父review SHA `ec162d4702fbc874b07eae6d446432848940bbbf7cc67032d710eff50add9f3e`。80新真实/12诊断更新/0正式训练/0评估，worker1293.513658s，含CPU核查1355.686018s；capture/resume均rc0，父review rc1唯一成本issue。64点混合6新回合/2存活，PID1678→1741，reference与resumed原件before/after逐位相等、场景/物理/观测/候选/选点/采样/梯度/更新/账本及原deadline一致；journal原collector身份无漏重。峰值RSS7864380KiB、torch peak allocated6690426880bytes，后者不含driver/context/未用缓存；CUDA同步wall与sim尝试642.25/提交628.5 row-s分列，不冒充CUDA-event时间。采集14.6692771368s/决策、更新mean.3300314833/P95.4798142881s、保存64点8.0621413365s/484035709bytes、恢复8.0819508713s。推导输入/公式详见parent-review.json.projection：42次保存用整次64保存成本max(1,d/64)保守线性放大，预计保存27295.3872624s，10000决策+9000更新+保存+初始化+清理共177134.730326s=49.204092h；用更新P95加一次放大恢复179745.580393s=49.929328h。由于包含固定状态放大而偏保守、仅一个64点样本，且B额外learner/actor发布成本尚未端到端实测，此结论为**48h可行性未被证实，NOT_READY**，不是实际必超48h的测量结论。按用户A退出条件停在A，无重跑/扩窗/正式B/C。具体优化/另行核查仅建议，不能据此新增授权。[17结果](tasks/task10/task10.17/RESULTS.md)与early-handoff.json为本轮交接。
+
+<a id="src-t10-budget-20261104"></a>
+## SRC-T10-BUDGET-20261104 — 批准增加预算并启动唯一10k
+
+- 类型：用户明确授权、工程预算选择及既有实测的条件估算。作者用户/FoReM-Codex，2026-11-04，核查Codex。用户原文：“现在我批准预算，可以去跑，能否只用两张卡？”；后要求“给一个预估时间”。授权承接task10.17原单种子10k协议及当前成本停点，GPU最多两张；不据此增加种子/算法或task11。
+- 选择：训练硬限54h=194400s由执行者选定，非用户给出的精确数值；依据原49.204–49.929h保守外推留约8%余量。仍10000真实决策/1000预热/9000更新先到即止，42次保存，固定KL目标与科学合同不改。C仍3×12验证、每90min、总4.5h。B+C硬资源上限58.5h，正常预计50–55h；不将估算当保证，不以第二张卡直接推算提速。
+- 输入来源：task10独立工作树`forem/results/task10/t10-17-audit-20261103-s101/parent-review.json`及early-handoff.json（nominal/guarded_training_hours），其SRC-T10-043/17 RESULTS列公式与单位；14.669277s/真实决策，.330031s/更新及保存/恢复。保守保存外推含固定状态放大，10k保存成本未实测，状态分布亦可变。
+- 资源核查：2026-11-04 docker inspect显示forem-task10-runtime DeviceIDs=[1]、/workspace绑定task10工作树；nvidia-smi四卡利用率0%、各14MiB、无相关Python worker。实际用物理GPU1顺序B/C，仅一张；最多两卡是上限，未实施新多卡并行。
+- 适用：本次唯一run `t10-long-20261104-s101`，评估`t10-long-eval-20261104-s101`；精确新代码/配置SHA、命令、PID/epoch/退出状态由launch/contract与日志记录，启动前不声称已运行或完成。证据日志：`/home/ybc/projects/CL-FoReM-task10/forem/doc/agent_logs/task10/task10.17/20261104-codex-launch.md`；父任务三文档位于同工作树`forem/doc/tasks/task10/task10.17/`。旧A结果/48h停点保留，当前选择不回写成旧run预算。
+
+SRC-T10-BUDGET-20261104 启动实测补充 2026-11-04T09:23:29+08:00：唯一run已于09:20:23+08启动，driver900227/launcher900228/host worker900264/container1807；launch/training-budget/contract均194400s，原deadline11-06 15:20:23+08一致。initial-comparison.full_model_state_equal=true，模型实际cuda:0/物理GPU1，CPU合同70passed/9.30s/rc0，当前8真实/0更新预热；没有预宣称首更/训练完成。源码/配置SHA由contract与logs/task10/t10-long-20261104-s101/prelaunch-code-sha256.json及startup-verified.json保存（均在task10工作树）。顺序评估沿原16200s；监控/停止/恢复与原epoch见该工作树本轮日志。
+
+<a id="src-t10-load-20261104"></a>
+## SRC-T10-LOAD-20261104 — 网络更新与端到端负载解释
+
+- 类型：已有项目实测、当前瞬时查询、条件推导；核查Codex，2026-11-04，用户问显存/GPU利用不高是否训练压力小。
+- 原始证据：task10工作树`results/task10/t10-17-audit-20261103-s101/parent-review.json`的performance/projection（完整诊断更新mean .3300314833s、环境执行/推演/复位等合计14.6692771368s/真实决策）；`results/task10/t10-kl-online-20261103-s101/training-summary.json`的timing.update_total（200次总71.953538s、mean .359768s）、wall_seconds16830.271s、peak_cuda_memory_bytes12002403840（约11.18GiB，PyTorch峰值不含driver/context）。计时为CUDA同步wall，不是纯GPU-event核时间。
+- 现场：新run t10-long-20261104-s101仍随机预热，账本updates=0，不能用当前利用率当反向传播负载；本轮nvidia-smi一次读取GPU1利用52%、4850MiB（约4.74GiB），仅worker900264使用GPU1。瞬时利用率会变；startup-verified.json另存稍后快照，不将不同时间读数混成同一时点。
+- 条件推导：9000×.3300314833/3600≈.825h（约49.5min）；10000×14.6692771368/3600≈40.748h环境/采集；原保守保存投影约7.582h，共49.204h，更新占约1.68%。旧短训更新占71.953538/16830.271≈.4275%，含1000/1200随机预热，不能直接当10k占比。只适用于已测batch8/thread2路径，序列分布/保存成本仍可能变。
+- 解释及限制：相对96GB级卡，本上层更新的已测计算与显存需求较小，端到端瓶颈主要在真实执行/候选推演/复位与保存。部分环境操作本身亦在GPU，不能据总耗时把它们全部说成CPU或证明GPU已饱和。第二卡提速未验证，不能推断耗时减半。提速需另做保持科学条件的等价优化核查；本次仅解释/记录，不擅自改网络、batch或并行。
+
+SRC-T10-044 实际收尾核查 2026-11-04T10:15:41.249112+08:00：项目原件/CPU复算，Codex持久driver；run `t10-long-20261104-s101`、evaluation `t10-long-eval-20261104-s101`，完整条件=False；原始结论与限制以[17结果](tasks/task10/task10.17/RESULTS.md)和run/handoff.json、parent-training-audit.json、各checkpoint report及curve-summary.json为准。精确版本/哈希在contract/manifest/checkpoint metadata，退出码见stage-exits.json；未读取原件或缺失不得当已验收，不自动扩大预算。
+
+<a id="src-t10-save-failure-20261104"></a>
+## SRC-T10-SAVE-FAILURE-20261104 — 256首保存失败、CPU修复与无恢复快照
+
+- 类型：项目原件核查、CPU最小复现/必要修复与测试；核查Codex，2026-11-04T10:20:02+08:00，版本task10 HEAD91f538cf及既有未提交内容；精确修复SHA见task10工作树logs/task10/t10-long-20261104-s101/check-failure/restart-proposal-not-executed.json.code_sha256。
+- 主张：唯一run t10-long-20261104-s101已失败退出，真实256/10000、更新0/9000，inflight0/pending0；没有完成1000预热。launcher结束2026-11-04T10:15:36+08:00、rc1，worker约10:15:34结束、lower_unchanged=true。第一256保存尚未写出boundary/metadata，checkpoints目录为空；final.actor.pt与初始完整模型逐字节相同。C仅标missing checkpoints、0评估回合/决策/更新，D审计不完整，不把C退出码0当科学验收通过。
+- 原始证据位置（均为task10独立工作树`/home/ybc/projects/CL-FoReM-task10/forem/`）：`results/task10/t10-long-20261104-s101/{training-budget.json,training-summary.json,launch.json,worker-exit.json,parent-training-audit.json}`，`logs/task10/t10-long-20261104-s101/train-attempt-0.stderr` traceback；`results/task10/t10-long-eval-20261104-s101/sequence.json`；`logs/task10/t10-long-20261104-s101/check-failure/{reproduce.txt,saved-journal-audit.json,cpu-tests.txt,failed-run-sha256.json}`。
+- 根因：`recovery.py::tree_equal`使用`.contiguous().reshape(-1).view(uint8)`；已实测shape(1)/stride(13)的Float张量is_contiguous=True但字节view要求stride1，原代码抛错。真实保存的32批/256唯一身份journal均next_boundary_ready=True；29184个tensor字段中24处可复现原异常，首例batch-000088.pt row0 next_candidates.diagnostics.inplace_progress。日志核查不是原运行内存回放独立一致性验收。
+- 修复：仅将字节比较前的归一化改为明确contiguous_format克隆，不跳过字段、不放宽逐字节一致性；保留NaN payload与正负零区分。新单例/空维/非单位步长/多dtype/NaN与signedzero回归，加既有恢复/长训/评估测试，共112passed/28.24s/rc0，CUDA隐藏、0新交互/0更新。最小复现修前rc1；CPU审计修后rc0。原失败run49文件hash全未改。
+- 采用/限制：这是保存检查的必要bugfix，不证明未来整条保存/训练已通过。原进程已退出且无完整环境/传感/sampler/RNG/history快照，只有journal与actor不足以按既有合同精确接续；不重建或伪造恢复点、不回滚256已消费交互。原PROCEDURE B明确“禁止自动从头重启或创建第二训练run”，须用户明确批准新run重跑；方案已准备未执行，单卡GPU1/原科学合同/54h及4.5h评估，同时保留原256交互与约55min成本。原11-06完成估价目前失效，获准启动后再按实际epoch估算。
+- 现场：原driver/launcher/worker PID均退出、GPU1空闲；GPU0/2/3被其他STAR-CCM+任务占用，本轮未启停或修改其任务。日志：该工作树doc/agent_logs/task10/task10.17/20261104-codex-check-failure.md。
+
+<a id="src-t10-restart-r2-20261104"></a>
+## SRC-T10-RESTART-R2-20261104 — 修复后新run重启明确授权
+
+- 类型：用户明确授权、项目必要修复/运行记录；作者用户/FoReM-Codex，核查2026-11-04T10:25:39+08:00，Codex。用户原文“修复并重新启动”，承接已给出的新run重跑确认（10k、54h、单卡GPU1）。授权创建t10-long-20261104-s101-r2与t10-long-eval-20261104-s101-r2，旧失败记录保留。
+- 边界：单seed101/B3-4718/batch8、1000新真实预热、10k真实/9k更新、KL .35/9000新scheduler、42保存点及固定3×12验证不变；GPU最多2且仅GPU1顺序使用；54h训练+4.5h评估，以新run首次启动epoch为原点，不重置新run时限。旧run256真实/0更新/约55min不隐去、不混计预热；这不是从旧256恢复。该明确授权不包含再次失败后自动启动第三run或额外实验/种子。
+- 修复与依据：SRC-T10-SAVE-FAILURE-20261104（根因、修前复现、112CPU测试、原49件证据未变）；必要修复为tree_equal强制单位步长buffer后按原字节比较。实际新run源码SHA/配置/初始权重/命令/PID/时限由launch/contract及本轮日志登记，未启动前不能写已完成。
+- 证据路径：task10独立工作树`/home/ybc/projects/CL-FoReM-task10/forem/doc/agent_logs/task10/task10.17/20261104-codex-restart-r2.md`、`logs/task10/t10-long-20261104-s101-r2/`；父结果在同工作树`doc/tasks/task10/task10.17/RESULTS.md`。预估仍沿已有49.2–49.9h的保守投影，含评估约50–55h；是条件估价非新实测完成结论，首次256保存仍待运行实证。
+
+SRC-T10-RESTART-R2-20261104 CPU补充及启动 2026-11-04T10:27:27+08:00：新增test_decision_recovery.py::test_complete_boundary_save_restores_nonunit_stride_journal_fields，向合成64转移journal/replay/history加入13候选视图的shape(1)/stride13字段，实际调用完整save_decision_boundary和load_decision_boundary后比较回放/历史。该完整保存加载回归与字节测试共22passed/3.92s/rc0，日志task10工作树logs/task10/t10-long-20261104-s101-r2/cpu-full-save-regression.txt；此前112pass原件沿保存失败条目，不相加冒充独立测试总数。新driver969983/launcher969984/host worker970022/container1911已于10:26:12启动，launch与training-budget为194400s、原截止11-06 16:26:12+08，评估仍16200s（训练用尽后评估用尽最晚11-06 20:56:12）。全部源码配置SHA见prelaunch-code-sha256.json及实际contract，初始模型比较/真实采集另待启动核实，不预宣称首256保存通过。预计50–55h对应11-06 12:26–17:26，是条件推导非工期保证。
+
+SRC-T10-RESTART-R2-20261104 启动核实 2026-11-04T10:28:24+08:00：new initial full_model_state_equal=true，run/contract的cuda:0/physical_gpu1、code/config SHA及原194400s deadline与launch/budget一致；driver969983/launcher969984/host worker970022/container1911实际存活、启动事件training_ready。账本8完成/0在途/0更新，明确仍预热。现场原件task10工作树logs/task10/t10-long-20261104-s101-r2/startup-verified.json，精确runtime/模型/地图/源码SHA在run contract。实际首256 GPU完整保存和首参数更新未发生，不将CPU专项替代实证；无自动第三run。
+
+
+<a id="src-t10-ckpt-audit-20261104"></a>
+## SRC-T10-CKPT-AUDIT-20261104 · r2 256/1024不可变检查点CPU只读审计
+
+- 主张与类型：项目实测；已发布r2第256/1024检查点文件CPU可读，内容与历史自身计数一致，分别256真实/0更新/256回放和1024真实/24更新/1024回放；不构成r2下一次真实执行已验证。推导`max(0,d−1000)`，单位真实决策/更新，输入来自task10.17已批准预热协议；非新增参数选择。
+- 作者/标题/版本：FoReM-Codex，《task10.17 r2：256 / 1024 检查点CPU只读审计》，2026-11-04；代码HEAD91f538cf2ee10bebffd6b643d5c908fa0d419ced加现场已冻结未提交源，源集合逐文件hash按boundary.sources和config.code_sha256核对。核查人Codex，核查时间2026-11-04T14:59:20+08:00。
+- 精确证据：工作树/home/ybc/projects/CL-FoReM-task10；原run forem/results/task10/t10-long-20261104-s101-r2/checkpoints/decision-000256.*、decision-001024.*；独立输出forem/results/task10/t10-17-checkpoint-audit-20261104/REPORT.md、audit.json、checkpoint-256.json、checkpoint-1024.json（全路径/字节数/metadata与actor/learner/boundary SHA）、journals-256.json/journals-1024.json（32/128批全journal SHA、逐行唯一身份）、fields-review.json、weights-review.json、stride-*.json、commands.sh及四组stdout/stderr/exit-code。配置SHA a5c99a8e5e2b15d2ca6d9ad24223fc30caf015d8b841dfde3f25d22acc188f20，两点相同。boundaries SHA分别e6edb8dc7a7b503829c41e9661aa8c5d2dda74480711e757b892fb674919072e / 517f0e4809c73049401bfb083a7e736d8674f829df2cf66287b3d6d942d0fe7b。
+- 原始结论：两点actor与完整learner model逐字节相等，boundary与learner的learner/replay/RNG/config一致；历史ledger自身哈希可重建一致，无inflight。1024含85组Adam完整step/exp_avg/exp_avg_sq，step均24、scheduler last_epoch24/total9000，独立CPU learner加载往返一致，双Q/actor与target头均较256改变。固定alpha配置.35，运行float32值.3499999940395355；relative_uniform/task10-relative-uniform-v1一致。journal逐真实字段与回放一致；6新2存活及7新1存活batch8均保存环境/传感/候选/时钟/历史/RNG/回放/账本。真实journal有3/14个字段可复现旧stride view异常，修复比较和独立内存序列化字节往返均通过。四个最终审计命令rc0，CUDA未初始化；首轮审计器alpha断言rc1保留，修正浮点表示断言后通过，未改训练原件。
+- 既有实测复核：A run t10-17-audit-20261103-s101的reference/branch.pt与resumed/branch.pt重新CPU逐项比较before/after无差异，旧PID1678→1741，同started/deadline；cross-process-review.json。覆盖64真实/10诊断更新时6新2存活边界及下一8条/下一诊断更新，按原协议总80真实/12诊断更新；不是本轮r2续跑。
+- 采用方式与限制：作为r2已发布保存文件完整性和一致性的只读验收；不新增交互/训练更新/GPU，不执行load_decision_boundary，不修改训练账本/latest或进程。CUDA RNG/policy状态仅CPU可读性/持久化核查，不以CPU伪装CUDA下一动作。现场恢复仍要求原ledger哈希未变、旧PID退出、同boot/source/runtime；后续已消费交互禁止回滚到历史点。最近本轮内容审计点1024/24；最近有下一批跨进程实测的点A64/10，不称任意崩溃可恢复。独立learner文件online_resumable=False是设计，完整环境需boundary文件。
+
+<a id="src-budget-review-20261104"></a>
+## SRC-BUDGET-REVIEW-20261104 — 合理训练自主执行与精简审核
+
+- 类型：用户明确决定、项目工程执行规则；作者用户，2026-11-04；核查日期2026-11-04，核查人Codex。不是外部文献或效果实测。
+- 原始指令（当前聊天，精确位置为预算审核讨论后用户执行指令）：“请你按照情况，修改，只要训练合理，即可放心，然后审核的力度也要放松，保证无bug，不要做重复冗余的审核浪费token”。前文用户指出预算审核过于严苛、多处卡住。
+- 支撑主张：在已授权研究目标内允许执行者按成本和结果自主调整合理训练预算、完成必要排错与重跑，取消重复预算审批与无新增理由的重复审核。
+- 项目采用：见[共同约定预算与审核原则](../../AGENTS.md#budget-review)。端到端成本可复用既有证据，未知成本先试跑；工程耗时为可调整预估，排错/等待与训练有效运行分别记录；保留累计实际成本。审核聚焦变更及受影响路径，已有适用证据引用一次，修复后定向复验即可推进。
+- 适用限制：不授权新研究方向/功能或无限制盲目重试；用户明确的资源限制、交付截止与暂停继续遵守。科学条件变更事先登记并保持对照可比；有效教师/数据/恢复等正确性依赖仍须满足。“保证无bug”采用必要检查、修复和定向回归落实，不作绝对无bug承诺。历史失败及预算事实不重写，运行中超时器不因文档更新自动改变。当前聊天原文为直接核验来源，无外部URL；执行修改见各工作树PROGRESS/DECISIONS和主工作区过程记录。
+
+<a id="src-t10-status-20261105"></a>
+## SRC-T10-STATUS-20261105 — r2进度与显存增长条件估算
+
+- 类型：项目运行原件只读核查、既有证据复用、CPU检查点内存字段统计、条件推导；Codex核查2026-11-05T10:02:15+08:00，task10 HEAD91f538cf加已记未提交修复，未修改运行代码/配置或干预进程。
+- 进度原件：task10工作树`/home/ybc/projects/CL-FoReM-task10/forem/results/task10/t10-long-20261104-s101-r2/`的training-budget.json、events.jsonl、updates.jsonl、latest-checkpoint.json、first-update-evidence.json，以及logs同run的driver-status/stderr。09:55快照5760/10000真实、4760/9000更新、8在途；09:58:49快照更新日志4776条（对应5776真实）。24个已发布consistent_checkpoint事件，最新5632/4632，2000/1000和5000/4000已保存；首更证据verified_cuda/issues=[]，actor/双Q梯度和权重变化及固定B3未变沿该原件，不重复GPU复验。4776条已落盘update中的loss/gradient_norm/LR/alpha均有限，仅证明已检查数值，不能推断成功率或无未来发散。无新错误，仅既有kernel缓存目录警告。
+- 保存证据复用：该工作树`results/task10/t10-17-checkpoint-audit-20261104/REPORT.md`与SRC-T10-CKPT-AUDIT-20261104已验256/1024文件可读及计数/回放/权重一致，修后真实stride字段通过；本轮不重跑测试/hash或恢复下一批。GPU1进程970022、父969983/969984仍活，现阶段B未完成，C严格成功率尚未评估，不能将旧12图结果当新长训结果。
+- 显存原件：09:55–09:58多次nvidia-smi为67006/97887MiB（65.4355/95.5928GiB），当前余量30.1572GiB；0/2/3为空闲。本轮仅CPU map_location=cpu/mmap读不可变1024/5632边界，不加载GPU。checkpoint-memory.json显示缓存planner从2077到7260；对应sampler带CUDA标签张量总量2992608664→10460404040 bytes，5632点环境各组总10476046000 bytes。后者不是运行进程的CUDA allocated/reserved测量，编码会重复共享对象，不含临时张量/优化器/graph/driver。CPU脚本及rc0原件位于该工作树`logs/task10/status-20261105/{checkpoint-memory.py,checkpoint-memory.stdout,checkpoint-memory.json}`。
+- 机制：task8_sim/episode.py::PcdEpisodeSampler.entries/planners/sample按train地图ID缓存PcdTruthPlanner；训练pool manifest共有10000 train地图，缓存上限因此受地图集合约束。primitive_scene.py::PrimitiveScene.from_asset在GPU保存occupancy/height等；task10/learning.py::EpisodeReplay.append用exact_cpu保存回放。task7_sim/kinematics.py::dls按设备/dtype/2幂capacity缓存CUDA graph。均为源码事实，不据此断言所有显存均来自地图或纯CPU/纯GPU瓶颈。
+- 显存条件推导：当前缓存CUDA张量均值10460404040/7260≈1440827bytes/地图；余2740地图，预计新增3947865988bytes≈3.677GiB。若其他占用保持类似，67006/1024 + 新增bytes/2^30 = 69.112GiB，余26.480GiB。因此以已识别增长部分估算终点约69–70GiB/95.6GiB，当前OOM风险较低；不是最坏上界或不会OOM的保证，尚无同进程allocated/reserved明细及所有未来临时峰值。不能直接按已用步数线性外推全部GPU占用。用户表示“主要要计算会不会爆显存，其他的没关系”，随后“那还可以”；据此保持单卡现有训练，不实施两卡拆分。精确输入/公式/单位/限制见`logs/task10/status-20261105/memory-projection.json`。
+- 时间条件推导：5000→5632完整checkpoint事件wall从72715.9490到82613.6268s，包含当前执行/更新/保存，平均15.660882s/真实决策；以09:58:49剩余4224决策外推66151.568s，训练约11-06 04:21、再加原评估上限4.5h约08:51（+08）。仅近期速度估价，场景/缓存/保存成本可变，非交付承诺；运行中仍原194400s/11-06 16:26训练超时，不因新规则/预计提前直接改现场配置。
+- 限制与采用：本次只读状态检查和内存风险计算，不改变科学条件/样本/种子，不证明更广泛成功率、不声称绝对无bug；已授权训练继续。`logs/task10/status-20261105/progress-snapshot.json`及`doc/agent_logs/task10/task10.17/20261105-codex-status.md`保存本轮新增事实。
+
+SRC-T10-044 实际收尾核查 2026-11-06T07:31:33.811350+08:00：项目原件/CPU复算，Codex持久driver；run `t10-long-20261104-s101-r2`、evaluation `t10-long-eval-20261104-s101-r2`，完整条件=False；原始结论与限制以[17结果](tasks/task10/task10.17/RESULTS.md)和run/handoff.json、parent-training-audit.json、各checkpoint report及curve-summary.json为准。精确版本/哈希在contract/manifest/checkpoint metadata，退出码见stage-exits.json；未读取原件或缺失不得当已验收，不自动扩大预算。
+
+<a id="src-t10-t12-review-20261106"></a>
+## SRC-T10-T12-REVIEW-20261106 — 双任务决策者阶段审核
+
+- 类型：项目原件定向独立复算、运行状态核查和工程决策；作者/核查人Codex，核查时间2026-11-06T09:14:15.029017+08:00。用户要求审核task10/12；本轮0新交互/0更新，不重跑评估或全量hash。推荐GPT6.1sol/medium、Sonnet5.5/medium，跨计数、行为与隔离合同核查；实际配置未知，可自主选模/建档委派，本轮独立。
+- task10来源：独立树 `/home/ybc/projects/CL-FoReM-task10/forem/results/task10/t10-long-20261104-s101-r2/` 的training-budget、parent-training-audit、launch及评估 `t10-long-eval-20261104-s101-r2/checkpoint-002000|005000|010000/episodes.jsonl,decisions.jsonl`。已有训练CPU审计verified_complete/issues空、10000唯一journal/9000更新、launcher rc0，墙钟154055.955s≈42.793h；本轮复用有效原件审计，不再加载全检查点/重新hash全部文件。
+- task10独立复算：36唯一完成回合、60唯一决策；每检查点12回合初态哈希逐项相等，选择槽合法且为logit最大项。2k/5k/10k严格成功10/9/9（分母各12）、原地0/18、1/20、1/22。2k/5k报告verified_complete，uniform历史固定参照10/12，对照配对分别0胜0负12平和0胜1负11平；10k完整报告此前300s超时，执行者现已单独启动1200s CPU补证，本审核不重复启动，10k目前仅签收上述JSON计数/动作范围，最终报告验收仍待。
+- task10行为限制：5k/10k唯一原地位于standard_validation_00001首决策，delta_s=0.25、当步失败0；随后有累计失败，回合completion_with_failures。2k同图两次移动、零失败严格完成；5k/10k其他失败图均为sparse_validation_00004和standard_validation_00000。不能从关联直接推断原地导致退化，更不能称全原地坍缩复发。下一步优先复用该图逐决策的候选/Q/奖励/执行证据诊断；当前无持续提升或超越uniform证据，不据此扩大20k×3，不回选2k冒充固定终点。
+- task12来源：主树 `forem/results/task12/t12-expand-20261105-r8/` 的plan/exclusions/inputs-frozen/targeted-tests/driver/current和states/*/row.json；冻结代码task12_expand_train.py::assemble_training/selection_key/train/evaluate_sealed、task12_expand_stats.py::summarize及launcher阶段顺序。核256唯一新图160/32/64、旧65身份排除、旧24不与新集重叠，正式test未用；标签前冻结计数0，已有15项定向验证all_pass。训练只装非sealed输入/标签，权重选择按预登记五键，封存需200epoch/4600更及模型哈希先落盘；统计门与父流程相符。复用已验收教师/FK/保存恢复，不重复冒烟。
+- task12现场：234/256完整状态（91.41%）、完整状态标签5616/6144，全部已读row为complete/known24/missing0/updates0；当前state-234/grid-1，GPU3 driver2162429/worker2162484存活。未见顶层error/STOP，training/selected-model/evaluation尚未产生；未打开封存标签、统计收益或反例。当前仅阶段审核，不能称训练或泛化通过；维持现有持久链继续运行，不干预GPU1或其他任务。
+- 限制及采用：task10单seed/固定12validation，10k完整报告待补；task12仍在制数，未有生产训练收益。只在已检查范围内未发现须中断task12的新阻断。完整复算日志 `/home/ybc/projects/CL-FoReM/forem/doc/agent_logs/project/20261106-codex-task10-task12-review.md`，两工作区同ID登记便于各自任务链接，绝对原件路径区分来源。
+
+<a id="src-t10-final-20261106"></a>
+## SRC-T10-FINAL-20261106 — r2完成与最终CPU报告补证
+
+- 类型：项目原始运行记录/已有训练审计复用、既定评估原件CPU报告补证；核查Codex，2026-11-06T09:14:37+08:00（Asia/Shanghai），HEAD91f538cf及已记录未提交修复。运行代码/配置/模型版本与训练run/contract、checkpoint索引和评估manifest绑定，本轮不修改实现、不新增GPU交互或参数更新。
+- 原件根：task10独立工作树`/home/ybc/projects/CL-FoReM-task10/forem/`。训练`results/task10/t10-long-20261104-s101-r2/`的training-budget/training-summary/launch/worker-exit、parent-training-audit.json、checkpoints；评估`results/task10/t10-long-eval-20261104-s101-r2/`各组manifest/budget/summary/launch/episodes/decisions和report.json；补证命令、退出码及输出在`logs/task10/status-20261106/`。
+- 训练事实：10000真实决策、1000真实均匀预热、9000更新、回放10000、在途/待提交0，最终complete/error null，worker和launcher均rc0；结束11-06 05:13:48+08，launcher154055.9555s=42.7933h。parent-training-audit为verified_complete/issues=[]，已核10000唯一journal转移、9000更新和42预定检查点metadata全有效；复用该适用原件，不重跑全量审计/训练。下层B3 unchanged=true，固定预算终点为最终模型。
+- 显存事实：完成训练无OOM。training-summary.peak_cuda_memory_bytes=23974262272，除2^30为22.3278GiB，是PyTorch实际分配峰值；不能当nvidia-smi进程总占用/预留显存峰值，与11-05观察65.4GiB口径不同。本轮GPU1已空闲，0/3其他任务不触碰。
+- 评估事实/初查：36/36回合、60真实评估决策、0更新均已执行，3组初态/策略按原合同。2k报告verified_complete/10成功/12、原地0/18；5k报告verified_complete/9成功/12、原地1/20，对uniform0胜1负11平（uniform10/12）。10k逐12唯一完整episode原始JSON为9成功/12、22真实，但原报告及D补证均300s工程超时，无report文件；在本段记录时尚待完整CPU报告通过。sequence原partial及stage timeout124必须保留，不把超时当漏跑评估。
+- 必要补证：沿最新预算审核规则，只对10k调用原task10_long_validation.py::report，CUDA隐藏，独立输出report-complete-20261106.json，1200s工程窗口；不重跑训练或任何评估、不新增交互/更新，旧工程超时事实保留。本次CPU成本另列，不回写有效训练预算。若完整报告通过，再据原件补全曲线/交接；否则保留具体issues，不伪称全部验收完成。
+- 采用/限制：目前已核训练完整且保存失败未复发；2k→5k及10k原始读数未显示增加预算收益，但10k结论须待完整补证。只涉及一个seed和固定12validation场景，不证明统计显著、跨种子/地图泛化，不按验证挑2k为最终模型、不自动追加20k×3或task11。核查日志`doc/agent_logs/task10/task10.17/20261106-codex-status-report.md`。
+
+SRC-T10-FINAL-20261106 完整补证与交付核查 2026-11-06T09:18:15+08:00：10k原report入口CPU补证rc0、report-complete-20261106.json为verified_complete/issues=[]、12/12完整、9严格成功、0缺失/更新、初态12/12对应。其SHA256=66a7f841c54b4a42988e1f0b9ebd1c64f5e2a3da517fd4bf77967528927eb659；正常报告生成后发布同内容report.json，不重跑评估。日志打开至退出记录观察wall 433.729s（含容器启动，不冒充GPU时间）。原两次300s超时/stage124/sequence partial保留，新final-review-20261106.json及handoff.cpu_supplement明确说明补证恢复完整交付，不伪改原sequence执行史。训练完整审计和2k/5k报告复用，补证新增交互/更新均0。
+
+最终固定清单：2k/1000更新=10/12（83.33%，原地0/18）；5k/4000=9/12（75%，原地1/20）；10k/9000=9/12（75%，原地1/22）。最终对old_KL200和uniform均0胜1负11平、0缺失（两参照各10/12），对old_legacy为9胜0负3平。最终终止为9严格成功、2累计失败上限、1带失败完成路线；没有stall_limit终止。原始attempt计数IK拒绝20、自碰撞21、base/arm碰撞0，不能将attempt计数当独立回合或单因归因。结论限于本seed/固定12validation：未观察2k→5k→10k持续改善或最终优于uniform，不能证明方法普遍无效/统计显著；主结果固定10k终点，不选较好2k。
+
+原部分曲线和交接已分别保留*.pre-cpu-supplement-20261106.*、handoff-initial-incomplete-20261106.json；重生成的curve-summary/learning-curve.csv/png、initial-logit-comparison.csv现含三个已验收点，finalise.stdout/exit及final-status.json为本轮原件。最终handoff.complete=true但status仍review供后续阅核，task10.17本轮训练/既定评估/必要原件核查已完成；不自动追加20k×3或task11。原代码/配置/模型/评估数据均未改，当前无task10 worker、GPU1已释放。
+
+<a id="src-t10-opt-plan-20261106"></a>
+## SRC-T10-OPT-PLAN-20261106 — SCWM对照与task10优化诊断授权
+
+用户2026-11-06明确要求“调研，根据SCWM的想法，寻找问题，推进优化task10的过程”。类型：用户指令及工程任务拆分，Codex核查2026-11-06。依据task10.17最终10/9/9各12评估（SRC-T10-FINAL-20261106）与已复算退化案例（SRC-T10-T12-REVIEW-20261106），先研究SCWM原文和官方实现、核task10实际表征/预测/执行/学习证据；不预设根因，不直接套导航方法。task10.18及18.1/18.2三文档是范围事实来源。确定的实现bug修复与定向验证属于必要优化；新科学机制/功能按根AGENTS先明确方案获准，不直接改变奖励或架构。推荐默认GPT6.1sol/high或Sonnet5.5/high；两独立只读子任务计划Terra/high，因为需论文实现和原件因果判断，非模型性能比较。实际配置以日志为准。
+
+<a id="src-t10-scwm-20261106"></a>
+## SRC-T10-SCWM-20261106 — SCWM训练与反馈机制核查
+
+- 类型：外部原文＋官方固定源码静态核查；作者Xuan Yao、Yuze Zhu、Junyu Gao、Zongmeng Wang、Changsheng Xu，SC²-WM: A Self-Correcting World Model with Closed-Loop Feedback for Vision-and-Language Navigation in Continuous Environments，2026。原文 https://arxiv.org/html/2608.07548v1 ，出版页 https://proceedings.mlr.press/v306/yao26u.html ，官方检出origin https://github.com/sunrise-yuze/SC2_WM ，本地只读scwm commit f2f2f5ff2e1f21a08f7d7c51fbbd5c17b0d6778b。网页论文代码链接sunrise-ikun与检出origin不同，未推断迁移历史。
+- 核查日期/人：2026-11-06，Codex父及Terra/high子18.1。父直接阅读原文§3.1–3.2并核固定源码关键段，子补§3.3/附录C；未运行Habitat。详情task10/task10.18/task10.18.1/RESULTS.md及独立日志。
+- 原文结论：§3.1 Eq9/10是预测未来潜状态减当前潜状态的内部反馈，并非预测减真实观测；§3.2 Eq11专家动作监督两策略，Eq12潜态KL、Eq13未来视觉特征监督。附录C描述预训练初始化及分阶段训练，不是从零SAC。论文§3.3正文/算法2在熵门和时刻表述不完全一致。
+- 固定代码：vilmodel_cmt.py:939–967采用逐候选MLP H_rebuild、detach后的门控残差，并非该路径显式Eq9相减；ss_trainer_ETP.py:2410–2453有两头专家CE和实际执行后视觉余弦损失，979–1035训练/评估冻结范围；2190–2202使用KL(enhanced||global)，与论文描述方向不同。固定代码与论文抽象不能逐字等同，未证明该提交即全部论文实验版本。
+- 项目采用/限制：task7_upper/model.py::set_stage/forward 的stage1仅VCM/候选编码/headA，actor对候选detach、Q对actor detach；该梯度合同本身不是本轮发现的bug。借鉴“有任务约束的表征与预测/实际校验”，不移植论文阈值/学习率到SAC，不把其潜态KL等同task10 policy-vs-uniform KL，不把没启用WM认定为退化根因。新监督损失或WM接入仍需明确范围授权。
+
+<a id="src-t10-behavior-20261106"></a>
+## SRC-T10-BEHAVIOR-20261106 — 已保存三检查点价值与策略诊断
+
+- 类型：项目原件CPU重建与独立统计推导；核查2026-11-06，Codex父及子18.2。来源独立树forem/results/task10/t10-long-eval-20261104-s101-r2/{checkpoint-002000,checkpoint-005000,checkpoint-010000}/decisions.jsonl及其raw_path、训练r2/checkpoints/decision-*.actor.pt。诊断输出results/task10/t10-diagnosis-20261106/behavior/{analysis,metrics}.json；复算scripts/task10_behavior_diagnosis.py（原分步脚本执行通过，合并脚本仅py_compile，不重跑相同数据）。原run身份/版本见SRC-T10-FINAL-20261106，CPU/GPU最大logit差约0.00030，非位级一致声称。
+- 精确结果：60决策selected_prediction与所选f_k精确一致，所有非首决策的previous_result/link/route_s连续；12初态跨检查点身份hash一致。父独立从analysis逐候选重算：2k/5k/10k初态平均entropy/logN=0.963625/0.995503/0.996970；KL(pi||softmax(minQ/.35))=0.003544/0.002928/0.003989；minQ候选范围均值0.430799/0.180534/0.158209。归一熵是每状态H/logN后平均，不是均值概率的熵。
+- 判读：后期策略在本12初态近均匀且与softQ较接近，优先检验critic区分度/尺度/表征/优化，不由argmax分歧直接判actor失效；这些统计不能证明alpha过大或critic必错。standard_validation_00001的5k/10k原地本身推进.25m且零失败，后续均出现一次失败；因果与未选动作反事实未知。
+- 预测风险限制：2k/5k/10k所选预测有失败但实际无失败4/3/5次，预测零失败实际有失败2/0/0次；有效槽顺序映射核task10.environment.predict_candidates。预测和执行感知信息/轨迹不同，既非可靠真值也不自动构成实现bug。当前不支持按预测失败硬屏蔽候选。未新增环境交互或训练。
+
+<a id="src-t10-training-diagnostic-20261106"></a>
+## SRC-T10-TRAINING-DIAGNOSTIC-20261106 — 训练曲线与终局Q拟合诊断设计
+
+- 类型：项目实测聚合、公式推导及预登记工程诊断。作者/核查人Codex，2026-11-06。实际训练原件t10-long-20261104-s101-r2/{episodes,decisions,updates}.jsonl，脚本scripts/task10_training_diagnosis.py，输出results/task10/t10-diagnosis-20261106/training-summary.json含三个原件SHA与分组定义；本轮执行rc0。6570完成回合、10000决策、9000更新，更新序号连续。
+- 结果：0–1k/1–2k/2–5k/5–10k按完成决策计数分组，严格成功率约69.89/64.18/65.65/67.21%，单决策回合占64.98/70.43/69.82/68.87%；这是不同地图的训练采样，不能当配对学习曲线。后5k的平均critic loss .04114，高于2–5k的.02613；学习率在2k/5k/10k终点为5.995e-5/1.292e-5/1e-6。以上只产生优化假设，不证明学习率根因。
+- 公式推导：现合同g=.99^(dt/.1)，折扣半衰期 .1*ln(.5)/ln(.99)=6.897s；attempt_reward的终局基础奖励1未在最后段内部折扣。假设同一20s成功路线、Phi初始0/中间.5/终局0，一段结束回报1，两段各10s为.99^100≈.3660。塑形相消，只折扣最后段开始前时间，属于登记合同的分段偏好，不是本轮发现的实现偏离或该真实退化的因果证明；本轮不改奖励。
+- 新的有限诊断预登记：task10.18.3取1250批中编号等距64批，只用真实已选初态终局，按地图seed1813拆75/25拟合/诊断留出（都为旧训练图，不是新泛化集）；固定10k表征，已有双Q头分别以原lr两端1e-6/1e-4、同batch32、各200更新拟合原SAC终局target=r，保留零更基线。新Adam及固定表征/采样条件与在线不同；此为区分现有表征可用性与Q头拟合的工程探针，不是新生产算法或正式参数优化，实际结果待子记录。预算CPU有限，0新环境交互/不部署诊断权重，不因结果追加探针。
+
+<a id="src-t10-value-probe-20261106"></a>
+## SRC-T10-VALUE-PROBE-20261106 — 现有表征与终局价值头诊断结果
+
+- 类型：项目预登记CPU诊断及父独立原件指标复算，Codex/Terra子18.3，2026-11-06。输入原r2/checkpoints/decision-010000.actor.pt SHA256 64a2faf77a105991dd7ea055534c23859ed6a79c2c7f8716b5203841564c77e3、64等距真实训练批；精确条件见SRC-T10-TRAINING-DIAGNOSTIC-20261106与task10.18.3 PROCEDURE。
+- 原件：独立树forem/results/task10/t10-diagnosis-20261106/value-probe/{pre-registration,sample-split,summary}.json、frozen-inputs.pt、两臂诊断heads/curve，脚本forem/scripts/task10_value_probe.py；实际CPU两线程4.42s/rc0，0新环境交互、400次独立诊断Q头更新、0生产更新。父读取脚本/取样/数据并从已存输入和三组权重独立计算留出MSE/AUC一致，未重复拟合，rc0。
+- 结果：实际合格228条，全部初态s=0/任务终局/原reward=真实strict_success；按map拆171拟合（169图，105正66负）/57留出（57图，42正15负）。原头/1e-6/1e-4的留出双Q平均MSE分别.0902667/.0896387/.0839923；平均双Q排序AUC .9396825/.9349206/.9333333。两臂固定表征、同batch32×200次、原终局双Q MSE、Adam重置；完整最终而非挑最好epoch。留出成功/失败平均Q原头.8234/.2395，较大步长头.9039/.2026。
+- 解释/适用限制：当前表征在旧训练图的已选单步终局子集上有价值信号；较大步长能降MSE，但留出AUC未提高。不能据此说Q完全塌缩、学习率就是退化根因，亦不能据小探针选生产LR。这些地图曾参与旧在线训练，诊断留出仅对本次独立头拟合隔图，不能冒充未观察泛化。未选候选、多步状态、策略真实任务表现尚未验证；平均双Q AUC不是SAC使用minQ的策略验收。
+
+<a id="src-t10-first-action-plan-20261106"></a>
+## SRC-T10-FIRST-ACTION-PLAN-20261106 — 两回合首步因果诊断
+
+- 类型：既有问题诊断的工程选择，Codex，2026-11-06；来自用户要求根据SCWM寻找问题并推进task10优化，未引入新网络/奖励/损失/候选机制。
+- 输入：SRC-T10-BEHAVIOR-20261106中standard_validation_00001首态四个有效槽7/8/9/12；2k选9后成功，5k/10k先12后失败，但初始动作与后续策略同时变化，原记录不能直接归因。SRC-T10-VALUE-PROBE-20261106又不支持仅凭学习率解释或把表征判无效。
+- 预登记：task10.18.4，两回合同地图/seed101/原B3/native Core/10k固定策略，A原argmax用于复现；B仅首步强制原合法槽9（由已观察2k轨迹事先确定），后续恢复相同10k argmax。所有旧typed初态hash一致，A路径先核原10k记录，异常停止B；总最多2回合/300决策/0训练。每回合原150决策/200s尝试上限保持。结果无论如何均停止，不扩成候选搜索，不用该已观察图调部署。
+- 成本：旧10k评估launch1328.066s/12≈110.67s/回合仅参考，重建/加载非线性，初排20min工程余量可按实际修正，不是性能承诺；物理GPU1仅空闲时使用，不干预task12/GPU3。持久执行启动核实后按用户偏好退出监督，自动收尾原件。当前尚未启动；结果后追加独立来源。
+- 结论边界：若B改善，仅说明该固定状态首步干预有效并提示价值排序/长期后果估计问题，不证明泛化或应硬编码槽9；若B无改善，原2k成功仍不能归于首步，需后续独立裁定，不自动加第三臂。此项是建立因果证据，非正式策略性能对照。
+
+SRC-T10-BEHAVIOR-20261106 推导补充：对固定Q和任意alpha>0，softmax(Q/alpha)保持Q排序；当前评估为actor logits的argmax，单纯修改部署softmax温度也不改变该argmax。因此“将推理分布降温”不能直接修复已观察的贪心选点；训练alpha的影响须另做同条件研究，不能从此推导最优alpha。依据本项目distribution/masked_select实现及指数函数单调性，Codex2026-11-06核查。
+
+SRC-T10-FIRST-ACTION-PLAN-20261106 启动登记（2026-11-06T09:39:53.963954+08:00，Codex）：父已读新入口/原参数/CPU选择检查、核小权重和plan绑定，09:39:30由独立SID/PID2507382启动持久链，GPU1空闲检查及容器映射由launcher实时核。原A动作[12,7,2,1,8]；对初态typed hash和离散计数要求精确，浮点执行字段使用绝对1e-4工程容差（区分浮点再现性，不作为物理误差验收阈值），不按运行结果放宽。入口实际工程防挂起上界5400s，20min仍仅初排；最多2回合/300决策/0更新不变。实际首条和设备待核，结果不得预判。原件first-action/plan.json、cpu-check.json、parent-launch.json及launch/budget/entry，独立日志logs/task10/t10-first-action-20261106/。
+
+<a id="src-t10-sample-uncertainty-20261106"></a>
+## SRC-T10-SAMPLE-UNCERTAINTY-20261106 — 小样本与训练随机性优先核查
+
+- 来源类型：用户最新问题＋项目配对原件及统计解释；2026-11-06用户明确指出可能任务太少/随机性而非真实大差异，Codex核查2026-11-06T09:42:18.257853+08:00。输入为r2固定12图3检查点和旧uniform逐图结果（SRC-T10-FINAL-20261106、SRC-T10-BEHAVIOR-20261106）。
+- 已知：10k相对uniform为0胜1负11平，成功差-1/12=-8.33百分点，单训练seed；2k→10k也仅一个场景结局变化。每个已固定场景中动作/轨迹差异确实存在，但不能由此推断场景总体真实退化或跨训练种子差异。当前没有足够证据区分小样本波动、训练种子影响与系统性差异，亦不能反过来证明策略等价。
+- 推导示意：若以配对胜负方向独立可交换为假设，仅1个胜负不一致样本，零效应下正反方向各1/2，双侧精确符号检验p=1；此值不证明无效应，也不解决样本选择/泛化/训练种子不足，不用单p值作通过门。
+- 决策修正：先前把单一退化案例排在整体证据扩充之前，优先级过高。已启动18.4两回合只完成既定案例因果核查，结果不用于选择部署超参/硬编码候选/判定总体收益；不追加该图搜索。下一优化前优先冻结现有模型，在更大独立validation地图/初态清单上与uniform同条件配对，报告分层胜负平、差值与配对不确定区间；固定模型场景评估后再决定合理多训练种子。重复同12图同seed并不能解决样本多样性不足。
+- 范围：不因用户提问立即启动新长训或更换奖励/网络。具体新评估规模/成本/方法另在执行前预登记，正式test池继续保留。12图上的近均匀/softQ KL是该集合描述，不能直接当全分布根因；旧训练子集Q探针也不是泛化证据。
+
+<a id="src-t10-expanded-eval-plan-20261106"></a>
+## SRC-T10-EXPANDED-EVAL-PLAN-20261106 — 固定模型扩大配对评估设计
+
+- 类型：用户明确要求规划/给启动提示词＋地图池现场核查＋工程选择/成本推导。核查2026-11-06，Codex。研究背景SRC-T10-SAMPLE-UNCERTAINTY-20261106：12图/1训练seed/1配对损失不足以认定整体退化。
+- 精确本地来源：主树forem/results/task8/t8-pool-20261027/cube-pool-v2/manifest.json之maps split/difficulty，validation各50张、train各5000/test各100；task10独立树results/task10下18份真实episodes.jsonl共出现sparse_validation_00004–00009、standard_validation_00000–00005；旧checkpoint-010000/manifest.json::excluded为sparse_validation_00000–00003。仅按身份排除后剩40 sparse/44 standard；canonical geometry/新任务使用需执行前再核，不能提前保证80均可用。128全新validation图不可行，未借test补齐。
+- 工程设计：80新图40/40×2初态×T/U1/U2=480回合；T固定r2/decision-010000.actor.pt，0更新；U两次独立随机生成器，意在降低一次随机参照的偶然性，仍不能估计所有训练随机性。地图Random1919、scene190000+2i+j、policy191000+4i+2j+r为可复现工程选择，无性能最优性主张。每图保持完整策略组；主效应为地图内两初态的T−均值U再等权平均。
+- 统计：95%分层map-cluster percentile bootstrap、10000抽样、seed191901是本项目预登记近似方案，算法支持与限制见SRC-T10-CLUSTER-BOOTSTRAP-20261106。80是有限资源/池容量选择，未做检测小效应的功效保证；不同初态/随机重复不得虚报为独立地图。缺失保留计划分母/最差最好效应界，区间跨0不等于等价，退化bootstrap不作证据。
+- 成本：task10.17 r2/评估sequence.json之10000.launch_wall_seconds=1328.065712s/12回合；×480/12=53122.62848s=14.7563h。初排16–24h串行工程窗口；模型小权重入口/新地图耗时不同、未知成本用首2正式map估价并保留为正式数据。不假定两卡线性加速，最多2空闲GPU/按map独立分片，保护其他任务。
+- 执行范围与模型：task10.19三文档为唯一具体协议；合理恢复/工程调整按最新根规则，当前只规划未运行。推荐GPT6.1sol/medium、Sonnet5.5/medium，因为初态/随机流/聚类统计跨模块；执行者可自主选模与先建档委派，实际配置另记。只评固定10k与uniform，不新增训练/网络/奖励/动作/WM或task12接入。正式test保留。
+
+<a id="src-t10-cluster-bootstrap-20261106"></a>
+## SRC-T10-CLUSTER-BOOTSTRAP-20261106 — 地图成组统计的依据与边界
+
+- 类型：外部原论文＋项目统计设计。C. A. Field、A. H. Welsh，Bootstrapping clustered data，JRSS B 69(3):369–390，2007，DOI10.1111/j.1467-9868.2007.00593.x。原文PDF https://bemlar.ism.ac.jp/zhuang/Refs/Refs/field2007jrssb.pdf ，出版页 https://academic.oup.com/jrsssb/article-abstract/69/3/369/7109361 （本轮直开重定向失败，未称已完整读取出版页）。2026-11-06 Codex读取PDF Summary及§1 pp369–372，未逐项核全部定理/模拟表。
+- 原始支持：文中区分组间/组内依赖与不同重抽样方式；cluster bootstrap按组有放回抽取，保留组内观测，方法性质依赖模型/渐近条件。采用：task10按map整组保留同图初态与策略配对，按难度分层重抽，避免逐回合当独立样本。
+- 限制：论文不提供本机器人80地图设计的精确95%覆盖或检测功效保证；10000次数/百分位区间/两初态/两随机重复均为本项目工程统计选择。区间只条件于一个已训练策略，不推断训练seed方差；有限池/已排除已观察地图及稀少差异需披露。
+
+<a id="src-t10-first-action-result-20261106"></a>
+## SRC-T10-FIRST-ACTION-RESULT-20261106 — 两回合受控个案终态
+
+类型：项目实测及父原件复算，Codex核查2026-11-06。来源独立树results/task10/t10-diagnosis-20261106/first-action/{summary,launch,A-reproduced}.json和decisions.jsonl；0更新、两回合7决策、worker约185.129s/rc0。A/B初态typed hash相等，A原动作[12,7,2,1,8]与旧轨迹一致并带1次失败完成；B仅首步9、后续固定10k，2决策零失败严格成功。父核上述JSON关联与原始每步记录，未重新执行。本固定场景第一步干预改变了实际结局，但不能代表总体收益、随机性已排除或应部署硬编码slot9；后续80图方案未据该个案挑图/改模型，仍以SRC-T10-SAMPLE-UNCERTAINTY-20261106为优先级。
+
+<a id="src-t10-expanded-run-20261106"></a>
+## SRC-T10-EXPANDED-RUN-20261106 — 扩大配对评估执行原件
+
+类型：项目实际冻结/入口核查/工程选择；2026-11-06 Codex父核。来源forem/results/task10/t10-expanded-20261106-r1/{plan,exclusions,parent-plan-check,cpu-check}.json及shards/worker0/{entry,first-map-check,budget,worker-exit}.json（运行产物按实际生成），每身份attempts原件；scripts/task10_expanded_eval.py、task10_expanded_report.py。validation各50，18份真实episodes及手工诊断核旧12图、额外4图排除；canonical OBB验证validation100图，source/target全池索引排重与既有train/val互斥审计复用，剩40/44按预定抽80，480回合0更新；正式test保留。GPU1占用故选GPU3独立容器/单worker，网络隔离，不影响他任务；不是新科学条件。计划前冻结所有种子/轮换及r2固定10k权重，首图兼正式入口核查不重跑。成本旧14.76h外推，16–24h窗口，首2正式图正常吞吐自动修正。统计19.1纯CPU合成已知答案核验；真实区间待完成后依预登记统计，启动不等于收益成立。参数与限制沿SRC-T10-EXPANDED-EVAL-PLAN-20261106及SRC-T10-CLUSTER-BOOTSTRAP-20261106。
+
+<a id="src-t10-expanded-active-1793935402"></a>
+## task10.19 自动实测/交接 2026-11-06T11:23:22.448749+08:00
+
+类型：项目原件、工程成本与预登记统计。来源`forem/results/task10/t10-expanded-20261106-r1/plan.json`、`exclusions.json`、`shards/worker0/`、`launch.json`、`handoff.json`、`report.json`（若已生成）。持久启动，host launcher PID2587567、client PID2587586，GPU3，计划480回合；首条产物和初态核查待运行。工程窗口16–24h，非硬截止；无按成绩提前停止。STOP=/home/ybc/projects/CL-FoReM-task10/forem/results/task10/t10-expanded-20261106-r1/STOP；恢复先读结果保留partial，再显式launch --resume。 固定分母与地图成组统计沿用SRC-T10-EXPANDED-EVAL-PLAN-20261106及SRC-T10-CLUSTER-BOOTSTRAP-20261106；不能据启动状态宣称有收益。
+
+<a id="src-t10-expanded-blocked-1793935434"></a>
+## task10.19 自动实测/交接 2026-11-06T11:23:54.483008+08:00
+
+类型：项目原件、工程成本与预登记统计。来源`forem/results/task10/t10-expanded-20261106-r1/plan.json`、`exclusions.json`、`shards/worker0/`、`launch.json`、`handoff.json`、`report.json`（若已生成）。worker rc=1，report rc=0，完整条件=False。保留全部partial/缺失与固定分母；未自动换图或重试。先定位日志，再按边界或同身份一次恢复，用户STOP未撤销不得恢复。 固定分母与地图成组统计沿用SRC-T10-EXPANDED-EVAL-PLAN-20261106及SRC-T10-CLUSTER-BOOTSTRAP-20261106；不能据启动状态宣称有收益。
+
+SRC-T10-EXPANDED-RUN-20261106执行补充：r1因固定地图采样lambda不受边界编码支持，24.276733s worker、0环境决策失败；r2冻结同480身份，仅在入口限定单map sampler.entries后原reset以满足既有data-only边界，初态相同性须运行前对齐，未改生产合同或按成绩换样本。r1原freeze/失败记录与r2 prior-cost/parent-plan-check为精确证据。
+
+<a id="src-t10-expanded-active-1793935558"></a>
+## task10.19 自动实测/交接 2026-11-06T11:25:56.677912+08:00
+
+类型：项目原件、工程成本与预登记统计。来源`forem/results/task10/t10-expanded-20261106-r2/plan.json`、`exclusions.json`、`shards/worker0/`、`launch.json`、`handoff.json`、`report.json`（若已生成）。持久启动，host launcher PID2589004、client PID2589025，GPU3，计划480回合；首条产物和初态核查待运行。工程窗口16–24h，非硬截止；无按成绩提前停止。STOP=/home/ybc/projects/CL-FoReM-task10/forem/results/task10/t10-expanded-20261106-r2/STOP；恢复先读结果保留partial，再显式launch --resume。 固定分母与地图成组统计沿用SRC-T10-EXPANDED-EVAL-PLAN-20261106及SRC-T10-CLUSTER-BOOTSTRAP-20261106；不能据启动状态宣称有收益。
+
+SRC-T10-EXPANDED-RUN-20261106补充：原件map_ids保存tuple，CPU审计归一化修复，不改变冻结运行入口；finalization-config.json及startup-raw-audit.json为专项通过证据，最终CPU收尾按同固定统计协议，无新增环境或更新。
+
+SRC-T10-EXPANDED-RUN-20261106启动实证补充：r2首正式map6回合8真实决策已计计划；父读取6个initial.pt逐项复算并核原件合法选点，startup-check.json passed，first-map-check.json passed，0更新。PIDs/实际CUDA/fixed weights和双独立持久收尾配置已核，当前仅启动/入口通过，最终统计与收益结论待完成；不将此当算法收益证据。

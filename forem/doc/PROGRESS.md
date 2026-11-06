@@ -1,5 +1,39 @@
 # 当前进度
 
+2026-11-06T07:31:33.791002+08:00 **T10.17-10K-20261103 · Codex · review**：持久B/C/D收尾，完整条件=False；训练10000/10000、9000/9000，C=partial。未追加预算/种子/task11。[结果](tasks/task10/task10.17/RESULTS.md)。
+
+2026-11-05T10:02:15+08:00 · T10.17-STATUS-20261105 · Codex · done（只读核查），r2训练继续active。09:55约5760/10000真实、4760/9000更新；24检查点发布、最新5632，2k/5k均有，首CUDA更及既有保存审计通过。GPU1约65.4/95.6GiB；按缓存剩余地图增长估计终点约69.1GiB、余26.5GiB，非OOM保证。当前未见新增报错，无训练改动/重复测试/跨卡实施。[依据](SOURCES.md#src-t10-status-20261105)。
+
+2026-11-04T14:59:20+08:00 · T10.17-CKPT-AUDIT-20261104 · Codex · done（CPU只读审计）。r2已发布256/0/256及1024/24/1024检查点文件可读、SHA与内容/历史账本一致，1024完整Adam85组step24，actor匹配；真实stride字段修后通过。既有A跨进程原件复算无差异，本轮未执行r2下一批。训练继续由父负责，无现场写入。[来源](SOURCES.md#src-t10-ckpt-audit-20261104) · [独立报告](../results/task10/t10-17-checkpoint-audit-20261104/REPORT.md)。
+
+2026-11-04T14:53:00+08:00 · T10.17-CKPT-AUDIT-20261104 · Codex · active。只读CPU审计r2不可变256/1024检查点；不触碰训练进程/GPU/账本/latest。独占输出results/task10/t10-17-checkpoint-audit-20261104及独立日志agent_logs/task10/task10.17/20261104-codex-checkpoint-audit.md；父执行者r2记录保持。
+
+2026-11-04T10:28:24+08:00 · T10.17-RESTART-R2-20261104 · Codex · active（r2启动核实，后台B→C→D）。t10-long-20261104-s101-r2于10:26:12启动，GPU1、54h/10k/9k；初始全模型/实际CUDA/源码SHA/原截止一致，当前8完成/0在途/0更新。driver969983/host worker970022/container1911；训练截止11-06 16:26:12+08。首256保存待运行实证；原失败记录保留。[来源](SOURCES.md#src-t10-restart-r2-20261104)。
+
+2026-11-04T10:25:39+08:00 · T10.17-RESTART-R2-20261104 · Codex · active。用户明确“修复并重新启动”，准备新run t10-long-20261104-s101-r2；原10k/54h/单卡GPU1及4.5h评估，旧失败记录不动。先补完整保存CPU回归后唯一启动。[来源](SOURCES.md#src-t10-restart-r2-20261104)。
+
+2026-11-04T10:20:02+08:00 · T10.17-CHECK-FAILURE-20261104 · Codex · review（检查与CPU修复完成，重跑待明确授权）。10k run于10:15失败在首256保存，256真实/0更新/无完整恢复点，当前训练未运行。tree_equal单元素stride13转bytes错误已修复，112CPU测试通过，32批256日志/49原件hash核对通过；不恢复伪造或自动重跑。原预计完成时间失效。[证据](SOURCES.md#src-t10-save-failure-20261104)。
+
+2026-11-04T10:15:41.248720+08:00 **T10.17-10K-20261103 · Codex · review**：持久B/C/D收尾，完整条件=False；训练256/10000、0/9000，C=partial。未追加预算/种子/task11。[结果](tasks/task10/task10.17/RESULTS.md)。
+
+2026-11-03T23:30:28.721796+08:00 **T10.17-10K-20261103 · Codex · review / NOT_READY**：A正常batch8混合边界新PID逐位恢复通过（1678→1741，80真实/12诊断更新，worker1293.514s、含父CPU核查1355.686s），但含42次保存的保守外推49.20h/49.93h不支持48h。按A退出条件交回；B/C均未启动，无遗留本轮进程，GPU释放。保存估算含固定成本线性放大，不能断言实际必超；须另定成本核查/优化，未扩窗/预算/种子/task11。[结果](tasks/task10/task10.17/RESULTS.md) · [来源](SOURCES.md#src-t10-043) · [日志](agent_logs/task10/task10.17/20261103-codex-execution.md)。
+
+2026-11-03T22:51:46.639755+08:00 **T10.17-10K-20261103 · Codex · active**：接手A→B→C→D，先正常batch8混合边界恢复与CPU夹具；A共享128真实/64诊断更新/1h尚未启动，B/C未启动。保留现有修改，父统一资源，已建17.1–17.3。[日志](agent_logs/task10/task10.17/20261103-codex-execution.md)。
+
+2026-11-03T22:00:35.683862+08:00 **T10.16.3-KL-EVAL-20261103 · Codex · active**：接手唯一新KL trained配对评估；CPU核验/冻结后独立持久启动，12/1800/0/5400s，不重跑；保留训练launch残留running及外层退出码缺失。run `t10-kl-eval-20261103-s101`。推荐GPT6.1sol/medium、Sonnet5.5/medium，实际未知，本次独立执行。[日志](agent_logs/task10/task10.16/task10.16.3/20261103-codex-paired-execution.md)。
+
+2026-11-03T16:30:59.045509+08:00 **T10.15-DIAG-20261103 · Codex · review（诊断完成，待决策者审核）**：475源文件hash未变；52共享状态原地概率initial均26.133%→trained19.378%，argmax仍全原地，映射/归一化/梯度及终局mask未见偏离合同。3零dt真实样本额外熵target贡献0.455–0.781；7停滞失败终局y=−1而final Q残差0.901–1.192，且训练无原地停滞终局。目标风险与学习不足共存，未裁单因。CPU首更复算/保存前后权重及父原件验证通过，D跳过；实际0新增交互/0更新/0GPU。没有改协议或启动10k，交回决策者。[RESULTS](tasks/task10/task10.15/RESULTS.md) · [来源](SOURCES.md#src-t10-034) · [日志](agent_logs/task10/task10.15/20261103-codex-execution.md)。
+
+2026-11-03 16:15 +08 **T10.15-DIAG-20261103 · Codex · active**：接手原地排序/学习信号诊断；0新增环境决策，CPU优先，必要隔离GPU共≤20更新/1800s。保留已有修改。分支codex/task10-upper-wm，日志[执行记录](agent_logs/task10/task10.15/20261103-codex-execution.md)。
+
+2026-11-03T16:04:05.363044+08:00 **T10.14-EVAL-20261103 · Codex · review（待决策者审核）**：唯一评估36/36、123真实、0更新/0在途/0缺失、rc0，15:56:34退出、含入口outer55m11.918s。trained0/12、initial0/12、uniform10/12；两难度均0/6、0/6、5/6；配对0/0/12与0/10/2。独立v2/父原件复算通过、119冻结文件一致；两模型均52/52选原地、5自碰撞失败上限+7停滞，无观察收益，建议先排查评分/学习信号再定训练预算。本轮无遗留运行，保留其他任务。[RESULTS](tasks/task10/task10.14/RESULTS.md) · [来源](SOURCES.md#src-t10-028)。下方active为历史运行快照。
+
+2026-11-03 15:01 +08 **T10.14-EVAL-20261103 · Codex · active**：唯一评估t10-eval-20261103-s101已启，GPU1/worker820；CPU155pass/2skip+专项22pass，GPU旧输入入口verified/0真实/0更新，开始36回合。原硬截止16:31:22+08，36/5400/0/5400s，无重跑。[日志](agent_logs/task10/task10.14/20261103-codex-execution.md)。
+
+2026-11-03T14:49:34.572240+08:00 **T10.14-EVAL-20261103 · Codex · active**：接手一次三策略配对验证，CPU入口适配/夹具准备中；90分钟GPU窗尚未启动。保留现有未提交修改。[日志](agent_logs/task10/task10.14/20261103-codex-execution.md)。
+
+2026-11-02T20:03:14.233029+08:00 **T10-ONLINE-TRIAL-20261102 · Codex · active监控**：真实完成144/1200，在线更新0/200，inflight8；原7h截止不变，唯一运行继续，不重启。[原件/日志](agent_logs/task10/20261102-codex-online-trial.md) · [来源](SOURCES.md#src-t10-023)。
+
 2026-11-02T19:29:28.225644+08:00 **T10-ONLINE-TRIAL-20261102 · Codex · active**：唯一试训已启动，代码b5b60ee，run-id t10-online-20261102-s101，GPU1/workerPID554；1200真实/200更新/7h，原硬截止2026-11-03T02:29:28.225644+08:00。入口CPU203passed/3skipped、GPU5旧fixture verified/0真实；本次空回放1000真实预热，父持续监控，不恢复/重跑/配对。[日志](agent_logs/task10/20261102-codex-online-trial.md) · [入口证据](SOURCES.md#src-t10-022)。
 
 2026-11-02T17:42:49.550264+08:00 **T10-GPU-BATCH8-20261102 · Codex · review / NOT_READY**：afc56f6正常入口7批56真实/0更新，结束行4/4/2/5/7/6/5，无全8安全边界，真实跨进程恢复未验；journal/回放56身份无漏重。GPU12派生更新：默认纯内存也差、确定性两组逐位一致，具体kernel未定位；ede1299补严格字节/完整恢复原件等，163passed/3条件skipped。总测量1318.73/1800s，7h仅估价，当前不建议放行1200/200。[RESULTS](tasks/task10/RESULTS.md) · [来源](SOURCES.md#src-t10-019) · [日志](agent_logs/task10/20261102-codex-gpu-batch8.md)。
@@ -336,3 +370,95 @@ r1历史记录（已由SRC-1041授权r2续跑）：2026-10-26 task8.8：地图�
 2026-11-02 · T10-GATE-R2 · Codex · done（复算及入口审核），task10 仍为 review；7h 试训待放行。[日志](agent_logs/task10/20261102-codex-second-gate.md)
 
 2026-11-02 18:45 +08 · T10-GATE-R3 · Codex · done（短验证审核），task10 在线训练与真实 batch8 恢复仍待验。[记录](agent_logs/task10/20261102-codex-third-gate.md)
+
+2026-11-03 · T10-STATUS-CHECK · Codex · done（现况核查），唯一试训1200/200已完成并CPU原件审计通过；task10整体review待评估。[记录](agent_logs/task10/20261103-codex-progress-check.md)
+
+2026-11-03 · T10-EVAL-DESIGN · Codex · done（设计）；task10.14待派发，12场景三组36回合。[流程](tasks/task10/task10.14/PROCEDURE.md)
+
+2026-11-03 · T10-T12-ALIGN · Codex · done（阅读与关系核查），task12教师停止门仍须按新证据复审。[记录](agent_logs/task10/20261103-codex-task12-alignment.md)
+
+**T10.14-EVAL-20261103 · active监控**：2026-11-03T15:06:55.766318+08:00 已完成1/12组三策略配对、3/36回合、9真实决策、0更新，累计333.10s；当前临时success/completed={'trained': {'success': 0, 'completed': 1}, 'initial': {'success': 0, 'completed': 1}, 'uniform': {'success': 0, 'completed': 1}}。尚未最终复算，不据此验收。 [日志](agent_logs/task10/task10.14/20261103-codex-execution.md)。
+
+**T10.14-EVAL-20261103 · active监控**：2026-11-03T15:14:05.945207+08:00 已完成2/12组三策略配对、6/36回合、20真实决策、0更新，累计763.28s；当前临时success/completed={'trained': {'success': 0, 'completed': 2}, 'initial': {'success': 0, 'completed': 2}, 'uniform': {'success': 0, 'completed': 2}}。尚未最终复算，不据此验收。 [日志](agent_logs/task10/task10.14/20261103-codex-execution.md)。
+
+**T10.14-EVAL-20261103 · active监控**：2026-11-03T15:16:09.954326+08:00 已完成3/12组三策略配对、9/36回合、24真实决策、0更新，累计887.29s；当前临时success/completed={'trained': {'success': 0, 'completed': 3}, 'initial': {'success': 0, 'completed': 3}, 'uniform': {'success': 1, 'completed': 3}}。尚未最终复算，不据此验收。 [日志](agent_logs/task10/task10.14/20261103-codex-execution.md)。
+
+**T10.14-EVAL-20261103 · active监控**：2026-11-03T15:19:43.878557+08:00 已完成4/12组三策略配对、12/36回合、30真实决策、0更新，累计1101.21s；当前临时success/completed={'trained': {'success': 0, 'completed': 4}, 'initial': {'success': 0, 'completed': 4}, 'uniform': {'success': 2, 'completed': 4}}。尚未最终复算，不据此验收。 [日志](agent_logs/task10/task10.14/20261103-codex-execution.md)。
+
+**T10.14-EVAL-20261103 · active监控**：2026-11-03T15:22:41.737224+08:00 已完成5/12组三策略配对、15/36回合、34真实决策、0更新，累计1279.07s；当前临时success/completed={'trained': {'success': 0, 'completed': 5}, 'initial': {'success': 0, 'completed': 5}, 'uniform': {'success': 3, 'completed': 5}}。尚未最终复算，不据此验收。 [日志](agent_logs/task10/task10.14/20261103-codex-execution.md)。
+
+**T10.14-EVAL-20261103 · active监控**：2026-11-03T15:27:48.999189+08:00 已完成6/12组三策略配对、18/36回合、49真实决策、0更新，累计1586.33s；当前临时success/completed={'trained': {'success': 0, 'completed': 6}, 'initial': {'success': 0, 'completed': 6}, 'uniform': {'success': 4, 'completed': 6}}。尚未最终复算，不据此验收。 [日志](agent_logs/task10/task10.14/20261103-codex-execution.md)。
+
+**T10.14-EVAL-20261103 · active监控**：2026-11-03T15:31:32.313164+08:00 已完成7/12组三策略配对、21/36回合、55真实决策、0更新，累计1809.64s；当前临时success/completed={'trained': {'success': 0, 'completed': 7}, 'initial': {'success': 0, 'completed': 7}, 'uniform': {'success': 5, 'completed': 7}}。尚未最终复算，不据此验收。 [日志](agent_logs/task10/task10.14/20261103-codex-execution.md)。
+
+**T10.14-EVAL-20261103 · active监控**：2026-11-03T15:35:11.190954+08:00 已完成8/12组三策略配对、25/36回合、67真实决策、0更新，累计2028.52s；当前临时success/completed={'trained': {'success': 0, 'completed': 8}, 'initial': {'success': 0, 'completed': 8}, 'uniform': {'success': 7, 'completed': 9}}。尚未最终复算，不据此验收。 [日志](agent_logs/task10/task10.14/20261103-codex-execution.md)。
+
+**T10.14-EVAL-20261103 · active监控**：2026-11-03T15:38:28.959261+08:00 已完成9/12组三策略配对、27/36回合、79真实决策、0更新，累计2226.29s；当前临时success/completed={'trained': {'success': 0, 'completed': 9}, 'initial': {'success': 0, 'completed': 9}, 'uniform': {'success': 7, 'completed': 9}}。尚未最终复算，不据此验收。 [日志](agent_logs/task10/task10.14/20261103-codex-execution.md)。
+
+**T10.14-EVAL-20261103 · active监控**：2026-11-03T15:44:32.711631+08:00 已完成10/12组三策略配对、30/36回合、93真实决策、0更新，累计2590.04s；当前临时success/completed={'trained': {'success': 0, 'completed': 10}, 'initial': {'success': 0, 'completed': 10}, 'uniform': {'success': 8, 'completed': 10}}。尚未最终复算，不据此验收。 [日志](agent_logs/task10/task10.14/20261103-codex-execution.md)。
+
+**T10.14-EVAL-20261103 · active监控**：2026-11-03T15:52:31.839353+08:00 已完成11/12组三策略配对、33/36回合、110真实决策、0更新，累计3069.17s；当前临时success/completed={'trained': {'success': 0, 'completed': 11}, 'initial': {'success': 0, 'completed': 11}, 'uniform': {'success': 9, 'completed': 11}}。尚未最终复算，不据此验收。 [日志](agent_logs/task10/task10.14/20261103-codex-execution.md)。
+
+**T10.14-EVAL-20261103 · active监控**：2026-11-03T15:57:03.734582+08:00 已完成12/12组三策略配对、36/36回合、123真实决策、0更新，累计3341.07s；当前临时success/completed={'trained': {'success': 0, 'completed': 12}, 'initial': {'success': 0, 'completed': 12}, 'uniform': {'success': 10, 'completed': 12}}。尚未最终复算，不据此验收。 [日志](agent_logs/task10/task10.14/20261103-codex-execution.md)。
+
+2026-11-03 · T10.14-REVIEW · Codex · done（工程验收，未观察到收益），task10.15设计已交付待执行。[流程](tasks/task10/task10.15/PROCEDURE.md)
+
+2026-11-03 · T10.16-FIX · Codex · active，审核15并推进原地偏好修正，先独立数学复核。[流程](tasks/task10/task10.16/PROCEDURE.md)
+
+2026-11-03 16:49 +08 · T10.16-TRIAL · Codex · active。用户批准的KL修正试训已启动，1200/200/7h，随后12场景评估≤90min。[结果](tasks/task10/task10.16/RESULTS.md)
+
+2026-11-03 21:56 +08 · T10.16-STATUS · Codex · done（进度核查）；KL试训1200/200完成且CPU原件审计verified，12场景评估待执行，外层退出码未取得。[结果](tasks/task10/task10.16/RESULTS.md)
+
+2026-11-03T22:08:07.747066+08:00 **T10.16.3-KL-EVAL-20261103 · Codex · active（独立运行，启动核实后退出主动监督）**：唯一run t10-kl-eval-20261103-s101已启，driver534271/launcher534276/GPU1，硬截止2026-11-03T23:36:51.829083+08:00，12/1800/0/5400s。CPU source-audit verified、旧reference-audit verified_complete；顺序report/finalize已排，失败保留缺失不重跑。原地行为/成功率待实测，保留训练外层收尾缺失。[结果](tasks/task10/task10.16/task10.16.3/RESULTS.md) · [来源](SOURCES.md#src-t10-038)。
+
+2026-11-03T22:08:49.785967+08:00 **T10.16.3启动核实完成**：entry verified/worker1300/GPU1，首初态全字段match；Codex按用户要求退出主动监督，运行保持active，由独立driver顺序收尾。报告及两项收益结论待结束，不标done。[记录](tasks/task10/task10.16/task10.16.3/RESULTS.md)。
+
+2026-11-03T22:19:41.078682+08:00 **T10.16.3-KL-EVAL-20261103 · Codex · review**：run t10-kl-eval-20261103-s101结束，完整验收=False，report=failed，完成12/12、缺失0、严格成功10/12，原地0/21，launcher rc0，更新0、在途0。保留训练外层收尾缺失，单种子12场景；交当前决策者审核，不自动重跑。[结果](tasks/task10/task10.16/task10.16.3/RESULTS.md) · [来源](SOURCES.md#src-t10-039)。
+
+2026-11-03T22:26:14.121155+08:00 **T10.16.3-REPORT-CHECK-20261103 · Codex · active**：用户要求检查；唯一评估正常结束，原报告snapshot_checks参数接口错导致failed，CPU修复适配并复算，保留原件，不新增评估或更新。[日志](agent_logs/task10/task10.16/task10.16.3/20261103-codex-report-check.md)。
+
+2026-11-03T22:30:50.608942+08:00 **T10.16.3-REPORT-CHECK-20261103 · Codex · review（完整工程验收通过，待决策者）**：CPU适配修复原报告snapshot_checks参数错，3专项passed；report-v2/parent-check-v2均verified_complete/rc0。12完成/0缺失/21真实/0更新/0在途，worker/launcher正常结束；原地52/52→0/21、12同初态logit领先全转负，成功0/12→10/12，与uniform10/12持平。0停滞，剩余自碰撞20/IK拒绝20；321+254+70输入原件hash未变。保留原failed报告及训练外层退出码缺失，未重跑；单种子12validation边界。[RESULTS](tasks/task10/task10.16/task10.16.3/RESULTS.md) · [SRC-T10-040](SOURCES.md#src-t10-040)。
+
+2026-11-03 22:31 +08 · T10.16-FINAL-REVIEW · Codex · done。独立CPU审计通过，12场景原地0/21、严格成功10/12，旧trained0/12、uniform10/12。task10整体继续review。[结果](tasks/task10/task10.16/RESULTS.md)
+
+2026-11-03 · T10.17-PLAN · Codex · done（设计），执行待派发；单种子10k/9000更新，先恢复成本门。[流程](tasks/task10/task10.17/PROCEDURE.md)
+
+2026-11-04T09:19:40+08:00 · T10.17-LAUNCH-20261104 · Codex · active。用户批准预算，准备唯一10k/9000新run；工程硬限54h，评估4.5h，最多2GPU、实际物理GPU1。A恢复原件沿用，先同步预算合同与CPU核验。[日志](agent_logs/task10/task10.17/20261104-codex-launch.md)。
+
+2026-11-04T09:23:29+08:00 · T10.17-LAUNCH-20261104 · Codex · active（启动已核实，后台自主B→C→D）。独立worktree run t10-long-20261104-s101，09:20:23开始，唯一物理GPU1、54h/10k/9k；初始权重相等，实际CUDA/源码hash/截止通过。当前8真实/0更新，预热中。driver900227/host worker900264/container1807；原训练截止11-06 15:20:23+08，C仍4.5h。[授权与实际原件](SOURCES.md#src-t10-budget-20261104)。
+
+2026-11-04T10:17:51+08:00 · T10.17-CHECK-FAILURE-20261104 · Codex · active。用户要求检查，发现10k在256真实/0更新保存首个checkpoint时tree_equal stride异常退出；无训练运行/无安全快照，不自动重跑。进行CPU复现/必要修复与原件审计。日志：/home/ybc/projects/CL-FoReM-task10/forem/doc/agent_logs/task10/task10.17/20261104-codex-check-failure.md。
+
+2026-11-04T15:10:52+08:00 · PROJECT-BUDGET-REVIEW-20261104 · Codex · done（规则修改与文档定向检查）。根AGENTS、SOURCES、DECISIONS及当前流程已同步：合理训练规模/工程耗时自主决定，必要修复恢复/重跑不逐次请批，已有证据复用，仅对新改动/失败定向复验。用户资源/交付限制和正确性保留。未启停训练或改运行代码/超时；task12旧BUDGET_STOP仍为历史事实，后续补完不再受旧600秒审批阻塞。[当前规则](../../AGENTS.md#budget-review) · [用户依据](SOURCES.md#src-budget-review-20261104)。主工作区过程记录：/home/ybc/projects/CL-FoReM/forem/doc/agent_logs/project/20261104-codex-budget-review-policy.md。
+
+2026-11-05T09:55:46+08:00 · T10.17-STATUS-20261105 · Codex · active（只读进度核查）。r2训练仍运行，核账本/更新/检查点及已有CPU审计，不重复测试或全量hash。日志：/home/ybc/projects/CL-FoReM-task10/forem/doc/agent_logs/task10/task10.17/20261105-codex-status.md。
+
+2026-11-06T09:08:30+08:00 · T10.17-FINAL-STATUS-20261106 · Codex · active。训练10k/9k完成/rc0，36评估已执行；只补10k CPU报告超时，0新交互/更新，不重跑训练/评估。日志：/home/ybc/projects/CL-FoReM-task10/forem/doc/agent_logs/task10/task10.17/20261106-codex-status-report.md。
+
+2026-11-06T09:14:15.029017+08:00 · T10-DECISION-REVIEW-20261106 · Codex · done（阶段审核）。训练终态核对通过，10/12→9/12→9/12逐回合计数复算；10k完整CPU报告由执行者补证中，task10.17仍review；下一优先退化定位，非扩训。[依据](SOURCES.md#src-t10-t12-review-20261106)。
+
+2026-11-06T09:18:15+08:00 · T10.17-FINAL-STATUS-20261106 · Codex · done（本轮10k训练、36评估、CPU补证及交付核查）。r2 10000/9000、42检查点有效、42h48m、无OOM；最终报告已CPU补证完整，2k/5k/10k严格成功10/9/9（各/12），最终对uniform0胜1负11平，未观察长训收益。原timeout/partial保留，handoff.complete=true附补证，不选2k作为最终权重、不自动扩规模。GPU1释放。[依据](SOURCES.md#src-t10-final-20261106)。
+
+2026-11-06T09:23:53.109410+08:00 · TASK10.18-SCWM-OPT · Codex · active。SCWM原文/官方实现对照＋10k退化原件诊断；必要bug修复定向验证，未启动新训练、不改task12。任务在task10独立树task10.18，父与18.1/18.2独立范围并行。[依据](SOURCES.md#src-t10-opt-plan-20261106)。
+
+2026-11-06 · TASK10.18-SCWM-OPT · Codex · active。18.1论文/代码、18.2逐候选、18.3终局Q探针已核完成；策略近uniform但softQ跟随较好，旧训练已选单步终局Q留出AUC .9397，不据此改生产LR/alpha。18.4两回合首步诊断入口准备中，不扩训。[依据](SOURCES.md#src-t10-value-probe-20261106) · [下一诊断](SOURCES.md#src-t10-first-action-plan-20261106)。
+
+2026-11-06T09:39:53.963954+08:00 · TASK10.18.4-FIRST-ACTION · Codex · active（持久启动，首条待核）。PID2507382/GPU1计划，2回合同10k策略，仅B首步槽9干预；A须先复现旧轨迹，不做训练，task12不动。[依据](SOURCES.md#src-t10-first-action-plan-20261106)。
+
+2026-11-06T09:42:18.257853+08:00 · TASK10.18-PRIORITY · Codex · active（18.4运行，退出主动监督）。启动核实A初态typed hash一致、首条原地执行正常，GPU1/PID2507382，0训练；有限两回合自动收尾。用户指出小样本/随机性，下一优先扩大固定模型独立场景配对、报告不确定性，不以单图干预调参。[依据](SOURCES.md#src-t10-sample-uncertainty-20261106)。
+
+2026-11-06T09:45:36.986799+08:00 · TASK10.19-PLAN · Codex · active（规划）。80新validation图×2初态×10k/随机U1/U2共480回合，0训练；容量与独立性核对，尚未派发执行。
+
+2026-11-06T09:50:14.282985+08:00 · TASK10.18-DONE/TASK10.19-PLAN · Codex · done（研究与下一流程规划）。18.4两臂2回合7决策/0更/rc0已核，个案不替代总体；19三文档/来源/派发就绪，80新图×2初态×3回合=480、map簇区间、0训练，尚未启动。[设计](SOURCES.md#src-t10-expanded-eval-plan-20261106)。
+
+2026-11-06T11:14:18.748514+08:00 · **T10.19-EXPANDED-20261106 · Codex · active**：接手80地图配对评估，冻结清单/新入口/持久收尾准备；0训练，不改算法，旧改动保留。GPU1占用先核归属。日志[执行记录](agent_logs/task10/task10.19/20261106-codex-expanded-execution.md)。
+
+2026-11-06T11:23:22.448749+08:00 · **T10.19-EXPANDED-20261106 · Codex · active**：持久启动，host launcher PID2587567、client PID2587586，GPU3，计划480回合；首条产物和初态核查待运行。工程窗口16–24h，非硬截止；无按成绩提前停止。STOP=/home/ybc/projects/CL-FoReM-task10/forem/results/task10/t10-expanded-20261106-r1/STOP；恢复先读结果保留partial，再显式launch --resume。 [结果](tasks/task10/task10.19/RESULTS.md)。
+
+2026-11-06T11:23:54.483008+08:00 · **T10.19-EXPANDED-20261106 · Codex · blocked**：worker rc=1，report rc=0，完整条件=False。保留全部partial/缺失与固定分母；未自动换图或重试。先定位日志，再按边界或同身份一次恢复，用户STOP未撤销不得恢复。 [结果](tasks/task10/task10.19/RESULTS.md)。
+
+2026-11-06 · T10.19-EXPANDED-20261106 · Codex · active：r1零决策入口失败已定位修复，r2保持完全相同480身份和全部科学合同，保留r1成本；准备持久恢复。
+
+2026-11-06T11:25:56.677912+08:00 · **T10.19-EXPANDED-20261106 · Codex · active**：持久启动，host launcher PID2589004、client PID2589025，GPU3，计划480回合；首条产物和初态核查待运行。工程窗口16–24h，非硬截止；无按成绩提前停止。STOP=/home/ybc/projects/CL-FoReM-task10/forem/results/task10/t10-expanded-20261106-r2/STOP；恢复先读结果保留partial，再显式launch --resume。 [结果](tasks/task10/task10.19/RESULTS.md)。
+
+2026-11-06 · **T10.19-EXPANDED-20261106 · Codex · active后台交接**：80地图/480回合/0更新，r2 GPU3；首图6回合配对入口及原件核通过，当前10完整。launcher2589004、worker2589052/container90、CPU收尾2592521；父已退出主动监督，自动统计/文档与最终review，未判收益。[结果](tasks/task10/task10.19/RESULTS.md)。

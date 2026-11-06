@@ -257,3 +257,34 @@ sg docker -c 'docker exec --user 1004:1004 -e CUDA_VISIBLE_DEVICES= -e PYTHONPAT
 入口代码b5b60ee：显式online-trial25200与默认smoke1800、同原epoch两层timeout及ledger/合同硬截止，20s清理在hard内；确定性CUBLAS pre-Python/cuDNN/算法True、TF32/benchmarkFalse、threads2；CPU203passed/3条件skipped/47.09s，正常入口GPU旧fixture5更新/0真实、两组严格同输入与取证verified_cuda、rc0/14.641s。独立审核缺口已修复，原始RED和完整原件保留。[SRC-T10-022](../../SOURCES.md#src-t10-022)。
 
 唯一试训run-id `t10-online-20261102-s101`，从空回放初始化，B3-5M4718、上层101/batch8/train和1000真实均匀预热/既定科学合同不变，连续采集不等全8终局。开始北京时间19:29:28，硬截止2026-11-03 02:29:28；GPU1，container workerPID554、父3815493。actual contract runtime flags与25200/1200/200及outer deadline已核对，源码/配置冻结；运行中，当前不预宣称预热完成或真实GPU更新。原件根、实际命令、监控与停止方法见[父日志](../../agent_logs/task10/20261102-codex-online-trial.md)与[SRC-T10-023](../../SOURCES.md#src-t10-023)。结束后统一只读复算/报告，不拿旧16/56条及预检5更新混计。
+
+## 2026-11-03 · 决策者状态复核
+
+唯一在线试训已于00:12:00结束，bounded_complete，1200真实决策/1200回放/200在线更新、1000随机预热、inflight0、error null。总墙钟16951.958秒（4h42m32s）。CPU原件审计rc0 verified，首个真实更新与最终checkpoint200核对通过，actor/q1/q2均有200份有限非零梯度记录，B3前后保持一致。可验收本次有界训练管线；独立任务成功率评估与batch8环境恢复仍待验。原active段落保留为启动历史。执行者最终交接仍需整理，已有未提交变更保留。推荐GPT6.1sol/medium或Sonnet5.5/medium复核本次账本与报告，因需跨文件对齐。[证据与限制](../../SOURCES.md#src-t10-024)
+
+
+## 2026-11-03 · task10.15诊断交付
+
+[task10.15结果](task10.15/RESULTS.md)交review，首更子核查已由父原件验收。475源文件未变，52共享状态的原地概率下降但argmax全原地；映射、归一化、梯度和终局mask未见合同偏离。真实零dt样本熵软价值与7失败终局未充分拟合同时存在，不能判单因或以直接加训替代目标裁定。0新交互/0诊断更新/0GPU；D无需重复step，未改奖励/熵/终止/候选或启动10k。后续由当前决策者审核最小协议建议与条件训练预算。[SRC-T10-031](../../SOURCES.md#src-t10-031)–[034](../../SOURCES.md#src-t10-034)。推荐GPT6.1sol/high、Sonnet5.5/high用于目标/梯度与下一协议审核；实际变体/强度未知，执行者可自主选模和先建档委派，父统一预算。
+
+## 2026-11-03T22:08:07.747066+08:00 · 16.3唯一配对评估启动
+
+run `t10-kl-eval-20261103-s101`，CPU source/reference复核与freeze均rc0；仅新trained12回合、1800真实、0更新、5400秒。2026-11-03T22:06:51.829083+08:00启动，硬截止2026-11-03T23:36:51.829083+08:00。独立driver534271（PPID1/SID534271）、launcher534276，GPU1；启动核实后按用户要求退出主动监督，顺序只读report/finalize写交接，不重跑。训练source launch残留running及原外层退出码缺失保留。原地行为及成功率待结果，尚不完整验收。推荐GPT6.1sol/medium、Sonnet5.5/medium，实际未知。[来源](../../SOURCES.md#src-t10-038)。
+
+## 2026-11-03T22:19:41.078682+08:00 · task10.16.3配对评估交接
+
+run `t10-kl-eval-20261103-s101`；review_incomplete，完整验收=False，report=failed，严格成功10/12，完成12、缺失0、更新0、在途0。原地行为：完整验收未通过，不能给出完整12场景结论；已落盘原地0/21，旧trained 52/52。 成功率：完整验收未通过；已完成12/12，已知严格成功10/12、缺失0，不按完整样本宣称提高。 详见子16.3 RESULTS及run/report.json、handoff.json、initial-logit-comparison.csv。源训练外层退出码缺失仍保留；单种子12验证场景，无自动重跑。推荐GPT6.1sol/medium、Sonnet5.5/medium，实际未知。[来源](../../SOURCES.md#src-t10-039)。
+
+## 2026-11-03T22:30:50.608942+08:00 · task10.16.3完整补证通过
+
+run t10-kl-eval-20261103-s101，报告参数接口错已用独立CPU适配器修复，3专项passed；report-v2及父逐原件parent-check-v2均verified_complete/issues=[]/rc0。12回合/21真实/0更新/0缺失/0在途，worker和launcher正常退出，全部完整验收条件通过；状态review待当前决策者审核。原地行为改变：52/52→0/21，12同初态原地logit领先全由正变负。成功率相对旧trained提高0/12→10/12（83.33%），与uniform10/12持平；配对10/0/2和0/0/12（均无缺失）。10成功/2失败上限/0停滞，剩余自碰撞20、IK拒绝20。CPU补证未重跑评估、未新增交互/更新/GPU；原failed报告及训练launch running/外层退出码缺失保留。单训练种子12验证场景，不作跨种子/泛化/唯一因果结论。推荐GPT6.1sol/medium、Sonnet5.5/medium，实际未知。[依据](../../SOURCES.md#src-t10-040)，详细三文档见16.3。
+
+## 2026-11-03T23:30:28.721796+08:00 · task10.17 A交回
+
+恢复CPU及真实正常batch8混合边界跨PID逐位通过，80真实/12诊断更新；成本门NOT_READY，含42保存保守外推49.20/49.93h，不能肯定48h可行（含固定成本放大，非必然超时结论）。按用户A退出条件交回，B/C均未启动，无新增正式曲线/收益；不追加预算/种子/task11。推荐GPT6.1sol/high、Sonnet5.5/high，实际未知，父统一GPU/预算并复核原件。[17结果](task10.17/RESULTS.md) · [SRC-T10-043](../../SOURCES.md#src-t10-043)。
+
+## 2026-11-06T09:18:15+08:00 · task10.17单种子10k交付完成
+
+10k真实/9000更新及36固定验证回合完整，CPU报告超时已补证（0新交互），训练审计及三份报告verified_complete。2k/5k/10k严格成功10/9/9（各/12），最终9/12（75%），uniform10/12，配对0胜1负11平；无随预算持续改善证据。原地最终1/22，无stall_limit终局。未OOM、42检查点有效，GPU1释放。仅单seed/固定12validation，不作泛化或显著性结论、不挑较好2k权重、不自动扩20k×3/task11。详见[17结果](task10.17/RESULTS.md)、[依据](../../SOURCES.md#src-t10-final-20261106)。推荐GPT6.1sol/medium、Sonnet5.5/medium复核统计与交接，实际未知，执行者可自主选模/先建档委派，本轮独立。
+
+2026-11-06：task10.19仅规划完成，先扩大固定10k与uniform的场景配对和不确定性报告，不据旧12图差1例扩训或改算法；实际结果尚未执行。[流程](task10.19/PROCEDURE.md) · [来源](../../SOURCES.md#src-t10-expanded-eval-plan-20261106)。
